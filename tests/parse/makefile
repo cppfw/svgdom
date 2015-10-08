@@ -10,7 +10,7 @@ this_cflags += -std=c++11
 
 this_srcs += main.cpp
 
-this_ldlibs += -lstob -lpapki
+this_ldlibs += -lsvgdom -lpapki -lpugixml
 this_ldflags += -L$(prorab_this_dir)../../src
 
 ifeq ($(prorab_os), macosx)
@@ -26,7 +26,7 @@ $(eval $(prorab-build-app))
 
 
 ifeq ($(prorab_os),windows)
-    this_test_cmd := $(prorab_echo)(cd $(prorab_this_dir); cp ../../src/libstob.dll .; $$^)
+    this_test_cmd := $(prorab_echo)(cd $(prorab_this_dir); cp ../../src/libsvgdom.dll .; $$^)
 else
     this_test_cmd := $(prorab_echo)(cd $(prorab_this_dir); LD_LIBRARY_PATH=../../src $$^)
 endif
@@ -40,6 +40,6 @@ endef
 $(eval $(this_rules))
 
 #add dependency on libsvgdom
-#$(prorab_this_name): $(abspath $(prorab_this_dir)../../src/libstob$(prorab_lib_extension))
+$(prorab_this_name): $(abspath $(prorab_this_dir)../../src/libsvgdom$(prorab_lib_extension))
 
-#$(eval $(call prorab-include,$(prorab_this_dir)../../src/makefile))
+$(eval $(call prorab-include,$(prorab_this_dir)../../src/makefile))

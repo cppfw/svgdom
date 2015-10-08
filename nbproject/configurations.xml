@@ -2,6 +2,9 @@
 <configurationDescriptor version="97">
   <logicalFolder name="root" displayName="root" projectFiles="true" kind="ROOT">
     <df root="src" name="0">
+      <df name="svgdom">
+        <in>dom.cpp</in>
+      </df>
     </df>
     <df root="tests" name="1">
       <df name="parse">
@@ -29,7 +32,8 @@
         <rebuildPropChanged>false</rebuildPropChanged>
       </toolsSet>
       <flagsDictionary>
-        <element flagsID="0" commonFlags="-std=c++11"/>
+        <element flagsID="0" commonFlags="-funsigned-char -std=c++11 -fPIC"/>
+        <element flagsID="1" commonFlags="-std=c++11"/>
       </flagsDictionary>
       <codeAssistance>
       </codeAssistance>
@@ -38,8 +42,9 @@
           <buildCommandWorkingDir>.</buildCommandWorkingDir>
           <buildCommand>make debug=true</buildCommand>
           <cleanCommand>make clean</cleanCommand>
-          <executablePath></executablePath>
+          <executablePath>tests/parse/tests</executablePath>
           <ccTool>
+            <standard>8</standard>
             <incDir>
               <pElem>.</pElem>
             </incDir>
@@ -53,8 +58,12 @@
           <preBuildCommand></preBuildCommand>
         </preBuild>
       </makefileType>
-      <item path="tests/parse/main.cpp" ex="false" tool="1" flavor2="8">
+      <item path="src/svgdom/dom.cpp" ex="false" tool="1" flavor2="8">
         <ccTool flags="0">
+        </ccTool>
+      </item>
+      <item path="tests/parse/main.cpp" ex="false" tool="1" flavor2="8">
+        <ccTool flags="1">
         </ccTool>
       </item>
     </conf>

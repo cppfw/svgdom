@@ -7,16 +7,30 @@
 
 #pragma once
 
+#include <vector>
+#include <memory>
+
+#include <papki/File.hpp>
+
 namespace svgdom{
 
 class Element{
+public:
+	virtual ~Element()noexcept{}
+};
+
+class ContainerElement : public Element{
+public:
+	std::vector<Element> children;
+};
+
+class SvgElement : public ContainerElement{
 	
 };
 
-class SvgElement : public Element{
-	
-};
 
 
+
+std::unique_ptr<SvgElement> load(const papki::File& f);
 
 }//~namespace
