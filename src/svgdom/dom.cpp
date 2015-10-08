@@ -71,7 +71,7 @@ std::unique_ptr<svgdom::Element> Parser::parseNode(const pugi::xml_node& n){
 		}
 	}
 	
-	
+	//TODO: check namespace
 	if(std::string("svg") == n.value()){
 		return parseSvgElement(n);
 	}
