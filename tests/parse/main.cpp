@@ -9,6 +9,7 @@ int main(int argc, char** argv){
 
 	auto dom = svgdom::load(papki::FSFile("tiger.svg"));
 	
+	ASSERT_ALWAYS(dom)
 	
 	TRACE_ALWAYS(<< "[PASSED]" << std::endl)
 }

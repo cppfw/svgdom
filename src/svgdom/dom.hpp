@@ -21,7 +21,7 @@ public:
 
 class ContainerElement : public Element{
 public:
-	std::vector<Element> children;
+	std::vector<std::unique_ptr<Element>> children;
 };
 
 class SvgElement : public ContainerElement{
