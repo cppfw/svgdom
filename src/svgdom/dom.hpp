@@ -67,7 +67,11 @@ struct Transformable{
 	void attribsToStream(std::ostream& s)const;
 };
 
-struct GElement : public Element, public Container, public Transformable{
+struct Styleable{
+	void attribsToStream(std::ostream& s)const;
+};
+
+struct GElement : public Element, public Container, public Transformable, public Styleable{
 	void toStream(std::ostream& s, unsigned indent = 0)const override;
 };
 

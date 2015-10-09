@@ -390,6 +390,8 @@ void GElement::toStream(std::ostream& s, unsigned indent) const{
 	
 	s << ind << "<g";
 	this->Element::attribsToStream(s);
+	this->Transformable::attribsToStream(s);
+	this->Styleable::attribsToStream(s);
 	
 	if(this->children.size() == 0){
 		s << "/>";
@@ -399,4 +401,12 @@ void GElement::toStream(std::ostream& s, unsigned indent) const{
 		s << ind << "</g>";
 	}
 	s << std::endl;
+}
+
+void Styleable::attribsToStream(std::ostream& s) const{
+	//TODO:
+}
+
+void Transformable::attribsToStream(std::ostream& s) const{
+	//TODO:
 }
