@@ -258,3 +258,107 @@ Length Length::parse(const std::string& str) {
 	
 	return ret;
 }
+
+
+
+std::ostream& operator<<(std::ostream& s, const Length& l){
+	s << l.value;
+	
+	switch(l.unit){
+		case EUnit::UNKNOWN:
+		case EUnit::NUMBER:
+		default:
+			break;
+		case EUnit::PERCENT:
+			s << "%";
+			break;
+		case EUnit::EM:
+			s << "em";
+			break;
+		case EUnit::EX:
+			s << "ex";
+			break;
+		case EUnit::PX:
+			s << "px";
+			break;
+		case EUnit::CM:
+			s << "cm";
+			break;
+		case EUnit::IN:
+			s << "in";
+			break;
+		case EUnit::PT:
+			s << "pt";
+			break;
+		case EUnit::PC:
+			s << "pc";
+			break;
+	}
+	
+	return s;
+}
+
+
+
+void Element::attribsToStream(std::ostream& s) const{
+	if(this->id.length() != 0){
+		s << " id=\"" << this->id << "\"";
+	}
+}
+
+
+
+void Rectangle::attribsToStream(std::ostream& s)const{
+	if(this->x.value != 0){
+		s << " x=\"" << this->x << "\"";
+	}
+	
+	if(this->y.value != 0){
+		s << " y=\"" << this->y << "\"";
+	}
+	
+	if(this->width.value != 100 || this->width.unit != EUnit::PERCENT){ //if width is not 100% (default value)
+		s << " width=\"" << this->width << "\"";
+	}
+	
+	if(this->height.value != 100 || this->height.unit != EUnit::PERCENT){ //if height is not 100% (default value)
+		s << " height=\"" << this->height << "\"";
+	}
+}
+
+
+
+void SvgElement::toStream(std::ostream& s, unsigned indent) const{
+	std::string ind;
+	{
+		std::stringstream ss;
+		for(unsigned i = 0; i != indent; ++i){
+			ss << "\t";
+		}
+		ind = ss.str();
+	}
+	
+	s << ind << "<svg";
+	this->Element::attribsToStream(s);
+	this->Rectangle::attribsToStream(s);
+	
+	if(this->children.size() == 0){
+		s << "/>";
+	}else{
+		s << ind << ">" << std::endl;
+		this->childrenToStream(s, indent + 1);
+		s << ind << "</svg>";
+	}
+}
+
+void Container::childrenToStream(std::ostream& s, unsigned indent) const{
+	for(auto& e : this->children){
+		e->toStream(s, indent);
+	}
+}
+
+std::string Element::toString() const{
+	std::stringstream s;
+	this->toStream(s, 0);
+	return s.str();
+}
