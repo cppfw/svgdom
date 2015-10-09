@@ -14,6 +14,9 @@
 #include <papki/File.hpp>
 
 
+#include "config.hpp"
+
+
 namespace svgdom{
 
 enum class EUnit{
@@ -30,7 +33,7 @@ enum class EUnit{
 };
 
 struct Length{
-	float value = 0;
+	real value = 0;
 	EUnit unit = EUnit::NUMBER;
 	
 	static Length parse(const std::string& str);

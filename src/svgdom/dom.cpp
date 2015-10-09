@@ -1,8 +1,10 @@
 #include "dom.hpp"
+#include "config.hpp"
 
 #include <pugixml.hpp>
 
 #include <map>
+#include <sstream>
 
 using namespace svgdom;
 
@@ -217,7 +219,11 @@ std::unique_ptr<SvgElement> svgdom::load(const papki::File& f){
 Length Length::parse(const std::string& str) {
 	Length ret;
 
-	//TODO:
+	std::istringstream ss(str);
+	
+	ss >> ret.value;
+	
+	
 	
 	return ret;
 }
