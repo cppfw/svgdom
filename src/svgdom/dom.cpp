@@ -26,6 +26,41 @@ struct Parser{
 	std::vector<EXmlNamespace> defaultNamespace;
 	
 	
+	EXmlNamespace findNamespace(const std::string& ns){
+		for(auto i = this->namespaces.rbegin(); i != this->namespaces.rend(); ++i){
+			auto iter = i->find(ns);
+			if(iter == i->end()){
+				continue;
+			}
+			ASSERT(ns == iter->first)
+			return iter->second;
+		}
+		return EXmlNamespace::UNKNOWN;
+	}
+	
+	struct NamespaceNamePair{
+		EXmlNamespace ns;
+		std::string name;
+	};
+	
+	NamespaceNamePair getNamespace(const std::string& fullName){
+		NamespaceNamePair ret;
+		
+		auto colonIndex = fullName.find_first_not_of(':');
+		if(colonIndex == fullName.length()){
+			ret.ns = this->defaultNamespace.back();
+			ret.name = fullName;
+			return ret;
+		}
+		
+		ASSERT(fullName.length() >= colonIndex + 1)
+		
+		ret.ns = this->findNamespace(fullName.substr(0, colonIndex));
+		ret.name = fullName.substr(colonIndex + 1, fullName.length() - 1 - colonIndex);
+		
+		return ret;
+	}
+	
 	std::unique_ptr<svgdom::Element> parseNode(const pugi::xml_node& n);
 
 	std::unique_ptr<SvgElement> parseSvgElement(const pugi::xml_node& n){
@@ -36,7 +71,6 @@ struct Parser{
 
 
 std::unique_ptr<svgdom::Element> Parser::parseNode(const pugi::xml_node& n){
-	
 	//parse default namespace
 	{
 		pugi::xml_attribute dn = n.attribute("xmlns");
@@ -77,9 +111,16 @@ std::unique_ptr<svgdom::Element> Parser::parseNode(const pugi::xml_node& n){
 		}
 	}
 	
-	//TODO: check namespace
-	if(std::string("svg") == n.value()){
-		return parseSvgElement(n);
+	auto nsn = getNamespace(n.value());
+	switch(nsn.ns){
+		case EXmlNamespace::SVG:
+			if(nsn.name == "svg"){
+				return parseSvgElement(n);
+			}
+			break;
+		default:
+			//unknown namespace, ignore
+			break;
 	}
 	
 	ASSERT(this->namespaces.size() > 0)
@@ -95,7 +136,6 @@ std::unique_ptr<svgdom::Element> Parser::parseNode(const pugi::xml_node& n){
 
 
 std::unique_ptr<SvgElement> svgdom::load(const papki::File& f){
-
 	auto fileContents = f.loadWholeFileIntoMemory();
 	
 	pugi::xml_document doc;
