@@ -221,9 +221,40 @@ Length Length::parse(const std::string& str) {
 
 	std::istringstream ss(str);
 	
+	ss >> std::skipws;
+	
 	ss >> ret.value;
 	
+	std::array<char, 3> unit;
 	
+	ss.width(unit.size() - 1);//for terminating null
+	ss.fill(' ');
+	
+	ss >> (&*unit.begin());
+	
+	std::string u(&*unit.begin());
+	
+	if(u.length() == 0){
+		ret.unit = EUnit::NUMBER;
+	}else if(u == "%"){
+		ret.unit = EUnit::PERCENT;
+	}else if(u == "em"){
+		ret.unit = EUnit::EM;
+	}else if(u == "ex"){
+		ret.unit = EUnit::EX;
+	}else if(u == "px"){
+		ret.unit = EUnit::PX;
+	}else if(u == "cm"){
+		ret.unit = EUnit::CM;
+	}else if(u == "in"){
+		ret.unit = EUnit::IN;
+	}else if(u == "pt"){
+		ret.unit = EUnit::PT;
+	}else if(u == "pc"){
+		ret.unit = EUnit::PC;
+	}else{
+		ret.unit = EUnit::UNKNOWN;
+	}
 	
 	return ret;
 }
