@@ -10,21 +10,45 @@
 #include <vector>
 #include <memory>
 
+#include <utki/Unique.hpp>
 #include <papki/File.hpp>
+
 
 namespace svgdom{
 
-class Element{
-public:
+enum class EUnit{
+	UNKNOWN,
+	NUMBER,
+	PERCENT,
+	EM,
+	EX,
+	PX,
+	CM,
+	IN,
+	PT,
+	PC
+};
+
+struct Length{
+	float value = 0;
+	EUnit unit = EUnit::NUMBER;
+};
+
+struct Element : public utki::Unique{
+	std::string id;
+	
 	virtual ~Element()noexcept{}
 };
 
-class ContainerElement : public Element{
-public:
+struct Container{
 	std::vector<std::unique_ptr<Element>> children;
 };
 
-class SvgElement : public ContainerElement{
+struct Rectangle{
+	Length x, y, width, height;
+};
+
+struct SvgElement : public Element, public Container, public Rectangle{
 	
 };
 

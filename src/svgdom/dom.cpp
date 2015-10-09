@@ -19,6 +19,14 @@ const char* DSvgNamespace = "http://www.w3.org/2000/svg";
 const char* DXlinkNamespace = "http://www.w3.org/1999/xlink";
 
 
+void fillElement(Element& e, const pugi::xml_node& n){
+	//TODO: parse id
+}
+
+void fillRectangle(Rectangle& r, const pugi::xml_node& n){
+	//TODO: parse x, y, width, height
+}
+
 struct Parser{
 	typedef std::map<std::string, EXmlNamespace> T_NamespaceMap;
 	std::vector<T_NamespaceMap> namespaces;
@@ -46,8 +54,8 @@ struct Parser{
 	NamespaceNamePair getNamespace(const std::string& fullName){
 		NamespaceNamePair ret;
 		
-		auto colonIndex = fullName.find_first_not_of(':');
-		if(colonIndex == fullName.length()){
+		auto colonIndex = fullName.find_first_of(':');
+		if(colonIndex == std::string::npos){
 			ret.ns = this->defaultNamespace.back();
 			ret.name = fullName;
 			return ret;
@@ -64,8 +72,16 @@ struct Parser{
 	std::unique_ptr<svgdom::Element> parseNode(const pugi::xml_node& n);
 
 	std::unique_ptr<SvgElement> parseSvgElement(const pugi::xml_node& n){
+		ASSERT(getNamespace(n.name()).ns == EXmlNamespace::SVG)
+		ASSERT(getNamespace(n.name()).name == "svg")
+		
+		auto ret = utki::makeUnique<SvgElement>();
+		
+		fillElement(*ret, n);
+		fillRectangle(*ret, n);
+		
 		//TODO:
-		return nullptr;
+		return ret;
 	}
 };//~class
 
@@ -111,7 +127,7 @@ std::unique_ptr<svgdom::Element> Parser::parseNode(const pugi::xml_node& n){
 		}
 	}
 	
-	auto nsn = getNamespace(n.value());
+	auto nsn = getNamespace(n.name());
 	switch(nsn.ns){
 		case EXmlNamespace::SVG:
 			if(nsn.name == "svg"){
@@ -147,7 +163,14 @@ std::unique_ptr<SvgElement> svgdom::load(const papki::File& f){
 	
 	Parser parser;
 	
-	auto ret = parser.parseNode(doc.first_child());
+	//return first node which is successfully parsed
+	for(auto n = doc.first_child(); !n.empty(); n = n.next_sibling()){
+		auto element = parser.parseNode(doc.first_child());
 	
-	return std::unique_ptr<SvgElement>(dynamic_cast<SvgElement*>(ret.release()));
+		auto ret = std::unique_ptr<SvgElement>(dynamic_cast<SvgElement*>(element.release()));
+		if(ret){
+			return ret;
+		}
+	}
+	return nullptr;
 }
