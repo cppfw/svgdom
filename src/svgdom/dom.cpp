@@ -136,10 +136,14 @@ std::unique_ptr<svgdom::Element> Parser::parseNode(const pugi::xml_node& n){
 
 
 std::unique_ptr<SvgElement> svgdom::load(const papki::File& f){
-	auto fileContents = f.loadWholeFileIntoMemory();
-	
 	pugi::xml_document doc;
-	doc.load_buffer(&*fileContents.begin(), fileContents.size());
+	{
+		auto fileContents = f.loadWholeFileIntoMemory();
+		if(doc.load_buffer(&*fileContents.begin(), fileContents.size()).status != pugi::xml_parse_status::status_ok){
+			TRACE(<< "svgdom::load(): loading XML document failed!" << std::endl)
+			return nullptr;
+		}
+	}
 	
 	Parser parser;
 	
