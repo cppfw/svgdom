@@ -20,9 +20,10 @@ const char* DXlinkNamespace = "http://www.w3.org/1999/xlink";
 
 
 struct Parser{
-	std::map<std::string, EXmlNamespace> namespaces;
+	typedef std::map<std::string, EXmlNamespace> T_NamespaceMap;
+	std::vector<T_NamespaceMap> namespaces;
 	
-	EXmlNamespace defaultNamespace = EXmlNamespace::UNKNOWN;
+	std::vector<EXmlNamespace> defaultNamespace;
 	
 	
 	std::unique_ptr<svgdom::Element> parseNode(const pugi::xml_node& n);
@@ -35,21 +36,26 @@ struct Parser{
 
 
 std::unique_ptr<svgdom::Element> Parser::parseNode(const pugi::xml_node& n){
+	
 	//parse default namespace
 	{
 		pugi::xml_attribute dn = n.attribute("xmlns");
 		if(!dn.empty()){
 			if(std::string(dn.value()) == DSvgNamespace){
-				this->defaultNamespace = EXmlNamespace::SVG;
+				this->defaultNamespace.push_back(EXmlNamespace::SVG);
 			}else{
-				this->defaultNamespace = EXmlNamespace::UNKNOWN;
+				this->defaultNamespace.push_back(EXmlNamespace::UNKNOWN);
 			}
+		}else{
+			this->defaultNamespace.push_back(EXmlNamespace::UNKNOWN);
 		}
 	}
 	
 	//parse other namespaces
 	{
 		std::string xmlns = "xmlns:";
+		
+		this->namespaces.push_back(T_NamespaceMap());
 		
 		for(auto a = n.first_attribute(); !a.empty(); a = a.next_attribute()){
 			auto attr = std::string(a.name());
@@ -62,11 +68,11 @@ std::unique_ptr<svgdom::Element> Parser::parseNode(const pugi::xml_node& n){
 			auto ns = attr.substr(xmlns.length(), attr.length() - xmlns.length());
 			
 			if(ns == DSvgNamespace){
-				this->namespaces[ns] = EXmlNamespace::SVG;
+				this->namespaces.back()[ns] = EXmlNamespace::SVG;
 			}else if (ns == DXlinkNamespace){
-				this->namespaces[ns] = EXmlNamespace::XLINK;
+				this->namespaces.back()[ns] = EXmlNamespace::XLINK;
 			}else{
-				this->namespaces.erase(ns);
+				this->namespaces.back().erase(ns);
 			}
 		}
 	}
@@ -76,6 +82,10 @@ std::unique_ptr<svgdom::Element> Parser::parseNode(const pugi::xml_node& n){
 		return parseSvgElement(n);
 	}
 	
+	ASSERT(this->namespaces.size() > 0)
+	this->namespaces.pop_back();
+	ASSERT(this->defaultNamespace.size() > 0)
+	this->defaultNamespace.pop_back();
 	
 	return nullptr;
 }
