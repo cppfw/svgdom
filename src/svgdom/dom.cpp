@@ -47,7 +47,7 @@ std::unique_ptr<svgdom::Element> Parser::parseNode(const pugi::xml_node& n){
 				this->defaultNamespace.push_back(EXmlNamespace::UNKNOWN);
 			}
 		}else{
-			this->defaultNamespace.push_back(EXmlNamespace::UNKNOWN);
+			this->defaultNamespace.push_back(this->defaultNamespace.back());
 		}
 	}
 	
