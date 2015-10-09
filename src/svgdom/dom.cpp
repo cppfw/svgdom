@@ -116,10 +116,22 @@ struct Parser{
 		
 		auto ret = utki::makeUnique<SvgElement>();
 		
-		fillElement(*ret, n);
-		fillRectangle(*ret, n);
-		fillContainer(*ret, n);
+		this->fillElement(*ret, n);
+		this->fillRectangle(*ret, n);
+		this->fillContainer(*ret, n);
 
+		return ret;
+	}
+	
+	std::unique_ptr<GElement> parseGElement(const pugi::xml_node& n){
+		ASSERT(getNamespace(n.name()).ns == EXmlNamespace::SVG)
+		ASSERT(getNamespace(n.name()).name == "g")
+		
+		auto ret = utki::makeUnique<GElement>();
+		
+		this->fillElement(*ret, n);
+		this->fillContainer(*ret, n);
+		
 		return ret;
 	}
 };//~class
@@ -170,7 +182,9 @@ std::unique_ptr<svgdom::Element> Parser::parseNode(const pugi::xml_node& n){
 	switch(nsn.ns){
 		case EXmlNamespace::SVG:
 			if(nsn.name == "svg"){
-				return parseSvgElement(n);
+				return this->parseSvgElement(n);
+			}else if(nsn.name == "g"){
+				return this->parseGElement(n);
 			}
 			break;
 		default:
@@ -327,16 +341,23 @@ void Rectangle::attribsToStream(std::ostream& s)const{
 }
 
 
+namespace{
+
+std::string indentStr(unsigned indent){
+	std::string ind;
+
+	std::stringstream ss;
+	for(unsigned i = 0; i != indent; ++i){
+		ss << "\t";
+	}
+	return ss.str();
+}
+
+}//~namespace
+
 
 void SvgElement::toStream(std::ostream& s, unsigned indent) const{
-	std::string ind;
-	{
-		std::stringstream ss;
-		for(unsigned i = 0; i != indent; ++i){
-			ss << "\t";
-		}
-		ind = ss.str();
-	}
+	auto ind = indentStr(indent);
 	
 	s << ind << "<svg";
 	this->Element::attribsToStream(s);
@@ -345,10 +366,11 @@ void SvgElement::toStream(std::ostream& s, unsigned indent) const{
 	if(this->children.size() == 0){
 		s << "/>";
 	}else{
-		s << ind << ">" << std::endl;
+		s << ">" << std::endl;
 		this->childrenToStream(s, indent + 1);
 		s << ind << "</svg>";
 	}
+	s << std::endl;
 }
 
 void Container::childrenToStream(std::ostream& s, unsigned indent) const{
@@ -361,4 +383,20 @@ std::string Element::toString() const{
 	std::stringstream s;
 	this->toStream(s, 0);
 	return s.str();
+}
+
+void GElement::toStream(std::ostream& s, unsigned indent) const{
+	auto ind = indentStr(indent);
+	
+	s << ind << "<g";
+	this->Element::attribsToStream(s);
+	
+	if(this->children.size() == 0){
+		s << "/>";
+	}else{
+		s << ">" << std::endl;
+		this->childrenToStream(s, indent + 1);
+		s << ind << "</g>";
+	}
+	s << std::endl;
 }

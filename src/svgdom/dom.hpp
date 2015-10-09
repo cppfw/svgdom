@@ -63,6 +63,14 @@ struct Container{
 	void childrenToStream(std::ostream& s, unsigned indent)const;
 };
 
+struct Transformable{
+	void attribsToStream(std::ostream& s)const;
+};
+
+struct GElement : public Element, public Container, public Transformable{
+	void toStream(std::ostream& s, unsigned indent = 0)const override;
+};
+
 struct Rectangle{
 	Length x, y;
 	Length width = Length(100, EUnit::PERCENT);
