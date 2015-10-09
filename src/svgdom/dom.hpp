@@ -32,6 +32,8 @@ enum class EUnit{
 struct Length{
 	float value = 0;
 	EUnit unit = EUnit::NUMBER;
+	
+	static Length parse(const std::string& str);
 };
 
 struct Element : public utki::Unique{

@@ -19,14 +19,6 @@ const char* DSvgNamespace = "http://www.w3.org/2000/svg";
 const char* DXlinkNamespace = "http://www.w3.org/1999/xlink";
 
 
-void fillElement(Element& e, const pugi::xml_node& n){
-	//TODO: parse id
-}
-
-void fillRectangle(Rectangle& r, const pugi::xml_node& n){
-	//TODO: parse x, y, width, height
-}
-
 struct Parser{
 	typedef std::map<std::string, EXmlNamespace> T_NamespaceMap;
 	std::vector<T_NamespaceMap> namespaces;
@@ -71,6 +63,51 @@ struct Parser{
 	
 	std::unique_ptr<svgdom::Element> parseNode(const pugi::xml_node& n);
 
+	void fillElement(Element& e, const pugi::xml_node& n){
+		for(auto a = n.first_attribute(); !a.empty(); a = a.next_attribute()){
+			auto nsn = this->getNamespace(a.name());
+			switch(nsn.ns){
+				case EXmlNamespace::SVG:
+					if(nsn.name == "id"){
+						e.id = a.value();
+					}
+					break;
+				default:
+					break;
+			}
+		}
+	}
+
+	void fillRectangle(Rectangle& r, const pugi::xml_node& n){
+		for(auto a = n.first_attribute(); !a.empty(); a = a.next_attribute()){
+			auto nsn = this->getNamespace(a.name());
+			switch(nsn.ns){
+				case EXmlNamespace::SVG:
+					if(nsn.name == "x"){
+						r.x = Length::parse(a.value());
+					}else if(nsn.name == "y"){
+						r.y = Length::parse(a.value());
+					}else if(nsn.name == "width"){
+						r.width = Length::parse(a.value());
+					}else if(nsn.name == "height"){
+						r.height = Length::parse(a.value());
+					}
+					break;
+				default:
+					break;
+			}
+		}
+	}
+	
+	void fillContainer(Container& c, const pugi::xml_node& n){
+		ASSERT(c.children.size() == 0)
+		for(auto i = n.first_child(); !i.empty(); i = i.next_sibling()){
+			if(auto res = this->parseNode(i)){
+				c.children.push_back(std::move(res));
+			}
+		}
+	}
+	
 	std::unique_ptr<SvgElement> parseSvgElement(const pugi::xml_node& n){
 		ASSERT(getNamespace(n.name()).ns == EXmlNamespace::SVG)
 		ASSERT(getNamespace(n.name()).name == "svg")
@@ -79,8 +116,8 @@ struct Parser{
 		
 		fillElement(*ret, n);
 		fillRectangle(*ret, n);
-		
-		//TODO:
+		fillContainer(*ret, n);
+
 		return ret;
 	}
 };//~class
@@ -173,4 +210,14 @@ std::unique_ptr<SvgElement> svgdom::load(const papki::File& f){
 		}
 	}
 	return nullptr;
+}
+
+
+
+Length Length::parse(const std::string& str) {
+	Length ret;
+
+	//TODO:
+	
+	return ret;
 }
