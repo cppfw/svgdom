@@ -32,7 +32,7 @@ void skipWhitespacesAndOrComma(std::istream& s){
 std::string readTillCharOrWhitespace(std::istream& s, char c){
 	std::stringstream ss;
 	while(!s.eof()){
-		if(std::isspace(s.peek()) || s.peek() == c){
+		if(std::isspace(s.peek()) || s.peek() == c || s.peek() == std::char_traits<char>::eof()){
 			break;
 		}
 		ss << char(s.get());
@@ -43,7 +43,7 @@ std::string readTillCharOrWhitespace(std::istream& s, char c){
 std::string readTillChar(std::istream& s, char c){
 	std::stringstream ss;
 	while(!s.eof()){
-		if(s.peek() == c){
+		if(s.peek() == c || s.peek() == std::char_traits<char>::eof()){
 			break;
 		}
 		ss << char(s.get());
@@ -729,6 +729,8 @@ decltype(Styleable::styles) Styleable::parse(const std::string& str){
 			}
 		}
 		
+		skipWhitespaces(s);
+		
 		StylePropertyValue v;
 		
 		switch(type){
@@ -736,11 +738,10 @@ decltype(Styleable::styles) Styleable::parse(const std::string& str){
 				ASSERT(false)
 				break;
 			case EStyleProperty::FILL:
-				skipWhitespaces(s);
 				{
 					auto value = readTillChar(s, ';');
-					//TODO:
-					
+//					TRACE(<< "value = " << value << std::endl)
+					v = StylePropertyValue::parsePaint(value);
 				}
 				break;
 		}
@@ -753,8 +754,44 @@ decltype(Styleable::styles) Styleable::parse(const std::string& str){
 			}
 		}
 		
-		ret[type] = v;
+		ret[type] = std::move(v);
 	}
+	
+	return ret;
+}
+
+
+
+StylePropertyValue StylePropertyValue::parsePaint(const std::string& str){
+	StylePropertyValue ret;
+	
+	if(str.size() == 0){
+		ret.effective = false;
+		return ret;
+	}
+	
+	ASSERT(!std::isspace(str[0])) //leading spaces should be skept already
+
+	//check if 'none'
+	{
+		std::string cmp = "none";
+		if(cmp == str.substr(0, cmp.length())){
+			ret.effective = false;
+			return ret;
+		}
+	}
+	
+	//check if # notation
+	if(str[0] == '#'){
+		//TODO: parse as # rgb color
+	}
+	
+	//check if rgb() or RGB() notation
+	{
+		
+	}
+	
+	//TODO:
 	
 	return ret;
 }

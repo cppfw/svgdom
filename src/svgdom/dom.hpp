@@ -13,6 +13,8 @@
 #include <map>
 
 #include <utki/Unique.hpp>
+#include <utki/Void.hpp>
+
 #include <papki/File.hpp>
 
 
@@ -161,8 +163,12 @@ enum class EStyleProperty{
 };
 
 struct StylePropertyValue{
-	std::uint32_t integer;
+	bool effective = true;
+	std::uint32_t integer = 0;
 	std::string str;
+	std::unique_ptr<utki::Void> d;
+	
+	static StylePropertyValue parsePaint(const std::string& str);
 };
 
 struct Styleable{
