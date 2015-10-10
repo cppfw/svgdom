@@ -5,11 +5,69 @@
 
 #include <map>
 #include <sstream>
+#include <iomanip>
 
 using namespace svgdom;
 
 
 namespace{
+
+void skipWhitespacesAndOrComma(std::istream& s){
+	bool commaSkipped = false;
+	while(!s.eof()){
+		if(std::isspace(s.peek())){
+			s.get();
+		}else if(s.peek() == ','){
+			if(commaSkipped){
+				break;
+			}
+			s.get();
+			commaSkipped = true;
+		}else{
+			break;
+		}
+	}
+}
+
+std::string readTillCharOrWhitespace(std::istream& s, char c){
+	std::stringstream ss;
+	while(!s.eof()){
+		if(std::isspace(s.peek()) || s.peek() == c){
+			break;
+		}
+		ss << char(s.get());
+	}
+	return ss.str();
+}
+
+std::string readTillChar(std::istream& s, char c){
+	std::stringstream ss;
+	while(!s.eof()){
+		if(s.peek() == c){
+			break;
+		}
+		ss << char(s.get());
+	}
+	return ss.str();
+}
+
+
+void skipTillCharInclusive(std::istream& s, char c){
+	while(!s.eof()){
+		if(s.get() == c){
+			break;
+		}
+	}
+}
+
+void skipWhitespaces(std::istream& s){
+	while(!s.eof()){
+		if(!std::isspace(s.peek())){
+			break;
+		}
+		s.get();
+	}
+}
 
 enum class EXmlNamespace{
 	UNKNOWN,
@@ -110,6 +168,40 @@ struct Parser{
 		}
 	}
 	
+	void fillTransformable(Transformable& t, const pugi::xml_node& n){
+		ASSERT(t.transformations.size() == 0)
+		
+		for(auto a = n.first_attribute(); !a.empty(); a = a.next_attribute()){
+			auto nsn = this->getNamespace(a.name());
+			switch(nsn.ns){
+				case EXmlNamespace::SVG:
+					if(nsn.name == "transform"){
+						t.transformations = Transformable::parse(a.value());
+					}
+					break;
+				default:
+					break;
+			}
+		}
+	}
+	
+	void fillStyleable(Styleable& s, const pugi::xml_node& n){
+		ASSERT(s.styles.size() == 0)
+		
+		for(auto a = n.first_attribute(); !a.empty(); a = a.next_attribute()){
+			auto nsn = this->getNamespace(a.name());
+			switch(nsn.ns){
+				case EXmlNamespace::SVG:
+					if(nsn.name == "style"){
+						s.styles = Styleable::parse(a.value());
+					}
+					break;
+				default:
+					break;
+			}
+		}
+	}
+	
 	std::unique_ptr<SvgElement> parseSvgElement(const pugi::xml_node& n){
 		ASSERT(getNamespace(n.name()).ns == EXmlNamespace::SVG)
 		ASSERT(getNamespace(n.name()).name == "svg")
@@ -130,6 +222,8 @@ struct Parser{
 		auto ret = utki::makeUnique<GElement>();
 		
 		this->fillElement(*ret, n);
+		this->fillTransformable(*ret, n);
+		this->fillStyleable(*ret, n);
 		this->fillContainer(*ret, n);
 		
 		return ret;
@@ -239,14 +333,9 @@ Length Length::parse(const std::string& str) {
 	
 	ss >> ret.value;
 	
-	std::array<char, 3> unit;
+	std::string u;
 	
-	ss.width(unit.size() - 1);//for terminating null
-	ss.fill(' ');
-	
-	ss >> (&*unit.begin());
-	
-	std::string u(&*unit.begin());
+	ss >> std::setw(2) >> u >> std::setw(0);
 	
 	if(u.length() == 0){
 		ret.unit = EUnit::NUMBER;
@@ -408,5 +497,264 @@ void Styleable::attribsToStream(std::ostream& s) const{
 }
 
 void Transformable::attribsToStream(std::ostream& s) const{
-	//TODO:
+	if(this->transformations.size() == 0){
+		return;
+	}
+	
+	s << " transform=\"";
+	
+	bool isFirst = true;
+	
+	for(auto& t : this->transformations){
+		if(isFirst){
+			isFirst = false;
+		}else{
+			s << " ";
+		}
+		
+		switch(t.type){
+			default:
+				ASSERT(false)
+				break;
+			case Transformation::EType::MATRIX:
+				s << "matrix(" << t.a << "," << t.b << "," << t.c << "," << t.d << "," << t.e << "," << t.f << ")";
+				break;
+			case Transformation::EType::TRANSLATE:
+				s << "translate(" << t.x;
+				if(t.y != 0){
+					s << "," << t.y;
+				}
+				s << ")";
+				break;
+			case Transformation::EType::SCALE:
+				s << "scale(" << t.x;
+				if(t.x != t.y){
+					s << "," << t.y;
+				}
+				s << ")";
+				break;
+			case Transformation::EType::ROTATE:
+				s << "rotate(" << t.angle;
+				if(t.x != 0 || t.y != 0){
+					s << "," << t.x << "," << t.y;
+				}
+				s << ")";
+				break;
+			case Transformation::EType::SKEWX:
+				s << "skewX(" << t.angle << ")";
+				break;
+			case Transformation::EType::SKEWY:
+				s << "skewY(" << t.angle << ")";
+				break;
+		}
+	}
+	s << "\"";
+}
+
+decltype(Transformable::transformations) Transformable::parse(const std::string& str){
+	std::istringstream s(str);
+	
+	s >> std::skipws;
+	s >> std::setfill(' ');
+	
+	decltype(Transformable::transformations) ret;
+	
+	while(!s.eof()){
+		std::string transform = readTillCharOrWhitespace(s, '(');
+		
+		Transformation t;
+		
+		if(transform == "matrix"){
+			t.type = Transformation::EType::MATRIX;
+		}else if(transform == "translate"){
+			t.type = Transformation::EType::TRANSLATE;
+		}else if(transform == "scale"){
+			t.type = Transformation::EType::SCALE;
+		}else if(transform == "rotate"){
+			t.type = Transformation::EType::ROTATE;
+		}else if(transform == "skewX"){
+			t.type = Transformation::EType::SKEWX;
+		}else if(transform == "skewY"){
+			t.type = Transformation::EType::SKEWY;
+		}else{
+			return ret;//unknown transformation, stop parsing
+		}
+		
+		{
+			std::string str;
+			s >> std::setw(1) >> str >> std::setw(0);
+			if(str != "("){
+				return ret;//expected (
+			}
+		}
+		
+		switch(t.type){
+			default:
+				ASSERT(false)
+				break;
+			case Transformation::EType::MATRIX:
+				s >> t.a;
+				if(s.fail()){
+					return ret;
+				}
+				skipWhitespacesAndOrComma(s);
+				s >> t.b;
+				if(s.fail()){
+					return ret;
+				}
+				skipWhitespacesAndOrComma(s);
+				s >> t.c;
+				if(s.fail()){
+					return ret;
+				}
+				skipWhitespacesAndOrComma(s);
+				s >> t.d;
+				if(s.fail()){
+					return ret;
+				}
+				skipWhitespacesAndOrComma(s);
+				s >> t.e;
+				if(s.fail()){
+					return ret;
+				}
+				skipWhitespacesAndOrComma(s);
+				s >> t.f;
+				if(s.fail()){
+					return ret;
+				}
+				break;
+			case Transformation::EType::TRANSLATE:
+				s >> t.x;
+				if(s.fail()){
+					return ret;
+				}
+				skipWhitespacesAndOrComma(s);
+				s >> t.y;
+				if(s.fail()){
+					s.clear();
+					t.y = 0;
+				}
+				break;
+			case Transformation::EType::SCALE:
+				s >> t.x;
+				if(s.fail()){
+					return ret;
+				}
+				skipWhitespacesAndOrComma(s);
+				s >> t.y;
+				if(s.fail()){
+					s.clear();
+					t.y = t.x;
+				}
+				break;
+			case Transformation::EType::ROTATE:
+				s >> t.angle;
+				if(s.fail()){
+					return ret;
+				}
+				skipWhitespacesAndOrComma(s);
+				s >> t.x;
+				if(s.fail()){
+					s.clear();
+					t.x = 0;
+					t.y = 0;
+				}else{
+					skipWhitespacesAndOrComma(s);
+					s >> t.y;
+					if(s.fail()){
+						return ret;//malformed rotate transformation
+					}
+				}
+				break;
+			case Transformation::EType::SKEWY:
+			case Transformation::EType::SKEWX:
+				s >> t.angle;
+				if(s.fail()){
+					return ret;
+				}
+				break;
+		}
+		
+		{
+			std::string str;
+			s >> std::setw(1) >> str >> std::setw(0);
+			if(str != ")"){
+				return ret;//expected )
+			}
+		}
+		
+		ret.push_back(t);
+		
+		skipWhitespacesAndOrComma(s);
+	}
+	
+	return ret;
+}
+
+decltype(Styleable::styles) Styleable::parse(const std::string& str){
+	std::stringstream s(str);
+	
+	s >> std::skipws;
+	s >> std::setfill(' ');
+	
+	decltype(Styleable::styles) ret;
+	
+	while(!s.eof()){
+		skipWhitespaces(s);
+		std::string property = readTillCharOrWhitespace(s, ':');
+		
+		EStyleProperty type;
+		
+		
+		if(property == "fill"){
+			type = EStyleProperty::FILL;
+//		}else if(property == "fill-opacity"){
+//			type = EStyleProperty::FILL_OPACITY;
+//		}else if(property == "stroke"){
+//			type = EStyleProperty::STROKE;
+//		}else if(property == "stroke-width"){
+//			type = EStyleProperty::STROKE_WIDTH;
+		}else{
+			//unknown transformation, skip it
+			TRACE(<< "Unknown style property: " << property << std::endl)
+			skipTillCharInclusive(s, ';');
+			continue;
+		}
+		
+		{
+			std::string str;
+			s >> std::setw(1) >> str >> std::setw(0);
+			if(str != ":"){
+				return ret;//expected colon
+			}
+		}
+		
+		StylePropertyValue v;
+		
+		switch(type){
+			default:
+				ASSERT(false)
+				break;
+			case EStyleProperty::FILL:
+				skipWhitespaces(s);
+				{
+					auto value = readTillChar(s, ';');
+					//TODO:
+					
+				}
+				break;
+		}
+		
+		{
+			std::string str;
+			s >> std::setw(1) >> str >> std::setw(0);
+			if(!s.eof() && str != ";"){
+				return ret;//expected semicolon
+			}
+		}
+		
+		ret[type] = v;
+	}
+	
+	return ret;
 }
