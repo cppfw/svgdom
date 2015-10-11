@@ -164,7 +164,9 @@ enum class EStyleProperty{
 
 struct StylePropertyValue{
 	bool effective = true;
-	std::uint32_t integer = 0;
+	std::uint32_t integer;
+	real floating;
+	Length length;
 	std::string str;
 	std::unique_ptr<utki::Void> d;
 	

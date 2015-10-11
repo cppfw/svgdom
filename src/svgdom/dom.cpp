@@ -708,12 +708,12 @@ decltype(Styleable::styles) Styleable::parse(const std::string& str){
 		
 		if(property == "fill"){
 			type = EStyleProperty::FILL;
-//		}else if(property == "fill-opacity"){
-//			type = EStyleProperty::FILL_OPACITY;
-//		}else if(property == "stroke"){
-//			type = EStyleProperty::STROKE;
-//		}else if(property == "stroke-width"){
-//			type = EStyleProperty::STROKE_WIDTH;
+		}else if(property == "fill-opacity"){
+			type = EStyleProperty::FILL_OPACITY;
+		}else if(property == "stroke"){
+			type = EStyleProperty::STROKE;
+		}else if(property == "stroke-width"){
+			type = EStyleProperty::STROKE_WIDTH;
 		}else{
 			//unknown transformation, skip it
 			TRACE(<< "Unknown style property: " << property << std::endl)
@@ -738,11 +738,25 @@ decltype(Styleable::styles) Styleable::parse(const std::string& str){
 				ASSERT(false)
 				break;
 			case EStyleProperty::FILL:
-				{
-					auto value = readTillChar(s, ';');
-//					TRACE(<< "value = " << value << std::endl)
-					v = StylePropertyValue::parsePaint(value);
+//				TRACE(<< "value = " << value << std::endl)
+				v = StylePropertyValue::parsePaint(readTillChar(s, ';'));
+				break;
+			case EStyleProperty::FILL_OPACITY:
+				s >> v.floating;
+				if(s.fail()){
+					s.clear();
+				}else{
+					utki::clampRange(v.floating, real(0), real(1));
+//					TRACE(<< "fill-opacity read = " << v.number << std::endl)
 				}
+				break;
+			case EStyleProperty::STROKE:
+				v = StylePropertyValue::parsePaint(readTillChar(s, ';'));
+//				TRACE(<< "stroke read = " << std::hex << v.integer << std::endl)
+				break;
+			case EStyleProperty::STROKE_WIDTH:
+				v.length = Length::parse(readTillChar(s, ';'));
+//				TRACE(<< "stroke-width read = " << v.length << std::endl)
 				break;
 		}
 		
@@ -817,7 +831,7 @@ StylePropertyValue StylePropertyValue::parsePaint(const std::string& str){
 				break;
 		}
 		
-		TRACE(<< "color read = " << std::hex << ret.integer << std::endl)
+//		TRACE(<< "# color read = " << std::hex << ret.integer << std::endl)
 		return ret;
 	}
 	
@@ -826,7 +840,7 @@ StylePropertyValue StylePropertyValue::parsePaint(const std::string& str){
 		//TODO:
 	}
 	
-	//TODO:
+	//TODO: check if color name
 	
 	return ret;
 }
