@@ -99,6 +99,7 @@ struct Transformable{
 };
 
 enum class EStyleProperty{
+	UNKNOWN,
 	FONT,
 	FONT_FAMILY,
 	FONT_SIZE,
@@ -171,6 +172,8 @@ struct StylePropertyValue{
 	std::unique_ptr<utki::Void> d;
 	
 	static StylePropertyValue parsePaint(const std::string& str);
+	
+	std::string paintToString()const;
 };
 
 struct Styleable{
@@ -179,6 +182,9 @@ struct Styleable{
 	void attribsToStream(std::ostream& s)const;
 	
 	static decltype(styles) parse(const std::string& str);
+	
+	static std::string propertyToString(EStyleProperty p);
+	static EStyleProperty stringToProperty(std::string str);
 };
 
 struct GElement : public Element, public Container, public Transformable, public Styleable{

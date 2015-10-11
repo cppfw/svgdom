@@ -493,7 +493,47 @@ void GElement::toStream(std::ostream& s, unsigned indent) const{
 }
 
 void Styleable::attribsToStream(std::ostream& s) const{
+	if(this->styles.size() == 0){
+		return;
+	}
+	
+	s << " style=\"";
+	
+	bool isFirst = true;
+	
+	for(auto& st : this->styles){
+		if(isFirst){
+			isFirst = false;
+		}else{
+			s << "; ";
+		}
+		
+		ASSERT(st.first != EStyleProperty::UNKNOWN)
+		
+		s << propertyToString(st.first) << ":";
+		
+		switch(st.first){
+			default:
+				ASSERT(false)
+				break;
+			case EStyleProperty::FILL:
+				s << st.second.paintToString();
+				break;
+			case EStyleProperty::FILL_OPACITY:
+				s << st.second.floating;
+				break;
+			case EStyleProperty::STROKE:
+				s << st.second.paintToString();
+				break;
+			case EStyleProperty::STROKE_WIDTH:
+				s << st.second.length;
+				break;
+		}
+	}
+	
 	//TODO:
+	
+	s << "\"";
 }
 
 void Transformable::attribsToStream(std::ostream& s) const{
@@ -691,6 +731,36 @@ decltype(Transformable::transformations) Transformable::parse(const std::string&
 	return ret;
 }
 
+EStyleProperty Styleable::stringToProperty(std::string str){
+	if(str == "fill"){
+		return EStyleProperty::FILL;
+	}else if(str == "fill-opacity"){
+		return EStyleProperty::FILL_OPACITY;
+	}else if(str == "stroke"){
+		return EStyleProperty::STROKE;
+	}else if(str == "stroke-width"){
+		return EStyleProperty::STROKE_WIDTH;
+	}
+	
+	return EStyleProperty::UNKNOWN;
+}
+
+std::string Styleable::propertyToString(EStyleProperty p){
+	switch(p){
+		default:
+			return "UNKNOWN";
+		case EStyleProperty::FILL:
+			return "fill";
+		case EStyleProperty::FILL_OPACITY:
+			return "fill-opacity";
+		case EStyleProperty::STROKE:
+			return "stroke";
+		case EStyleProperty::STROKE_WIDTH:
+			return "stroke-width";
+	}
+}
+
+
 decltype(Styleable::styles) Styleable::parse(const std::string& str){
 	std::stringstream s(str);
 	
@@ -703,19 +773,10 @@ decltype(Styleable::styles) Styleable::parse(const std::string& str){
 		skipWhitespaces(s);
 		std::string property = readTillCharOrWhitespace(s, ':');
 		
-		EStyleProperty type;
+		EStyleProperty type = Styleable::stringToProperty(property);
 		
-		
-		if(property == "fill"){
-			type = EStyleProperty::FILL;
-		}else if(property == "fill-opacity"){
-			type = EStyleProperty::FILL_OPACITY;
-		}else if(property == "stroke"){
-			type = EStyleProperty::STROKE;
-		}else if(property == "stroke-width"){
-			type = EStyleProperty::STROKE_WIDTH;
-		}else{
-			//unknown transformation, skip it
+		if(type == EStyleProperty::UNKNOWN){
+			//unknown style property, skip it
 			TRACE(<< "Unknown style property: " << property << std::endl)
 			skipTillCharInclusive(s, ';');
 			continue;
@@ -843,4 +904,29 @@ StylePropertyValue StylePropertyValue::parsePaint(const std::string& str){
 	//TODO: check if color name
 	
 	return ret;
+}
+
+std::string StylePropertyValue::paintToString()const{
+	if(!this->effective){
+		return "none";
+	}
+	
+	if(this->str.size() == 0){
+		//it is a # notation
+		
+		std::stringstream s;
+		s << std::hex;
+		s << "#";
+		s << ((this->integer >> 4) & 0xf);
+		s << ((this->integer) & 0xf);
+		s << ((this->integer >> 12) & 0xf);
+		s << ((this->integer >> 8) & 0xf);
+		s << ((this->integer >> 20) & 0xf);
+		s << ((this->integer >> 16) & 0xf);
+		return s.str();
+	}
+	
+	//TODO: other notations
+	
+	return "";
 }
