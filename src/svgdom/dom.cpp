@@ -976,3 +976,11 @@ void PathElement::toStream(std::ostream& s, unsigned indent) const{
 	s << "/>";
 	s << std::endl;
 }
+
+decltype(PathElement::path) PathElement::parse(const std::string& str){
+	decltype(PathElement::path) ret;
+	
+	//TODO:
+	
+	return ret;
+}

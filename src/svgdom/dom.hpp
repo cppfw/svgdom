@@ -255,6 +255,8 @@ struct PathElement : public Element, public Styleable, public Transformable{
 	std::vector<Step> path;
 	
 	void toStream(std::ostream& s, unsigned indent = 0)const override;
+	
+	static decltype(path) parse(const std::string& str);
 };
 
 
