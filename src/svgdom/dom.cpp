@@ -783,12 +783,47 @@ StylePropertyValue StylePropertyValue::parsePaint(const std::string& str){
 	
 	//check if # notation
 	if(str[0] == '#'){
-		//TODO: parse as # rgb color
+		std::istringstream s(str.substr(1, 6));
+		
+		std::array<std::uint8_t, 6> d;
+		unsigned numDigits = 0;
+		for(auto i = d.begin(); i != d.end(); ++i, ++numDigits){
+			char c = s.get();
+			if('0' <= c && c <= '9'){
+				(*i) = c - '0';
+			}else if('a' <= c && c <= 'f'){
+				(*i) = 10 + c - 'a';
+			}else if('A' <= c && c <= 'F'){
+				(*i) = 10 + c - 'A';
+			}else{
+				break;
+			}
+			
+			ASSERT(((*i) & 0xf0) == 0) //only one hex digit
+		}
+		switch(numDigits){
+			case 3:
+				ret.integer = (std::uint32_t(d[0]) << 4) | (std::uint32_t(d[0]))
+						| (std::uint32_t(d[1]) << 12) | (std::uint32_t(d[1]) << 8)
+						| (std::uint32_t(d[2]) << 20) | (std::uint32_t(d[2]) << 16);
+				break;
+			case 6:
+				ret.integer = (std::uint32_t(d[0]) << 4) | (std::uint32_t(d[1]))
+						| (std::uint32_t(d[2]) << 12) | (std::uint32_t(d[3]) << 8)
+						| (std::uint32_t(d[4]) << 20) | (std::uint32_t(d[5]) << 16);
+				break;
+			default:
+				ret.effective = false;
+				break;
+		}
+		
+		TRACE(<< "color read = " << std::hex << ret.integer << std::endl)
+		return ret;
 	}
 	
 	//check if rgb() or RGB() notation
 	{
-		
+		//TODO:
 	}
 	
 	//TODO:
