@@ -225,7 +225,7 @@ struct PathElement : public Element, public Styleable, public Transformable{
 			QUADRATIC_SMOOT_REL,
 			ARC_ABS,
 			ARC_REL
-		};
+		} type;
 	
 		real x, y;
 		
