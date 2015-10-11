@@ -221,8 +221,10 @@ struct PathElement : public Element, public Styleable, public Transformable{
 			CUBIC_REL,
 			CUBIC_SMOOTH_ABS,
 			CUBIC_SMOOTH_REL,
-			QUADRATIC_SMOOT_ABS,
-			QUADRATIC_SMOOT_REL,
+			QUADRATIC_ABS,
+			QUADRATIC_REL,
+			QUADRATIC_SMOOTH_ABS,
+			QUADRATIC_SMOOTH_REL,
 			ARC_ABS,
 			ARC_REL
 		} type;
@@ -251,8 +253,13 @@ struct PathElement : public Element, public Styleable, public Transformable{
 				bool sweep;
 			} flags;
 		};
+		
+		static EType charToType(char c);
+		static char typeToChar(EType t);
 	};
 	std::vector<Step> path;
+	
+	void attribsToStream(std::ostream& s)const;
 	
 	void toStream(std::ostream& s, unsigned indent = 0)const override;
 	

@@ -244,7 +244,7 @@ struct Parser{
 			switch(nsn.ns){
 				case EXmlNamespace::SVG:
 					if(nsn.name == "d"){
-						//TODO: parse d
+						ret->path = PathElement::parse(a.value());
 						return ret;
 					}
 					break;
@@ -971,16 +971,406 @@ void PathElement::toStream(std::ostream& s, unsigned indent) const{
 	this->Transformable::attribsToStream(s);
 	this->Styleable::attribsToStream(s);
 	
-	//TODO: print d property
+	this->attribsToStream(s);
 	
 	s << "/>";
 	s << std::endl;
 }
 
+void PathElement::attribsToStream(std::ostream& s) const{
+	if(this->path.size() == 0){
+		return;
+	}
+	
+	s << " d=\"";
+	
+	Step::EType curType = Step::EType::UNKNOWN;
+	
+	for(auto& step : this->path){
+		if(curType == step.type){
+			s << " ";
+		}else{
+			s << Step::typeToChar(step.type);
+			curType = step.type;
+		}
+		
+		switch(step.type){
+			case Step::EType::MOVE_ABS:
+			case Step::EType::MOVE_REL:
+			case Step::EType::LINE_ABS:
+			case Step::EType::LINE_REL:
+				s << step.x;
+				s << ",";
+				s << step.y;
+				break;
+			case Step::EType::CLOSE:
+				break;
+			case Step::EType::HORIZONTAL_LINE_ABS:
+			case Step::EType::HORIZONTAL_LINE_REL:
+				s << step.x;
+				break;
+			case Step::EType::VERTICAL_LINE_ABS:
+			case Step::EType::VERTICAL_LINE_REL:
+				s << step.y;
+				break;
+			case Step::EType::CUBIC_ABS:
+			case Step::EType::CUBIC_REL:
+				s << step.x1;
+				s << ",";
+				s << step.y1;
+				s << " ";
+				s << step.x2;
+				s << ",";
+				s << step.y2;
+				s << " ";
+				s << step.x;
+				s << ",";
+				s << step.y;
+				break;
+			case Step::EType::CUBIC_SMOOTH_ABS:
+			case Step::EType::CUBIC_SMOOTH_REL:
+				s << step.x2;
+				s << ",";
+				s << step.y2;
+				s << " ";
+				s << step.x;
+				s << ",";
+				s << step.y;
+				break;
+			case Step::EType::QUADRATIC_ABS:
+			case Step::EType::QUADRATIC_REL:
+				s << step.x1;
+				s << ",";
+				s << step.y1;
+				s << " ";
+				s << step.x;
+				s << ",";
+				s << step.y;
+				break;
+			case Step::EType::QUADRATIC_SMOOTH_ABS:
+			case Step::EType::QUADRATIC_SMOOTH_REL:
+				s << step.x;
+				s << ",";
+				s << step.y;
+				break;
+			case Step::EType::ARC_ABS:
+			case Step::EType::ARC_REL:
+				s << step.rx;
+				s << ",";
+				s << step.ry;
+				s << " ";
+				s << step.xAxisRotation;
+				s << " ";
+				s << (step.flags.largeArc ? "1" : "0");
+				s << ",";
+				s << (step.flags.sweep ? "1" : "0");
+				s << " ";
+				s << step.x;
+				s << ",";
+				s << step.y;
+				break;
+			default:
+				ASSERT(false)
+				break;
+		}
+	}
+	
+	s << "\"";
+}
+
+char PathElement::Step::typeToChar(EType t){
+	switch(t){
+		case Step::EType::MOVE_ABS:
+			return 'M';
+		case Step::EType::MOVE_REL:
+			return 'm';
+		case Step::EType::LINE_ABS:
+			return 'L';
+		case Step::EType::LINE_REL:
+			return 'l';
+		case Step::EType::CLOSE:
+			return 'z';
+		case Step::EType::HORIZONTAL_LINE_ABS:
+			return 'H';
+		case Step::EType::HORIZONTAL_LINE_REL:
+			return 'h';
+		case Step::EType::VERTICAL_LINE_ABS:
+			return 'V';
+		case Step::EType::VERTICAL_LINE_REL:
+			return 'v';
+		case Step::EType::CUBIC_ABS:
+			return 'C';
+		case Step::EType::CUBIC_REL:
+			return 'c';
+		case Step::EType::CUBIC_SMOOTH_ABS:
+			return 'S';
+		case Step::EType::CUBIC_SMOOTH_REL:
+			return 's';
+		case Step::EType::QUADRATIC_ABS:
+			return 'Q';
+		case Step::EType::QUADRATIC_REL:
+			return 'q';
+		case Step::EType::QUADRATIC_SMOOTH_ABS:
+			return 'T';
+		case Step::EType::QUADRATIC_SMOOTH_REL:
+			return 't';
+		case Step::EType::ARC_ABS:
+			return 'A';
+		case Step::EType::ARC_REL:
+			return 'a';
+		default:
+			ASSERT(false)
+			return ' ';
+	}
+}
+
+
+PathElement::Step::EType PathElement::Step::charToType(char c){
+	switch(c){
+		case 'M':
+			return Step::EType::MOVE_ABS;
+		case 'm':
+			return Step::EType::MOVE_REL;
+		case 'z':
+		case 'Z':
+			return Step::EType::CLOSE;
+		case 'L':
+			return Step::EType::LINE_ABS;
+		case 'l':
+			return Step::EType::LINE_REL;
+		case 'H':
+			return Step::EType::HORIZONTAL_LINE_ABS;
+		case 'h':
+			return Step::EType::HORIZONTAL_LINE_REL;
+		case 'V':
+			return Step::EType::VERTICAL_LINE_ABS;
+		case 'v':
+			return Step::EType::VERTICAL_LINE_REL;
+		case 'C':
+			return Step::EType::CUBIC_ABS;
+		case 'c':
+			return Step::EType::CUBIC_REL;
+		case 'S':
+			return Step::EType::CUBIC_SMOOTH_ABS;
+		case 's':
+			return Step::EType::CUBIC_SMOOTH_REL;
+		case 'Q':
+			return Step::EType::QUADRATIC_ABS;
+		case 'q':
+			return Step::EType::QUADRATIC_REL;
+		case 'T':
+			return Step::EType::QUADRATIC_SMOOTH_ABS;
+		case 't':
+			return Step::EType::QUADRATIC_SMOOTH_REL;
+		case 'A':
+			return Step::EType::ARC_ABS;
+		case 'a':
+			return Step::EType::ARC_REL;
+		default:
+			return Step::EType::UNKNOWN;
+	}
+}
+
+
 decltype(PathElement::path) PathElement::parse(const std::string& str){
 	decltype(PathElement::path) ret;
 	
-	//TODO:
+	std::istringstream s(str);
+	s >> std::skipws;
+	
+	skipWhitespaces(s);
+	
+	Step::EType curType = Step::EType::MOVE_ABS;
+	
+	while(!s.eof()){
+		ASSERT(!std::isspace(s.peek()))//spaces should be skept
+		
+		{
+			auto t = Step::charToType(s.peek());
+			if(t != Step::EType::UNKNOWN){
+				curType = t;
+				s.get();
+			}
+		}
+		
+		skipWhitespaces(s);
+		
+		Step step;
+		step.type = curType;
+		
+		switch(step.type){
+			case Step::EType::MOVE_ABS:
+			case Step::EType::MOVE_REL:
+			case Step::EType::LINE_ABS:
+			case Step::EType::LINE_REL:
+				s >> step.x;
+				if(s.fail()){
+					return ret;
+				}
+				skipWhitespacesAndOrComma(s);
+				s >> step.y;
+				if(s.fail()){
+					return ret;
+				}
+				break;
+			case Step::EType::CLOSE:
+				break;
+			case Step::EType::HORIZONTAL_LINE_ABS:
+			case Step::EType::HORIZONTAL_LINE_REL:
+				s >> step.x;
+				if(s.fail()){
+					return ret;
+				}
+				break;
+			case Step::EType::VERTICAL_LINE_ABS:
+			case Step::EType::VERTICAL_LINE_REL:
+				s >> step.y;
+				if(s.fail()){
+					return ret;
+				}
+				break;
+			case Step::EType::CUBIC_ABS:
+			case Step::EType::CUBIC_REL:
+				s >> step.x1;
+				if(s.fail()){
+					return ret;
+				}
+				skipWhitespacesAndOrComma(s);
+				s >> step.y1;
+				if(s.fail()){
+					return ret;
+				}
+				skipWhitespacesAndOrComma(s);
+				s >> step.x2;
+				if(s.fail()){
+					return ret;
+				}
+				skipWhitespacesAndOrComma(s);
+				s >> step.y2;
+				if(s.fail()){
+					return ret;
+				}
+				skipWhitespacesAndOrComma(s);
+				s >> step.x;
+				if(s.fail()){
+					return ret;
+				}
+				skipWhitespacesAndOrComma(s);
+				s >> step.y;
+				if(s.fail()){
+					return ret;
+				}
+				break;
+			case Step::EType::CUBIC_SMOOTH_ABS:
+			case Step::EType::CUBIC_SMOOTH_REL:
+				s >> step.x2;
+				if(s.fail()){
+					return ret;
+				}
+				skipWhitespacesAndOrComma(s);
+				s >> step.y2;
+				if(s.fail()){
+					return ret;
+				}
+				skipWhitespacesAndOrComma(s);
+				s >> step.x;
+				if(s.fail()){
+					return ret;
+				}
+				skipWhitespacesAndOrComma(s);
+				s >> step.y;
+				if(s.fail()){
+					return ret;
+				}
+				break;
+			case Step::EType::QUADRATIC_ABS:
+			case Step::EType::QUADRATIC_REL:
+				s >> step.x1;
+				if(s.fail()){
+					return ret;
+				}
+				skipWhitespacesAndOrComma(s);
+				s >> step.y1;
+				if(s.fail()){
+					return ret;
+				}
+				skipWhitespacesAndOrComma(s);
+				s >> step.x;
+				if(s.fail()){
+					return ret;
+				}
+				skipWhitespacesAndOrComma(s);
+				s >> step.y;
+				if(s.fail()){
+					return ret;
+				}
+				break;
+			case Step::EType::QUADRATIC_SMOOTH_ABS:
+			case Step::EType::QUADRATIC_SMOOTH_REL:
+				s >> step.x;
+				if(s.fail()){
+					return ret;
+				}
+				skipWhitespacesAndOrComma(s);
+				s >> step.y;
+				if(s.fail()){
+					return ret;
+				}
+				break;
+			case Step::EType::ARC_ABS:
+			case Step::EType::ARC_REL:
+				s >> step.rx;
+				if(s.fail()){
+					return ret;
+				}
+				skipWhitespacesAndOrComma(s);
+				s >> step.ry;
+				if(s.fail()){
+					return ret;
+				}
+				skipWhitespacesAndOrComma(s);
+				s >> step.xAxisRotation;
+				if(s.fail()){
+					return ret;
+				}
+				skipWhitespacesAndOrComma(s);
+				{
+					unsigned f;
+					s >> f;
+					if(s.fail()){
+						return ret;
+					}
+					step.flags.largeArc = (f != 0);
+				}
+				skipWhitespacesAndOrComma(s);
+				{
+					unsigned f;
+					s >> f;
+					if(s.fail()){
+						return ret;
+					}
+					step.flags.sweep = (f != 0);
+				}
+				skipWhitespacesAndOrComma(s);
+				s >> step.x;
+				if(s.fail()){
+					return ret;
+				}
+				skipWhitespacesAndOrComma(s);
+				s >> step.y;
+				if(s.fail()){
+					return ret;
+				}
+				break;
+			default:
+				ASSERT(false)
+				break;
+		}
+		
+		ret.push_back(step);
+		
+		skipWhitespacesAndOrComma(s);
+	}
 	
 	return ret;
 }
