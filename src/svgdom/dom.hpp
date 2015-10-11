@@ -204,6 +204,59 @@ struct SvgElement : public Element, public Container, public Rectangle{
 };
 
 
+struct PathElement : public Element, public Styleable, public Transformable{
+	struct Step{
+		enum class EType{
+			UNKNOWN,
+			CLOSE,
+			MOVE_ABS,
+			MOVE_REL,
+			LINE_ABS,
+			LINE_REL,
+			HORIZONTAL_LINE_ABS,
+			HORIZONTAL_LINE_REL,
+			VERTICAL_LINE_ABS,
+			VERTICAL_LINE_REL,
+			CUBIC_ABS,
+			CUBIC_REL,
+			CUBIC_SMOOTH_ABS,
+			CUBIC_SMOOTH_REL,
+			QUADRATIC_SMOOT_ABS,
+			QUADRATIC_SMOOT_REL,
+			ARC_ABS,
+			ARC_REL
+		};
+	
+		real x, y;
+		
+		union{
+			real x1;
+			real rx;
+		};
+		
+		union{
+			real y1;
+			real ry;
+		};
+		
+		union{
+			real x2;
+			real xAxisRotation;
+		};
+		
+		union{
+			real y2;
+			struct{
+				bool largeArc;
+				bool sweep;
+			} flags;
+		};
+	};
+	std::vector<Step> path;
+	
+	void toStream(std::ostream& s, unsigned indent = 0)const override;
+};
+
 
 
 std::unique_ptr<SvgElement> load(const papki::File& f);

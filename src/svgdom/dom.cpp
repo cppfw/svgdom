@@ -228,6 +228,33 @@ struct Parser{
 		
 		return ret;
 	}
+	
+	std::unique_ptr<PathElement> parsePathElement(const pugi::xml_node& n){
+		ASSERT(getNamespace(n.name()).ns == EXmlNamespace::SVG)
+		ASSERT(getNamespace(n.name()).name == "path")
+		
+		auto ret = utki::makeUnique<PathElement>();
+		
+		this->fillElement(*ret, n);
+		this->fillTransformable(*ret, n);
+		this->fillStyleable(*ret, n);
+
+		for(auto a = n.first_attribute(); !a.empty(); a = a.next_attribute()){
+			auto nsn = this->getNamespace(a.name());
+			switch(nsn.ns){
+				case EXmlNamespace::SVG:
+					if(nsn.name == "d"){
+						//TODO: parse d
+						return ret;
+					}
+					break;
+				default:
+					break;
+			}
+		}
+		
+		return ret;
+	}
 };//~class
 
 
@@ -272,6 +299,13 @@ std::unique_ptr<svgdom::Element> Parser::parseNode(const pugi::xml_node& n){
 		}
 	}
 	
+	utki::ScopeExit scopeExit([this](){
+		ASSERT(this->namespaces.size() > 0)
+		this->namespaces.pop_back();
+		ASSERT(this->defaultNamespace.size() > 0)
+		this->defaultNamespace.pop_back();
+	});
+	
 	auto nsn = getNamespace(n.name());
 	switch(nsn.ns){
 		case EXmlNamespace::SVG:
@@ -279,17 +313,15 @@ std::unique_ptr<svgdom::Element> Parser::parseNode(const pugi::xml_node& n){
 				return this->parseSvgElement(n);
 			}else if(nsn.name == "g"){
 				return this->parseGElement(n);
+			}else if(nsn.name == "path"){
+				return this->parsePathElement(n);
 			}
+			
 			break;
 		default:
 			//unknown namespace, ignore
 			break;
 	}
-	
-	ASSERT(this->namespaces.size() > 0)
-	this->namespaces.pop_back();
-	ASSERT(this->defaultNamespace.size() > 0)
-	this->defaultNamespace.pop_back();
 	
 	return nullptr;
 }
@@ -929,4 +961,18 @@ std::string StylePropertyValue::paintToString()const{
 	//TODO: other notations
 	
 	return "";
+}
+
+void PathElement::toStream(std::ostream& s, unsigned indent) const{
+	auto ind = indentStr(indent);
+	
+	s << ind << "<path";
+	this->Element::attribsToStream(s);
+	this->Transformable::attribsToStream(s);
+	this->Styleable::attribsToStream(s);
+	
+	//TODO: print d property
+	
+	s << "/>";
+	s << std::endl;
 }
