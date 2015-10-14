@@ -61,7 +61,7 @@ struct Element : public utki::Unique{
 	
 	std::string toString()const;
 	
-	virtual void render(const Renderer& renderer)const{}
+	virtual void render(Renderer& renderer)const{}
 };
 
 struct Container{
@@ -69,7 +69,7 @@ struct Container{
 	
 	void childrenToStream(std::ostream& s, unsigned indent)const;
 	
-	void render(const Renderer& renderer)const;
+	void render(Renderer& renderer)const;
 };
 
 struct Transformation{
@@ -196,7 +196,7 @@ struct Styleable{
 struct GElement : public Element, public Container, public Transformable, public Styleable{
 	void toStream(std::ostream& s, unsigned indent = 0)const override;
 	
-	void render(const Renderer& renderer) const override;
+	void render(Renderer& renderer) const override;
 };
 
 struct Rectangle{
@@ -210,7 +210,7 @@ struct Rectangle{
 struct SvgElement : public Element, public Container, public Rectangle{
 	void toStream(std::ostream& s, unsigned indent = 0)const override;
 	
-	void render(const Renderer& renderer) const override;
+	void render(Renderer& renderer) const override;
 };
 
 
@@ -275,14 +275,18 @@ struct PathElement : public Element, public Styleable, public Transformable{
 	
 	static decltype(path) parse(const std::string& str);
 	
-	void render(const Renderer& renderer) const override;
+	void render(Renderer& renderer) const override;
 };
 
 
 
 class Renderer{
 public:
-	virtual void render(const PathElement& e)const{}
+	virtual void render(const PathElement& e){}
+	
+	virtual void render(const GElement& e){}
+	
+	virtual void render(const SvgElement& e){}
 	
 	virtual ~Renderer()noexcept{}
 };
