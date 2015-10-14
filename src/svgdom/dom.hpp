@@ -117,6 +117,10 @@ enum class EStyleProperty{
     WRITING_MODE
 };
 
+struct Rgb{
+	real r, g, b;
+};
+
 struct StylePropertyValue{
 	bool effective = true;
 	std::uint32_t integer;
@@ -130,6 +134,8 @@ struct StylePropertyValue{
 	std::string paintToString()const;
 	
 	std::uint32_t getColor()const;
+	
+	Rgb getRgb()const;
 };
 
 struct Element : public utki::Unique{

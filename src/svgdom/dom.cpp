@@ -1400,6 +1400,17 @@ std::uint32_t StylePropertyValue::getColor() const{
 	return this->integer;
 }
 
+Rgb StylePropertyValue::getRgb() const{
+	auto c = this->getColor();
+	
+	Rgb ret;
+	
+	ret.r = real(c & 0xff) / real(0xff);
+	ret.g = real((c >> 8) & 0xff) / real(0xff);
+	ret.b = real((c >> 16) & 0xff) / real(0xff);
+	
+	return ret;
+}
 
 
 const StylePropertyValue* Element::getStyleProperty(EStyleProperty property) const{
