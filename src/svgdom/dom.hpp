@@ -50,59 +50,7 @@ struct Length{
 
 class Renderer;
 
-struct Element : public utki::Unique{
-	std::string id;
-	
-	virtual ~Element()noexcept{}
-	
-	void attribsToStream(std::ostream& s)const;
-	
-	virtual void toStream(std::ostream& s, unsigned indent = 0)const = 0;
-	
-	std::string toString()const;
-	
-	virtual void render(Renderer& renderer)const{}
-};
-
-struct Container{
-	std::vector<std::unique_ptr<Element>> children;
-	
-	void childrenToStream(std::ostream& s, unsigned indent)const;
-	
-	void render(Renderer& renderer)const;
-};
-
-struct Transformation{
-	enum class EType{
-		MATRIX,
-		TRANSLATE,
-		SCALE,
-		ROTATE,
-		SKEWX,
-		SKEWY
-	} type;
-	union{
-		real a;
-		real angle;
-	};
-	union{
-		real b;
-		real x;
-	};
-	union{
-		real c;
-		real y;
-	};
-	real d, e, f;
-};
-
-struct Transformable{
-	std::vector<Transformation> transformations;
-	
-	void attribsToStream(std::ostream& s)const;
-	
-	static decltype(Transformable::transformations) parse(const std::string& str);
-};
+struct Container;
 
 enum class EStyleProperty{
 	UNKNOWN,
@@ -180,7 +128,68 @@ struct StylePropertyValue{
 	static StylePropertyValue parsePaint(const std::string& str);
 	
 	std::string paintToString()const;
+	
+	std::uint32_t getColor()const;
 };
+
+struct Element : public utki::Unique{
+	Container* parent;
+	
+	std::string id;
+	
+	virtual ~Element()noexcept{}
+	
+	void attribsToStream(std::ostream& s)const;
+	
+	virtual void toStream(std::ostream& s, unsigned indent = 0)const = 0;
+	
+	std::string toString()const;
+	
+	virtual void render(Renderer& renderer)const{}
+	
+	const StylePropertyValue* getStyleProperty(EStyleProperty property)const;
+};
+
+struct Container : public Element{
+	std::vector<std::unique_ptr<Element>> children;
+	
+	void childrenToStream(std::ostream& s, unsigned indent)const;
+	
+	void render(Renderer& renderer)const;
+};
+
+struct Transformation{
+	enum class EType{
+		MATRIX,
+		TRANSLATE,
+		SCALE,
+		ROTATE,
+		SKEWX,
+		SKEWY
+	} type;
+	union{
+		real a;
+		real angle;
+	};
+	union{
+		real b;
+		real x;
+	};
+	union{
+		real c;
+		real y;
+	};
+	real d, e, f;
+};
+
+struct Transformable{
+	std::vector<Transformation> transformations;
+	
+	void attribsToStream(std::ostream& s)const;
+	
+	static decltype(Transformable::transformations) parse(const std::string& str);
+};
+
 
 struct Styleable{
 	std::map<EStyleProperty, StylePropertyValue> styles;
@@ -193,7 +202,7 @@ struct Styleable{
 	static EStyleProperty stringToProperty(std::string str);
 };
 
-struct GElement : public Element, public Container, public Transformable, public Styleable{
+struct GElement : public Container, public Transformable, public Styleable{
 	void toStream(std::ostream& s, unsigned indent = 0)const override;
 	
 	void render(Renderer& renderer) const override;
@@ -207,7 +216,7 @@ struct Rectangle{
 	void attribsToStream(std::ostream& s)const;
 };
 
-struct SvgElement : public Element, public Container, public Rectangle{
+struct SvgElement : public Container, public Rectangle{
 	void toStream(std::ostream& s, unsigned indent = 0)const override;
 	
 	void render(Renderer& renderer) const override;

@@ -1,5 +1,6 @@
 #include "dom.hpp"
 #include "config.hpp"
+#include "Exc.hpp"
 
 #include <pugixml.hpp>
 
@@ -164,6 +165,7 @@ struct Parser{
 		for(auto i = n.first_child(); !i.empty(); i = i.next_sibling()){
 			if(auto res = this->parseNode(i)){
 				c.children.push_back(std::move(res));
+				c.children.back()->parent = &c;
 			}
 		}
 	}
@@ -1391,4 +1393,26 @@ void GElement::render(Renderer& renderer) const{
 
 void SvgElement::render(Renderer& renderer) const{
 	renderer.render(*this);
+}
+
+std::uint32_t StylePropertyValue::getColor() const{
+	//TODO: check other notations
+	return this->integer;
+}
+
+
+
+const StylePropertyValue* Element::getStyleProperty(EStyleProperty property) const{
+	if(auto styleable = dynamic_cast<const Styleable*>(this)){
+		auto i = styleable->styles.find(property);
+		if(i != styleable->styles.end()){
+			return &i->second;
+		}
+	}
+	
+	if(!this->parent){
+		return nullptr;
+	}
+	
+	return this->parent->getStyleProperty(property);
 }
