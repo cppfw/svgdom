@@ -1374,3 +1374,21 @@ decltype(PathElement::path) PathElement::parse(const std::string& str){
 	
 	return ret;
 }
+
+void PathElement::render(const Renderer& renderer) const{
+	renderer.render(*this);
+}
+
+void Container::render(const Renderer& renderer) const{
+	for(auto& e : this->children){
+		e->render(renderer);
+	}
+}
+
+void GElement::render(const Renderer& renderer) const{
+	this->Container::render(renderer);
+}
+
+void SvgElement::render(const Renderer& renderer) const{
+	this->Container::render(renderer);
+}

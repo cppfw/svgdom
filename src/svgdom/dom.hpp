@@ -48,6 +48,8 @@ struct Length{
 	static Length parse(const std::string& str);
 };
 
+class Renderer;
+
 struct Element : public utki::Unique{
 	std::string id;
 	
@@ -58,12 +60,16 @@ struct Element : public utki::Unique{
 	virtual void toStream(std::ostream& s, unsigned indent = 0)const = 0;
 	
 	std::string toString()const;
+	
+	virtual void render(const Renderer& renderer)const{}
 };
 
 struct Container{
 	std::vector<std::unique_ptr<Element>> children;
 	
 	void childrenToStream(std::ostream& s, unsigned indent)const;
+	
+	void render(const Renderer& renderer)const;
 };
 
 struct Transformation{
@@ -189,6 +195,8 @@ struct Styleable{
 
 struct GElement : public Element, public Container, public Transformable, public Styleable{
 	void toStream(std::ostream& s, unsigned indent = 0)const override;
+	
+	void render(const Renderer& renderer) const override;
 };
 
 struct Rectangle{
@@ -201,6 +209,8 @@ struct Rectangle{
 
 struct SvgElement : public Element, public Container, public Rectangle{
 	void toStream(std::ostream& s, unsigned indent = 0)const override;
+	
+	void render(const Renderer& renderer) const override;
 };
 
 
@@ -264,6 +274,17 @@ struct PathElement : public Element, public Styleable, public Transformable{
 	void toStream(std::ostream& s, unsigned indent = 0)const override;
 	
 	static decltype(path) parse(const std::string& str);
+	
+	void render(const Renderer& renderer) const override;
+};
+
+
+
+class Renderer{
+public:
+	virtual void render(const PathElement& e)const{}
+	
+	virtual ~Renderer()noexcept{}
 };
 
 
