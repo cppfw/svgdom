@@ -553,6 +553,7 @@ void Styleable::attribsToStream(std::ostream& s) const{
 			case EStyleProperty::FILL:
 				s << st.second.paintToString();
 				break;
+			case EStyleProperty::STROKE_OPACITY:
 			case EStyleProperty::FILL_OPACITY:
 				s << st.second.opacity;
 				break;
@@ -790,6 +791,8 @@ EStyleProperty Styleable::stringToProperty(std::string str){
 		return EStyleProperty::STROKE_WIDTH;
 	}else if(str == "stroke-linecap"){
 		return EStyleProperty::STROKE_LINECAP;
+	}else if(str == "stroke-opacity"){
+		return EStyleProperty::STROKE_OPACITY;
 	}
 	
 	return EStyleProperty::UNKNOWN;
@@ -809,6 +812,8 @@ std::string Styleable::propertyToString(EStyleProperty p){
 			return "stroke-width";
 		case EStyleProperty::STROKE_LINECAP:
 			return "stroke-linecap";
+		case EStyleProperty::STROKE_OPACITY:
+			return "stroke-opacity";
 	}
 }
 
@@ -854,13 +859,13 @@ decltype(Styleable::styles) Styleable::parse(const std::string& str){
 //				TRACE(<< "value = " << value << std::endl)
 				v = StylePropertyValue::parsePaint(readTillChar(s, ';'));
 				break;
+			case EStyleProperty::STROKE_OPACITY:
 			case EStyleProperty::FILL_OPACITY:
 				s >> v.opacity;
 				if(s.fail()){
 					s.clear();
 				}else{
 					utki::clampRange(v.opacity, real(0), real(1));
-//					TRACE(<< "fill-opacity read = " << v.number << std::endl)
 				}
 				break;
 			case EStyleProperty::STROKE:
