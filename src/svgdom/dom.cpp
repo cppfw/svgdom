@@ -372,25 +372,25 @@ Length Length::parse(const std::string& str) {
 	ss >> std::setw(2) >> u >> std::setw(0);
 	
 	if(u.length() == 0){
-		ret.unit = EUnit::NUMBER;
+		ret.unit = Length::EUnit::NUMBER;
 	}else if(u == "%"){
-		ret.unit = EUnit::PERCENT;
+		ret.unit = Length::EUnit::PERCENT;
 	}else if(u == "em"){
-		ret.unit = EUnit::EM;
+		ret.unit = Length::EUnit::EM;
 	}else if(u == "ex"){
-		ret.unit = EUnit::EX;
+		ret.unit = Length::EUnit::EX;
 	}else if(u == "px"){
-		ret.unit = EUnit::PX;
+		ret.unit = Length::EUnit::PX;
 	}else if(u == "cm"){
-		ret.unit = EUnit::CM;
+		ret.unit = Length::EUnit::CM;
 	}else if(u == "in"){
-		ret.unit = EUnit::IN;
+		ret.unit = Length::EUnit::IN;
 	}else if(u == "pt"){
-		ret.unit = EUnit::PT;
+		ret.unit = Length::EUnit::PT;
 	}else if(u == "pc"){
-		ret.unit = EUnit::PC;
+		ret.unit = Length::EUnit::PC;
 	}else{
-		ret.unit = EUnit::UNKNOWN;
+		ret.unit = Length::EUnit::UNKNOWN;
 	}
 	
 	return ret;
@@ -402,32 +402,32 @@ std::ostream& operator<<(std::ostream& s, const Length& l){
 	s << l.value;
 	
 	switch(l.unit){
-		case EUnit::UNKNOWN:
-		case EUnit::NUMBER:
+		case Length::EUnit::UNKNOWN:
+		case Length::EUnit::NUMBER:
 		default:
 			break;
-		case EUnit::PERCENT:
+		case Length::EUnit::PERCENT:
 			s << "%";
 			break;
-		case EUnit::EM:
+		case Length::EUnit::EM:
 			s << "em";
 			break;
-		case EUnit::EX:
+		case Length::EUnit::EX:
 			s << "ex";
 			break;
-		case EUnit::PX:
+		case Length::EUnit::PX:
 			s << "px";
 			break;
-		case EUnit::CM:
+		case Length::EUnit::CM:
 			s << "cm";
 			break;
-		case EUnit::IN:
+		case Length::EUnit::IN:
 			s << "in";
 			break;
-		case EUnit::PT:
+		case Length::EUnit::PT:
 			s << "pt";
 			break;
-		case EUnit::PC:
+		case Length::EUnit::PC:
 			s << "pc";
 			break;
 	}
@@ -454,11 +454,11 @@ void Rectangle::attribsToStream(std::ostream& s)const{
 		s << " y=\"" << this->y << "\"";
 	}
 	
-	if(this->width.value != 100 || this->width.unit != EUnit::PERCENT){ //if width is not 100% (default value)
+	if(this->width.value != 100 || this->width.unit != Length::EUnit::PERCENT){ //if width is not 100% (default value)
 		s << " width=\"" << this->width << "\"";
 	}
 	
-	if(this->height.value != 100 || this->height.unit != EUnit::PERCENT){ //if height is not 100% (default value)
+	if(this->height.value != 100 || this->height.unit != Length::EUnit::PERCENT){ //if height is not 100% (default value)
 		s << " height=\"" << this->height << "\"";
 	}
 }
@@ -554,7 +554,7 @@ void Styleable::attribsToStream(std::ostream& s) const{
 				s << st.second.paintToString();
 				break;
 			case EStyleProperty::FILL_OPACITY:
-				s << st.second.floating;
+				s << st.second.opacity;
 				break;
 			case EStyleProperty::STROKE:
 				s << st.second.paintToString();
@@ -837,11 +837,11 @@ decltype(Styleable::styles) Styleable::parse(const std::string& str){
 				v = StylePropertyValue::parsePaint(readTillChar(s, ';'));
 				break;
 			case EStyleProperty::FILL_OPACITY:
-				s >> v.floating;
+				s >> v.opacity;
 				if(s.fail()){
 					s.clear();
 				}else{
-					utki::clampRange(v.floating, real(0), real(1));
+					utki::clampRange(v.opacity, real(0), real(1));
 //					TRACE(<< "fill-opacity read = " << v.number << std::endl)
 				}
 				break;
@@ -912,12 +912,12 @@ StylePropertyValue StylePropertyValue::parsePaint(const std::string& str){
 		}
 		switch(numDigits){
 			case 3:
-				ret.integer = (std::uint32_t(d[0]) << 4) | (std::uint32_t(d[0]))
+				ret.color = (std::uint32_t(d[0]) << 4) | (std::uint32_t(d[0]))
 						| (std::uint32_t(d[1]) << 12) | (std::uint32_t(d[1]) << 8)
 						| (std::uint32_t(d[2]) << 20) | (std::uint32_t(d[2]) << 16);
 				break;
 			case 6:
-				ret.integer = (std::uint32_t(d[0]) << 4) | (std::uint32_t(d[1]))
+				ret.color = (std::uint32_t(d[0]) << 4) | (std::uint32_t(d[1]))
 						| (std::uint32_t(d[2]) << 12) | (std::uint32_t(d[3]) << 8)
 						| (std::uint32_t(d[4]) << 20) | (std::uint32_t(d[5]) << 16);
 				break;
@@ -951,12 +951,12 @@ std::string StylePropertyValue::paintToString()const{
 		std::stringstream s;
 		s << std::hex;
 		s << "#";
-		s << ((this->integer >> 4) & 0xf);
-		s << ((this->integer) & 0xf);
-		s << ((this->integer >> 12) & 0xf);
-		s << ((this->integer >> 8) & 0xf);
-		s << ((this->integer >> 20) & 0xf);
-		s << ((this->integer >> 16) & 0xf);
+		s << ((this->color >> 4) & 0xf);
+		s << ((this->color) & 0xf);
+		s << ((this->color >> 12) & 0xf);
+		s << ((this->color >> 8) & 0xf);
+		s << ((this->color >> 20) & 0xf);
+		s << ((this->color >> 16) & 0xf);
 		return s.str();
 	}
 	
@@ -1397,7 +1397,7 @@ void SvgElement::render(Renderer& renderer) const{
 
 std::uint32_t StylePropertyValue::getColor() const{
 	//TODO: check other notations
-	return this->integer;
+	return this->color;
 }
 
 Rgb StylePropertyValue::getRgb() const{

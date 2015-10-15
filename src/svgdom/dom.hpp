@@ -23,27 +23,22 @@
 
 namespace svgdom{
 
-enum class EUnit{
-	UNKNOWN,
-	NUMBER,
-	PERCENT,
-	EM,
-	EX,
-	PX,
-	CM,
-	IN,
-	PT,
-	PC
-};
-
 struct Length{
+	enum class EUnit{
+		UNKNOWN,
+		NUMBER,
+		PERCENT,
+		EM,
+		EX,
+		PX,
+		CM,
+		IN,
+		PT,
+		PC
+	};
+
 	real value;
 	EUnit unit;
-	
-	Length(real value = 0, EUnit unit = EUnit::NUMBER) :
-			value(value),
-			unit(unit)
-	{}
 	
 	static Length parse(const std::string& str);
 };
@@ -123,11 +118,16 @@ struct Rgb{
 
 struct StylePropertyValue{
 	bool effective = true;
-	std::uint32_t integer;
-	real floating;
-	Length length;
+	
+	union{
+		std::uint32_t color;
+		real opacity;
+		Length length;
+	};
+	
 	std::string str;
 	std::unique_ptr<utki::Void> d;
+
 	
 	static StylePropertyValue parsePaint(const std::string& str);
 	
@@ -164,31 +164,31 @@ struct Container : public Element{
 	void render(Renderer& renderer)const;
 };
 
-struct Transformation{
-	enum class EType{
-		MATRIX,
-		TRANSLATE,
-		SCALE,
-		ROTATE,
-		SKEWX,
-		SKEWY
-	} type;
-	union{
-		real a;
-		real angle;
-	};
-	union{
-		real b;
-		real x;
-	};
-	union{
-		real c;
-		real y;
-	};
-	real d, e, f;
-};
 
 struct Transformable{
+	struct Transformation{
+		enum class EType{
+			MATRIX,
+			TRANSLATE,
+			SCALE,
+			ROTATE,
+			SKEWX,
+			SKEWY
+		} type;
+		union{
+			real a;
+			real angle;
+		};
+		union{
+			real b;
+			real x;
+		};
+		union{
+			real c;
+			real y;
+		};
+		real d, e, f;
+	};
 	std::vector<Transformation> transformations;
 	
 	void attribsToStream(std::ostream& s)const;
@@ -216,8 +216,15 @@ struct GElement : public Container, public Transformable, public Styleable{
 
 struct Rectangle{
 	Length x, y;
-	Length width = Length(100, EUnit::PERCENT);
-	Length height = Length(100, EUnit::PERCENT);
+	Length width;
+	Length height;
+	
+	Rectangle(){
+		this->width.value = 100;
+		this->width.unit = Length::EUnit::PERCENT;
+		this->height.value = 100;
+		this->height.unit = Length::EUnit::PERCENT;
+	}
 	
 	void attribsToStream(std::ostream& s)const;
 };
