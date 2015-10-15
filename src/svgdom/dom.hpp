@@ -317,6 +317,23 @@ struct PathElement : public Shape{
 };
 
 
+struct Gradient : public Element{
+	struct Stop : public Styleable{
+		real offset;
+	};
+	std::vector<Stop> stops;
+	
+	//TODO:
+};
+
+struct LinearGradientElement : public Gradient{
+	//TODO:
+};
+
+struct RadialGradientElement : public Gradient{
+	//TODO:
+};
+
 
 class Renderer{
 public:
