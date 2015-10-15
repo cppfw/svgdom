@@ -231,6 +231,20 @@ struct Parser{
 		return ret;
 	}
 	
+	std::unique_ptr<DefsElement> parseDefsElement(const pugi::xml_node& n){
+		ASSERT(getNamespace(n.name()).ns == EXmlNamespace::SVG)
+		ASSERT(getNamespace(n.name()).name == "defs")
+		
+		auto ret = utki::makeUnique<DefsElement>();
+		
+		this->fillElement(*ret, n);
+		this->fillTransformable(*ret, n);
+		this->fillStyleable(*ret, n);
+		this->fillContainer(*ret, n);
+		
+		return ret;
+	}
+	
 	std::unique_ptr<PathElement> parsePathElement(const pugi::xml_node& n){
 		ASSERT(getNamespace(n.name()).ns == EXmlNamespace::SVG)
 		ASSERT(getNamespace(n.name()).name == "path")
@@ -315,6 +329,8 @@ std::unique_ptr<svgdom::Element> Parser::parseNode(const pugi::xml_node& n){
 				return this->parseSvgElement(n);
 			}else if(nsn.name == "g"){
 				return this->parseGElement(n);
+			}else if(nsn.name == "defs"){
+				return this->parseDefsElement(n);
 			}else if(nsn.name == "path"){
 				return this->parsePathElement(n);
 			}
@@ -525,6 +541,25 @@ void GElement::toStream(std::ostream& s, unsigned indent) const{
 	}
 	s << std::endl;
 }
+
+void DefsElement::toStream(std::ostream& s, unsigned indent) const{
+	auto ind = indentStr(indent);
+	
+	s << ind << "<defs";
+	this->Element::attribsToStream(s);
+	this->Transformable::attribsToStream(s);
+	this->Styleable::attribsToStream(s);
+	
+	if(this->children.size() == 0){
+		s << "/>";
+	}else{
+		s << ">" << std::endl;
+		this->childrenToStream(s, indent + 1);
+		s << ind << "</defs>";
+	}
+	s << std::endl;
+}
+
 
 void Styleable::attribsToStream(std::ostream& s) const{
 	if(this->styles.size() == 0){
@@ -1433,6 +1468,11 @@ void PathElement::render(Renderer& renderer) const{
 void GElement::render(Renderer& renderer) const{
 	renderer.render(*this);
 }
+
+void DefsElement::render(Renderer& renderer) const{
+	renderer.render(*this);
+}
+
 
 void SvgElement::render(Renderer& renderer) const{
 	renderer.render(*this);

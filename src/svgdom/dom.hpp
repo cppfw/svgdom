@@ -218,7 +218,13 @@ struct Styleable{
 struct GElement : public Container, public Transformable, public Styleable{
 	void toStream(std::ostream& s, unsigned indent = 0)const override;
 	
-	void render(Renderer& renderer) const override;
+	void render(Renderer& renderer)const override;
+};
+
+struct DefsElement : public Container, public Transformable, public Styleable{
+	void toStream(std::ostream& s, unsigned indent = 0)const override;
+	
+	void render(Renderer& renderer)const override;
 };
 
 struct Rectangle{
@@ -317,6 +323,8 @@ public:
 	virtual void render(const PathElement& e){}
 	
 	virtual void render(const GElement& e){}
+	
+	virtual void render(const DefsElement& e){}
 	
 	virtual void render(const SvgElement& e){}
 	
