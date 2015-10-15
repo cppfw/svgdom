@@ -228,11 +228,11 @@ struct SvgElement : public Container, public Rectangle{
 	void render(Renderer& renderer) const override;
 };
 
-struct Shape : public Element, public Styleable{
+struct Shape : public Element, public Styleable, public Transformable{
 	
 };
 
-struct PathElement : public Shape, public Transformable{
+struct PathElement : public Shape{
 	struct Step{
 		enum class EType{
 			UNKNOWN,
