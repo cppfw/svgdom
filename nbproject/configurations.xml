@@ -82,7 +82,7 @@
       </toolsSet>
       <flagsDictionary>
         <element flagsID="0"
-                 commonFlags="-mtune=generic -march=x86-64 -O2 -std=c++11 -funsigned-char -fPIC -fstack-protector"/>
+                 commonFlags="-mtune=generic -march=x86-64 -std=c++11 -funsigned-char -fPIC -fstack-protector"/>
         <element flagsID="1" commonFlags="-std=c++11"/>
       </flagsDictionary>
       <codeAssistance>
