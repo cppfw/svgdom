@@ -553,6 +553,7 @@ void Styleable::attribsToStream(std::ostream& s) const{
 			case EStyleProperty::FILL:
 				s << st.second.paintToString();
 				break;
+			case EStyleProperty::OPACITY:
 			case EStyleProperty::STROKE_OPACITY:
 			case EStyleProperty::FILL_OPACITY:
 				s << st.second.opacity;
@@ -793,6 +794,8 @@ EStyleProperty Styleable::stringToProperty(std::string str){
 		return EStyleProperty::STROKE_LINECAP;
 	}else if(str == "stroke-opacity"){
 		return EStyleProperty::STROKE_OPACITY;
+	}else if(str == "opacity"){
+		return EStyleProperty::OPACITY;
 	}
 	
 	return EStyleProperty::UNKNOWN;
@@ -814,6 +817,8 @@ std::string Styleable::propertyToString(EStyleProperty p){
 			return "stroke-linecap";
 		case EStyleProperty::STROKE_OPACITY:
 			return "stroke-opacity";
+		case EStyleProperty::OPACITY:
+			return "opacity";
 	}
 }
 
@@ -859,6 +864,7 @@ decltype(Styleable::styles) Styleable::parse(const std::string& str){
 //				TRACE(<< "value = " << value << std::endl)
 				v = StylePropertyValue::parsePaint(readTillChar(s, ';'));
 				break;
+			case EStyleProperty::OPACITY:
 			case EStyleProperty::STROKE_OPACITY:
 			case EStyleProperty::FILL_OPACITY:
 				s >> v.opacity;
