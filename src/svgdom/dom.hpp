@@ -116,6 +116,12 @@ struct Rgb{
 	real r, g, b;
 };
 
+enum class EStrokeLineCap{
+	BUTT,
+	ROUND,
+	SQUARE
+};
+
 struct StylePropertyValue{
 	bool effective = true;
 	
@@ -123,6 +129,7 @@ struct StylePropertyValue{
 		std::uint32_t color;
 		real opacity;
 		Length length;
+		EStrokeLineCap strokeLineCap;
 	};
 	
 	std::string str;

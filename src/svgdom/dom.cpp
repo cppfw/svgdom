@@ -562,10 +562,24 @@ void Styleable::attribsToStream(std::ostream& s) const{
 			case EStyleProperty::STROKE_WIDTH:
 				s << st.second.length;
 				break;
+			case EStyleProperty::STROKE_LINECAP:
+				switch(st.second.strokeLineCap){
+					default:
+						ASSERT(false)
+						break;
+					case EStrokeLineCap::BUTT:
+						s << "butt";
+						break;
+					case EStrokeLineCap::ROUND:
+						s << "round";
+						break;
+					case EStrokeLineCap::SQUARE:
+						s << "square";
+						break;
+				}
+				break;
 		}
 	}
-	
-	//TODO:
 	
 	s << "\"";
 }
@@ -774,6 +788,8 @@ EStyleProperty Styleable::stringToProperty(std::string str){
 		return EStyleProperty::STROKE;
 	}else if(str == "stroke-width"){
 		return EStyleProperty::STROKE_WIDTH;
+	}else if(str == "stroke-linecap"){
+		return EStyleProperty::STROKE_LINECAP;
 	}
 	
 	return EStyleProperty::UNKNOWN;
@@ -791,6 +807,8 @@ std::string Styleable::propertyToString(EStyleProperty p){
 			return "stroke";
 		case EStyleProperty::STROKE_WIDTH:
 			return "stroke-width";
+		case EStyleProperty::STROKE_LINECAP:
+			return "stroke-linecap";
 	}
 }
 
@@ -852,6 +870,20 @@ decltype(Styleable::styles) Styleable::parse(const std::string& str){
 			case EStyleProperty::STROKE_WIDTH:
 				v.length = Length::parse(readTillChar(s, ';'));
 //				TRACE(<< "stroke-width read = " << v.length << std::endl)
+				break;
+			case EStyleProperty::STROKE_LINECAP:
+				{
+					auto str = readTillCharOrWhitespace(s, ';');
+					if(str == "butt"){
+						v.strokeLineCap = EStrokeLineCap::BUTT;
+					}else if(str == "round"){
+						v.strokeLineCap = EStrokeLineCap::ROUND;
+					}else if(str == "square"){
+						v.strokeLineCap = EStrokeLineCap::SQUARE;
+					}else{
+						TRACE(<< "unknown strokeLineCap value:" << str << std::endl)
+					}
+				}
 				break;
 		}
 		
