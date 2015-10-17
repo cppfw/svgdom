@@ -327,7 +327,6 @@ struct Parser{
 				case EXmlNamespace::SVG:
 					if(nsn.name == "d"){
 						ret->path = PathElement::parse(a.value());
-						return ret;
 					}
 					break;
 				default:
@@ -345,16 +344,20 @@ struct Parser{
 		auto ret = utki::makeUnique<LinearGradientElement>();
 		
 		this->fillGradient(*ret, n);
-
+		
 		for(auto a = n.first_attribute(); !a.empty(); a = a.next_attribute()){
 			auto nsn = this->getNamespace(a.name());
 			switch(nsn.ns){
 				case EXmlNamespace::SVG:
-					//TODO:
-//					if(nsn.name == "d"){
-//						ret->path = PathElement::parse(a.value());
-//						return ret;
-//					}
+					if(nsn.name == "x1"){
+						ret->x1 = Length::parse(a.value());
+					}else if(nsn.name == "y1"){
+						ret->y1 = Length::parse(a.value());
+					}else if(nsn.name == "x2"){
+						ret->y1 = Length::parse(a.value());
+					}else if(nsn.name == "y2"){
+						ret->y1 = Length::parse(a.value());
+					}
 					break;
 				default:
 					break;
@@ -1663,7 +1666,7 @@ Gradient::ESpreadMethod Gradient::stringToSpreadMethod(const std::string& str) {
 std::string Gradient::spreadMethodToString(ESpreadMethod sm) {
 	switch(sm){
 		default:
-			ASSERT(false)
+			ASSERT_INFO(false, "sm = " << unsigned(sm))
 			return "";
 		case ESpreadMethod::PAD:
 			return "pad";
@@ -1742,4 +1745,13 @@ Element* Container::findById(const std::string& elementId) {
 		}
 	}
 	return nullptr;
+}
+
+Length Length::make(real value, EUnit unit) {
+	Length ret;
+	
+	ret.unit = unit;
+	ret.value = value;
+	
+	return ret;
 }

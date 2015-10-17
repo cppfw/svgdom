@@ -41,6 +41,8 @@ struct Length{
 	EUnit unit;
 	
 	static Length parse(const std::string& str);
+	
+	static Length make(real value, EUnit unit);
 };
 
 class Renderer;
@@ -237,16 +239,10 @@ struct DefsElement : public Container, public Transformable, public Styleable{
 };
 
 struct Rectangle{
-	Length x, y;
-	Length width;
-	Length height;
-	
-	Rectangle(){
-		this->width.value = 100;
-		this->width.unit = Length::EUnit::PERCENT;
-		this->height.value = 100;
-		this->height.unit = Length::EUnit::PERCENT;
-	}
+	Length x = Length::make(0, Length::EUnit::PERCENT);
+	Length y = Length::make(0, Length::EUnit::PERCENT);
+	Length width = Length::make(100, Length::EUnit::PERCENT);
+	Length height = Length::make(100, Length::EUnit::PERCENT);
 	
 	void attribsToStream(std::ostream& s)const;
 };
@@ -331,7 +327,7 @@ struct Gradient : public Container, public Referencing, public Styleable{
 		PAD,
 		REFLECT,
 		REPEAT
-	} spreadMethod;
+	} spreadMethod = ESpreadMethod::PAD;
 	
 	static std::string spreadMethodToString(ESpreadMethod sm);
 	static ESpreadMethod stringToSpreadMethod(const std::string& str);
@@ -346,6 +342,10 @@ struct Gradient : public Container, public Referencing, public Styleable{
 };
 
 struct LinearGradientElement : public Gradient{
+	Length x1 = Length::make(0, Length::EUnit::PERCENT);
+	Length y1 = Length::make(0, Length::EUnit::PERCENT);
+	Length x2 = Length::make(100, Length::EUnit::PERCENT);
+	Length y2 = Length::make(0, Length::EUnit::PERCENT);
 	
 	void toStream(std::ostream& s, unsigned indent) const override;
 
