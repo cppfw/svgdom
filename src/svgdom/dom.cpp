@@ -1679,6 +1679,11 @@ void PathElement::render(Renderer& renderer) const{
 	renderer.render(*this);
 }
 
+void RectElement::render(Renderer& renderer) const {
+	renderer.render(*this);
+}
+
+
 void GElement::render(Renderer& renderer) const{
 	renderer.render(*this);
 }

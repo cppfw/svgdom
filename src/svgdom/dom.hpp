@@ -328,6 +328,8 @@ struct RectElement : public Shape, public Rectangle{
 	void attribsToStream(std::ostream& s)const;
 	
 	void toStream(std::ostream& s, unsigned indent) const override;
+	
+	void render(Renderer& renderer) const override;
 };
 
 struct Gradient : public Container, public Referencing, public Styleable{
@@ -372,6 +374,7 @@ struct RadialGradientElement : public Gradient{
 class Renderer{
 public:
 	virtual void render(const PathElement& e){}
+	virtual void render(const RectElement& e){}
 	
 	virtual void render(const GElement& e){}
 	
