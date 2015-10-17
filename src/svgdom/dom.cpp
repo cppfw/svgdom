@@ -204,6 +204,50 @@ struct Parser{
 		}
 	}
 	
+	void fillGradient(Gradient& g, const pugi::xml_node& n){
+		for(auto a = n.first_attribute(); !a.empty(); a = a.next_attribute()){
+			auto nsn = this->getNamespace(a.name());
+			switch(nsn.ns){
+				case EXmlNamespace::SVG:
+					if(nsn.name == "spreadMethod"){
+						g.spreadMethod = Gradient::stringToSpreadMethod(a.value());
+					}else if(nsn.name == "gradientTransform"){
+						//TODO:
+					}
+					break;
+				default:
+					break;
+			}
+		}
+	}
+	
+	std::unique_ptr<Gradient::StopElement> parseGradientStopElement(const pugi::xml_node& n){
+		ASSERT(getNamespace(n.name()).ns == EXmlNamespace::SVG)
+		ASSERT(getNamespace(n.name()).name == "stop")
+		
+		auto ret = utki::makeUnique<Gradient::StopElement>();
+		this->fillStyleable(*ret, n);
+		
+		for(auto a = n.first_attribute(); !a.empty(); a = a.next_attribute()){
+			auto nsn = this->getNamespace(a.name());
+			switch(nsn.ns){
+				case EXmlNamespace::SVG:
+					if(nsn.name == "offset"){
+						std::istringstream s(a.value());
+						s >> ret->offset;
+						if(!s.eof() && s.peek() == '%'){
+							ret->offset /= 100;
+						}
+					}
+					break;
+				default:
+					break;
+			}
+		}
+		
+		return ret;
+	}
+	
 	std::unique_ptr<SvgElement> parseSvgElement(const pugi::xml_node& n){
 		ASSERT(getNamespace(n.name()).ns == EXmlNamespace::SVG)
 		ASSERT(getNamespace(n.name()).name == "svg")
@@ -263,6 +307,34 @@ struct Parser{
 						ret->path = PathElement::parse(a.value());
 						return ret;
 					}
+					break;
+				default:
+					break;
+			}
+		}
+		
+		return ret;
+	}
+	
+	std::unique_ptr<LinearGradientElement> parseLinearGradientElement(const pugi::xml_node& n){
+		ASSERT(getNamespace(n.name()).ns == EXmlNamespace::SVG)
+		ASSERT(getNamespace(n.name()).name == "linearGradient")
+		
+		auto ret = utki::makeUnique<LinearGradientElement>();
+		
+		this->fillElement(*ret, n);
+		this->fillContainer(*ret, n);
+		this->fillGradient(*ret, n);
+
+		for(auto a = n.first_attribute(); !a.empty(); a = a.next_attribute()){
+			auto nsn = this->getNamespace(a.name());
+			switch(nsn.ns){
+				case EXmlNamespace::SVG:
+					//TODO:
+//					if(nsn.name == "d"){
+//						ret->path = PathElement::parse(a.value());
+//						return ret;
+//					}
 					break;
 				default:
 					break;
@@ -333,6 +405,10 @@ std::unique_ptr<svgdom::Element> Parser::parseNode(const pugi::xml_node& n){
 				return this->parseDefsElement(n);
 			}else if(nsn.name == "path"){
 				return this->parsePathElement(n);
+			}else if(nsn.name == "linearGradient"){
+				return this->parseLinearGradientElement(n);
+			}else if(nsn.name == "stop"){
+				return this->parseGradientStopElement(n);
 			}
 			
 			break;
@@ -585,14 +661,14 @@ void Styleable::attribsToStream(std::ostream& s) const{
 			default:
 				ASSERT(false)
 				break;
-			case EStyleProperty::FILL:
-				s << st.second.paintToString();
-				break;
+			case EStyleProperty::STOP_OPACITY:
 			case EStyleProperty::OPACITY:
 			case EStyleProperty::STROKE_OPACITY:
 			case EStyleProperty::FILL_OPACITY:
 				s << st.second.opacity;
 				break;
+			case EStyleProperty::STOP_COLOR:
+			case EStyleProperty::FILL:
 			case EStyleProperty::STROKE:
 				s << st.second.paintToString();
 				break;
@@ -831,6 +907,10 @@ EStyleProperty Styleable::stringToProperty(std::string str){
 		return EStyleProperty::STROKE_OPACITY;
 	}else if(str == "opacity"){
 		return EStyleProperty::OPACITY;
+	}else if(str == "stop-opacity"){
+		return EStyleProperty::STOP_OPACITY;
+	}else if(str == "stop-color"){
+		return EStyleProperty::STOP_COLOR;
 	}
 	
 	return EStyleProperty::UNKNOWN;
@@ -839,7 +919,8 @@ EStyleProperty Styleable::stringToProperty(std::string str){
 std::string Styleable::propertyToString(EStyleProperty p){
 	switch(p){
 		default:
-			return "UNKNOWN";
+			ASSERT(false)
+			return "";
 		case EStyleProperty::FILL:
 			return "fill";
 		case EStyleProperty::FILL_OPACITY:
@@ -854,6 +935,10 @@ std::string Styleable::propertyToString(EStyleProperty p){
 			return "stroke-opacity";
 		case EStyleProperty::OPACITY:
 			return "opacity";
+		case EStyleProperty::STOP_OPACITY:
+			return "stop-opacity";
+		case EStyleProperty::STOP_COLOR:
+			return "stop-color";
 	}
 }
 
@@ -895,10 +980,7 @@ decltype(Styleable::styles) Styleable::parse(const std::string& str){
 			default:
 				ASSERT(false)
 				break;
-			case EStyleProperty::FILL:
-//				TRACE(<< "value = " << value << std::endl)
-				v = StylePropertyValue::parsePaint(readTillChar(s, ';'));
-				break;
+			case EStyleProperty::STOP_OPACITY:
 			case EStyleProperty::OPACITY:
 			case EStyleProperty::STROKE_OPACITY:
 			case EStyleProperty::FILL_OPACITY:
@@ -909,9 +991,11 @@ decltype(Styleable::styles) Styleable::parse(const std::string& str){
 					utki::clampRange(v.opacity, real(0), real(1));
 				}
 				break;
+			case EStyleProperty::STOP_COLOR:
+			case EStyleProperty::FILL:
 			case EStyleProperty::STROKE:
 				v = StylePropertyValue::parsePaint(readTillChar(s, ';'));
-//				TRACE(<< "stroke read = " << std::hex << v.integer << std::endl)
+//				TRACE(<< "paint read = " << std::hex << v.integer << std::endl)
 				break;
 			case EStyleProperty::STROKE_WIDTH:
 				v.length = Length::parse(readTillChar(s, ';'));
@@ -1469,10 +1553,6 @@ void GElement::render(Renderer& renderer) const{
 	renderer.render(*this);
 }
 
-void DefsElement::render(Renderer& renderer) const{
-	renderer.render(*this);
-}
-
 
 void SvgElement::render(Renderer& renderer) const{
 	renderer.render(*this);
@@ -1510,3 +1590,63 @@ const StylePropertyValue* Element::getStyleProperty(EStyleProperty property) con
 	
 	return this->parent->getStyleProperty(property);
 }
+
+Gradient::ESpreadMethod Gradient::stringToSpreadMethod(const std::string& str) {
+	if(str == "pad"){
+		return ESpreadMethod::PAD;
+	}else if(str == "reflect"){
+		return ESpreadMethod::REFLECT;
+	}else if(str == "repeat"){
+		return ESpreadMethod::REPEAT;
+	}
+	return ESpreadMethod::PAD;
+}
+
+std::string Gradient::spreadMethodToString(ESpreadMethod sm) {
+	switch(sm){
+		default:
+			ASSERT(false)
+			return "";
+		case ESpreadMethod::PAD:
+			return "pad";
+		case ESpreadMethod::REFLECT:
+			return "reflect";
+		case ESpreadMethod::REPEAT:
+			return "repeat";
+	}
+}
+
+void LinearGradientElement::toStream(std::ostream& s, unsigned indent) const {
+	auto ind = indentStr(indent);
+	
+	s << ind << "<linearGradient";
+	this->Element::attribsToStream(s);
+	this->Gradient::attribsToStream(s);
+	
+	if(this->children.size() == 0){
+		s << "/>";
+	}else{
+		s << ">" << std::endl;
+		this->childrenToStream(s, indent + 1);
+		s << ind << "</linearGradient>";
+	}
+	s << std::endl;
+}
+
+void Gradient::attribsToStream(std::ostream& s)const{
+	if(this->spreadMethod != ESpreadMethod::PAD){
+		s << "spreadMethod=\"" << Gradient::spreadMethodToString(this->spreadMethod) << "\"";
+	}
+	
+	//TODO:
+}
+
+
+void Gradient::StopElement::toStream(std::ostream& s, unsigned indent) const {
+	auto ind = indentStr(indent);
+	s << ind << "<stop";
+	s << " offset=\"" << this->offset << "\"";
+	this->Styleable::attribsToStream(s);
+	s << "/>" << std::endl;
+}
+

@@ -223,8 +223,6 @@ struct GElement : public Container, public Transformable, public Styleable{
 
 struct DefsElement : public Container, public Transformable, public Styleable{
 	void toStream(std::ostream& s, unsigned indent = 0)const override;
-	
-	void render(Renderer& renderer)const override;
 };
 
 struct Rectangle{
@@ -317,16 +315,31 @@ struct PathElement : public Shape{
 };
 
 
-struct Gradient : public Element{
-	struct Stop : public Styleable{
+struct Gradient : public Container{
+	enum class ESpreadMethod{
+		PAD,
+		REFLECT,
+		REPEAT
+	} spreadMethod;
+	
+	static std::string spreadMethodToString(ESpreadMethod sm);
+	static ESpreadMethod stringToSpreadMethod(const std::string& str);
+	
+	struct StopElement : public Styleable, public Element{
 		real offset;
+		
+		void toStream(std::ostream& s, unsigned indent)const override;
 	};
-	std::vector<Stop> stops;
+	
+	void attribsToStream(std::ostream& s)const;
 	
 	//TODO:
 };
 
 struct LinearGradientElement : public Gradient{
+	
+	void toStream(std::ostream& s, unsigned indent) const override;
+
 	//TODO:
 };
 
@@ -340,8 +353,6 @@ public:
 	virtual void render(const PathElement& e){}
 	
 	virtual void render(const GElement& e){}
-	
-	virtual void render(const DefsElement& e){}
 	
 	virtual void render(const SvgElement& e){}
 	
