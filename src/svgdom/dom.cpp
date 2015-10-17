@@ -337,6 +337,33 @@ struct Parser{
 		return ret;
 	}
 	
+	std::unique_ptr<RectElement> parseRectElement(const pugi::xml_node& n){
+		ASSERT(getNamespace(n.name()).ns == EXmlNamespace::SVG)
+		ASSERT(getNamespace(n.name()).name == "rect")
+		
+		auto ret = utki::makeUnique<RectElement>();
+		
+		this->fillShape(*ret, n);
+		this->fillRectangle(*ret, n);
+
+		for(auto a = n.first_attribute(); !a.empty(); a = a.next_attribute()){
+			auto nsn = this->getNamespace(a.name());
+			switch(nsn.ns){
+				case EXmlNamespace::SVG:
+					if(nsn.name == "rx"){
+						ret->rx = Length::parse(a.value());
+					}else if(nsn.name == "ry"){
+						ret->ry = Length::parse(a.value());
+					}
+					break;
+				default:
+					break;
+			}
+		}
+		
+		return ret;
+	}
+	
 	std::unique_ptr<LinearGradientElement> parseLinearGradientElement(const pugi::xml_node& n){
 		ASSERT(getNamespace(n.name()).ns == EXmlNamespace::SVG)
 		ASSERT(getNamespace(n.name()).name == "linearGradient")
@@ -464,6 +491,8 @@ std::unique_ptr<svgdom::Element> Parser::parseNode(const pugi::xml_node& n){
 				return this->parseRadialGradientElement(n);
 			}else if(nsn.name == "stop"){
 				return this->parseGradientStopElement(n);
+			}else if(nsn.name == "rect"){
+				return this->parseRectElement(n);
 			}
 			
 			break;
@@ -648,7 +677,7 @@ void SvgElement::toStream(std::ostream& s, unsigned indent) const{
 	auto ind = indentStr(indent);
 	
 	s << ind << "<svg";
-	this->Element::attribsToStream(s);
+	this->Container::attribsToStream(s);
 	this->Rectangle::attribsToStream(s);
 	
 	if(this->children.size() == 0){
@@ -677,7 +706,7 @@ void GElement::toStream(std::ostream& s, unsigned indent) const{
 	auto ind = indentStr(indent);
 	
 	s << ind << "<g";
-	this->Element::attribsToStream(s);
+	this->Container::attribsToStream(s);
 	this->Transformable::attribsToStream(s);
 	this->Styleable::attribsToStream(s);
 	
@@ -695,7 +724,7 @@ void DefsElement::toStream(std::ostream& s, unsigned indent) const{
 	auto ind = indentStr(indent);
 	
 	s << ind << "<defs";
-	this->Element::attribsToStream(s);
+	this->Container::attribsToStream(s);
 	this->Transformable::attribsToStream(s);
 	this->Styleable::attribsToStream(s);
 	
@@ -1226,8 +1255,7 @@ void PathElement::toStream(std::ostream& s, unsigned indent) const{
 	auto ind = indentStr(indent);
 	
 	s << ind << "<path";
-	this->Shape::attribsToStream(s);
-	
+
 	this->attribsToStream(s);
 	
 	s << "/>";
@@ -1242,6 +1270,8 @@ void Shape::attribsToStream(std::ostream& s) const {
 
 
 void PathElement::attribsToStream(std::ostream& s) const{
+	this->Shape::attribsToStream(s);
+	
 	if(this->path.size() == 0){
 		return;
 	}
@@ -1785,8 +1815,9 @@ void RadialGradientElement::toStream(std::ostream& s, unsigned indent) const {
 }
 
 void Gradient::attribsToStream(std::ostream& s)const{
-	this->Element::attribsToStream(s);
+	this->Container::attribsToStream(s);
 	this->Referencing::attribsToStream(s);
+	this->Styleable::attribsToStream(s);
 	
 	if(this->spreadMethod != ESpreadMethod::PAD){
 		s << " spreadMethod=\"" << Gradient::spreadMethodToString(this->spreadMethod) << "\"";
@@ -1800,6 +1831,7 @@ void Gradient::StopElement::toStream(std::ostream& s, unsigned indent) const {
 	auto ind = indentStr(indent);
 	s << ind << "<stop";
 	s << " offset=\"" << this->offset << "\"";
+	this->Element::attribsToStream(s);
 	this->Styleable::attribsToStream(s);
 	s << "/>" << std::endl;
 }
@@ -1846,4 +1878,28 @@ Length Length::make(real value, EUnit unit) {
 	ret.value = value;
 	
 	return ret;
+}
+
+void RectElement::attribsToStream(std::ostream& s) const {
+	this->Shape::attribsToStream(s);
+	this->Rectangle::attribsToStream(s);
+	
+	if(this->rx.unit != Length::EUnit::UNKNOWN){
+		s << " rx=\"" << this->rx << "\"";
+	}
+	
+	if(this->ry.unit != Length::EUnit::UNKNOWN){
+		s << " ry=\"" << this->ry << "\"";
+	}
+}
+
+void RectElement::toStream(std::ostream& s, unsigned indent) const {
+	auto ind = indentStr(indent);
+	
+	s << ind << "<rect";
+
+	this->attribsToStream(s);
+	
+	s << "/>";
+	s << std::endl;
 }

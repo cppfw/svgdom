@@ -321,6 +321,14 @@ struct PathElement : public Shape{
 	void render(Renderer& renderer) const override;
 };
 
+struct RectElement : public Shape, public Rectangle{
+	Length rx = Length::make(0, Length::EUnit::UNKNOWN);
+	Length ry = Length::make(0, Length::EUnit::UNKNOWN);
+	
+	void attribsToStream(std::ostream& s)const;
+	
+	void toStream(std::ostream& s, unsigned indent) const override;
+};
 
 struct Gradient : public Container, public Referencing, public Styleable{
 	enum class ESpreadMethod{
