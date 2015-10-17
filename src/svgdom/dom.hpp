@@ -326,7 +326,7 @@ struct PathElement : public Shape{
 };
 
 
-struct Gradient : public Container, public Referencing{
+struct Gradient : public Container, public Referencing, public Styleable{
 	enum class ESpreadMethod{
 		PAD,
 		REFLECT,
@@ -343,8 +343,6 @@ struct Gradient : public Container, public Referencing{
 	};
 	
 	void attribsToStream(std::ostream& s)const;
-	
-	//TODO:
 };
 
 struct LinearGradientElement : public Gradient{

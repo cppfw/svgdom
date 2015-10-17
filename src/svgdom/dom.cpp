@@ -176,6 +176,8 @@ struct Parser{
 	}
 	
 	void fillContainer(Container& c, const pugi::xml_node& n){
+		this->fillElement(c, n);
+		
 		ASSERT(c.children.size() == 0)
 		for(auto i = n.first_child(); !i.empty(); i = i.next_sibling()){
 			if(auto res = this->parseNode(i)){
@@ -220,6 +222,10 @@ struct Parser{
 	}
 	
 	void fillGradient(Gradient& g, const pugi::xml_node& n){
+		this->fillContainer(g, n);
+		this->fillReferencing(g, n);
+		this->fillStyleable(g, n);
+		
 		for(auto a = n.first_attribute(); !a.empty(); a = a.next_attribute()){
 			auto nsn = this->getNamespace(a.name());
 			switch(nsn.ns){
@@ -234,6 +240,12 @@ struct Parser{
 					break;
 			}
 		}
+	}
+	
+	void fillShape(Shape& s, const pugi::xml_node& n){
+		this->fillElement(s, n);
+		this->fillStyleable(s, n);
+		this->fillTransformable(s, n);
 	}
 	
 	std::unique_ptr<Gradient::StopElement> parseGradientStopElement(const pugi::xml_node& n){
@@ -269,7 +281,6 @@ struct Parser{
 		
 		auto ret = utki::makeUnique<SvgElement>();
 		
-		this->fillElement(*ret, n);
 		this->fillRectangle(*ret, n);
 		this->fillContainer(*ret, n);
 
@@ -282,7 +293,6 @@ struct Parser{
 		
 		auto ret = utki::makeUnique<GElement>();
 		
-		this->fillElement(*ret, n);
 		this->fillTransformable(*ret, n);
 		this->fillStyleable(*ret, n);
 		this->fillContainer(*ret, n);
@@ -296,7 +306,6 @@ struct Parser{
 		
 		auto ret = utki::makeUnique<DefsElement>();
 		
-		this->fillElement(*ret, n);
 		this->fillTransformable(*ret, n);
 		this->fillStyleable(*ret, n);
 		this->fillContainer(*ret, n);
@@ -310,9 +319,7 @@ struct Parser{
 		
 		auto ret = utki::makeUnique<PathElement>();
 		
-		this->fillElement(*ret, n);
-		this->fillTransformable(*ret, n);
-		this->fillStyleable(*ret, n);
+		this->fillShape(*ret, n);
 
 		for(auto a = n.first_attribute(); !a.empty(); a = a.next_attribute()){
 			auto nsn = this->getNamespace(a.name());
@@ -337,10 +344,7 @@ struct Parser{
 		
 		auto ret = utki::makeUnique<LinearGradientElement>();
 		
-		this->fillElement(*ret, n);
-		this->fillContainer(*ret, n);
 		this->fillGradient(*ret, n);
-		this->fillReferencing(*ret, n);
 
 		for(auto a = n.first_attribute(); !a.empty(); a = a.next_attribute()){
 			auto nsn = this->getNamespace(a.name());
