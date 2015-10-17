@@ -254,7 +254,7 @@ struct SvgElement : public Container, public Rectangle{
 };
 
 struct Shape : public Element, public Styleable, public Transformable{
-	
+	void attribsToStream(std::ostream& s)const;
 };
 
 struct PathElement : public Shape{
@@ -348,12 +348,16 @@ struct LinearGradientElement : public Gradient{
 	Length y2 = Length::make(0, Length::EUnit::PERCENT);
 	
 	void toStream(std::ostream& s, unsigned indent) const override;
-
-	//TODO:
 };
 
 struct RadialGradientElement : public Gradient{
-	//TODO:
+	Length cx = Length::make(50, Length::EUnit::PERCENT);
+	Length cy = Length::make(50, Length::EUnit::PERCENT);
+	Length r = Length::make(50, Length::EUnit::PERCENT);
+	Length fx = Length::make(50, Length::EUnit::UNKNOWN);
+	Length fy = Length::make(50, Length::EUnit::UNKNOWN);
+	
+	void toStream(std::ostream& s, unsigned indent) const override;
 };
 
 

@@ -366,6 +366,38 @@ struct Parser{
 		
 		return ret;
 	}
+	
+	std::unique_ptr<RadialGradientElement> parseRadialGradientElement(const pugi::xml_node& n){
+		ASSERT(getNamespace(n.name()).ns == EXmlNamespace::SVG)
+		ASSERT(getNamespace(n.name()).name == "radialGradient")
+		
+		auto ret = utki::makeUnique<RadialGradientElement>();
+		
+		this->fillGradient(*ret, n);
+		
+		for(auto a = n.first_attribute(); !a.empty(); a = a.next_attribute()){
+			auto nsn = this->getNamespace(a.name());
+			switch(nsn.ns){
+				case EXmlNamespace::SVG:
+					if(nsn.name == "cx"){
+						ret->cx = Length::parse(a.value());
+					}else if(nsn.name == "cy"){
+						ret->cy = Length::parse(a.value());
+					}else if(nsn.name == "r"){
+						ret->r = Length::parse(a.value());
+					}else if(nsn.name == "fx"){
+						ret->fx = Length::parse(a.value());
+					}else if(nsn.name == "fy"){
+						ret->fy = Length::parse(a.value());
+					}
+					break;
+				default:
+					break;
+			}
+		}
+		
+		return ret;
+	}
 };//~class
 
 
@@ -428,6 +460,8 @@ std::unique_ptr<svgdom::Element> Parser::parseNode(const pugi::xml_node& n){
 				return this->parsePathElement(n);
 			}else if(nsn.name == "linearGradient"){
 				return this->parseLinearGradientElement(n);
+			}else if(nsn.name == "radialGradient"){
+				return this->parseRadialGradientElement(n);
 			}else if(nsn.name == "stop"){
 				return this->parseGradientStopElement(n);
 			}
@@ -1192,15 +1226,20 @@ void PathElement::toStream(std::ostream& s, unsigned indent) const{
 	auto ind = indentStr(indent);
 	
 	s << ind << "<path";
-	this->Element::attribsToStream(s);
-	this->Transformable::attribsToStream(s);
-	this->Styleable::attribsToStream(s);
+	this->Shape::attribsToStream(s);
 	
 	this->attribsToStream(s);
 	
 	s << "/>";
 	s << std::endl;
 }
+
+void Shape::attribsToStream(std::ostream& s) const {
+	this->Element::attribsToStream(s);
+	this->Transformable::attribsToStream(s);
+	this->Styleable::attribsToStream(s);
+}
+
 
 void PathElement::attribsToStream(std::ostream& s) const{
 	if(this->path.size() == 0){
@@ -1681,9 +1720,23 @@ void LinearGradientElement::toStream(std::ostream& s, unsigned indent) const {
 	auto ind = indentStr(indent);
 	
 	s << ind << "<linearGradient";
-	this->Element::attribsToStream(s);
 	this->Gradient::attribsToStream(s);
-	this->Referencing::attribsToStream(s);
+	
+	if(this->x1.unit != Length::EUnit::PERCENT || this->x1.value != 0){
+		s << " x1=\"" << this->x1 << "\"";
+	}
+	
+	if(this->y1.unit != Length::EUnit::PERCENT || this->y1.value != 0){
+		s << " y1=\"" << this->y1 << "\"";
+	}
+	
+	if(this->x2.unit != Length::EUnit::PERCENT || this->x2.value != 100){
+		s << " x2=\"" << this->x2 << "\"";
+	}
+	
+	if(this->y2.unit != Length::EUnit::PERCENT || this->y2.value != 0){
+		s << " y2=\"" << this->y2 << "\"";
+	}
 	
 	if(this->children.size() == 0){
 		s << "/>";
@@ -1695,7 +1748,46 @@ void LinearGradientElement::toStream(std::ostream& s, unsigned indent) const {
 	s << std::endl;
 }
 
+void RadialGradientElement::toStream(std::ostream& s, unsigned indent) const {
+	auto ind = indentStr(indent);
+	
+	s << ind << "<radialGradient";
+	this->Gradient::attribsToStream(s);
+	
+	if(this->cx.unit != Length::EUnit::PERCENT || this->cx.value != 50){
+		s << " cx=\"" << this->cx << "\"";
+	}
+	
+	if(this->cy.unit != Length::EUnit::PERCENT || this->cy.value != 50){
+		s << " cy=\"" << this->cy << "\"";
+	}
+	
+	if(this->r.unit != Length::EUnit::PERCENT || this->r.value != 50){
+		s << " r=\"" << this->r << "\"";
+	}
+	
+	if(this->fx.unit != Length::EUnit::UNKNOWN){
+		s << " fx=\"" << this->fx << "\"";
+	}
+	
+	if(this->fy.unit != Length::EUnit::UNKNOWN){
+		s << " fy=\"" << this->fy << "\"";
+	}
+	
+	if(this->children.size() == 0){
+		s << "/>";
+	}else{
+		s << ">" << std::endl;
+		this->childrenToStream(s, indent + 1);
+		s << ind << "</radialGradient>";
+	}
+	s << std::endl;
+}
+
 void Gradient::attribsToStream(std::ostream& s)const{
+	this->Element::attribsToStream(s);
+	this->Referencing::attribsToStream(s);
+	
 	if(this->spreadMethod != ESpreadMethod::PAD){
 		s << " spreadMethod=\"" << Gradient::spreadMethodToString(this->spreadMethod) << "\"";
 	}
