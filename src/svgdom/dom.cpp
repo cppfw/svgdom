@@ -1657,7 +1657,7 @@ void LinearGradientElement::toStream(std::ostream& s, unsigned indent) const {
 
 void Gradient::attribsToStream(std::ostream& s)const{
 	if(this->spreadMethod != ESpreadMethod::PAD){
-		s << "spreadMethod=\"" << Gradient::spreadMethodToString(this->spreadMethod) << "\"";
+		s << " spreadMethod=\"" << Gradient::spreadMethodToString(this->spreadMethod) << "\"";
 	}
 	
 	//TODO:
