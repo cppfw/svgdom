@@ -1094,7 +1094,29 @@ StylePropertyValue StylePropertyValue::parsePaint(const std::string& str){
 	
 	//check if rgb() or RGB() notation
 	{
-		//TODO:
+		std::string rgb = "rgb(";
+		if(rgb == str.substr(0, rgb.length())){
+			std::istringstream s(str);
+			
+			s >> std::setw(rgb.length());
+			
+			s >> rgb;
+			ASSERT(rgb == "rgb(")
+			
+			std::uint32_t r, g, b;
+			
+			skipWhitespaces(s);
+			s >> r;
+			skipWhitespacesAndOrComma(s);
+			s >> g;
+			skipWhitespacesAndOrComma(s);
+			s >> b;
+			skipWhitespaces(s);
+			
+			if(s.get() == ')'){
+				ret.color = r | (g << 8) | (b << 16);
+			}
+		}
 	}
 	
 	//TODO: check if color name
