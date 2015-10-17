@@ -171,6 +171,13 @@ struct Container : public Element{
 	void render(Renderer& renderer)const;
 };
 
+struct Referencing{
+	Element* ref = nullptr;
+	std::string iri;
+	
+	void attribsToStream(std::ostream& s)const;
+};
+
 
 struct Transformable{
 	struct Transformation{
@@ -315,7 +322,7 @@ struct PathElement : public Shape{
 };
 
 
-struct Gradient : public Container{
+struct Gradient : public Container, public Referencing{
 	enum class ESpreadMethod{
 		PAD,
 		REFLECT,

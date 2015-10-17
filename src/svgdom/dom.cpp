@@ -76,8 +76,8 @@ enum class EXmlNamespace{
 	XLINK
 };
 
-const char* DSvgNamespace = "http://www.w3.org/2000/svg";
-const char* DXlinkNamespace = "http://www.w3.org/1999/xlink";
+const std::string DSvgNamespace = "http://www.w3.org/2000/svg";
+const std::string DXlinkNamespace = "http://www.w3.org/1999/xlink";
 
 
 struct Parser{
@@ -131,6 +131,21 @@ struct Parser{
 				case EXmlNamespace::SVG:
 					if(nsn.name == "id"){
 						e.id = a.value();
+					}
+					break;
+				default:
+					break;
+			}
+		}
+	}
+	
+	void fillReferencing(Referencing& e, const pugi::xml_node& n){
+		for(auto a = n.first_attribute(); !a.empty(); a = a.next_attribute()){
+			auto nsn = this->getNamespace(a.name());
+			switch(nsn.ns){
+				case EXmlNamespace::XLINK:
+					if(nsn.name == "href"){
+						e.iri = a.value();
 					}
 					break;
 				default:
@@ -325,6 +340,7 @@ struct Parser{
 		this->fillElement(*ret, n);
 		this->fillContainer(*ret, n);
 		this->fillGradient(*ret, n);
+		this->fillReferencing(*ret, n);
 
 		for(auto a = n.first_attribute(); !a.empty(); a = a.next_attribute()){
 			auto nsn = this->getNamespace(a.name());
@@ -377,12 +393,10 @@ std::unique_ptr<svgdom::Element> Parser::parseNode(const pugi::xml_node& n){
 			ASSERT(attr.length() >= xmlns.length())
 			auto ns = attr.substr(xmlns.length(), attr.length() - xmlns.length());
 			
-			if(ns == DSvgNamespace){
+			if(DSvgNamespace == a.value()){
 				this->namespaces.back()[ns] = EXmlNamespace::SVG;
-			}else if (ns == DXlinkNamespace){
+			}else if(DXlinkNamespace == a.value()){
 				this->namespaces.back()[ns] = EXmlNamespace::XLINK;
-			}else{
-				this->namespaces.back().erase(ns);
 			}
 		}
 	}
@@ -1644,6 +1658,7 @@ void LinearGradientElement::toStream(std::ostream& s, unsigned indent) const {
 	s << ind << "<linearGradient";
 	this->Element::attribsToStream(s);
 	this->Gradient::attribsToStream(s);
+	this->Referencing::attribsToStream(s);
 	
 	if(this->children.size() == 0){
 		s << "/>";
@@ -1660,7 +1675,7 @@ void Gradient::attribsToStream(std::ostream& s)const{
 		s << " spreadMethod=\"" << Gradient::spreadMethodToString(this->spreadMethod) << "\"";
 	}
 	
-	//TODO:
+	//TODO: gradientTransform
 }
 
 
@@ -1672,3 +1687,9 @@ void Gradient::StopElement::toStream(std::ostream& s, unsigned indent) const {
 	s << "/>" << std::endl;
 }
 
+void Referencing::attribsToStream(std::ostream& s) const {
+	if(this->iri.length() == 0){
+		return;
+	}
+	s << " xlink:href=\"" << this->iri << "\"";
+}
