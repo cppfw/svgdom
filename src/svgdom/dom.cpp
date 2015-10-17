@@ -434,6 +434,23 @@ std::unique_ptr<svgdom::Element> Parser::parseNode(const pugi::xml_node& n){
 	return nullptr;
 }
 
+void resolveReferences(Element& e, SvgElement& svg){
+	if(auto r = dynamic_cast<Referencing*>(&e)){
+		if(r->iri.length() != 0 && r->iri[0] == '#'){
+			r->ref = svg.findById(r->iri.substr(1, r->iri.length() - 1));
+			if(r->ref){
+				r->iri.clear();
+			}
+		}
+	}
+	
+	if(auto container = dynamic_cast<Container*>(&e)){
+		for(auto& c : container->children){
+			resolveReferences(*c, svg);
+		}
+	}
+}
+
 }//~namespace
 
 
@@ -456,6 +473,7 @@ std::unique_ptr<SvgElement> svgdom::load(const papki::File& f){
 	
 		auto ret = std::unique_ptr<SvgElement>(dynamic_cast<SvgElement*>(element.release()));
 		if(ret){
+			resolveReferences(*ret, *ret);
 			return ret;
 		}
 	}
@@ -1688,8 +1706,36 @@ void Gradient::StopElement::toStream(std::ostream& s, unsigned indent) const {
 }
 
 void Referencing::attribsToStream(std::ostream& s) const {
-	if(this->iri.length() == 0){
+	if(this->iri.length() == 0 && !this->ref){
 		return;
 	}
-	s << " xlink:href=\"" << this->iri << "\"";
+	s << " xlink:href=\"";
+	
+	if(this->ref){
+		s << '#' << this->ref->id;
+	}else{
+		s << this->iri;
+	}
+	
+	s << "\"";
+}
+
+Element* Element::findById(const std::string& elementId) {
+	if(this->id == elementId){
+		return this;
+	}
+	return nullptr;
+}
+
+Element* Container::findById(const std::string& elementId) {
+	if(auto e = this->Element::findById(elementId)){
+		return e;
+	}
+	
+	for(auto& c : this->children){
+		if(auto e = c->findById(elementId)){
+			return e;
+		}
+	}
+	return nullptr;
 }

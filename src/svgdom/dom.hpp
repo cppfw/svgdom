@@ -161,6 +161,8 @@ struct Element : public utki::Unique{
 	virtual void render(Renderer& renderer)const{}
 	
 	const StylePropertyValue* getStyleProperty(EStyleProperty property)const;
+	
+	virtual Element* findById(const std::string& elementId);
 };
 
 struct Container : public Element{
@@ -169,6 +171,8 @@ struct Container : public Element{
 	void childrenToStream(std::ostream& s, unsigned indent)const;
 	
 	void render(Renderer& renderer)const;
+	
+	Element* findById(const std::string& elementId) override;
 };
 
 struct Referencing{
