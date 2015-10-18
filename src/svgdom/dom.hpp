@@ -125,7 +125,15 @@ enum class EStrokeLineCap{
 };
 
 struct StylePropertyValue{
-	bool effective = true;
+	enum class ERule{
+		NORMAL,
+		NONE,
+		INHERIT
+	} rule = ERule::NORMAL;
+	
+	bool isNormal()const noexcept{
+		return this->rule == ERule::NORMAL;
+	}
 	
 	union{
 		std::uint32_t color;
@@ -141,8 +149,6 @@ struct StylePropertyValue{
 	static StylePropertyValue parsePaint(const std::string& str);
 	
 	std::string paintToString()const;
-	
-	std::uint32_t getColor()const;
 	
 	Rgb getRgb()const;
 };
@@ -162,7 +168,7 @@ struct Element : public utki::Unique{
 	
 	virtual void render(Renderer& renderer)const{}
 	
-	const StylePropertyValue* getStyleProperty(EStyleProperty property)const;
+	const StylePropertyValue* getStyleProperty(EStyleProperty property, bool explicitInherit = false)const;
 	
 	virtual Element* findById(const std::string& elementId);
 };

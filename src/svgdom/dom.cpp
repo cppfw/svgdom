@@ -5,6 +5,7 @@
 #include <pugixml.hpp>
 
 #include <map>
+#include <set>
 #include <sstream>
 #include <iomanip>
 
@@ -1133,13 +1134,316 @@ decltype(Styleable::styles) Styleable::parse(const std::string& str){
 	return ret;
 }
 
+namespace{
+const std::map<std::string, std::uint32_t> colorNames = {
+	{"aliceblue", 0xfff8f0},
+	{"antiquewhite", 0xd7ebfa},
+	{"aqua", 0xffff00},
+	{"aquamarine", 0xd4ff7f},
+	{"azure", 0xfffff0},
+	{"beige", 0xdcf5f5},
+	{"bisque", 0xc4e4ff},
+	{"black", 0x0},
+	{"blanchedalmond", 0xcdebff},
+	{"blue", 0xff0000},
+	{"blueviolet", 0xe22b8a},
+	{"brown", 0x2a2aa5},
+	{"burlywood", 0x87b8de},
+	{"cadetblue", 0xa09e5f},
+	{"chartreuse", 0xff7f},
+	{"chocolate", 0x1e69d2},
+	{"coral", 0x507fff},
+	{"cornflowerblue", 0xed9564},
+	{"cornsilk", 0xdcf8ff},
+	{"crimson", 0x3c14dc},
+	{"cyan", 0xffff00},
+	{"darkblue", 0x8b0000},
+	{"darkcyan", 0x8b8b00},
+	{"darkgoldenrod", 0xb86b8},
+	{"darkgray", 0xa9a9a9},
+	{"darkgreen", 0x6400},
+	{"darkgrey", 0xa9a9a9},
+	{"darkkhaki", 0x6bb7bd},
+	{"darkmagenta", 0x8b008b},
+	{"darkolivegreen", 0x2f6b55},
+	{"darkorange", 0x8cff},
+	{"darkorchid", 0xcc3299},
+	{"darkred", 0x8b},
+	{"darksalmon", 0x7a96e9},
+	{"darkseagreen", 0x8fbc8f},
+	{"darkslateblue", 0x8b3d48},
+	{"darkslategray", 0x4f4f2f},
+	{"darkslategrey", 0x4f4f2f},
+	{"darkturquoise", 0xd1ce00},
+	{"darkviolet", 0xd30094},
+	{"deeppink", 0x9314ff},
+	{"deepskyblue", 0xffbf00},
+	{"dimgray", 0x696969},
+	{"dimgrey", 0x696969},
+	{"dodgerblue", 0xff901e},
+	{"firebrick", 0x2222b2},
+	{"floralwhite", 0xf0faff},
+	{"forestgreen", 0x228b22},
+	{"fuchsia", 0xff00ff},
+	{"gainsboro", 0xdcdcdc},
+	{"ghostwhite", 0xfff8f8},
+	{"gold", 0xd7ff},
+	{"goldenrod", 0x20a5da},
+	{"gray", 0x808080},
+	{"grey", 0x808080},
+	{"green", 0x8000},
+	{"greenyellow", 0x2fffad},
+	{"honeydew", 0xf0fff0},
+	{"hotpink", 0xb469ff},
+	{"indianred", 0x5c5ccd},
+	{"indigo", 0x82004b},
+	{"ivory", 0xf0ffff},
+	{"khaki", 0x8ce6f0},
+	{"lavender", 0xfae6e6},
+	{"lavenderblush", 0xf5f0ff},
+	{"lawngreen", 0xfc7c},
+	{"lemonchiffon", 0xcdfaff},
+	{"lightblue", 0xe6d8ad},
+	{"lightcoral", 0x8080f0},
+	{"lightcyan", 0xffffe0},
+	{"lightgoldenrodyellow", 0xd2fafa},
+	{"lightgray", 0xd3d3d3},
+	{"lightgreen", 0x90ee90},
+	{"lightgrey", 0xd3d3d3},
+	{"lightpink", 0xc1b6ff},
+	{"lightsalmon", 0x7aa0ff},
+	{"lightseagreen", 0xaab220},
+	{"lightskyblue", 0xface87},
+	{"lightslategray", 0x998877},
+	{"lightslategrey", 0x998877},
+	{"lightsteelblue", 0xdec4b0},
+	{"lightyellow", 0xe0ffff},
+	{"lime", 0xff00},
+	{"limegreen", 0x32cd32},
+	{"linen", 0xe6f0fa},
+	{"magenta", 0xff00ff},
+	{"maroon", 0x80},
+	{"mediumaquamarine", 0xaacd66},
+	{"mediumblue", 0xcd0000},
+	{"mediumorchid", 0xd355ba},
+	{"mediumpurple", 0xdb7093},
+	{"mediumseagreen", 0x71b33c},
+	{"mediumslateblue", 0xee687b},
+	{"mediumspringgreen", 0x9afa00},
+	{"mediumturquoise", 0xccd148},
+	{"mediumvioletred", 0x8515c7},
+	{"midnightblue", 0x701919},
+	{"mintcream", 0xfafff5},
+	{"mistyrose", 0xe1e4ff},
+	{"moccasin", 0xb5e4ff},
+	{"navajowhite", 0xaddeff},
+	{"navy", 0x800000},
+	{"oldlace", 0xe6f5fd},
+	{"olive", 0x8080},
+	{"olivedrab", 0x238e6b},
+	{"orange", 0xa5ff},
+	{"orangered", 0x45ff},
+	{"orchid", 0xd670da},
+	{"palegoldenrod", 0xaae8ee},
+	{"palegreen", 0x98fb98},
+	{"paleturquoise", 0xeeeeaf},
+	{"palevioletred", 0x9370db},
+	{"papayawhip", 0xd5efff},
+	{"peachpuff", 0xb9daff},
+	{"peru", 0x3f85cd},
+	{"pink", 0xcbc0ff},
+	{"plum", 0xdda0dd},
+	{"powderblue", 0xe6e0b0},
+	{"purple", 0x800080},
+	{"red", 0xff},
+	{"rosybrown", 0x8f8fbc},
+	{"royalblue", 0xe16941},
+	{"saddlebrown", 0x13458b},
+	{"salmon", 0x7280fa},
+	{"sandybrown", 0x60a4f4},
+	{"seagreen", 0x578b2e},
+	{"seashell", 0xeef5ff},
+	{"sienna", 0x2d52a0},
+	{"silver", 0xc0c0c0},
+	{"skyblue", 0xebce87},
+	{"slateblue", 0xcd5a6a},
+	{"slategray", 0x908070},
+	{"slategrey", 0x908070},
+	{"snow", 0xfafaff},
+	{"springgreen", 0x7fff00},
+	{"steelblue", 0xb48246},
+	{"tan", 0x8cb4d2},
+	{"teal", 0x808000},
+	{"thistle", 0xd8bfd8},
+	{"tomato", 0x4763ff},
+	{"turquoise", 0xd0e040},
+	{"violet", 0xee82ee},
+	{"wheat", 0xb3def5},
+	{"white", 0xffffff},
+	{"whitesmoke", 0xf5f5f5},
+	{"yellow", 0xffff},
+	{"yellowgreen", 0x32cd9a}
+};
+
+
+//TODO: remove
+//std::string cn = R"qwertyuiop(aliceblue	rgb(240, 248, 255)
+//	antiquewhite	rgb(250, 235, 215)
+//	aqua	rgb( 0, 255, 255)
+//	aquamarine	rgb(127, 255, 212)
+//	azure	rgb(240, 255, 255)
+//	beige	rgb(245, 245, 220)
+//	bisque	rgb(255, 228, 196)
+//	black	rgb( 0, 0, 0)
+//	blanchedalmond	rgb(255, 235, 205)
+//	blue	rgb( 0, 0, 255)
+//	blueviolet	rgb(138, 43, 226)
+//	brown	rgb(165, 42, 42)
+//	burlywood	rgb(222, 184, 135)
+//	cadetblue	rgb( 95, 158, 160)
+//	chartreuse	rgb(127, 255, 0)
+//	chocolate	rgb(210, 105, 30)
+//	coral	rgb(255, 127, 80)
+//	cornflowerblue	rgb(100, 149, 237)
+//	cornsilk	rgb(255, 248, 220)
+//	crimson	rgb(220, 20, 60)
+//	cyan	rgb( 0, 255, 255)
+//	darkblue	rgb( 0, 0, 139)
+//	darkcyan	rgb( 0, 139, 139)
+//	darkgoldenrod	rgb(184, 134, 11)
+//	darkgray	rgb(169, 169, 169)
+//	darkgreen	rgb( 0, 100, 0)
+//	darkgrey	rgb(169, 169, 169)
+//	darkkhaki	rgb(189, 183, 107)
+//	darkmagenta	rgb(139, 0, 139)
+//	darkolivegreen	rgb( 85, 107, 47)
+//	darkorange	rgb(255, 140, 0)
+//	darkorchid	rgb(153, 50, 204)
+//	darkred	rgb(139, 0, 0)
+//	darksalmon	rgb(233, 150, 122)
+//	darkseagreen	rgb(143, 188, 143)
+//	darkslateblue	rgb( 72, 61, 139)
+//	darkslategray	rgb( 47, 79, 79)
+//	darkslategrey	rgb( 47, 79, 79)
+//	darkturquoise	rgb( 0, 206, 209)
+//	darkviolet	rgb(148, 0, 211)
+//	deeppink	rgb(255, 20, 147)
+//	deepskyblue	rgb( 0, 191, 255)
+//	dimgray	rgb(105, 105, 105)
+//	dimgrey	rgb(105, 105, 105)
+//	dodgerblue	rgb( 30, 144, 255)
+//	firebrick	rgb(178, 34, 34)
+//	floralwhite	rgb(255, 250, 240)
+//	forestgreen	rgb( 34, 139, 34)
+//	fuchsia	rgb(255, 0, 255)
+//	gainsboro	rgb(220, 220, 220)
+//	ghostwhite	rgb(248, 248, 255)
+//	gold	rgb(255, 215, 0)
+//	goldenrod	rgb(218, 165, 32)
+//	gray	rgb(128, 128, 128)
+//	grey	rgb(128, 128, 128)
+//	green	rgb( 0, 128, 0)
+//	greenyellow	rgb(173, 255, 47)
+//	honeydew	rgb(240, 255, 240)
+//	hotpink	rgb(255, 105, 180)
+//	indianred	rgb(205, 92, 92)
+//	indigo	rgb( 75, 0, 130)
+//	ivory	rgb(255, 255, 240)
+//	khaki	rgb(240, 230, 140)
+//	lavender	rgb(230, 230, 250)
+//	lavenderblush	rgb(255, 240, 245)
+//	lawngreen	rgb(124, 252, 0)
+//	lemonchiffon	rgb(255, 250, 205)
+//	lightblue	rgb(173, 216, 230)
+//	lightcoral	rgb(240, 128, 128)
+//	lightcyan	rgb(224, 255, 255)
+//	lightgoldenrodyellow	rgb(250, 250, 210)
+//	lightgray	rgb(211, 211, 211)
+//	lightgreen	rgb(144, 238, 144)
+//	lightgrey	rgb(211, 211, 211)
+//	lightpink	rgb(255, 182, 193)
+//	lightsalmon	rgb(255, 160, 122)
+//	lightseagreen	rgb( 32, 178, 170)
+//	lightskyblue	rgb(135, 206, 250)
+//	lightslategray	rgb(119, 136, 153)
+//	lightslategrey	rgb(119, 136, 153)
+//	lightsteelblue	rgb(176, 196, 222)
+//	lightyellow	rgb(255, 255, 224)
+//	lime	rgb( 0, 255, 0)
+//	limegreen	rgb( 50, 205, 50)
+//	linen	rgb(250, 240, 230)
+//	magenta	rgb(255, 0, 255)
+//	maroon	rgb(128, 0, 0)
+//	mediumaquamarine	rgb(102, 205, 170)
+//	mediumblue	rgb( 0, 0, 205)
+//	mediumorchid	rgb(186, 85, 211)
+//	mediumpurple	rgb(147, 112, 219)
+//	mediumseagreen	rgb( 60, 179, 113)
+//	mediumslateblue	rgb(123, 104, 238)
+//	mediumspringgreen	rgb( 0, 250, 154)
+//	mediumturquoise	rgb( 72, 209, 204)
+//	mediumvioletred	rgb(199, 21, 133)
+//	midnightblue	rgb( 25, 25, 112)
+//	mintcream	rgb(245, 255, 250)
+//	mistyrose	rgb(255, 228, 225)
+//	moccasin	rgb(255, 228, 181)
+//	navajowhite	rgb(255, 222, 173)
+//	navy	rgb( 0, 0, 128)
+//	oldlace	rgb(253, 245, 230)
+//	olive	rgb(128, 128, 0)
+//	olivedrab	rgb(107, 142, 35)
+//	orange	rgb(255, 165, 0)
+//	orangered	rgb(255, 69, 0)
+//	orchid	rgb(218, 112, 214)
+//	palegoldenrod	rgb(238, 232, 170)
+//	palegreen	rgb(152, 251, 152)
+//	paleturquoise	rgb(175, 238, 238)
+//	palevioletred	rgb(219, 112, 147)
+//	papayawhip	rgb(255, 239, 213)
+//	peachpuff	rgb(255, 218, 185)
+//	peru	rgb(205, 133, 63)
+//	pink	rgb(255, 192, 203)
+//	plum	rgb(221, 160, 221)
+//	powderblue	rgb(176, 224, 230)
+//	purple	rgb(128, 0, 128)
+//	red	rgb(255, 0, 0)
+//	rosybrown	rgb(188, 143, 143)
+//	royalblue	rgb( 65, 105, 225)
+//	saddlebrown	rgb(139, 69, 19)
+//	salmon	rgb(250, 128, 114)
+//	sandybrown	rgb(244, 164, 96)
+//	seagreen	rgb( 46, 139, 87)
+//	seashell	rgb(255, 245, 238)
+//	sienna	rgb(160, 82, 45)
+//	silver	rgb(192, 192, 192)
+//	skyblue	rgb(135, 206, 235)
+//	slateblue	rgb(106, 90, 205)
+//	slategray	rgb(112, 128, 144)
+//	slategrey	rgb(112, 128, 144)
+//	snow	rgb(255, 250, 250)
+//	springgreen	rgb( 0, 255, 127)
+//	steelblue	rgb( 70, 130, 180)
+//	tan	rgb(210, 180, 140)
+//	teal	rgb( 0, 128, 128)
+//	thistle	rgb(216, 191, 216)
+//	tomato	rgb(255, 99, 71)
+//	turquoise	rgb( 64, 224, 208)
+//	violet	rgb(238, 130, 238)
+//	wheat	rgb(245, 222, 179)
+//	white	rgb(255, 255, 255)
+//	whitesmoke	rgb(245, 245, 245)
+//	yellow	rgb(255, 255, 0)
+//	yellowgreen	rgb(154, 205, 50))qwertyuiop";
+
+
+}//~namespace
 
 
 StylePropertyValue StylePropertyValue::parsePaint(const std::string& str){
 	StylePropertyValue ret;
 	
 	if(str.size() == 0){
-		ret.effective = false;
+		ret.rule = StylePropertyValue::ERule::NONE;
 		return ret;
 	}
 	
@@ -1147,9 +1451,9 @@ StylePropertyValue StylePropertyValue::parsePaint(const std::string& str){
 
 	//check if 'none'
 	{
-		std::string cmp = "none";
+		const std::string cmp = "none";
 		if(cmp == str.substr(0, cmp.length())){
-			ret.effective = false;
+			ret.rule = StylePropertyValue::ERule::NONE;
 			return ret;
 		}
 	}
@@ -1186,7 +1490,7 @@ StylePropertyValue StylePropertyValue::parsePaint(const std::string& str){
 						| (std::uint32_t(d[4]) << 20) | (std::uint32_t(d[5]) << 16);
 				break;
 			default:
-				ret.effective = false;
+				ret.rule = StylePropertyValue::ERule::NONE;
 				break;
 		}
 		
@@ -1196,14 +1500,16 @@ StylePropertyValue StylePropertyValue::parsePaint(const std::string& str){
 	
 	//check if rgb() or RGB() notation
 	{
-		std::string rgb = "rgb(";
+		const std::string rgb = "rgb(";
 		if(rgb == str.substr(0, rgb.length())){
 			std::istringstream s(str);
 			
 			s >> std::setw(rgb.length());
 			
-			s >> rgb;
-			ASSERT(rgb == "rgb(")
+			std::string tmpStr;
+			
+			s >> tmpStr;
+			ASSERT(tmpStr == rgb)
 			
 			std::uint32_t r, g, b;
 			
@@ -1218,37 +1524,91 @@ StylePropertyValue StylePropertyValue::parsePaint(const std::string& str){
 			if(s.get() == ')'){
 				ret.color = r | (g << 8) | (b << 16);
 			}
+			return ret;
 		}
 	}
 	
-	//TODO: check if color name
+	//TODO: remove
+//	{
+//		std::istringstream s(cn);
+//		
+//		for(; !s.eof();){
+//			skipWhitespaces(s);
+//			std::string name;
+//			s >> name;
+//			
+//			skipWhitespaces(s);
+//			
+//			const std::string rgb = "rgb(";
+//			
+//			s >> std::setw(rgb.length());
+//			
+//			std::string tmpStr;
+//			
+//			s >> tmpStr;
+//			ASSERT(tmpStr == rgb)
+//			
+//			std::uint32_t r, g, b;
+//			
+//			skipWhitespaces(s);
+//			s >> r;
+//			skipWhitespacesAndOrComma(s);
+//			s >> g;
+//			skipWhitespacesAndOrComma(s);
+//			s >> b;
+//			skipWhitespaces(s);
+//			
+//			if(s.get() == ')'){
+//				std::uint32_t color = r | (g << 8) | (b << 16);
+//				TRACE_ALWAYS(<< "{\"" << name << "\", 0x" << std::hex << color << "}," << std::endl)
+//			}
+//		}
+//	}
+//	
+	
+	//check if color name
+	{
+		std::istringstream s(str);
+		std::string name;
+		s >> name;
+		
+		auto i = colorNames.find(name);
+		if(i != colorNames.end()){
+			ASSERT(i->first == name)
+			ret.str = name;
+			ret.color = i->second;
+			return ret;
+		}
+	}
 	
 	return ret;
 }
 
 std::string StylePropertyValue::paintToString()const{
-	if(!this->effective){
-		return "none";
+	switch(this->rule){
+		default:
+		case ERule::NONE:
+			return "none";
+		case ERule::INHERIT:
+			return "inherit";
+		case ERule::NORMAL:
+			if(this->str.size() == 0){
+				//it is a # notation
+
+				std::stringstream s;
+				s << std::hex;
+				s << "#";
+				s << ((this->color >> 4) & 0xf);
+				s << ((this->color) & 0xf);
+				s << ((this->color >> 12) & 0xf);
+				s << ((this->color >> 8) & 0xf);
+				s << ((this->color >> 20) & 0xf);
+				s << ((this->color >> 16) & 0xf);
+				return s.str();
+			}else{
+				return this->str;
+			}
 	}
-	
-	if(this->str.size() == 0){
-		//it is a # notation
-		
-		std::stringstream s;
-		s << std::hex;
-		s << "#";
-		s << ((this->color >> 4) & 0xf);
-		s << ((this->color) & 0xf);
-		s << ((this->color >> 12) & 0xf);
-		s << ((this->color >> 8) & 0xf);
-		s << ((this->color >> 20) & 0xf);
-		s << ((this->color >> 16) & 0xf);
-		return s.str();
-	}
-	
-	//TODO: other notations
-	
-	return "";
 }
 
 void PathElement::toStream(std::ostream& s, unsigned indent) const{
@@ -1693,13 +2053,8 @@ void SvgElement::render(Renderer& renderer) const{
 	renderer.render(*this);
 }
 
-std::uint32_t StylePropertyValue::getColor() const{
-	//TODO: check other notations
-	return this->color;
-}
-
 Rgb StylePropertyValue::getRgb() const{
-	auto c = this->getColor();
+	auto c = this->color;
 	
 	Rgb ret;
 	
@@ -1710,20 +2065,34 @@ Rgb StylePropertyValue::getRgb() const{
 	return ret;
 }
 
+namespace{
+const std::set<EStyleProperty> nonInheritedStyleProoperties = {
+	EStyleProperty::OPACITY
+	//TODO: check if there are other non-inherited properties
+};
+}//~namespace
 
-const StylePropertyValue* Element::getStyleProperty(EStyleProperty property) const{
+const StylePropertyValue* Element::getStyleProperty(EStyleProperty property, bool explicitInherit) const{
 	if(auto styleable = dynamic_cast<const Styleable*>(this)){
 		auto i = styleable->styles.find(property);
 		if(i != styleable->styles.end()){
-			return &i->second;
+			if(i->second.rule == StylePropertyValue::ERule::INHERIT){
+				explicitInherit = true;
+			}else{
+				return &i->second;
+			}
 		}
+	}
+	
+	if(!explicitInherit && nonInheritedStyleProoperties.find(property) != nonInheritedStyleProoperties.end()){
+		return nullptr;
 	}
 	
 	if(!this->parent){
 		return nullptr;
 	}
 	
-	return this->parent->getStyleProperty(property);
+	return this->parent->getStyleProperty(property, explicitInherit);
 }
 
 Gradient::ESpreadMethod Gradient::stringToSpreadMethod(const std::string& str) {
