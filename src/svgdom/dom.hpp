@@ -349,13 +349,16 @@ struct RectElement : public Shape, public Rectangle{
 
 struct Gradient : public Container, public Referencing, public Styleable{
 	enum class ESpreadMethod{
+		DEFAULT,
 		PAD,
 		REFLECT,
 		REPEAT
-	} spreadMethod = ESpreadMethod::PAD;
+	} spreadMethod = ESpreadMethod::DEFAULT;
 	
 	static std::string spreadMethodToString(ESpreadMethod sm);
 	static ESpreadMethod stringToSpreadMethod(const std::string& str);
+	
+	ESpreadMethod getSpreadMethod()const noexcept;
 	
 	struct StopElement : public Styleable, public Element{
 		real offset;
@@ -363,24 +366,37 @@ struct Gradient : public Container, public Referencing, public Styleable{
 		void toStream(std::ostream& s, unsigned indent)const override;
 	};
 	
+	const decltype(Container::children)& getStops()const noexcept;
+	
 	void attribsToStream(std::ostream& s)const;
 };
 
 struct LinearGradientElement : public Gradient{
-	Length x1 = Length::make(0, Length::EUnit::PERCENT);
-	Length y1 = Length::make(0, Length::EUnit::PERCENT);
-	Length x2 = Length::make(100, Length::EUnit::PERCENT);
-	Length y2 = Length::make(0, Length::EUnit::PERCENT);
+	Length x1 = Length::make(0, Length::EUnit::UNKNOWN);
+	Length y1 = Length::make(0, Length::EUnit::UNKNOWN);
+	Length x2 = Length::make(100, Length::EUnit::UNKNOWN);
+	Length y2 = Length::make(0, Length::EUnit::UNKNOWN);
+	
+	Length getX1()const noexcept;
+	Length getY1()const noexcept;
+	Length getX2()const noexcept;
+	Length getY2()const noexcept;
 	
 	void toStream(std::ostream& s, unsigned indent) const override;
 };
 
 struct RadialGradientElement : public Gradient{
-	Length cx = Length::make(50, Length::EUnit::PERCENT);
-	Length cy = Length::make(50, Length::EUnit::PERCENT);
-	Length r = Length::make(50, Length::EUnit::PERCENT);
+	Length cx = Length::make(50, Length::EUnit::UNKNOWN);
+	Length cy = Length::make(50, Length::EUnit::UNKNOWN);
+	Length r = Length::make(50, Length::EUnit::UNKNOWN);
 	Length fx = Length::make(50, Length::EUnit::UNKNOWN);
 	Length fy = Length::make(50, Length::EUnit::UNKNOWN);
+	
+	Length getCx()const noexcept;
+	Length getCy()const noexcept;
+	Length getR()const noexcept;
+	Length getFx()const noexcept;
+	Length getFy()const noexcept;
 	
 	void toStream(std::ostream& s, unsigned indent) const override;
 };

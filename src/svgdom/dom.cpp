@@ -1944,13 +1944,14 @@ Gradient::ESpreadMethod Gradient::stringToSpreadMethod(const std::string& str) {
 	}else if(str == "repeat"){
 		return ESpreadMethod::REPEAT;
 	}
-	return ESpreadMethod::PAD;
+	return ESpreadMethod::DEFAULT;
 }
 
 std::string Gradient::spreadMethodToString(ESpreadMethod sm) {
 	switch(sm){
 		default:
 			ASSERT_INFO(false, "sm = " << unsigned(sm))
+		case ESpreadMethod::DEFAULT:
 			return "";
 		case ESpreadMethod::PAD:
 			return "pad";
@@ -2034,7 +2035,7 @@ void Gradient::attribsToStream(std::ostream& s)const{
 	this->Referencing::attribsToStream(s);
 	this->Styleable::attribsToStream(s);
 	
-	if(this->spreadMethod != ESpreadMethod::PAD){
+	if(this->spreadMethod != ESpreadMethod::DEFAULT){
 		s << " spreadMethod=\"" << Gradient::spreadMethodToString(this->spreadMethod) << "\"";
 	}
 	
@@ -2117,4 +2118,150 @@ void RectElement::toStream(std::ostream& s, unsigned indent) const {
 	
 	s << "/>";
 	s << std::endl;
+}
+
+Gradient::ESpreadMethod Gradient::getSpreadMethod() const noexcept{
+	if(this->spreadMethod != ESpreadMethod::DEFAULT){
+		return this->spreadMethod;
+	}
+	
+	ASSERT(this->spreadMethod == ESpreadMethod::DEFAULT)
+	
+	if(this->ref){
+		if(auto g = dynamic_cast<Gradient*>(this->ref)){
+			return g->getSpreadMethod();
+		}
+	}
+	
+	return ESpreadMethod::PAD;
+}
+
+const decltype(Container::children)& Gradient::getStops() const noexcept{
+	if(this->children.size() != 0){
+		return this->children;
+	}
+	
+	if(this->ref){
+		if(auto g = dynamic_cast<Gradient*>(this->ref)){
+			return g->getStops();
+		}
+	}
+	return this->children;
+}
+
+Length LinearGradientElement::getX1() const noexcept{
+	if(this->x1.unit != Length::EUnit::UNKNOWN){
+		return this->x1;
+	}
+	
+	if(this->ref){
+		if(auto g = dynamic_cast<LinearGradientElement*>(this->ref)){
+			return g->getX1();
+		}
+	}
+	return Length::make(0, Length::EUnit::PERCENT);
+}
+
+Length LinearGradientElement::getX2() const noexcept{
+	if(this->x2.unit != Length::EUnit::UNKNOWN){
+		return this->x2;
+	}
+	
+	if(this->ref){
+		if(auto g = dynamic_cast<LinearGradientElement*>(this->ref)){
+			return g->getX2();
+		}
+	}
+	return Length::make(100, Length::EUnit::PERCENT);
+}
+
+Length LinearGradientElement::getY1() const noexcept{
+	if(this->y1.unit != Length::EUnit::UNKNOWN){
+		return this->y1;
+	}
+	
+	if(this->ref){
+		if(auto g = dynamic_cast<LinearGradientElement*>(this->ref)){
+			return g->getY1();
+		}
+	}
+	return Length::make(0, Length::EUnit::PERCENT);
+}
+
+Length LinearGradientElement::getY2() const noexcept{
+	if(this->y2.unit != Length::EUnit::UNKNOWN){
+		return this->y2;
+	}
+	
+	if(this->ref){
+		if(auto g = dynamic_cast<LinearGradientElement*>(this->ref)){
+			return g->getY2();
+		}
+	}
+	return Length::make(0, Length::EUnit::PERCENT);
+}
+
+Length RadialGradientElement::getCx() const noexcept{
+	if(this->cx.unit != Length::EUnit::UNKNOWN){
+		return this->cx;
+	}
+	
+	if(this->ref){
+		if(auto g = dynamic_cast<RadialGradientElement*>(this->ref)){
+			return g->getCx();
+		}
+	}
+	return Length::make(50, Length::EUnit::PERCENT);
+}
+
+Length RadialGradientElement::getCy() const noexcept{
+	if(this->cy.unit != Length::EUnit::UNKNOWN){
+		return this->cy;
+	}
+	
+	if(this->ref){
+		if(auto g = dynamic_cast<RadialGradientElement*>(this->ref)){
+			return g->getCy();
+		}
+	}
+	return Length::make(50, Length::EUnit::PERCENT);
+}
+
+Length RadialGradientElement::getR() const noexcept{
+	if(this->r.unit != Length::EUnit::UNKNOWN){
+		return this->r;
+	}
+	
+	if(this->ref){
+		if(auto g = dynamic_cast<RadialGradientElement*>(this->ref)){
+			return g->getR();
+		}
+	}
+	return Length::make(50, Length::EUnit::PERCENT);
+}
+
+Length RadialGradientElement::getFx() const noexcept{
+	if(this->fx.unit != Length::EUnit::UNKNOWN){
+		return this->fx;
+	}
+	
+	if(this->ref){
+		if(auto g = dynamic_cast<RadialGradientElement*>(this->ref)){
+			return g->getFx();
+		}
+	}
+	return Length::make(0, Length::EUnit::UNKNOWN);
+}
+
+Length RadialGradientElement::getFy() const noexcept{
+	if(this->fy.unit != Length::EUnit::UNKNOWN){
+		return this->fy;
+	}
+	
+	if(this->ref){
+		if(auto g = dynamic_cast<RadialGradientElement*>(this->ref)){
+			return g->getFy();
+		}
+	}
+	return Length::make(0, Length::EUnit::UNKNOWN);
 }
