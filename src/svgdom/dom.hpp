@@ -141,6 +141,10 @@ struct StylePropertyValue{
 		return this->rule == ERule::NONE;
 	}
 	
+	bool isUrl()const noexcept{
+		return this->rule == ERule::URL;
+	}
+	
 	union{
 		std::uint32_t color;
 		real opacity;

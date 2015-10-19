@@ -515,6 +515,16 @@ void resolveReferences(Element& e, SvgElement& svg){
 		}
 	}
 	
+	if(auto s = dynamic_cast<Styleable*>(&e)){
+		for(auto& p : s->styles){
+			if(p.second.isUrl()){
+				if(p.second.str.length() != 0 && p.second.str[0] == '#'){
+					p.second.url = svg.findById(p.second.str.substr(1, p.second.str.length() - 1));
+				}
+			}
+		}
+	}
+	
 	if(auto container = dynamic_cast<Container*>(&e)){
 		for(auto& c : container->children){
 			resolveReferences(*c, svg);
