@@ -128,9 +128,9 @@ enum class EStrokeLineCap{
 struct StylePropertyValue{
 	enum class ERule{
 		NORMAL,
-		NONE,
-		INHERIT,
-		URL
+		NONE, //for color property (e.g. fill, stroke, etc.) means that color is 'none'
+		INHERIT, //means that property inheritance was explicitly stated
+		URL //means that "str" member holds URL
 	} rule = ERule::NORMAL;
 	
 	bool isNormal()const noexcept{
@@ -150,7 +150,7 @@ struct StylePropertyValue{
 		real opacity;
 		Length length;
 		EStrokeLineCap strokeLineCap;
-		Element* url;
+		Element* url; //used if rule is URL
 	};
 	
 	std::string str;
