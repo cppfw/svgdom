@@ -48,6 +48,7 @@ struct Length{
 class Renderer;
 
 struct Container;
+struct Element;
 
 enum class EStyleProperty{
 	UNKNOWN,
@@ -128,11 +129,16 @@ struct StylePropertyValue{
 	enum class ERule{
 		NORMAL,
 		NONE,
-		INHERIT
+		INHERIT,
+		URL
 	} rule = ERule::NORMAL;
 	
 	bool isNormal()const noexcept{
 		return this->rule == ERule::NORMAL;
+	}
+	
+	bool isNone()const noexcept{
+		return this->rule == ERule::NONE;
 	}
 	
 	union{
@@ -140,11 +146,10 @@ struct StylePropertyValue{
 		real opacity;
 		Length length;
 		EStrokeLineCap strokeLineCap;
+		Element* url;
 	};
 	
 	std::string str;
-	std::unique_ptr<utki::Void> d;
-
 	
 	static StylePropertyValue parsePaint(const std::string& str);
 	
