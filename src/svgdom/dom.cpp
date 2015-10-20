@@ -365,6 +365,36 @@ struct Parser{
 		return ret;
 	}
 	
+	std::unique_ptr<EllipseElement> parseEllipseElement(const pugi::xml_node& n){
+		ASSERT(getNamespace(n.name()).ns == EXmlNamespace::SVG)
+		ASSERT(getNamespace(n.name()).name == "ellipse")
+		
+		auto ret = utki::makeUnique<EllipseElement>();
+		
+		this->fillShape(*ret, n);
+
+		for(auto a = n.first_attribute(); !a.empty(); a = a.next_attribute()){
+			auto nsn = this->getNamespace(a.name());
+			switch(nsn.ns){
+				case EXmlNamespace::SVG:
+					if(nsn.name == "cx"){
+						ret->cx = Length::parse(a.value());
+					}else if(nsn.name == "cy"){
+						ret->cy = Length::parse(a.value());
+					}else if(nsn.name == "rx"){
+						ret->rx = Length::parse(a.value());
+					}else if(nsn.name == "ry"){
+						ret->ry = Length::parse(a.value());
+					}
+					break;
+				default:
+					break;
+			}
+		}
+		
+		return ret;
+	}
+	
 	std::unique_ptr<LinearGradientElement> parseLinearGradientElement(const pugi::xml_node& n){
 		ASSERT(getNamespace(n.name()).ns == EXmlNamespace::SVG)
 		ASSERT(getNamespace(n.name()).name == "linearGradient")
@@ -498,6 +528,8 @@ std::unique_ptr<svgdom::Element> Parser::parseNode(const pugi::xml_node& n){
 				return this->parseGradientStopElement(n);
 			}else if(nsn.name == "rect"){
 				return this->parseRectElement(n);
+			}else if(nsn.name == "ellipse"){
+				return this->parseEllipseElement(n);
 			}
 			
 			break;
@@ -1888,6 +1920,10 @@ void RectElement::render(Renderer& renderer) const {
 	renderer.render(*this);
 }
 
+void EllipseElement::render(Renderer& renderer) const {
+	renderer.render(*this);
+}
+
 
 void GElement::render(Renderer& renderer) const{
 	renderer.render(*this);
@@ -2100,6 +2136,27 @@ Length Length::make(real value, EUnit unit) {
 	return ret;
 }
 
+void EllipseElement::attribsToStream(std::ostream& s) const {
+	this->Shape::attribsToStream(s);
+	
+	if(this->cx.unit != Length::EUnit::UNKNOWN){
+		s << " cx=\"" << this->cx << "\"";
+	}
+	
+	if(this->cy.unit != Length::EUnit::UNKNOWN){
+		s << " cy=\"" << this->cy << "\"";
+	}
+	
+	if(this->rx.unit != Length::EUnit::UNKNOWN){
+		s << " rx=\"" << this->rx << "\"";
+	}
+	
+	if(this->ry.unit != Length::EUnit::UNKNOWN){
+		s << " ry=\"" << this->ry << "\"";
+	}
+}
+
+
 void RectElement::attribsToStream(std::ostream& s) const {
 	this->Shape::attribsToStream(s);
 	this->Rectangle::attribsToStream(s);
@@ -2123,6 +2180,18 @@ void RectElement::toStream(std::ostream& s, unsigned indent) const {
 	s << "/>";
 	s << std::endl;
 }
+
+void EllipseElement::toStream(std::ostream& s, unsigned indent) const {
+	auto ind = indentStr(indent);
+	
+	s << ind << "<ellipse";
+
+	this->attribsToStream(s);
+	
+	s << "/>";
+	s << std::endl;
+}
+
 
 Gradient::ESpreadMethod Gradient::getSpreadMethod() const noexcept{
 	if(this->spreadMethod != ESpreadMethod::DEFAULT){

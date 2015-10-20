@@ -7,7 +7,7 @@
 
 int main(int argc, char** argv){
 
-	auto dom = svgdom::load(papki::FSFile("camera.svg"));
+	auto dom = svgdom::load(papki::FSFile("rect.svg"));
 	
 	ASSERT_ALWAYS(dom)
 			
