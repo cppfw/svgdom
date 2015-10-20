@@ -80,6 +80,56 @@ enum class EXmlNamespace{
 const std::string DSvgNamespace = "http://www.w3.org/2000/svg";
 const std::string DXlinkNamespace = "http://www.w3.org/1999/xlink";
 
+StylePropertyValue parsePropertyValue(EStyleProperty type, std::istream& s){
+	StylePropertyValue v;
+	
+	switch(type){
+		default:
+			ASSERT(false)
+			break;
+		case EStyleProperty::STOP_OPACITY:
+		case EStyleProperty::OPACITY:
+		case EStyleProperty::STROKE_OPACITY:
+		case EStyleProperty::FILL_OPACITY:
+			s >> v.opacity;
+			if(s.fail()){
+				s.clear();
+			}else{
+				utki::clampRange(v.opacity, real(0), real(1));
+			}
+			break;
+		case EStyleProperty::STOP_COLOR:
+		case EStyleProperty::FILL:
+		case EStyleProperty::STROKE:
+			v = StylePropertyValue::parsePaint(readTillChar(s, ';'));
+//				TRACE(<< "paint read = " << std::hex << v.integer << std::endl)
+			break;
+		case EStyleProperty::STROKE_WIDTH:
+			v.length = Length::parse(readTillChar(s, ';'));
+//				TRACE(<< "stroke-width read = " << v.length << std::endl)
+			break;
+		case EStyleProperty::STROKE_LINECAP:
+			{
+				auto str = readTillCharOrWhitespace(s, ';');
+				if(str == "butt"){
+					v.strokeLineCap = EStrokeLineCap::BUTT;
+				}else if(str == "round"){
+					v.strokeLineCap = EStrokeLineCap::ROUND;
+				}else if(str == "square"){
+					v.strokeLineCap = EStrokeLineCap::SQUARE;
+				}else{
+					TRACE(<< "unknown strokeLineCap value:" << str << std::endl)
+				}
+			}
+			break;
+	}
+	return v;
+}
+
+StylePropertyValue parsePropertyValue(EStyleProperty type, const std::string& str){
+	std::istringstream s(str);
+	return parsePropertyValue(type, s);
+}
 
 struct Parser{
 	typedef std::map<std::string, EXmlNamespace> T_NamespaceMap;
@@ -214,6 +264,13 @@ struct Parser{
 				case EXmlNamespace::SVG:
 					if(nsn.name == "style"){
 						s.styles = Styleable::parse(a.value());
+						break;
+					}
+					{
+						EStyleProperty type = Styleable::stringToProperty(nsn.name);
+						if(type != EStyleProperty::UNKNOWN){
+							s.styles[type] = parsePropertyValue(type, a.value());
+						}
 					}
 					break;
 				default:
@@ -1123,55 +1180,12 @@ decltype(Styleable::styles) Styleable::parse(const std::string& str){
 		
 		skipWhitespaces(s);
 		
-		StylePropertyValue v;
+		StylePropertyValue v = parsePropertyValue(type, s);
 		
-		switch(type){
-			default:
-				ASSERT(false)
-				break;
-			case EStyleProperty::STOP_OPACITY:
-			case EStyleProperty::OPACITY:
-			case EStyleProperty::STROKE_OPACITY:
-			case EStyleProperty::FILL_OPACITY:
-				s >> v.opacity;
-				if(s.fail()){
-					s.clear();
-				}else{
-					utki::clampRange(v.opacity, real(0), real(1));
-				}
-				break;
-			case EStyleProperty::STOP_COLOR:
-			case EStyleProperty::FILL:
-			case EStyleProperty::STROKE:
-				v = StylePropertyValue::parsePaint(readTillChar(s, ';'));
-//				TRACE(<< "paint read = " << std::hex << v.integer << std::endl)
-				break;
-			case EStyleProperty::STROKE_WIDTH:
-				v.length = Length::parse(readTillChar(s, ';'));
-//				TRACE(<< "stroke-width read = " << v.length << std::endl)
-				break;
-			case EStyleProperty::STROKE_LINECAP:
-				{
-					auto str = readTillCharOrWhitespace(s, ';');
-					if(str == "butt"){
-						v.strokeLineCap = EStrokeLineCap::BUTT;
-					}else if(str == "round"){
-						v.strokeLineCap = EStrokeLineCap::ROUND;
-					}else if(str == "square"){
-						v.strokeLineCap = EStrokeLineCap::SQUARE;
-					}else{
-						TRACE(<< "unknown strokeLineCap value:" << str << std::endl)
-					}
-				}
-				break;
-		}
+		skipWhitespaces(s);
 		
-		{
-			std::string str;
-			s >> std::setw(1) >> str >> std::setw(0);
-			if(!s.eof() && str != ";"){
-				return ret;//expected semicolon
-			}
+		if(!s.eof() && s.get() != ';'){
+			return ret;//expected semicolon
 		}
 		
 		ret[type] = std::move(v);
