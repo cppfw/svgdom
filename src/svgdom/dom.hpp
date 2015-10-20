@@ -395,7 +395,11 @@ struct RadialGradientElement : public Gradient{
 	Length getCx()const noexcept;
 	Length getCy()const noexcept;
 	Length getR()const noexcept;
+	
+	//can return unit as UNKNOWN in that case fx should coincide with cx
 	Length getFx()const noexcept;
+	
+	//can return unit as UNKNOWN in that case fy should coincide with cy
 	Length getFy()const noexcept;
 	
 	void toStream(std::ostream& s, unsigned indent) const override;

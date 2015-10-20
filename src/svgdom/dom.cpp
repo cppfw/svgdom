@@ -440,7 +440,11 @@ std::unique_ptr<svgdom::Element> Parser::parseNode(const pugi::xml_node& n){
 				this->defaultNamespace.push_back(EXmlNamespace::UNKNOWN);
 			}
 		}else{
-			this->defaultNamespace.push_back(this->defaultNamespace.back());
+			if(this->defaultNamespace.size() == 0){
+				this->defaultNamespace.push_back(EXmlNamespace::UNKNOWN);
+			}else{
+				this->defaultNamespace.push_back(this->defaultNamespace.back());
+			}
 		}
 	}
 	
