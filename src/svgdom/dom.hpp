@@ -47,6 +47,10 @@ struct Length{
 	bool isValid()const noexcept{
 		return this->unit != EUnit::UNKNOWN;
 	}
+	
+	bool isPercent()const noexcept{
+		return this->unit == EUnit::PERCENT;
+	}
 };
 
 class Renderer;
