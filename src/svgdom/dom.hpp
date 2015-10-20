@@ -43,6 +43,10 @@ struct Length{
 	static Length parse(const std::string& str);
 	
 	static Length make(real value, EUnit unit);
+	
+	bool isValid()const noexcept{
+		return this->unit != EUnit::UNKNOWN;
+	}
 };
 
 class Renderer;
