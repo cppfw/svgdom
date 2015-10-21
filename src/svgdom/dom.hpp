@@ -188,8 +188,6 @@ struct Element : public utki::Unique{
 	const StylePropertyValue* getStyleProperty(EStyleProperty property, bool explicitInherit = false)const;
 	
 	virtual Element* findById(const std::string& elementId);
-	
-	virtual std::array<Length, 2> computeBoundingBox()const noexcept;
 };
 
 struct Container : public Element{
@@ -344,8 +342,6 @@ struct PathElement : public Shape{
 	static decltype(path) parse(const std::string& str);
 	
 	void render(Renderer& renderer) const override;
-	
-	std::array<Length, 2> computeBoundingBox() const noexcept override;
 };
 
 struct RectElement : public Shape, public Rectangle{
@@ -357,8 +353,6 @@ struct RectElement : public Shape, public Rectangle{
 	void toStream(std::ostream& s, unsigned indent) const override;
 	
 	void render(Renderer& renderer) const override;
-	
-	std::array<Length, 2> computeBoundingBox() const noexcept override;
 };
 
 struct EllipseElement : public Shape{
@@ -372,8 +366,6 @@ struct EllipseElement : public Shape{
 	void toStream(std::ostream& s, unsigned indent) const override;
 	
 	void render(Renderer& renderer) const override;
-	
-	std::array<Length, 2> computeBoundingBox() const noexcept override;
 };
 
 struct Gradient : public Container, public Referencing, public Styleable{
