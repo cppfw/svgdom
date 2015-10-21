@@ -236,6 +236,8 @@ struct Transformable{
 	
 	void attribsToStream(std::ostream& s)const;
 	
+	void transformationsToStream(std::ostream& s)const;
+	
 	static decltype(Transformable::transformations) parse(const std::string& str);
 };
 
@@ -368,7 +370,7 @@ struct EllipseElement : public Shape{
 	void render(Renderer& renderer) const override;
 };
 
-struct Gradient : public Container, public Referencing, public Styleable{
+struct Gradient : public Container, public Referencing, public Styleable, public Transformable{
 	enum class ESpreadMethod{
 		DEFAULT,
 		PAD,

@@ -291,7 +291,7 @@ struct Parser{
 					if(nsn.name == "spreadMethod"){
 						g.spreadMethod = Gradient::stringToSpreadMethod(a.value());
 					}else if(nsn.name == "gradientTransform"){
-						//TODO:
+						g.transformations = Transformable::parse(a.value());
 					}else if(nsn.name == "gradientUnits"){
 						if(std::string("userSpaceOnUse") == a.value()){
 							g.units = Gradient::EUnits::USER_SPACE_ON_USE;
@@ -909,13 +909,7 @@ void Styleable::attribsToStream(std::ostream& s) const{
 	s << "\"";
 }
 
-void Transformable::attribsToStream(std::ostream& s) const{
-	if(this->transformations.size() == 0){
-		return;
-	}
-	
-	s << " transform=\"";
-	
+void Transformable::transformationsToStream(std::ostream& s) const {
 	bool isFirst = true;
 	
 	for(auto& t : this->transformations){
@@ -961,6 +955,15 @@ void Transformable::attribsToStream(std::ostream& s) const{
 				break;
 		}
 	}
+}
+
+void Transformable::attribsToStream(std::ostream& s) const{
+	if(this->transformations.size() == 0){
+		return;
+	}
+	
+	s << " transform=\"";
+	this->transformationsToStream(s);
 	s << "\"";
 }
 
@@ -2104,7 +2107,11 @@ void Gradient::attribsToStream(std::ostream& s)const{
 		s << " gradientUnits=\"userSpaceOnUse\"";
 	}
 	
-	//TODO: gradientTransform
+	if(this->transformations.size() != 0){
+		s << " gradientTransform=\"";
+		this->transformationsToStream(s);
+		s << "\"";
+	}
 }
 
 
