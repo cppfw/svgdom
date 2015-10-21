@@ -381,6 +381,11 @@ struct Gradient : public Container, public Referencing, public Styleable{
 	
 	ESpreadMethod getSpreadMethod()const noexcept;
 	
+	enum class EUnits{
+		USER_SPACE_ON_USE,
+		OBJECT_BOUNDING_BOX
+	} units = EUnits::OBJECT_BOUNDING_BOX;
+	
 	struct StopElement : public Styleable, public Element{
 		real offset;
 		

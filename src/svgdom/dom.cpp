@@ -292,6 +292,12 @@ struct Parser{
 						g.spreadMethod = Gradient::stringToSpreadMethod(a.value());
 					}else if(nsn.name == "gradientTransform"){
 						//TODO:
+					}else if(nsn.name == "gradientUnits"){
+						if(std::string("userSpaceOnUse") == a.value()){
+							g.units = Gradient::EUnits::USER_SPACE_ON_USE;
+						}else if(std::string("objectBoundingBox") == a.value()){
+							g.units = Gradient::EUnits::OBJECT_BOUNDING_BOX;
+						}
 					}
 					break;
 				default:
@@ -2091,6 +2097,11 @@ void Gradient::attribsToStream(std::ostream& s)const{
 	
 	if(this->spreadMethod != ESpreadMethod::DEFAULT){
 		s << " spreadMethod=\"" << Gradient::spreadMethodToString(this->spreadMethod) << "\"";
+	}
+	
+	if(this->units != EUnits::OBJECT_BOUNDING_BOX){
+		ASSERT(this->units == EUnits::USER_SPACE_ON_USE)
+		s << " gradientUnits=\"userSpaceOnUse\"";
 	}
 	
 	//TODO: gradientTransform
