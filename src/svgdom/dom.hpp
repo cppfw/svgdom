@@ -386,6 +386,10 @@ struct Gradient : public Container, public Referencing, public Styleable{
 		OBJECT_BOUNDING_BOX
 	} units = EUnits::OBJECT_BOUNDING_BOX;
 	
+	bool isBoundingBoxUnits()const noexcept{
+		return this->units == EUnits::OBJECT_BOUNDING_BOX;
+	}
+	
 	struct StopElement : public Styleable, public Element{
 		real offset;
 		

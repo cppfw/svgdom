@@ -475,9 +475,9 @@ struct Parser{
 					}else if(nsn.name == "y1"){
 						ret->y1 = Length::parse(a.value());
 					}else if(nsn.name == "x2"){
-						ret->y1 = Length::parse(a.value());
+						ret->x2 = Length::parse(a.value());
 					}else if(nsn.name == "y2"){
-						ret->y1 = Length::parse(a.value());
+						ret->y2 = Length::parse(a.value());
 					}
 					break;
 				default:
