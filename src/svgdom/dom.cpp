@@ -2152,7 +2152,7 @@ Element* Container::findById(const std::string& elementId) {
 	return nullptr;
 }
 
-Length Length::make(real value, EUnit unit) {
+Length Length::make(real value, EUnit unit) noexcept {
 	Length ret;
 	
 	ret.unit = unit;
@@ -2362,4 +2362,25 @@ Length RadialGradientElement::getFy() const noexcept{
 		}
 	}
 	return Length::make(0, Length::EUnit::UNKNOWN);
+}
+
+std::array<Length, 2> Element::computeBoundingBox() const noexcept {
+	return {Length::make(0), Length::make(0)};
+}
+
+
+std::array<Length, 2> RectElement::computeBoundingBox() const noexcept {
+	return {this->width, this->height};
+}
+
+std::array<Length, 2> EllipseElement::computeBoundingBox() const noexcept {
+	Length w = this->rx, h = this->ry;
+	w.value *= 2;
+	h.value *= 2;
+	return {w, h};
+}
+
+std::array<Length, 2> PathElement::computeBoundingBox() const noexcept {
+	//TODO:
+	return this->Element::computeBoundingBox();
 }
