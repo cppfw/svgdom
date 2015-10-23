@@ -133,6 +133,11 @@ enum class EStrokeLineCap{
 	SQUARE
 };
 
+enum class EFillRule{
+	NONZERO,
+	EVENODD
+};
+
 struct StylePropertyValue{
 	enum class ERule{
 		NORMAL,
@@ -158,6 +163,7 @@ struct StylePropertyValue{
 		real opacity;
 		Length length;
 		EStrokeLineCap strokeLineCap;
+		EFillRule fillRule;
 		Element* url; //used if rule is URL
 	};
 	

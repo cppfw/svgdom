@@ -122,6 +122,18 @@ StylePropertyValue parsePropertyValue(EStyleProperty type, std::istream& s){
 				}
 			}
 			break;
+		case EStyleProperty::FILL_RULE:
+			{
+				auto str = readTillCharOrWhitespace(s, ';');
+				if(str == "nonzero"){
+					v.fillRule = EFillRule::NONZERO;
+				}else if(str == "evenodd"){
+					v.fillRule = EFillRule::EVENODD;
+				}else{
+					TRACE(<< "unknown fill-rule value:" << str << std::endl)
+				}
+			}
+			break;
 	}
 	return v;
 }
@@ -903,6 +915,19 @@ void Styleable::attribsToStream(std::ostream& s) const{
 						break;
 				}
 				break;
+			case EStyleProperty::FILL_RULE:
+				switch(st.second.fillRule){
+					default:
+						ASSERT(false)
+						break;
+					case EFillRule::EVENODD:
+						s << "evenodd";
+						break;
+					case EFillRule::NONZERO:
+						s << "nonzero";
+						break;
+				}
+				break;
 		}
 	}
 	
@@ -1126,6 +1151,8 @@ EStyleProperty Styleable::stringToProperty(std::string str){
 		return EStyleProperty::STOP_OPACITY;
 	}else if(str == "stop-color"){
 		return EStyleProperty::STOP_COLOR;
+	}else if(str == "fill-rule"){
+		return EStyleProperty::FILL_RULE;
 	}
 	
 	return EStyleProperty::UNKNOWN;
@@ -1154,6 +1181,8 @@ std::string Styleable::propertyToString(EStyleProperty p){
 			return "stop-opacity";
 		case EStyleProperty::STOP_COLOR:
 			return "stop-color";
+		case EStyleProperty::FILL_RULE:
+			return "fill-rule";
 	}
 }
 
