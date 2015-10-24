@@ -468,6 +468,36 @@ struct Parser{
 		return ret;
 	}
 	
+	std::unique_ptr<LineElement> parseLineElement(const pugi::xml_node& n){
+		ASSERT(getNamespace(n.name()).ns == EXmlNamespace::SVG)
+		ASSERT(getNamespace(n.name()).name == "line")
+		
+		auto ret = utki::makeUnique<LineElement>();
+		
+		this->fillShape(*ret, n);
+
+		for(auto a = n.first_attribute(); !a.empty(); a = a.next_attribute()){
+			auto nsn = this->getNamespace(a.name());
+			switch(nsn.ns){
+				case EXmlNamespace::SVG:
+					if(nsn.name == "x1"){
+						ret->x1 = Length::parse(a.value());
+					}else if(nsn.name == "y1"){
+						ret->y1 = Length::parse(a.value());
+					}else if(nsn.name == "x2"){
+						ret->x2 = Length::parse(a.value());
+					}else if(nsn.name == "y2"){
+						ret->y2 = Length::parse(a.value());
+					}
+					break;
+				default:
+					break;
+			}
+		}
+		
+		return ret;
+	}
+	
 	std::unique_ptr<EllipseElement> parseEllipseElement(const pugi::xml_node& n){
 		ASSERT(getNamespace(n.name()).ns == EXmlNamespace::SVG)
 		ASSERT(getNamespace(n.name()).name == "ellipse")
@@ -635,6 +665,8 @@ std::unique_ptr<svgdom::Element> Parser::parseNode(const pugi::xml_node& n){
 				return this->parseCircleElement(n);
 			}else if(nsn.name == "ellipse"){
 				return this->parseEllipseElement(n);
+			}else if(nsn.name == "line"){
+				return this->parseLineElement(n);
 			}
 			
 			break;
@@ -2010,6 +2042,10 @@ void EllipseElement::render(Renderer& renderer) const {
 	renderer.render(*this);
 }
 
+void LineElement::render(Renderer& renderer) const {
+	renderer.render(*this);
+}
+
 
 void GElement::render(Renderer& renderer) const{
 	renderer.render(*this);
@@ -2269,6 +2305,26 @@ void EllipseElement::attribsToStream(std::ostream& s) const {
 	}
 }
 
+void LineElement::attribsToStream(std::ostream& s) const {
+	this->Shape::attribsToStream(s);
+	
+	if(this->x1.unit != Length::EUnit::UNKNOWN){
+		s << " x1=\"" << this->x1 << "\"";
+	}
+	
+	if(this->y1.unit != Length::EUnit::UNKNOWN){
+		s << " y1=\"" << this->y1 << "\"";
+	}
+	
+	if(this->x2.unit != Length::EUnit::UNKNOWN){
+		s << " x2=\"" << this->x2 << "\"";
+	}
+	
+	if(this->y2.unit != Length::EUnit::UNKNOWN){
+		s << " y2=\"" << this->y2 << "\"";
+	}
+}
+
 
 void RectElement::attribsToStream(std::ostream& s) const {
 	this->Shape::attribsToStream(s);
@@ -2316,6 +2372,18 @@ void EllipseElement::toStream(std::ostream& s, unsigned indent) const {
 	s << "/>";
 	s << std::endl;
 }
+
+void LineElement::toStream(std::ostream& s, unsigned indent) const {
+	auto ind = indentStr(indent);
+	
+	s << ind << "<line";
+
+	this->attribsToStream(s);
+	
+	s << "/>";
+	s << std::endl;
+}
+
 
 
 Gradient::ESpreadMethod Gradient::getSpreadMethod() const noexcept{

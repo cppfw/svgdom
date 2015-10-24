@@ -438,6 +438,19 @@ struct EllipseElement : public Shape{
 	void render(Renderer& renderer) const override;
 };
 
+struct LineElement : public Shape{
+	Length x1 = Length::make(0, Length::EUnit::UNKNOWN);
+	Length y1 = Length::make(0, Length::EUnit::UNKNOWN);
+	Length x2 = Length::make(0, Length::EUnit::UNKNOWN);
+	Length y2 = Length::make(0, Length::EUnit::UNKNOWN);
+	
+	void attribsToStream(std::ostream& s)const;
+	
+	void toStream(std::ostream& s, unsigned indent) const override;
+	
+	void render(Renderer& renderer) const override;
+};
+
 /**
  * @brief Common base for gradient elements.
  */
@@ -522,6 +535,7 @@ public:
 	virtual void render(const RectElement& e){}
 	virtual void render(const CircleElement& e){}
 	virtual void render(const EllipseElement& e){}
+	virtual void render(const LineElement& e){}
 	
 	virtual void render(const GElement& e){}
 	
