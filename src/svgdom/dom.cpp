@@ -498,6 +498,54 @@ struct Parser{
 		return ret;
 	}
 	
+	std::unique_ptr<PolylineElement> parsePolylineElement(const pugi::xml_node& n){
+		ASSERT(getNamespace(n.name()).ns == EXmlNamespace::SVG)
+		ASSERT(getNamespace(n.name()).name == "polyline")
+		
+		auto ret = utki::makeUnique<PolylineElement>();
+		
+		this->fillShape(*ret, n);
+
+		for(auto a = n.first_attribute(); !a.empty(); a = a.next_attribute()){
+			auto nsn = this->getNamespace(a.name());
+			switch(nsn.ns){
+				case EXmlNamespace::SVG:
+					if(nsn.name == "points"){
+						ret->points = ret->parse(a.value());
+					}
+					break;
+				default:
+					break;
+			}
+		}
+		
+		return ret;
+	}
+	
+	std::unique_ptr<PolygonElement> parsePolygonElement(const pugi::xml_node& n){
+		ASSERT(getNamespace(n.name()).ns == EXmlNamespace::SVG)
+		ASSERT(getNamespace(n.name()).name == "polygon")
+		
+		auto ret = utki::makeUnique<PolygonElement>();
+		
+		this->fillShape(*ret, n);
+
+		for(auto a = n.first_attribute(); !a.empty(); a = a.next_attribute()){
+			auto nsn = this->getNamespace(a.name());
+			switch(nsn.ns){
+				case EXmlNamespace::SVG:
+					if(nsn.name == "points"){
+						ret->points = ret->parse(a.value());
+					}
+					break;
+				default:
+					break;
+			}
+		}
+		
+		return ret;
+	}
+	
 	std::unique_ptr<EllipseElement> parseEllipseElement(const pugi::xml_node& n){
 		ASSERT(getNamespace(n.name()).ns == EXmlNamespace::SVG)
 		ASSERT(getNamespace(n.name()).name == "ellipse")
@@ -667,6 +715,10 @@ std::unique_ptr<svgdom::Element> Parser::parseNode(const pugi::xml_node& n){
 				return this->parseEllipseElement(n);
 			}else if(nsn.name == "line"){
 				return this->parseLineElement(n);
+			}else if(nsn.name == "polyline"){
+				return this->parsePolylineElement(n);
+			}else if(nsn.name == "polygon"){
+				return this->parsePolygonElement(n);
 			}
 			
 			break;
@@ -1816,6 +1868,32 @@ PathElement::Step::EType PathElement::Step::charToType(char c){
 	}
 }
 
+decltype(PolylineShape::points) PolylineShape::parse(const std::string& str) {
+	decltype(PolylineShape::points) ret;
+	
+	std::istringstream s(str);
+	s >> std::skipws;
+	
+	skipWhitespaces(s);
+	
+	while(!s.eof()){
+		decltype(ret)::value_type p;
+		s >> p[0];
+		skipWhitespacesAndOrComma(s);
+		s >> p[1];
+		
+		if(s.fail()){
+			break;
+		}
+		
+		ret.push_back(p);
+		
+		skipWhitespacesAndOrComma(s);
+	}
+	
+	return ret;
+}
+
 
 decltype(PathElement::path) PathElement::parse(const std::string& str){
 	decltype(PathElement::path) ret;
@@ -2046,11 +2124,17 @@ void LineElement::render(Renderer& renderer) const {
 	renderer.render(*this);
 }
 
+void PolygonElement::render(Renderer& renderer) const {
+	renderer.render(*this);
+}
+
+void PolylineElement::render(Renderer& renderer) const {
+	renderer.render(*this);
+}
 
 void GElement::render(Renderer& renderer) const{
 	renderer.render(*this);
 }
-
 
 void SvgElement::render(Renderer& renderer) const{
 	renderer.render(*this);
@@ -2325,6 +2409,23 @@ void LineElement::attribsToStream(std::ostream& s) const {
 	}
 }
 
+void PolylineShape::attribsToStream(std::ostream& s) const {
+	this->Shape::attribsToStream(s);
+	
+	if(this->points.size() != 0){
+		s << " points=\"";
+		bool isFirst = true;
+		for(auto& p : this->points){
+			if(isFirst){
+				isFirst = false;
+			}else{
+				s << ',';
+			}
+			s << p[0] << ',' << p[1];
+		}
+		s << "\"";
+	}
+}
 
 void RectElement::attribsToStream(std::ostream& s) const {
 	this->Shape::attribsToStream(s);
@@ -2384,6 +2485,27 @@ void LineElement::toStream(std::ostream& s, unsigned indent) const {
 	s << std::endl;
 }
 
+void PolylineElement::toStream(std::ostream& s, unsigned indent) const {
+	auto ind = indentStr(indent);
+	
+	s << ind << "<polyline";
+
+	this->attribsToStream(s);
+	
+	s << "/>";
+	s << std::endl;
+}
+
+void PolygonElement::toStream(std::ostream& s, unsigned indent) const {
+	auto ind = indentStr(indent);
+	
+	s << ind << "<polygon";
+
+	this->attribsToStream(s);
+	
+	s << "/>";
+	s << std::endl;
+}
 
 
 Gradient::ESpreadMethod Gradient::getSpreadMethod() const noexcept{

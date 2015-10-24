@@ -451,6 +451,28 @@ struct LineElement : public Shape{
 	void render(Renderer& renderer) const override;
 };
 
+struct PolylineShape : public Shape{
+	std::vector<std::array<real, 2>> points;
+	
+	void attribsToStream(std::ostream& s)const;
+	
+	static decltype(points) parse(const std::string& str);
+};
+
+
+struct PolylineElement : public PolylineShape{
+	void toStream(std::ostream& s, unsigned indent) const override;
+	
+	void render(Renderer& renderer) const override;
+};
+
+struct PolygonElement : public PolylineShape{
+	void toStream(std::ostream& s, unsigned indent) const override;
+	
+	void render(Renderer& renderer) const override;
+};
+
+
 /**
  * @brief Common base for gradient elements.
  */
@@ -536,6 +558,8 @@ public:
 	virtual void render(const CircleElement& e){}
 	virtual void render(const EllipseElement& e){}
 	virtual void render(const LineElement& e){}
+	virtual void render(const PolylineElement& e){}
+	virtual void render(const PolygonElement& e){}
 	
 	virtual void render(const GElement& e){}
 	
