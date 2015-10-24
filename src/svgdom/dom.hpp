@@ -123,6 +123,10 @@ enum class EStyleProperty{
     WRITING_MODE
 };
 
+/**
+ * @brief Red, green and blue values.
+ * All values are in range [0:1].
+ */
 struct Rgb{
 	real r, g, b;
 };
@@ -164,6 +168,11 @@ struct StylePropertyValue{
 		Length length;
 		EStrokeLineCap strokeLineCap;
 		EFillRule fillRule;
+		
+		/**
+		 * @brief reference to another element.
+		 * Can be nullptr. It is used only if 'rule' is ERule::URL.
+		 */
 		Element* url; //used if rule is URL
 	};
 	
@@ -173,9 +182,18 @@ struct StylePropertyValue{
 	
 	std::string paintToString()const;
 	
+	/**
+	 * @brief get color as RGB.
+	 * If this style property represents a color then this method returns the
+	 * color as red, green and blue values.
+     * @return RGB structure holding red, green and blue.S
+     */
 	Rgb getRgb()const;
 };
 
+/**
+ * @brief Base class for all SVG document elements.
+ */
 struct Element : public utki::Unique{
 	Container* parent;
 	
@@ -191,11 +209,30 @@ struct Element : public utki::Unique{
 	
 	virtual void render(Renderer& renderer)const{}
 	
+	/**
+	 * @brief Get style property of the element.
+	 * Properties are CSS, so it will get the property from parent elements in case this element
+	 * does not define the property.
+     * @param property - property to get.
+     * @param explicitInherit - the flag is used to indicate that an explicit inheritance is indicated for non-inherited properties.
+     * @return pointer to the property value.
+	 * @return nullptr in case property was not found.
+     */
 	const StylePropertyValue* getStyleProperty(EStyleProperty property, bool explicitInherit = false)const;
 	
+	/**
+	 * @brief Find element by its id.
+	 * Searches the elements tree to find an element with indicated id.
+     * @param elementId - element id to search for.
+     * @return pointer to the found element.
+	 * @return nullptr in case the element with given id was not found.
+     */
 	virtual Element* findById(const std::string& elementId);
 };
 
+/**
+ * @brief An element which can have child elements.
+ */
 struct Container : public Element{
 	std::vector<std::unique_ptr<Element>> children;
 	
@@ -206,6 +243,9 @@ struct Container : public Element{
 	Element* findById(const std::string& elementId) override;
 };
 
+/**
+ * @brief an element which can reference another element.
+ */
 struct Referencing{
 	Element* ref = nullptr;
 	std::string iri;
@@ -213,7 +253,9 @@ struct Referencing{
 	void attribsToStream(std::ostream& s)const;
 };
 
-
+/**
+ * @brief An element which has 'transform' attribute or similar.
+ */
 struct Transformable{
 	struct Transformation{
 		enum class EType{
@@ -247,7 +289,9 @@ struct Transformable{
 	static decltype(Transformable::transformations) parse(const std::string& str);
 };
 
-
+/**
+ * @brief An element which has 'style' attribute or can be styled.
+ */
 struct Styleable{
 	std::map<EStyleProperty, StylePropertyValue> styles;
 	
@@ -269,6 +313,9 @@ struct DefsElement : public Container, public Transformable, public Styleable{
 	void toStream(std::ostream& s, unsigned indent = 0)const override;
 };
 
+/**
+ * @brief A rectangular element.
+ */
 struct Rectangle{
 	Length x = Length::make(0, Length::EUnit::PERCENT);
 	Length y = Length::make(0, Length::EUnit::PERCENT);
@@ -284,6 +331,9 @@ struct SvgElement : public Container, public Rectangle{
 	void render(Renderer& renderer) const override;
 };
 
+/**
+ * @brief Element representing a geometric shape.
+ */
 struct Shape : public Element, public Styleable, public Transformable{
 	void attribsToStream(std::ostream& s)const;
 };
@@ -376,6 +426,9 @@ struct EllipseElement : public Shape{
 	void render(Renderer& renderer) const override;
 };
 
+/**
+ * @brief Common base for gradient elements.
+ */
 struct Gradient : public Container, public Referencing, public Styleable, public Transformable{
 	enum class ESpreadMethod{
 		DEFAULT,
@@ -443,7 +496,14 @@ struct RadialGradientElement : public Gradient{
 	void toStream(std::ostream& s, unsigned indent) const override;
 };
 
-
+/**
+ * @brief Renderer interface.
+ * A renderer interface which allows traversing of the SVG element tree.
+ * It utilizes the 'visitor' pattern.
+ * Each Element-based class can override the 'render' method which will call
+ * corresponding render method from Renderer. And user can override Renderer's methods
+ * to implement their own rendering of each SVG element.
+ */
 class Renderer{
 public:
 	virtual void render(const PathElement& e){}
@@ -458,7 +518,12 @@ public:
 };
 
 
-
+/**
+ * @brief Load SVG document.
+ * Load SVG document from XML file.
+ * @param f - file interface to load SVG from.
+ * @return unique pointer to the root of SVG document tree.
+ */
 std::unique_ptr<SvgElement> load(const papki::File& f);
 
 }//~namespace
