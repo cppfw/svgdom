@@ -360,6 +360,19 @@ struct Parser{
 		this->fillRectangle(*ret, n);
 		this->fillContainer(*ret, n);
 
+		for(auto a = n.first_attribute(); !a.empty(); a = a.next_attribute()){
+			auto nsn = this->getNamespace(a.name());
+			switch(nsn.ns){
+				case EXmlNamespace::SVG:
+					if(nsn.name == "viewBox"){
+						ret->viewBox = SvgElement::parseViewbox(a.value());
+					}
+					break;
+				default:
+					break;
+			}
+		}
+		
 		return ret;
 	}
 	
@@ -913,8 +926,7 @@ void SvgElement::toStream(std::ostream& s, unsigned indent) const{
 	auto ind = indentStr(indent);
 	
 	s << ind << "<svg";
-	this->Container::attribsToStream(s);
-	this->Rectangle::attribsToStream(s);
+	this->attribsToStream(s);
 	
 	if(this->children.size() == 0){
 		s << "/>";
@@ -2653,3 +2665,41 @@ Length RadialGradientElement::getFy() const noexcept{
 	}
 	return Length::make(0, Length::EUnit::UNKNOWN);
 }
+
+decltype(SvgElement::viewBox) SvgElement::parseViewbox(const std::string& str) {
+	std::istringstream s(str);
+	
+	s >> std::skipws;
+	
+	decltype(SvgElement::viewBox) ret;
+	
+	for(unsigned i = 0; i != ret.size(); ++i){
+		s >> ret[i];
+		if(s.fail()){
+			return {-1, -1, -1, -1};
+		}
+	}
+	
+	return ret;
+}
+
+void SvgElement::attribsToStream(std::ostream& s) const {
+	this->Container::attribsToStream(s);
+	this->Rectangle::attribsToStream(s);
+	
+	if(this->viewBox[0] >= 0){
+		s << " viewBox=\"";
+		
+		bool isFirst = true;
+		for(auto i = this->viewBox.begin(); i != this->viewBox.end(); ++i){
+			if(isFirst){
+				isFirst = false;
+			}else{
+				s << " ";
+			}
+			s << (*i);
+		}
+		s << "\"";
+	}
+}
+
