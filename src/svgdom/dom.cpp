@@ -366,6 +366,8 @@ struct Parser{
 				case EXmlNamespace::SVG:
 					if(nsn.name == "viewBox"){
 						ret->viewBox = SvgElement::parseViewbox(a.value());
+					}else if(nsn.name == "preserveAspectRatio"){
+						ret->parseAndFillPreserveAspectRatio(a.value());
 					}
 					break;
 				default:
@@ -2683,6 +2685,99 @@ decltype(SvgElement::viewBox) SvgElement::parseViewbox(const std::string& str) {
 	return ret;
 }
 
+namespace{
+SvgElement::EPreserveAspectRatio stringToPreserveAspectRatio(const std::string& str){
+	if(str == "none"){
+		return SvgElement::EPreserveAspectRatio::NONE;
+	}else if(str == "xMinYMin"){
+		return SvgElement::EPreserveAspectRatio::X_MIN_Y_MIN;
+	}else if(str == "xMidYMin"){
+		return SvgElement::EPreserveAspectRatio::X_MID_Y_MIN;
+	}else if(str == "xMaxYMin"){
+		return SvgElement::EPreserveAspectRatio::X_MAX_Y_MIN;
+	}else if(str == "xMinYMid"){
+		return SvgElement::EPreserveAspectRatio::X_MIN_Y_MID;
+	}else if(str == "xMidYMid"){
+		return SvgElement::EPreserveAspectRatio::X_MID_Y_MID;
+	}else if(str == "xMaxYMid"){
+		return SvgElement::EPreserveAspectRatio::X_MAX_Y_MID;
+	}else if(str == "xMinYMax"){
+		return SvgElement::EPreserveAspectRatio::X_MIN_Y_MAX;
+	}else if(str == "xMidYMax"){
+		return SvgElement::EPreserveAspectRatio::X_MID_Y_MAX;
+	}else if(str == "xMaxYMax"){
+		return SvgElement::EPreserveAspectRatio::X_MAX_Y_MAX;
+	}
+	return SvgElement::EPreserveAspectRatio::NONE;
+}
+
+std::string preserveAspectRatioToString(SvgElement::EPreserveAspectRatio par){
+	switch(par){
+		default:
+			ASSERT(false)
+			return std::string();
+		case SvgElement::EPreserveAspectRatio::NONE:
+			return "none";
+		case SvgElement::EPreserveAspectRatio::X_MIN_Y_MIN:
+			return "xMinYMin";
+		case SvgElement::EPreserveAspectRatio::X_MID_Y_MIN:
+			return "xMidYMin";
+		case SvgElement::EPreserveAspectRatio::X_MAX_Y_MIN:
+			return "xMaxYMin";
+		case SvgElement::EPreserveAspectRatio::X_MIN_Y_MID:
+			return "xMinYMid";
+		case SvgElement::EPreserveAspectRatio::X_MID_Y_MID:
+			return "xMidYMid";
+		case SvgElement::EPreserveAspectRatio::X_MAX_Y_MID:
+			return "xMaxYMid";
+		case SvgElement::EPreserveAspectRatio::X_MIN_Y_MAX:
+			return "xMinYMax";
+		case SvgElement::EPreserveAspectRatio::X_MID_Y_MAX:
+			return "xMidYMax";
+		case SvgElement::EPreserveAspectRatio::X_MAX_Y_MAX:
+			return "xMaxYMax";
+	}
+}
+}//~namespace
+
+void SvgElement::parseAndFillPreserveAspectRatio(const std::string& str) {
+	std::istringstream s(str);
+	
+	s >> std::skipws;
+	
+	std::string tmp;
+	
+	s >> tmp;
+	
+	if(s.fail()){
+		return;
+	}
+	
+	if(tmp == "defer"){
+		this->preserveAspectRatioDefer = true;
+		s >> tmp;
+		if(s.fail()){
+			return;
+		}
+	}else{
+		this->preserveAspectRatioDefer = false;
+	}
+	
+	this->preserveAspectRatio = stringToPreserveAspectRatio(tmp);
+	
+	s >> tmp;
+	if(s.fail()){
+		return;
+	}
+	
+	if(tmp == "meet"){
+		this->preserveAspectRatioMeetOrSlice = SvgElement::EMeetOrSlice::MEET;
+	}else if(tmp == "slice"){
+		this->preserveAspectRatioMeetOrSlice = SvgElement::EMeetOrSlice::SLICE;
+	}
+}
+
+
 void SvgElement::attribsToStream(std::ostream& s) const {
 	this->Container::attribsToStream(s);
 	this->Rectangle::attribsToStream(s);
@@ -2701,5 +2796,18 @@ void SvgElement::attribsToStream(std::ostream& s) const {
 		}
 		s << "\"";
 	}
+	
+	if(this->preserveAspectRatio != EPreserveAspectRatio::NONE || this->preserveAspectRatioDefer || this->preserveAspectRatioMeetOrSlice != EMeetOrSlice::MEET){
+		s << " preserveAspectRatio=\"";
+		if(this->preserveAspectRatioDefer){
+			s << "defer ";
+		}
+		
+		s << preserveAspectRatioToString(this->preserveAspectRatio);
+		
+		if(this->preserveAspectRatioMeetOrSlice != EMeetOrSlice::MEET){
+			s << " slice";
+		}
+		s << "\"";
+	}
 }
-

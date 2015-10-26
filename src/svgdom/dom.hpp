@@ -350,6 +350,8 @@ struct SvgElement : public Container, public Rectangle{
 	
 	static decltype(viewBox) parseViewbox(const std::string& str);
 	
+	void parseAndFillPreserveAspectRatio(const std::string& str);
+	
 	void attribsToStream(std::ostream& s)const;
 	
 	void toStream(std::ostream& s, unsigned indent = 0)const override;
