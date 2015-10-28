@@ -51,6 +51,8 @@ struct Length{
 	bool isPercent()const noexcept{
 		return this->unit == EUnit::PERCENT;
 	}
+	
+	real toPx(real dpi)const;
 };
 
 class Renderer;

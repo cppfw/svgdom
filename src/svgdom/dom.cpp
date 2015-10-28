@@ -2812,3 +2812,20 @@ void SvgElement::attribsToStream(std::ostream& s) const {
 		s << "\"";
 	}
 }
+
+real Length::toPx(real dpi) const{
+	switch(this->unit){
+		default:
+			return 0;
+		case svgdom::Length::EUnit::NUMBER:
+		case svgdom::Length::EUnit::PX:
+			return this->value;
+		case svgdom::Length::EUnit::IN:
+			return this->value * dpi;
+		case svgdom::Length::EUnit::CM:
+			if(dpi <= 0){
+				return 0;
+			}
+			return this->value * (dpi / real(2.54));
+	}
+}
