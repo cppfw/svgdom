@@ -2754,16 +2754,16 @@ void SvgElement::parseAndFillPreserveAspectRatio(const std::string& str) {
 	}
 	
 	if(tmp == "defer"){
-		this->preserveAspectRatioDefer = true;
+		this->preserveAspectRatio.defer = true;
 		s >> tmp;
 		if(s.fail()){
 			return;
 		}
 	}else{
-		this->preserveAspectRatioDefer = false;
+		this->preserveAspectRatio.defer = false;
 	}
 	
-	this->preserveAspectRatio = stringToPreserveAspectRatio(tmp);
+	this->preserveAspectRatio.preserve = stringToPreserveAspectRatio(tmp);
 	
 	s >> tmp;
 	if(s.fail()){
@@ -2771,9 +2771,9 @@ void SvgElement::parseAndFillPreserveAspectRatio(const std::string& str) {
 	}
 	
 	if(tmp == "meet"){
-		this->preserveAspectRatioMeetOrSlice = SvgElement::EMeetOrSlice::MEET;
+		this->preserveAspectRatio.meetOrSlice = SvgElement::EMeetOrSlice::MEET;
 	}else if(tmp == "slice"){
-		this->preserveAspectRatioMeetOrSlice = SvgElement::EMeetOrSlice::SLICE;
+		this->preserveAspectRatio.meetOrSlice = SvgElement::EMeetOrSlice::SLICE;
 	}
 }
 
@@ -2797,15 +2797,15 @@ void SvgElement::attribsToStream(std::ostream& s) const {
 		s << "\"";
 	}
 	
-	if(this->preserveAspectRatio != EPreserveAspectRatio::NONE || this->preserveAspectRatioDefer || this->preserveAspectRatioMeetOrSlice != EMeetOrSlice::MEET){
+	if(this->preserveAspectRatio.preserve != EPreserveAspectRatio::NONE || this->preserveAspectRatio.defer || this->preserveAspectRatio.meetOrSlice != EMeetOrSlice::MEET){
 		s << " preserveAspectRatio=\"";
-		if(this->preserveAspectRatioDefer){
+		if(this->preserveAspectRatio.defer){
 			s << "defer ";
 		}
 		
-		s << preserveAspectRatioToString(this->preserveAspectRatio);
+		s << preserveAspectRatioToString(this->preserveAspectRatio.preserve);
 		
-		if(this->preserveAspectRatioMeetOrSlice != EMeetOrSlice::MEET){
+		if(this->preserveAspectRatio.meetOrSlice != EMeetOrSlice::MEET){
 			s << " slice";
 		}
 		s << "\"";

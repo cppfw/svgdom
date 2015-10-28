@@ -339,14 +339,18 @@ struct SvgElement : public Container, public Rectangle{
 		X_MIN_Y_MAX,
 		X_MID_Y_MAX,
 		X_MAX_Y_MAX
-	} preserveAspectRatio = EPreserveAspectRatio::NONE;
-	
-	bool preserveAspectRatioDefer = false;
+	};
 	
 	enum class EMeetOrSlice{
 		MEET,
 		SLICE
-	}preserveAspectRatioMeetOrSlice = EMeetOrSlice::MEET;
+	};
+	
+	struct{
+		EPreserveAspectRatio preserve = EPreserveAspectRatio::NONE;
+		bool defer = false;
+		EMeetOrSlice meetOrSlice = EMeetOrSlice::MEET;
+	} preserveAspectRatio;
 	
 	static decltype(viewBox) parseViewbox(const std::string& str);
 	
