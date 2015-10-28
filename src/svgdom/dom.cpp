@@ -2686,55 +2686,56 @@ decltype(SvgElement::viewBox) SvgElement::parseViewbox(const std::string& str) {
 }
 
 namespace{
-SvgElement::EPreserveAspectRatio stringToPreserveAspectRatio(const std::string& str){
+
+EPreserveAspectRatio stringToPreserveAspectRatio(const std::string& str){
 	if(str == "none"){
-		return SvgElement::EPreserveAspectRatio::NONE;
+		return EPreserveAspectRatio::NONE;
 	}else if(str == "xMinYMin"){
-		return SvgElement::EPreserveAspectRatio::X_MIN_Y_MIN;
+		return EPreserveAspectRatio::X_MIN_Y_MIN;
 	}else if(str == "xMidYMin"){
-		return SvgElement::EPreserveAspectRatio::X_MID_Y_MIN;
+		return EPreserveAspectRatio::X_MID_Y_MIN;
 	}else if(str == "xMaxYMin"){
-		return SvgElement::EPreserveAspectRatio::X_MAX_Y_MIN;
+		return EPreserveAspectRatio::X_MAX_Y_MIN;
 	}else if(str == "xMinYMid"){
-		return SvgElement::EPreserveAspectRatio::X_MIN_Y_MID;
+		return EPreserveAspectRatio::X_MIN_Y_MID;
 	}else if(str == "xMidYMid"){
-		return SvgElement::EPreserveAspectRatio::X_MID_Y_MID;
+		return EPreserveAspectRatio::X_MID_Y_MID;
 	}else if(str == "xMaxYMid"){
-		return SvgElement::EPreserveAspectRatio::X_MAX_Y_MID;
+		return EPreserveAspectRatio::X_MAX_Y_MID;
 	}else if(str == "xMinYMax"){
-		return SvgElement::EPreserveAspectRatio::X_MIN_Y_MAX;
+		return EPreserveAspectRatio::X_MIN_Y_MAX;
 	}else if(str == "xMidYMax"){
-		return SvgElement::EPreserveAspectRatio::X_MID_Y_MAX;
+		return EPreserveAspectRatio::X_MID_Y_MAX;
 	}else if(str == "xMaxYMax"){
-		return SvgElement::EPreserveAspectRatio::X_MAX_Y_MAX;
+		return EPreserveAspectRatio::X_MAX_Y_MAX;
 	}
-	return SvgElement::EPreserveAspectRatio::NONE;
+	return EPreserveAspectRatio::NONE;
 }
 
-std::string preserveAspectRatioToString(SvgElement::EPreserveAspectRatio par){
+std::string preserveAspectRatioToString(EPreserveAspectRatio par){
 	switch(par){
 		default:
 			ASSERT(false)
 			return std::string();
-		case SvgElement::EPreserveAspectRatio::NONE:
+		case EPreserveAspectRatio::NONE:
 			return "none";
-		case SvgElement::EPreserveAspectRatio::X_MIN_Y_MIN:
+		case EPreserveAspectRatio::X_MIN_Y_MIN:
 			return "xMinYMin";
-		case SvgElement::EPreserveAspectRatio::X_MID_Y_MIN:
+		case EPreserveAspectRatio::X_MID_Y_MIN:
 			return "xMidYMin";
-		case SvgElement::EPreserveAspectRatio::X_MAX_Y_MIN:
+		case EPreserveAspectRatio::X_MAX_Y_MIN:
 			return "xMaxYMin";
-		case SvgElement::EPreserveAspectRatio::X_MIN_Y_MID:
+		case EPreserveAspectRatio::X_MIN_Y_MID:
 			return "xMinYMid";
-		case SvgElement::EPreserveAspectRatio::X_MID_Y_MID:
+		case EPreserveAspectRatio::X_MID_Y_MID:
 			return "xMidYMid";
-		case SvgElement::EPreserveAspectRatio::X_MAX_Y_MID:
+		case EPreserveAspectRatio::X_MAX_Y_MID:
 			return "xMaxYMid";
-		case SvgElement::EPreserveAspectRatio::X_MIN_Y_MAX:
+		case EPreserveAspectRatio::X_MIN_Y_MAX:
 			return "xMinYMax";
-		case SvgElement::EPreserveAspectRatio::X_MID_Y_MAX:
+		case EPreserveAspectRatio::X_MID_Y_MAX:
 			return "xMidYMax";
-		case SvgElement::EPreserveAspectRatio::X_MAX_Y_MAX:
+		case EPreserveAspectRatio::X_MAX_Y_MAX:
 			return "xMaxYMax";
 	}
 }
@@ -2771,9 +2772,9 @@ void SvgElement::parseAndFillPreserveAspectRatio(const std::string& str) {
 	}
 	
 	if(tmp == "meet"){
-		this->preserveAspectRatio.meetOrSlice = SvgElement::EMeetOrSlice::MEET;
+		this->preserveAspectRatio.slice = false;
 	}else if(tmp == "slice"){
-		this->preserveAspectRatio.meetOrSlice = SvgElement::EMeetOrSlice::SLICE;
+		this->preserveAspectRatio.slice = true;
 	}
 }
 
@@ -2797,7 +2798,7 @@ void SvgElement::attribsToStream(std::ostream& s) const {
 		s << "\"";
 	}
 	
-	if(this->preserveAspectRatio.preserve != EPreserveAspectRatio::NONE || this->preserveAspectRatio.defer || this->preserveAspectRatio.meetOrSlice != EMeetOrSlice::MEET){
+	if(this->preserveAspectRatio.preserve != EPreserveAspectRatio::NONE || this->preserveAspectRatio.defer || this->preserveAspectRatio.slice){
 		s << " preserveAspectRatio=\"";
 		if(this->preserveAspectRatio.defer){
 			s << "defer ";
@@ -2805,7 +2806,7 @@ void SvgElement::attribsToStream(std::ostream& s) const {
 		
 		s << preserveAspectRatioToString(this->preserveAspectRatio.preserve);
 		
-		if(this->preserveAspectRatio.meetOrSlice != EMeetOrSlice::MEET){
+		if(this->preserveAspectRatio.slice){
 			s << " slice";
 		}
 		s << "\"";

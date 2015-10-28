@@ -325,31 +325,27 @@ struct Rectangle{
 	void attribsToStream(std::ostream& s)const;
 };
 
+enum class EPreserveAspectRatio{
+	NONE,
+	X_MIN_Y_MIN,
+	X_MID_Y_MIN,
+	X_MAX_Y_MIN,
+	X_MIN_Y_MID,
+	X_MID_Y_MID,
+	X_MAX_Y_MID,
+	X_MIN_Y_MAX,
+	X_MID_Y_MAX,
+	X_MAX_Y_MAX
+};
+
+
 struct SvgElement : public Container, public Rectangle{
 	std::array<real, 4> viewBox = {{-1, -1, -1, -1}};
-	
-	enum class EPreserveAspectRatio{
-		NONE,
-		X_MIN_Y_MIN,
-		X_MID_Y_MIN,
-		X_MAX_Y_MIN,
-		X_MIN_Y_MID,
-		X_MID_Y_MID,
-		X_MAX_Y_MID,
-		X_MIN_Y_MAX,
-		X_MID_Y_MAX,
-		X_MAX_Y_MAX
-	};
-	
-	enum class EMeetOrSlice{
-		MEET,
-		SLICE
-	};
 	
 	struct{
 		EPreserveAspectRatio preserve = EPreserveAspectRatio::NONE;
 		bool defer = false;
-		EMeetOrSlice meetOrSlice = EMeetOrSlice::MEET;
+		bool slice = false;
 	} preserveAspectRatio;
 	
 	static decltype(viewBox) parseViewbox(const std::string& str);
