@@ -8,6 +8,7 @@
 #include <set>
 #include <sstream>
 #include <iomanip>
+#include <cctype>
 
 using namespace svgdom;
 

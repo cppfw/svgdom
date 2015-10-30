@@ -7,6 +7,13 @@
 
 #pragma once
 
+#include <utki/config.hpp>
+
+#if M_OS == M_OS_WINDOWS
+#	ifdef OVERFLOW
+#		undef OVERFLOW
+#	endif
+#endif
 
 namespace svgdom{
 
