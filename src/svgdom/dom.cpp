@@ -1314,7 +1314,6 @@ decltype(Styleable::styles) Styleable::parse(const std::string& str){
 	std::stringstream s(str);
 	
 	s >> std::skipws;
-	s >> std::setfill(' ');
 	
 	decltype(Styleable::styles) ret;
 	
@@ -1331,12 +1330,8 @@ decltype(Styleable::styles) Styleable::parse(const std::string& str){
 			continue;
 		}
 		
-		{
-			std::string str;
-			s >> std::setw(1) >> str >> std::setw(0);
-			if(str != ":"){
-				return ret;//expected colon
-			}
+		if(s.get() != ':'){
+			return ret;//expected colon
 		}
 		
 		skipWhitespaces(s);
