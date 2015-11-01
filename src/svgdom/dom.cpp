@@ -2843,7 +2843,7 @@ std::unique_ptr<SvgElement> svgdom::load(std::istream& s){
 	return ::load(doc);
 }
 
-real SvgElement::aspectRatio(real dpi){
+real SvgElement::aspectRatio(real dpi)const{
 	real w = this->width.toPx(dpi);
 	real h = this->height.toPx(dpi);
 	

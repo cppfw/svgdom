@@ -360,7 +360,7 @@ struct SvgElement : public Container, public Rectangle{
 	
 	void render(Renderer& renderer) const override;
 	
-	real aspectRatio(real dpi);
+	real aspectRatio(real dpi)const;
 };
 
 /**
