@@ -2842,3 +2842,14 @@ std::unique_ptr<SvgElement> svgdom::load(std::istream& s){
 	
 	return ::load(doc);
 }
+
+real SvgElement::aspectRatio(real dpi){
+	real w = this->width.toPx(dpi);
+	real h = this->height.toPx(dpi);
+	
+	if(w <= 0 || h <= 0){
+		return 0;
+	}
+	
+	return w / h;
+}

@@ -359,6 +359,8 @@ struct SvgElement : public Container, public Rectangle{
 	void toStream(std::ostream& s, unsigned indent = 0)const override;
 	
 	void render(Renderer& renderer) const override;
+	
+	real aspectRatio(real dpi);
 };
 
 /**
