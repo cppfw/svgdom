@@ -2,9 +2,9 @@
 
 ##MSYS environment
 
-- Download latest stob version from **[here](https://github.com/igagis/stob/releases)** and unpack it.
+- Download latest sources from **[here](https://github.com/igagis/svgdom/releases)** and unpack it.
 
-- Install **stob**
+- Install it
 
   ```
   make install
