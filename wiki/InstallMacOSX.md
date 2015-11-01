@@ -14,8 +14,8 @@ Installation in MacOS X requires **[homebrew](http://brew.sh/)** package manager
   sudo brew update
   ```
 
-- Install **libstob** keg
+- Install **libsvgdom** keg
 
   ```
-  sudo brew install libstob
+  sudo brew install libsvgdom
   ```
