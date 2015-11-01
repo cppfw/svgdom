@@ -1128,7 +1128,6 @@ decltype(Transformable::transformations) Transformable::parse(const std::string&
 	std::istringstream s(str);
 	
 	s >> std::skipws;
-	s >> std::setfill(' ');
 	
 	decltype(Transformable::transformations) ret;
 	
@@ -1153,12 +1152,8 @@ decltype(Transformable::transformations) Transformable::parse(const std::string&
 			return ret;//unknown transformation, stop parsing
 		}
 		
-		{
-			std::string str;
-			s >> std::setw(1) >> str >> std::setw(0);
-			if(str != "("){
-				return ret;//expected (
-			}
+		if(s.get() != '('){
+			return ret;//expected (
 		}
 		
 		switch(t.type){
@@ -1248,12 +1243,8 @@ decltype(Transformable::transformations) Transformable::parse(const std::string&
 				break;
 		}
 		
-		{
-			std::string str;
-			s >> std::setw(1) >> str >> std::setw(0);
-			if(str != ")"){
-				return ret;//expected )
-			}
+		if(s.get() != ')'){
+			return ret;//expected )
 		}
 		
 		ret.push_back(t);
