@@ -18,8 +18,9 @@ nuget{
 	}
 	dependencies {
 		packages : {
-			libutki/1.0.8.4;
+			libutki/1.0.8.5;
 			libpapki/1.0.2.2;
+			pugixml/1.7.0
 		};
 	}
 	files {
