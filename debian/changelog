@@ -1,8 +1,8 @@
-libsvgdom (0.2.0-1) UNRELEASED; urgency=medium
+libsvgdom (0.2.0-1) stable; urgency=medium
 
   * refactoring
 
- -- Ivan Gagis <igagis@gmail.com>  Sun, 01 Nov 2015 22:22:28 +0200
+ -- Ivan Gagis <igagis@gmail.com>  Sun, 01 Nov 2015 22:25:35 +0200
 
 libsvgdom (0.1.0-1) stable; urgency=low
 
