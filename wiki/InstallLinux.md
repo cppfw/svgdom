@@ -13,8 +13,8 @@
   sudo apt-get update
   ```
 
-- Install **libstob-dev** package
+- Install **libsvgdom-dev** package
 
   ```
-  sudo apt-get install libstob-dev
+  sudo apt-get install libsvgdom-dev
   ```
