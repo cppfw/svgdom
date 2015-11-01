@@ -607,6 +607,15 @@ public:
  */
 std::unique_ptr<SvgElement> load(const papki::File& f);
 
+/**
+ * @brief Load SVG document.
+ * Load SVG document from XML stream.
+ * @param s - input stream to load SVG from.
+ * @return unique pointer to the root of SVG document tree.
+ */
+
+std::unique_ptr<SvgElement> load(std::istream& s);
+
 }//~namespace
 
 

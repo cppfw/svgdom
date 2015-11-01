@@ -773,20 +773,7 @@ void resolveReferences(Element& e, SvgElement& svg){
 	}
 }
 
-}//~namespace
-
-
-
-std::unique_ptr<SvgElement> svgdom::load(const papki::File& f){
-	pugi::xml_document doc;
-	{
-		auto fileContents = f.loadWholeFileIntoMemory();
-		if(doc.load_buffer(&*fileContents.begin(), fileContents.size()).status != pugi::xml_parse_status::status_ok){
-			TRACE(<< "svgdom::load(): loading XML document failed!" << std::endl)
-			return nullptr;
-		}
-	}
-	
+std::unique_ptr<SvgElement> load(const pugi::xml_document& doc){
 	Parser parser;
 	
 	//return first node which is successfully parsed
@@ -800,6 +787,22 @@ std::unique_ptr<SvgElement> svgdom::load(const papki::File& f){
 		}
 	}
 	return nullptr;
+}
+
+}//~namespace
+
+
+std::unique_ptr<SvgElement> svgdom::load(const papki::File& f){
+	pugi::xml_document doc;
+	{
+		auto fileContents = f.loadWholeFileIntoMemory();
+		if(doc.load_buffer(&*fileContents.begin(), fileContents.size()).status != pugi::xml_parse_status::status_ok){
+			TRACE(<< "svgdom::load(): loading XML document failed!" << std::endl)
+			return nullptr;
+		}
+	}
+	
+	return ::load(doc);
 }
 
 
@@ -2829,4 +2832,13 @@ real Length::toPx(real dpi) const{
 			}
 			return this->value * (dpi / real(2.54));
 	}
+}
+
+
+std::unique_ptr<SvgElement> svgdom::load(std::istream& s){
+	pugi::xml_document doc;
+	
+	doc.load(s);
+	
+	return ::load(doc);
 }
