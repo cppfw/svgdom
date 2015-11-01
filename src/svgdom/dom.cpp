@@ -2668,7 +2668,7 @@ decltype(SvgElement::viewBox) SvgElement::parseViewbox(const std::string& str) {
 	for(unsigned i = 0; i != ret.size(); ++i){
 		s >> ret[i];
 		if(s.fail()){
-			return {-1, -1, -1, -1};
+			return {{-1, -1, -1, -1}};
 		}
 	}
 	
