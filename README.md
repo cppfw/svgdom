@@ -1,4 +1,6 @@
-# svgdom
+# svgdom [![Build status](https://ci.appveyor.com/api/projects/status/gxft9fftqmtih6uc/branch/master?svg=true)](https://ci.appveyor.com/project/igagis/svgdom/branch/master)
+
+
 
 SVG document object model library in C++.
 
