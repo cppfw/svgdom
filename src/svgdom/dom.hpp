@@ -14,12 +14,18 @@
 
 #include <utki/Unique.hpp>
 #include <utki/Void.hpp>
+#include <utki/config.hpp>
 
 #include <papki/File.hpp>
 
 
 #include "config.hpp"
 
+#if M_OS == M_OS_WINDOWS
+#	ifdef IN
+#		undef IN
+#	endif
+#endif
 
 namespace svgdom{
 
