@@ -1,0 +1,20 @@
+class Libsvgdom < Formula
+  desc "C++ cross-platform SVG DOM library."
+  homepage "https://github.com/igagis/svgdom"
+  url "https://github.com/igagis/svgdom/archive/$(version).tar.gz"
+  sha256 "$(sha256)"
+
+  depends_on "prorab" => :build
+  depends_on "pugixml" => :build
+  depends_on "libpapki"
+  depends_on "libutki"
+
+  def install
+    ENV['PATH'] += ':/usr/local/bin'
+    system "make", "install"
+  end
+
+  test do
+    system "make", "test"
+  end
+end

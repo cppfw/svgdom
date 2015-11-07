@@ -246,7 +246,7 @@ struct Container : public Element{
 	
 	void childrenToStream(std::ostream& s, unsigned indent)const;
 	
-	void render(Renderer& renderer)const;
+	void render(Renderer& renderer)const override;
 	
 	Element* findById(const std::string& elementId) override;
 };
