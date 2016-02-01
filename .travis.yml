@@ -1,16 +1,20 @@
 language: cpp
 sudo: required
+dist: trusty
+osx_image: xcode7.1
 
 os:
   - linux
   - osx
 
-osx_image: xcode7.1
-dist: trusty
-
 compiler:
   - clang
   - gcc
+
+matrix:
+  exclude:
+    - os: osx
+      compiler: gcc
 
 env:
   global:
@@ -26,6 +30,9 @@ before_install:
     sudo apt-get install -qq debhelper prorab doxygen libutki-dev libpapki-dev libpugixml-dev;
   fi
 - if [ "$TRAVIS_OS_NAME" == "osx" ]; then
+    pod repo add --silent igagis https://$HOMEBREW_GITHUB_USERNAME:$HOMEBREW_GITHUB_ACCESS_TOKEN@github.com/igagis/cocoapods-repo.git;
+    pod install --project-directory=ios;
+
     brew tap igagis/tap;
     brew update > /dev/null;
     brew install prorab libutki libpapki pugixml;
@@ -38,7 +45,11 @@ script:
   fi
 - if [ "$TRAVIS_OS_NAME" == "osx" ]; then
     make &&
-    make test;
+    make test &&
+    
+    xcodebuild -workspace ios/tests.xcworkspace -scheme tests CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO &&
+
+    if [ -n "$TRAVIS_TAG" ]; then prorab-deploy-cocoapods.sh igagis; else echo "Skip deploying to cocoapods because not a tagged commit!!!"; fi;
   fi
 
 deploy:
