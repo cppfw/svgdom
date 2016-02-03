@@ -1571,7 +1571,7 @@ StylePropertyValue StylePropertyValue::parsePaint(const std::string& str){
 			
 			std::string tmpStr;
 			
-			s >> std::setw(rgb.length()) >> tmpStr >> std::setw(0);
+			s >> std::setw(int(rgb.length())) >> tmpStr >> std::setw(0);
 			ASSERT(tmpStr == rgb)
 			
 			std::uint32_t r, g, b;
@@ -1597,7 +1597,7 @@ StylePropertyValue StylePropertyValue::parsePaint(const std::string& str){
 			std::istringstream s(str);
 			
 			std::string tmpStr;
-			s >> std::setw(url.length()) >> tmpStr >> std::setw(0);
+			s >> std::setw(int(url.length())) >> tmpStr >> std::setw(0);
 			ASSERT(tmpStr == url)
 			
 			skipWhitespaces(s);

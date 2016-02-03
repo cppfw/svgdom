@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		2C7FB83F1C5F9BBC00148CAA /* dom.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2C7FB83E1C5F9BBC00148CAA /* dom.cpp */; };
 		2C7FB8411C5F9BCA00148CAA /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2C7FB8401C5F9BCA00148CAA /* main.cpp */; };
-		2CE5FF7E1C5F99B700CD8537 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CE5FF7D1C5F99B700CD8537 /* main.m */; };
 		2CE5FF891C5F99B700CD8537 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2CE5FF881C5F99B700CD8537 /* Assets.xcassets */; };
 		F547C98D97E74CABA1FE1500 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8DAB26F4EB8AD6BBAF405EC6 /* libPods.a */; };
 /* End PBXBuildFile section */
@@ -18,7 +17,6 @@
 		2C7FB83E1C5F9BBC00148CAA /* dom.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = dom.cpp; path = ../src/svgdom/dom.cpp; sourceTree = "<group>"; };
 		2C7FB8401C5F9BCA00148CAA /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = main.cpp; path = ../../tests/parse/main.cpp; sourceTree = "<group>"; };
 		2CE5FF791C5F99B700CD8537 /* tests.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = tests.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		2CE5FF7D1C5F99B700CD8537 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		2CE5FF881C5F99B700CD8537 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		2CE5FF8D1C5F99B700CD8537 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8DAB26F4EB8AD6BBAF405EC6 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -71,7 +69,6 @@
 		2CE5FF7C1C5F99B700CD8537 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				2CE5FF7D1C5F99B700CD8537 /* main.m */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -213,7 +210,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				2C7FB83F1C5F9BBC00148CAA /* dom.cpp in Sources */,
-				2CE5FF7E1C5F99B700CD8537 /* main.m in Sources */,
 				2C7FB8411C5F9BCA00148CAA /* main.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

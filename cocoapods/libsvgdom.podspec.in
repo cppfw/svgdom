@@ -14,5 +14,5 @@ Pod::Spec.new do |s|
 
   s.dependency 'libutki', '>= 1.0.8'
   s.dependency 'libpapki', '>= 1.0.3'
-#TODO: add pugixml dependency
+  s.dependency 'pugixml', '>=1.7'
 end
