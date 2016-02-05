@@ -18,6 +18,7 @@
                    kind="IMPORTANT_FILES_FOLDER">
       <itemPath>.travis.yml</itemPath>
       <itemPath>ios/Podfile</itemPath>
+      <itemPath>debian/changelog</itemPath>
       <itemPath>nbproject/private/launcher.properties</itemPath>
       <itemPath>cocoapods/libsvgdom.podspec.in</itemPath>
       <itemPath>homebrew/libsvgdom.rb.in</itemPath>
