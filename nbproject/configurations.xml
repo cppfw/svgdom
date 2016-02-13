@@ -3,7 +3,6 @@
   <logicalFolder name="root" displayName="root" projectFiles="true" kind="ROOT">
     <df root="src" name="0">
       <df name="svgdom">
-        <in>Exc.hpp</in>
         <in>dom.cpp</in>
       </df>
     </df>
@@ -39,7 +38,6 @@
       </toolsSet>
       <flagsDictionary>
         <element flagsID="0" commonFlags="-funsigned-char -std=c++11 -fPIC"/>
-        <element flagsID="1" commonFlags="-std=c++11"/>
       </flagsDictionary>
       <codeAssistance>
       </codeAssistance>
@@ -68,15 +66,11 @@
           </preprocessorList>
         </ccTool>
       </folder>
-      <item path="src/svgdom/Exc.hpp" ex="false" tool="3" flavor2="0">
-      </item>
       <item path="src/svgdom/dom.cpp" ex="false" tool="1" flavor2="8">
         <ccTool flags="0">
         </ccTool>
       </item>
       <item path="tests/parse/main.cpp" ex="false" tool="1" flavor2="8">
-        <ccTool flags="1">
-        </ccTool>
       </item>
     </conf>
     <conf name="Debug" type="0">
