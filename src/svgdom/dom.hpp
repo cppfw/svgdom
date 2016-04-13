@@ -58,7 +58,7 @@ struct Length{
 		return this->unit == EUnit::PERCENT;
 	}
 	
-	real toPx(real dpi)const;
+	real toPx(real dpi)const noexcept;
 };
 
 class Renderer;

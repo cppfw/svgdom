@@ -2803,7 +2803,7 @@ void SvgElement::attribsToStream(std::ostream& s) const {
 	}
 }
 
-real Length::toPx(real dpi) const{
+real Length::toPx(real dpi) const noexcept{
 	switch(this->unit){
 		default:
 			return 0;
