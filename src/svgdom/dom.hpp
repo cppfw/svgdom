@@ -366,6 +366,12 @@ struct SvgElement : public Container, public Rectangle{
 	
 	void render(Renderer& renderer) const override;
 	
+	/**
+	 * @brief Get aspect ratio of the element.
+	 * @param dpi - dots per inch.
+	 * @return aspect ratio of the element.
+	 * @return 0 if any of height or weight is specified in percent.
+	 */
 	real aspectRatio(real dpi)const;
 };
 
