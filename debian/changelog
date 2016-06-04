@@ -1,3 +1,9 @@
+libsvgdom (0.2.6) stable; urgency=medium
+
+  * fix build
+
+ -- Ivan Gagis <igagis@gmail.com>  Sat, 04 Jun 2016 22:33:56 +0300
+
 libsvgdom (0.2.5) stable; urgency=medium
 
   * bugfix: handle implicit lineto if no command specified after moveto
