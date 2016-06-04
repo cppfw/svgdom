@@ -1907,7 +1907,7 @@ decltype(PathElement::path) PathElement::parse(const std::string& str){
 	
 	skipWhitespaces(s);
 	
-	Step::EType curType = Step::EType::MOVE_ABS;
+	Step::EType curType = Step::EType::UNKNOWN;
 	
 	while(!s.eof()){
 		ASSERT(!std::isspace(s.peek()))//spaces should be skept
@@ -1917,6 +1917,12 @@ decltype(PathElement::path) PathElement::parse(const std::string& str){
 			if(t != Step::EType::UNKNOWN){
 				curType = t;
 				s.get();
+			}else if(curType == Step::EType::UNKNOWN){
+				curType = Step::EType::MOVE_ABS;
+			}else if(curType == Step::EType::MOVE_ABS){
+				curType = Step::EType::LINE_ABS;
+			}else if(curType == Step::EType::MOVE_REL){
+				curType = Step::EType::LINE_REL;
 			}
 		}
 		
