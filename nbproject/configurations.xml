@@ -21,6 +21,7 @@
       <itemPath>nbproject/private/launcher.properties</itemPath>
       <itemPath>cocoapods/libsvgdom.podspec.in</itemPath>
       <itemPath>homebrew/libsvgdom.rb.in</itemPath>
+      <itemPath>nuget/nuget.autopkg.in</itemPath>
     </logicalFolder>
   </logicalFolder>
   <sourceFolderFilter>^(nbproject)$</sourceFolderFilter>
