@@ -1,3 +1,10 @@
+libsvgdom (0.2.5) stable; urgency=medium
+
+  * bugfix: handle implicit lineto if no command specified after moveto
+    in path
+
+ -- Ivan Gagis <igagis@gmail.com>  Sat, 04 Jun 2016 22:31:50 +0300
+
 libsvgdom (0.2.4) stable; urgency=medium
 
   * nuget fix
