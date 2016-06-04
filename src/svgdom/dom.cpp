@@ -72,7 +72,7 @@ void skipWhitespaces(std::istream& s){
 	}
 }
 
-enum class EXmlNamespace{
+enum class XmlNamespace_e{
 	UNKNOWN,
 	SVG,
 	XLINK
@@ -81,17 +81,17 @@ enum class EXmlNamespace{
 const std::string DSvgNamespace = "http://www.w3.org/2000/svg";
 const std::string DXlinkNamespace = "http://www.w3.org/1999/xlink";
 
-StylePropertyValue parsePropertyValue(EStyleProperty type, std::istream& s){
+StylePropertyValue parsePropertyValue(StyleProperty_e type, std::istream& s){
 	StylePropertyValue v;
 	
 	switch(type){
 		default:
 			ASSERT(false)
 			break;
-		case EStyleProperty::STOP_OPACITY:
-		case EStyleProperty::OPACITY:
-		case EStyleProperty::STROKE_OPACITY:
-		case EStyleProperty::FILL_OPACITY:
+		case StyleProperty_e::STOP_OPACITY:
+		case StyleProperty_e::OPACITY:
+		case StyleProperty_e::STROKE_OPACITY:
+		case StyleProperty_e::FILL_OPACITY:
 			s >> v.opacity;
 			if(s.fail()){
 				s.clear();
@@ -99,37 +99,37 @@ StylePropertyValue parsePropertyValue(EStyleProperty type, std::istream& s){
 				utki::clampRange(v.opacity, real(0), real(1));
 			}
 			break;
-		case EStyleProperty::STOP_COLOR:
-		case EStyleProperty::FILL:
-		case EStyleProperty::STROKE:
+		case StyleProperty_e::STOP_COLOR:
+		case StyleProperty_e::FILL:
+		case StyleProperty_e::STROKE:
 			v = StylePropertyValue::parsePaint(readTillChar(s, ';'));
 //				TRACE(<< "paint read = " << std::hex << v.integer << std::endl)
 			break;
-		case EStyleProperty::STROKE_WIDTH:
+		case StyleProperty_e::STROKE_WIDTH:
 			v.length = Length::parse(readTillChar(s, ';'));
 //				TRACE(<< "stroke-width read = " << v.length << std::endl)
 			break;
-		case EStyleProperty::STROKE_LINECAP:
+		case StyleProperty_e::STROKE_LINECAP:
 			{
 				auto str = readTillCharOrWhitespace(s, ';');
 				if(str == "butt"){
-					v.strokeLineCap = EStrokeLineCap::BUTT;
+					v.strokeLineCap = StrokeLineCap_e::BUTT;
 				}else if(str == "round"){
-					v.strokeLineCap = EStrokeLineCap::ROUND;
+					v.strokeLineCap = StrokeLineCap_e::ROUND;
 				}else if(str == "square"){
-					v.strokeLineCap = EStrokeLineCap::SQUARE;
+					v.strokeLineCap = StrokeLineCap_e::SQUARE;
 				}else{
 					TRACE(<< "unknown strokeLineCap value:" << str << std::endl)
 				}
 			}
 			break;
-		case EStyleProperty::FILL_RULE:
+		case StyleProperty_e::FILL_RULE:
 			{
 				auto str = readTillCharOrWhitespace(s, ';');
 				if(str == "nonzero"){
-					v.fillRule = EFillRule::NONZERO;
+					v.fillRule = FillRule_e::NONZERO;
 				}else if(str == "evenodd"){
-					v.fillRule = EFillRule::EVENODD;
+					v.fillRule = FillRule_e::EVENODD;
 				}else{
 					TRACE(<< "unknown fill-rule value:" << str << std::endl)
 				}
@@ -139,19 +139,19 @@ StylePropertyValue parsePropertyValue(EStyleProperty type, std::istream& s){
 	return v;
 }
 
-StylePropertyValue parsePropertyValue(EStyleProperty type, const std::string& str){
+StylePropertyValue parsePropertyValue(StyleProperty_e type, const std::string& str){
 	std::istringstream s(str);
 	return parsePropertyValue(type, s);
 }
 
 struct Parser{
-	typedef std::map<std::string, EXmlNamespace> T_NamespaceMap;
+	typedef std::map<std::string, XmlNamespace_e> T_NamespaceMap;
 	std::vector<T_NamespaceMap> namespaces;
 	
-	std::vector<EXmlNamespace> defaultNamespace;
+	std::vector<XmlNamespace_e> defaultNamespace;
 	
 	
-	EXmlNamespace findNamespace(const std::string& ns){
+	XmlNamespace_e findNamespace(const std::string& ns){
 		for(auto i = this->namespaces.rbegin(); i != this->namespaces.rend(); ++i){
 			auto iter = i->find(ns);
 			if(iter == i->end()){
@@ -160,11 +160,11 @@ struct Parser{
 			ASSERT(ns == iter->first)
 			return iter->second;
 		}
-		return EXmlNamespace::UNKNOWN;
+		return XmlNamespace_e::UNKNOWN;
 	}
 	
 	struct NamespaceNamePair{
-		EXmlNamespace ns;
+		XmlNamespace_e ns;
 		std::string name;
 	};
 	
@@ -192,7 +192,7 @@ struct Parser{
 		for(auto a = n.first_attribute(); !a.empty(); a = a.next_attribute()){
 			auto nsn = this->getNamespace(a.name());
 			switch(nsn.ns){
-				case EXmlNamespace::SVG:
+				case XmlNamespace_e::SVG:
 					if(nsn.name == "id"){
 						e.id = a.value();
 					}
@@ -207,7 +207,7 @@ struct Parser{
 		for(auto a = n.first_attribute(); !a.empty(); a = a.next_attribute()){
 			auto nsn = this->getNamespace(a.name());
 			switch(nsn.ns){
-				case EXmlNamespace::XLINK:
+				case XmlNamespace_e::XLINK:
 					if(nsn.name == "href"){
 						e.iri = a.value();
 					}
@@ -222,7 +222,7 @@ struct Parser{
 		for(auto a = n.first_attribute(); !a.empty(); a = a.next_attribute()){
 			auto nsn = this->getNamespace(a.name());
 			switch(nsn.ns){
-				case EXmlNamespace::SVG:
+				case XmlNamespace_e::SVG:
 					if(nsn.name == "x"){
 						r.x = Length::parse(a.value());
 					}else if(nsn.name == "y"){
@@ -257,7 +257,7 @@ struct Parser{
 		for(auto a = n.first_attribute(); !a.empty(); a = a.next_attribute()){
 			auto nsn = this->getNamespace(a.name());
 			switch(nsn.ns){
-				case EXmlNamespace::SVG:
+				case XmlNamespace_e::SVG:
 					if(nsn.name == "transform"){
 						t.transformations = Transformable::parse(a.value());
 					}
@@ -274,14 +274,14 @@ struct Parser{
 		for(auto a = n.first_attribute(); !a.empty(); a = a.next_attribute()){
 			auto nsn = this->getNamespace(a.name());
 			switch(nsn.ns){
-				case EXmlNamespace::SVG:
+				case XmlNamespace_e::SVG:
 					if(nsn.name == "style"){
 						s.styles = Styleable::parse(a.value());
 						break;
 					}
 					{
-						EStyleProperty type = Styleable::stringToProperty(nsn.name);
-						if(type != EStyleProperty::UNKNOWN){
+						StyleProperty_e type = Styleable::stringToProperty(nsn.name);
+						if(type != StyleProperty_e::UNKNOWN){
 							s.styles[type] = parsePropertyValue(type, a.value());
 						}
 					}
@@ -300,16 +300,16 @@ struct Parser{
 		for(auto a = n.first_attribute(); !a.empty(); a = a.next_attribute()){
 			auto nsn = this->getNamespace(a.name());
 			switch(nsn.ns){
-				case EXmlNamespace::SVG:
+				case XmlNamespace_e::SVG:
 					if(nsn.name == "spreadMethod"){
 						g.spreadMethod = Gradient::stringToSpreadMethod(a.value());
 					}else if(nsn.name == "gradientTransform"){
 						g.transformations = Transformable::parse(a.value());
 					}else if(nsn.name == "gradientUnits"){
 						if(std::string("userSpaceOnUse") == a.value()){
-							g.units = Gradient::EUnits::USER_SPACE_ON_USE;
+							g.units = Gradient::Units_e::USER_SPACE_ON_USE;
 						}else if(std::string("objectBoundingBox") == a.value()){
-							g.units = Gradient::EUnits::OBJECT_BOUNDING_BOX;
+							g.units = Gradient::Units_e::OBJECT_BOUNDING_BOX;
 						}
 					}
 					break;
@@ -326,7 +326,7 @@ struct Parser{
 	}
 	
 	std::unique_ptr<Gradient::StopElement> parseGradientStopElement(const pugi::xml_node& n){
-		ASSERT(getNamespace(n.name()).ns == EXmlNamespace::SVG)
+		ASSERT(getNamespace(n.name()).ns == XmlNamespace_e::SVG)
 		ASSERT(getNamespace(n.name()).name == "stop")
 		
 		auto ret = utki::makeUnique<Gradient::StopElement>();
@@ -335,7 +335,7 @@ struct Parser{
 		for(auto a = n.first_attribute(); !a.empty(); a = a.next_attribute()){
 			auto nsn = this->getNamespace(a.name());
 			switch(nsn.ns){
-				case EXmlNamespace::SVG:
+				case XmlNamespace_e::SVG:
 					if(nsn.name == "offset"){
 						std::istringstream s(a.value());
 						s >> ret->offset;
@@ -353,7 +353,7 @@ struct Parser{
 	}
 	
 	std::unique_ptr<SvgElement> parseSvgElement(const pugi::xml_node& n){
-		ASSERT(getNamespace(n.name()).ns == EXmlNamespace::SVG)
+		ASSERT(getNamespace(n.name()).ns == XmlNamespace_e::SVG)
 		ASSERT(getNamespace(n.name()).name == "svg")
 		
 		auto ret = utki::makeUnique<SvgElement>();
@@ -364,7 +364,7 @@ struct Parser{
 		for(auto a = n.first_attribute(); !a.empty(); a = a.next_attribute()){
 			auto nsn = this->getNamespace(a.name());
 			switch(nsn.ns){
-				case EXmlNamespace::SVG:
+				case XmlNamespace_e::SVG:
 					if(nsn.name == "viewBox"){
 						ret->viewBox = SvgElement::parseViewbox(a.value());
 					}else if(nsn.name == "preserveAspectRatio"){
@@ -380,7 +380,7 @@ struct Parser{
 	}
 	
 	std::unique_ptr<GElement> parseGElement(const pugi::xml_node& n){
-		ASSERT(getNamespace(n.name()).ns == EXmlNamespace::SVG)
+		ASSERT(getNamespace(n.name()).ns == XmlNamespace_e::SVG)
 		ASSERT(getNamespace(n.name()).name == "g")
 		
 		auto ret = utki::makeUnique<GElement>();
@@ -393,7 +393,7 @@ struct Parser{
 	}
 	
 	std::unique_ptr<DefsElement> parseDefsElement(const pugi::xml_node& n){
-		ASSERT(getNamespace(n.name()).ns == EXmlNamespace::SVG)
+		ASSERT(getNamespace(n.name()).ns == XmlNamespace_e::SVG)
 		ASSERT(getNamespace(n.name()).name == "defs")
 		
 		auto ret = utki::makeUnique<DefsElement>();
@@ -406,7 +406,7 @@ struct Parser{
 	}
 	
 	std::unique_ptr<PathElement> parsePathElement(const pugi::xml_node& n){
-		ASSERT(getNamespace(n.name()).ns == EXmlNamespace::SVG)
+		ASSERT(getNamespace(n.name()).ns == XmlNamespace_e::SVG)
 		ASSERT(getNamespace(n.name()).name == "path")
 		
 		auto ret = utki::makeUnique<PathElement>();
@@ -416,7 +416,7 @@ struct Parser{
 		for(auto a = n.first_attribute(); !a.empty(); a = a.next_attribute()){
 			auto nsn = this->getNamespace(a.name());
 			switch(nsn.ns){
-				case EXmlNamespace::SVG:
+				case XmlNamespace_e::SVG:
 					if(nsn.name == "d"){
 						ret->path = PathElement::parse(a.value());
 					}
@@ -430,7 +430,7 @@ struct Parser{
 	}
 	
 	std::unique_ptr<RectElement> parseRectElement(const pugi::xml_node& n){
-		ASSERT(getNamespace(n.name()).ns == EXmlNamespace::SVG)
+		ASSERT(getNamespace(n.name()).ns == XmlNamespace_e::SVG)
 		ASSERT(getNamespace(n.name()).name == "rect")
 		
 		auto ret = utki::makeUnique<RectElement>();
@@ -441,7 +441,7 @@ struct Parser{
 		for(auto a = n.first_attribute(); !a.empty(); a = a.next_attribute()){
 			auto nsn = this->getNamespace(a.name());
 			switch(nsn.ns){
-				case EXmlNamespace::SVG:
+				case XmlNamespace_e::SVG:
 					if(nsn.name == "rx"){
 						ret->rx = Length::parse(a.value());
 					}else if(nsn.name == "ry"){
@@ -457,7 +457,7 @@ struct Parser{
 	}
 	
 	std::unique_ptr<CircleElement> parseCircleElement(const pugi::xml_node& n){
-		ASSERT(getNamespace(n.name()).ns == EXmlNamespace::SVG)
+		ASSERT(getNamespace(n.name()).ns == XmlNamespace_e::SVG)
 		ASSERT(getNamespace(n.name()).name == "circle")
 		
 		auto ret = utki::makeUnique<CircleElement>();
@@ -467,7 +467,7 @@ struct Parser{
 		for(auto a = n.first_attribute(); !a.empty(); a = a.next_attribute()){
 			auto nsn = this->getNamespace(a.name());
 			switch(nsn.ns){
-				case EXmlNamespace::SVG:
+				case XmlNamespace_e::SVG:
 					if(nsn.name == "cx"){
 						ret->cx = Length::parse(a.value());
 					}else if(nsn.name == "cy"){
@@ -485,7 +485,7 @@ struct Parser{
 	}
 	
 	std::unique_ptr<LineElement> parseLineElement(const pugi::xml_node& n){
-		ASSERT(getNamespace(n.name()).ns == EXmlNamespace::SVG)
+		ASSERT(getNamespace(n.name()).ns == XmlNamespace_e::SVG)
 		ASSERT(getNamespace(n.name()).name == "line")
 		
 		auto ret = utki::makeUnique<LineElement>();
@@ -495,7 +495,7 @@ struct Parser{
 		for(auto a = n.first_attribute(); !a.empty(); a = a.next_attribute()){
 			auto nsn = this->getNamespace(a.name());
 			switch(nsn.ns){
-				case EXmlNamespace::SVG:
+				case XmlNamespace_e::SVG:
 					if(nsn.name == "x1"){
 						ret->x1 = Length::parse(a.value());
 					}else if(nsn.name == "y1"){
@@ -515,7 +515,7 @@ struct Parser{
 	}
 	
 	std::unique_ptr<PolylineElement> parsePolylineElement(const pugi::xml_node& n){
-		ASSERT(getNamespace(n.name()).ns == EXmlNamespace::SVG)
+		ASSERT(getNamespace(n.name()).ns == XmlNamespace_e::SVG)
 		ASSERT(getNamespace(n.name()).name == "polyline")
 		
 		auto ret = utki::makeUnique<PolylineElement>();
@@ -525,7 +525,7 @@ struct Parser{
 		for(auto a = n.first_attribute(); !a.empty(); a = a.next_attribute()){
 			auto nsn = this->getNamespace(a.name());
 			switch(nsn.ns){
-				case EXmlNamespace::SVG:
+				case XmlNamespace_e::SVG:
 					if(nsn.name == "points"){
 						ret->points = ret->parse(a.value());
 					}
@@ -539,7 +539,7 @@ struct Parser{
 	}
 	
 	std::unique_ptr<PolygonElement> parsePolygonElement(const pugi::xml_node& n){
-		ASSERT(getNamespace(n.name()).ns == EXmlNamespace::SVG)
+		ASSERT(getNamespace(n.name()).ns == XmlNamespace_e::SVG)
 		ASSERT(getNamespace(n.name()).name == "polygon")
 		
 		auto ret = utki::makeUnique<PolygonElement>();
@@ -549,7 +549,7 @@ struct Parser{
 		for(auto a = n.first_attribute(); !a.empty(); a = a.next_attribute()){
 			auto nsn = this->getNamespace(a.name());
 			switch(nsn.ns){
-				case EXmlNamespace::SVG:
+				case XmlNamespace_e::SVG:
 					if(nsn.name == "points"){
 						ret->points = ret->parse(a.value());
 					}
@@ -563,7 +563,7 @@ struct Parser{
 	}
 	
 	std::unique_ptr<EllipseElement> parseEllipseElement(const pugi::xml_node& n){
-		ASSERT(getNamespace(n.name()).ns == EXmlNamespace::SVG)
+		ASSERT(getNamespace(n.name()).ns == XmlNamespace_e::SVG)
 		ASSERT(getNamespace(n.name()).name == "ellipse")
 		
 		auto ret = utki::makeUnique<EllipseElement>();
@@ -573,7 +573,7 @@ struct Parser{
 		for(auto a = n.first_attribute(); !a.empty(); a = a.next_attribute()){
 			auto nsn = this->getNamespace(a.name());
 			switch(nsn.ns){
-				case EXmlNamespace::SVG:
+				case XmlNamespace_e::SVG:
 					if(nsn.name == "cx"){
 						ret->cx = Length::parse(a.value());
 					}else if(nsn.name == "cy"){
@@ -593,7 +593,7 @@ struct Parser{
 	}
 	
 	std::unique_ptr<LinearGradientElement> parseLinearGradientElement(const pugi::xml_node& n){
-		ASSERT(getNamespace(n.name()).ns == EXmlNamespace::SVG)
+		ASSERT(getNamespace(n.name()).ns == XmlNamespace_e::SVG)
 		ASSERT(getNamespace(n.name()).name == "linearGradient")
 		
 		auto ret = utki::makeUnique<LinearGradientElement>();
@@ -603,7 +603,7 @@ struct Parser{
 		for(auto a = n.first_attribute(); !a.empty(); a = a.next_attribute()){
 			auto nsn = this->getNamespace(a.name());
 			switch(nsn.ns){
-				case EXmlNamespace::SVG:
+				case XmlNamespace_e::SVG:
 					if(nsn.name == "x1"){
 						ret->x1 = Length::parse(a.value());
 					}else if(nsn.name == "y1"){
@@ -623,7 +623,7 @@ struct Parser{
 	}
 	
 	std::unique_ptr<RadialGradientElement> parseRadialGradientElement(const pugi::xml_node& n){
-		ASSERT(getNamespace(n.name()).ns == EXmlNamespace::SVG)
+		ASSERT(getNamespace(n.name()).ns == XmlNamespace_e::SVG)
 		ASSERT(getNamespace(n.name()).name == "radialGradient")
 		
 		auto ret = utki::makeUnique<RadialGradientElement>();
@@ -633,7 +633,7 @@ struct Parser{
 		for(auto a = n.first_attribute(); !a.empty(); a = a.next_attribute()){
 			auto nsn = this->getNamespace(a.name());
 			switch(nsn.ns){
-				case EXmlNamespace::SVG:
+				case XmlNamespace_e::SVG:
 					if(nsn.name == "cx"){
 						ret->cx = Length::parse(a.value());
 					}else if(nsn.name == "cy"){
@@ -662,13 +662,13 @@ std::unique_ptr<svgdom::Element> Parser::parseNode(const pugi::xml_node& n){
 		pugi::xml_attribute dn = n.attribute("xmlns");
 		if(!dn.empty()){
 			if(std::string(dn.value()) == DSvgNamespace){
-				this->defaultNamespace.push_back(EXmlNamespace::SVG);
+				this->defaultNamespace.push_back(XmlNamespace_e::SVG);
 			}else{
-				this->defaultNamespace.push_back(EXmlNamespace::UNKNOWN);
+				this->defaultNamespace.push_back(XmlNamespace_e::UNKNOWN);
 			}
 		}else{
 			if(this->defaultNamespace.size() == 0){
-				this->defaultNamespace.push_back(EXmlNamespace::UNKNOWN);
+				this->defaultNamespace.push_back(XmlNamespace_e::UNKNOWN);
 			}else{
 				this->defaultNamespace.push_back(this->defaultNamespace.back());
 			}
@@ -692,9 +692,9 @@ std::unique_ptr<svgdom::Element> Parser::parseNode(const pugi::xml_node& n){
 			auto ns = attr.substr(xmlns.length(), attr.length() - xmlns.length());
 			
 			if(DSvgNamespace == a.value()){
-				this->namespaces.back()[ns] = EXmlNamespace::SVG;
+				this->namespaces.back()[ns] = XmlNamespace_e::SVG;
 			}else if(DXlinkNamespace == a.value()){
-				this->namespaces.back()[ns] = EXmlNamespace::XLINK;
+				this->namespaces.back()[ns] = XmlNamespace_e::XLINK;
 			}
 		}
 	}
@@ -708,7 +708,7 @@ std::unique_ptr<svgdom::Element> Parser::parseNode(const pugi::xml_node& n){
 	
 	auto nsn = getNamespace(n.name());
 	switch(nsn.ns){
-		case EXmlNamespace::SVG:
+		case XmlNamespace_e::SVG:
 			if(nsn.name == "svg"){
 				return this->parseSvgElement(n);
 			}else if(nsn.name == "g"){
@@ -821,25 +821,25 @@ Length Length::parse(const std::string& str) {
 	ss >> std::setw(2) >> u >> std::setw(0);
 	
 	if(u.length() == 0){
-		ret.unit = Length::EUnit::NUMBER;
+		ret.unit = Length::Unit_e::NUMBER;
 	}else if(u == "%"){
-		ret.unit = Length::EUnit::PERCENT;
+		ret.unit = Length::Unit_e::PERCENT;
 	}else if(u == "em"){
-		ret.unit = Length::EUnit::EM;
+		ret.unit = Length::Unit_e::EM;
 	}else if(u == "ex"){
-		ret.unit = Length::EUnit::EX;
+		ret.unit = Length::Unit_e::EX;
 	}else if(u == "px"){
-		ret.unit = Length::EUnit::PX;
+		ret.unit = Length::Unit_e::PX;
 	}else if(u == "cm"){
-		ret.unit = Length::EUnit::CM;
+		ret.unit = Length::Unit_e::CM;
 	}else if(u == "in"){
-		ret.unit = Length::EUnit::IN;
+		ret.unit = Length::Unit_e::IN;
 	}else if(u == "pt"){
-		ret.unit = Length::EUnit::PT;
+		ret.unit = Length::Unit_e::PT;
 	}else if(u == "pc"){
-		ret.unit = Length::EUnit::PC;
+		ret.unit = Length::Unit_e::PC;
 	}else{
-		ret.unit = Length::EUnit::UNKNOWN;
+		ret.unit = Length::Unit_e::UNKNOWN;
 	}
 	
 	return ret;
@@ -851,32 +851,32 @@ std::ostream& operator<<(std::ostream& s, const Length& l){
 	s << l.value;
 	
 	switch(l.unit){
-		case Length::EUnit::UNKNOWN:
-		case Length::EUnit::NUMBER:
+		case Length::Unit_e::UNKNOWN:
+		case Length::Unit_e::NUMBER:
 		default:
 			break;
-		case Length::EUnit::PERCENT:
+		case Length::Unit_e::PERCENT:
 			s << "%";
 			break;
-		case Length::EUnit::EM:
+		case Length::Unit_e::EM:
 			s << "em";
 			break;
-		case Length::EUnit::EX:
+		case Length::Unit_e::EX:
 			s << "ex";
 			break;
-		case Length::EUnit::PX:
+		case Length::Unit_e::PX:
 			s << "px";
 			break;
-		case Length::EUnit::CM:
+		case Length::Unit_e::CM:
 			s << "cm";
 			break;
-		case Length::EUnit::IN:
+		case Length::Unit_e::IN:
 			s << "in";
 			break;
-		case Length::EUnit::PT:
+		case Length::Unit_e::PT:
 			s << "pt";
 			break;
-		case Length::EUnit::PC:
+		case Length::Unit_e::PC:
 			s << "pc";
 			break;
 	}
@@ -903,11 +903,11 @@ void Rectangle::attribsToStream(std::ostream& s)const{
 		s << " y=\"" << this->y << "\"";
 	}
 	
-	if(this->width.value != 100 || this->width.unit != Length::EUnit::PERCENT){ //if width is not 100% (default value)
+	if(this->width.value != 100 || this->width.unit != Length::Unit_e::PERCENT){ //if width is not 100% (default value)
 		s << " width=\"" << this->width << "\"";
 	}
 	
-	if(this->height.value != 100 || this->height.unit != Length::EUnit::PERCENT){ //if height is not 100% (default value)
+	if(this->height.value != 100 || this->height.unit != Length::Unit_e::PERCENT){ //if height is not 100% (default value)
 		s << " height=\"" << this->height << "\"";
 	}
 }
@@ -1009,7 +1009,7 @@ void Styleable::attribsToStream(std::ostream& s) const{
 			s << "; ";
 		}
 		
-		ASSERT(st.first != EStyleProperty::UNKNOWN)
+		ASSERT(st.first != StyleProperty_e::UNKNOWN)
 		
 		s << propertyToString(st.first) << ":";
 		
@@ -1017,45 +1017,45 @@ void Styleable::attribsToStream(std::ostream& s) const{
 			default:
 				ASSERT(false)
 				break;
-			case EStyleProperty::STOP_OPACITY:
-			case EStyleProperty::OPACITY:
-			case EStyleProperty::STROKE_OPACITY:
-			case EStyleProperty::FILL_OPACITY:
+			case StyleProperty_e::STOP_OPACITY:
+			case StyleProperty_e::OPACITY:
+			case StyleProperty_e::STROKE_OPACITY:
+			case StyleProperty_e::FILL_OPACITY:
 				s << st.second.opacity;
 				break;
-			case EStyleProperty::STOP_COLOR:
-			case EStyleProperty::FILL:
-			case EStyleProperty::STROKE:
+			case StyleProperty_e::STOP_COLOR:
+			case StyleProperty_e::FILL:
+			case StyleProperty_e::STROKE:
 				s << st.second.paintToString();
 				break;
-			case EStyleProperty::STROKE_WIDTH:
+			case StyleProperty_e::STROKE_WIDTH:
 				s << st.second.length;
 				break;
-			case EStyleProperty::STROKE_LINECAP:
+			case StyleProperty_e::STROKE_LINECAP:
 				switch(st.second.strokeLineCap){
 					default:
 						ASSERT(false)
 						break;
-					case EStrokeLineCap::BUTT:
+					case StrokeLineCap_e::BUTT:
 						s << "butt";
 						break;
-					case EStrokeLineCap::ROUND:
+					case StrokeLineCap_e::ROUND:
 						s << "round";
 						break;
-					case EStrokeLineCap::SQUARE:
+					case StrokeLineCap_e::SQUARE:
 						s << "square";
 						break;
 				}
 				break;
-			case EStyleProperty::FILL_RULE:
+			case StyleProperty_e::FILL_RULE:
 				switch(st.second.fillRule){
 					default:
 						ASSERT(false)
 						break;
-					case EFillRule::EVENODD:
+					case FillRule_e::EVENODD:
 						s << "evenodd";
 						break;
-					case EFillRule::NONZERO:
+					case FillRule_e::NONZERO:
 						s << "nonzero";
 						break;
 				}
@@ -1080,34 +1080,34 @@ void Transformable::transformationsToStream(std::ostream& s) const {
 			default:
 				ASSERT(false)
 				break;
-			case Transformation::EType::MATRIX:
+			case Transformation::Type_e::MATRIX:
 				s << "matrix(" << t.a << "," << t.b << "," << t.c << "," << t.d << "," << t.e << "," << t.f << ")";
 				break;
-			case Transformation::EType::TRANSLATE:
+			case Transformation::Type_e::TRANSLATE:
 				s << "translate(" << t.x;
 				if(t.y != 0){
 					s << "," << t.y;
 				}
 				s << ")";
 				break;
-			case Transformation::EType::SCALE:
+			case Transformation::Type_e::SCALE:
 				s << "scale(" << t.x;
 				if(t.x != t.y){
 					s << "," << t.y;
 				}
 				s << ")";
 				break;
-			case Transformation::EType::ROTATE:
+			case Transformation::Type_e::ROTATE:
 				s << "rotate(" << t.angle;
 				if(t.x != 0 || t.y != 0){
 					s << "," << t.x << "," << t.y;
 				}
 				s << ")";
 				break;
-			case Transformation::EType::SKEWX:
+			case Transformation::Type_e::SKEWX:
 				s << "skewX(" << t.angle << ")";
 				break;
-			case Transformation::EType::SKEWY:
+			case Transformation::Type_e::SKEWY:
 				s << "skewY(" << t.angle << ")";
 				break;
 		}
@@ -1137,17 +1137,17 @@ decltype(Transformable::transformations) Transformable::parse(const std::string&
 		Transformation t;
 		
 		if(transform == "matrix"){
-			t.type = Transformation::EType::MATRIX;
+			t.type = Transformation::Type_e::MATRIX;
 		}else if(transform == "translate"){
-			t.type = Transformation::EType::TRANSLATE;
+			t.type = Transformation::Type_e::TRANSLATE;
 		}else if(transform == "scale"){
-			t.type = Transformation::EType::SCALE;
+			t.type = Transformation::Type_e::SCALE;
 		}else if(transform == "rotate"){
-			t.type = Transformation::EType::ROTATE;
+			t.type = Transformation::Type_e::ROTATE;
 		}else if(transform == "skewX"){
-			t.type = Transformation::EType::SKEWX;
+			t.type = Transformation::Type_e::SKEWX;
 		}else if(transform == "skewY"){
-			t.type = Transformation::EType::SKEWY;
+			t.type = Transformation::Type_e::SKEWY;
 		}else{
 			return ret;//unknown transformation, stop parsing
 		}
@@ -1160,7 +1160,7 @@ decltype(Transformable::transformations) Transformable::parse(const std::string&
 			default:
 				ASSERT(false)
 				break;
-			case Transformation::EType::MATRIX:
+			case Transformation::Type_e::MATRIX:
 				s >> t.a;
 				if(s.fail()){
 					return ret;
@@ -1191,7 +1191,7 @@ decltype(Transformable::transformations) Transformable::parse(const std::string&
 					return ret;
 				}
 				break;
-			case Transformation::EType::TRANSLATE:
+			case Transformation::Type_e::TRANSLATE:
 				s >> t.x;
 				if(s.fail()){
 					return ret;
@@ -1203,7 +1203,7 @@ decltype(Transformable::transformations) Transformable::parse(const std::string&
 					t.y = 0;
 				}
 				break;
-			case Transformation::EType::SCALE:
+			case Transformation::Type_e::SCALE:
 				s >> t.x;
 				if(s.fail()){
 					return ret;
@@ -1215,7 +1215,7 @@ decltype(Transformable::transformations) Transformable::parse(const std::string&
 					t.y = t.x;
 				}
 				break;
-			case Transformation::EType::ROTATE:
+			case Transformation::Type_e::ROTATE:
 				s >> t.angle;
 				if(s.fail()){
 					return ret;
@@ -1234,8 +1234,8 @@ decltype(Transformable::transformations) Transformable::parse(const std::string&
 					}
 				}
 				break;
-			case Transformation::EType::SKEWY:
-			case Transformation::EType::SKEWX:
+			case Transformation::Type_e::SKEWY:
+			case Transformation::Type_e::SKEWX:
 				s >> t.angle;
 				if(s.fail()){
 					return ret;
@@ -1255,56 +1255,56 @@ decltype(Transformable::transformations) Transformable::parse(const std::string&
 	return ret;
 }
 
-EStyleProperty Styleable::stringToProperty(std::string str){
+StyleProperty_e Styleable::stringToProperty(std::string str){
 	if(str == "fill"){
-		return EStyleProperty::FILL;
+		return StyleProperty_e::FILL;
 	}else if(str == "fill-opacity"){
-		return EStyleProperty::FILL_OPACITY;
+		return StyleProperty_e::FILL_OPACITY;
 	}else if(str == "stroke"){
-		return EStyleProperty::STROKE;
+		return StyleProperty_e::STROKE;
 	}else if(str == "stroke-width"){
-		return EStyleProperty::STROKE_WIDTH;
+		return StyleProperty_e::STROKE_WIDTH;
 	}else if(str == "stroke-linecap"){
-		return EStyleProperty::STROKE_LINECAP;
+		return StyleProperty_e::STROKE_LINECAP;
 	}else if(str == "stroke-opacity"){
-		return EStyleProperty::STROKE_OPACITY;
+		return StyleProperty_e::STROKE_OPACITY;
 	}else if(str == "opacity"){
-		return EStyleProperty::OPACITY;
+		return StyleProperty_e::OPACITY;
 	}else if(str == "stop-opacity"){
-		return EStyleProperty::STOP_OPACITY;
+		return StyleProperty_e::STOP_OPACITY;
 	}else if(str == "stop-color"){
-		return EStyleProperty::STOP_COLOR;
+		return StyleProperty_e::STOP_COLOR;
 	}else if(str == "fill-rule"){
-		return EStyleProperty::FILL_RULE;
+		return StyleProperty_e::FILL_RULE;
 	}
 	
-	return EStyleProperty::UNKNOWN;
+	return StyleProperty_e::UNKNOWN;
 }
 
-std::string Styleable::propertyToString(EStyleProperty p){
+std::string Styleable::propertyToString(StyleProperty_e p){
 	switch(p){
 		default:
 			ASSERT(false)
 			return "";
-		case EStyleProperty::FILL:
+		case StyleProperty_e::FILL:
 			return "fill";
-		case EStyleProperty::FILL_OPACITY:
+		case StyleProperty_e::FILL_OPACITY:
 			return "fill-opacity";
-		case EStyleProperty::STROKE:
+		case StyleProperty_e::STROKE:
 			return "stroke";
-		case EStyleProperty::STROKE_WIDTH:
+		case StyleProperty_e::STROKE_WIDTH:
 			return "stroke-width";
-		case EStyleProperty::STROKE_LINECAP:
+		case StyleProperty_e::STROKE_LINECAP:
 			return "stroke-linecap";
-		case EStyleProperty::STROKE_OPACITY:
+		case StyleProperty_e::STROKE_OPACITY:
 			return "stroke-opacity";
-		case EStyleProperty::OPACITY:
+		case StyleProperty_e::OPACITY:
 			return "opacity";
-		case EStyleProperty::STOP_OPACITY:
+		case StyleProperty_e::STOP_OPACITY:
 			return "stop-opacity";
-		case EStyleProperty::STOP_COLOR:
+		case StyleProperty_e::STOP_COLOR:
 			return "stop-color";
-		case EStyleProperty::FILL_RULE:
+		case StyleProperty_e::FILL_RULE:
 			return "fill-rule";
 	}
 }
@@ -1321,9 +1321,9 @@ decltype(Styleable::styles) Styleable::parse(const std::string& str){
 		skipWhitespaces(s);
 		std::string property = readTillCharOrWhitespace(s, ':');
 		
-		EStyleProperty type = Styleable::stringToProperty(property);
+		StyleProperty_e type = Styleable::stringToProperty(property);
 		
-		if(type == EStyleProperty::UNKNOWN){
+		if(type == StyleProperty_e::UNKNOWN){
 			//unknown style property, skip it
 			TRACE(<< "Unknown style property: " << property << std::endl)
 			skipTillCharInclusive(s, ';');
@@ -1508,7 +1508,7 @@ StylePropertyValue StylePropertyValue::parsePaint(const std::string& str){
 	StylePropertyValue ret;
 	
 	if(str.size() == 0){
-		ret.rule = StylePropertyValue::ERule::NONE;
+		ret.rule = StylePropertyValue::Rule_e::NONE;
 		return ret;
 	}
 	
@@ -1518,7 +1518,7 @@ StylePropertyValue StylePropertyValue::parsePaint(const std::string& str){
 	{
 		const std::string cmp = "none";
 		if(cmp == str.substr(0, cmp.length())){
-			ret.rule = StylePropertyValue::ERule::NONE;
+			ret.rule = StylePropertyValue::Rule_e::NONE;
 			return ret;
 		}
 	}
@@ -1555,7 +1555,7 @@ StylePropertyValue StylePropertyValue::parsePaint(const std::string& str){
 						| (std::uint32_t(d[4]) << 20) | (std::uint32_t(d[5]) << 16);
 				break;
 			default:
-				ret.rule = StylePropertyValue::ERule::NONE;
+				ret.rule = StylePropertyValue::Rule_e::NONE;
 				break;
 		}
 		
@@ -1606,7 +1606,7 @@ StylePropertyValue StylePropertyValue::parsePaint(const std::string& str){
 			skipWhitespaces(s);
 			if(s.get() == ')'){
 				ret.str = tmpStr;
-				ret.rule = StylePropertyValue::ERule::URL;
+				ret.rule = StylePropertyValue::Rule_e::URL;
 				ret.url = nullptr;
 				return ret;
 			}
@@ -1634,11 +1634,11 @@ StylePropertyValue StylePropertyValue::parsePaint(const std::string& str){
 std::string StylePropertyValue::paintToString()const{
 	switch(this->rule){
 		default:
-		case ERule::NONE:
+		case Rule_e::NONE:
 			return "none";
-		case ERule::INHERIT:
+		case Rule_e::INHERIT:
 			return "inherit";
-		case ERule::NORMAL:
+		case Rule_e::NORMAL:
 			if(this->str.size() == 0){
 				//it is a # notation
 
@@ -1685,7 +1685,7 @@ void PathElement::attribsToStream(std::ostream& s) const{
 	
 	s << " d=\"";
 	
-	Step::EType curType = Step::EType::UNKNOWN;
+	Step::Type_e curType = Step::Type_e::UNKNOWN;
 	
 	for(auto& step : this->path){
 		if(curType == step.type){
@@ -1696,26 +1696,26 @@ void PathElement::attribsToStream(std::ostream& s) const{
 		}
 		
 		switch(step.type){
-			case Step::EType::MOVE_ABS:
-			case Step::EType::MOVE_REL:
-			case Step::EType::LINE_ABS:
-			case Step::EType::LINE_REL:
+			case Step::Type_e::MOVE_ABS:
+			case Step::Type_e::MOVE_REL:
+			case Step::Type_e::LINE_ABS:
+			case Step::Type_e::LINE_REL:
 				s << step.x;
 				s << ",";
 				s << step.y;
 				break;
-			case Step::EType::CLOSE:
+			case Step::Type_e::CLOSE:
 				break;
-			case Step::EType::HORIZONTAL_LINE_ABS:
-			case Step::EType::HORIZONTAL_LINE_REL:
+			case Step::Type_e::HORIZONTAL_LINE_ABS:
+			case Step::Type_e::HORIZONTAL_LINE_REL:
 				s << step.x;
 				break;
-			case Step::EType::VERTICAL_LINE_ABS:
-			case Step::EType::VERTICAL_LINE_REL:
+			case Step::Type_e::VERTICAL_LINE_ABS:
+			case Step::Type_e::VERTICAL_LINE_REL:
 				s << step.y;
 				break;
-			case Step::EType::CUBIC_ABS:
-			case Step::EType::CUBIC_REL:
+			case Step::Type_e::CUBIC_ABS:
+			case Step::Type_e::CUBIC_REL:
 				s << step.x1;
 				s << ",";
 				s << step.y1;
@@ -1728,8 +1728,8 @@ void PathElement::attribsToStream(std::ostream& s) const{
 				s << ",";
 				s << step.y;
 				break;
-			case Step::EType::CUBIC_SMOOTH_ABS:
-			case Step::EType::CUBIC_SMOOTH_REL:
+			case Step::Type_e::CUBIC_SMOOTH_ABS:
+			case Step::Type_e::CUBIC_SMOOTH_REL:
 				s << step.x2;
 				s << ",";
 				s << step.y2;
@@ -1738,8 +1738,8 @@ void PathElement::attribsToStream(std::ostream& s) const{
 				s << ",";
 				s << step.y;
 				break;
-			case Step::EType::QUADRATIC_ABS:
-			case Step::EType::QUADRATIC_REL:
+			case Step::Type_e::QUADRATIC_ABS:
+			case Step::Type_e::QUADRATIC_REL:
 				s << step.x1;
 				s << ",";
 				s << step.y1;
@@ -1748,14 +1748,14 @@ void PathElement::attribsToStream(std::ostream& s) const{
 				s << ",";
 				s << step.y;
 				break;
-			case Step::EType::QUADRATIC_SMOOTH_ABS:
-			case Step::EType::QUADRATIC_SMOOTH_REL:
+			case Step::Type_e::QUADRATIC_SMOOTH_ABS:
+			case Step::Type_e::QUADRATIC_SMOOTH_REL:
 				s << step.x;
 				s << ",";
 				s << step.y;
 				break;
-			case Step::EType::ARC_ABS:
-			case Step::EType::ARC_REL:
+			case Step::Type_e::ARC_ABS:
+			case Step::Type_e::ARC_REL:
 				s << step.rx;
 				s << ",";
 				s << step.ry;
@@ -1779,45 +1779,45 @@ void PathElement::attribsToStream(std::ostream& s) const{
 	s << "\"";
 }
 
-char PathElement::Step::typeToChar(EType t){
+char PathElement::Step::typeToChar(Type_e t){
 	switch(t){
-		case Step::EType::MOVE_ABS:
+		case Step::Type_e::MOVE_ABS:
 			return 'M';
-		case Step::EType::MOVE_REL:
+		case Step::Type_e::MOVE_REL:
 			return 'm';
-		case Step::EType::LINE_ABS:
+		case Step::Type_e::LINE_ABS:
 			return 'L';
-		case Step::EType::LINE_REL:
+		case Step::Type_e::LINE_REL:
 			return 'l';
-		case Step::EType::CLOSE:
+		case Step::Type_e::CLOSE:
 			return 'z';
-		case Step::EType::HORIZONTAL_LINE_ABS:
+		case Step::Type_e::HORIZONTAL_LINE_ABS:
 			return 'H';
-		case Step::EType::HORIZONTAL_LINE_REL:
+		case Step::Type_e::HORIZONTAL_LINE_REL:
 			return 'h';
-		case Step::EType::VERTICAL_LINE_ABS:
+		case Step::Type_e::VERTICAL_LINE_ABS:
 			return 'V';
-		case Step::EType::VERTICAL_LINE_REL:
+		case Step::Type_e::VERTICAL_LINE_REL:
 			return 'v';
-		case Step::EType::CUBIC_ABS:
+		case Step::Type_e::CUBIC_ABS:
 			return 'C';
-		case Step::EType::CUBIC_REL:
+		case Step::Type_e::CUBIC_REL:
 			return 'c';
-		case Step::EType::CUBIC_SMOOTH_ABS:
+		case Step::Type_e::CUBIC_SMOOTH_ABS:
 			return 'S';
-		case Step::EType::CUBIC_SMOOTH_REL:
+		case Step::Type_e::CUBIC_SMOOTH_REL:
 			return 's';
-		case Step::EType::QUADRATIC_ABS:
+		case Step::Type_e::QUADRATIC_ABS:
 			return 'Q';
-		case Step::EType::QUADRATIC_REL:
+		case Step::Type_e::QUADRATIC_REL:
 			return 'q';
-		case Step::EType::QUADRATIC_SMOOTH_ABS:
+		case Step::Type_e::QUADRATIC_SMOOTH_ABS:
 			return 'T';
-		case Step::EType::QUADRATIC_SMOOTH_REL:
+		case Step::Type_e::QUADRATIC_SMOOTH_REL:
 			return 't';
-		case Step::EType::ARC_ABS:
+		case Step::Type_e::ARC_ABS:
 			return 'A';
-		case Step::EType::ARC_REL:
+		case Step::Type_e::ARC_REL:
 			return 'a';
 		default:
 			ASSERT(false)
@@ -1826,49 +1826,49 @@ char PathElement::Step::typeToChar(EType t){
 }
 
 
-PathElement::Step::EType PathElement::Step::charToType(char c){
+PathElement::Step::Type_e PathElement::Step::charToType(char c){
 	switch(c){
 		case 'M':
-			return Step::EType::MOVE_ABS;
+			return Step::Type_e::MOVE_ABS;
 		case 'm':
-			return Step::EType::MOVE_REL;
+			return Step::Type_e::MOVE_REL;
 		case 'z':
 		case 'Z':
-			return Step::EType::CLOSE;
+			return Step::Type_e::CLOSE;
 		case 'L':
-			return Step::EType::LINE_ABS;
+			return Step::Type_e::LINE_ABS;
 		case 'l':
-			return Step::EType::LINE_REL;
+			return Step::Type_e::LINE_REL;
 		case 'H':
-			return Step::EType::HORIZONTAL_LINE_ABS;
+			return Step::Type_e::HORIZONTAL_LINE_ABS;
 		case 'h':
-			return Step::EType::HORIZONTAL_LINE_REL;
+			return Step::Type_e::HORIZONTAL_LINE_REL;
 		case 'V':
-			return Step::EType::VERTICAL_LINE_ABS;
+			return Step::Type_e::VERTICAL_LINE_ABS;
 		case 'v':
-			return Step::EType::VERTICAL_LINE_REL;
+			return Step::Type_e::VERTICAL_LINE_REL;
 		case 'C':
-			return Step::EType::CUBIC_ABS;
+			return Step::Type_e::CUBIC_ABS;
 		case 'c':
-			return Step::EType::CUBIC_REL;
+			return Step::Type_e::CUBIC_REL;
 		case 'S':
-			return Step::EType::CUBIC_SMOOTH_ABS;
+			return Step::Type_e::CUBIC_SMOOTH_ABS;
 		case 's':
-			return Step::EType::CUBIC_SMOOTH_REL;
+			return Step::Type_e::CUBIC_SMOOTH_REL;
 		case 'Q':
-			return Step::EType::QUADRATIC_ABS;
+			return Step::Type_e::QUADRATIC_ABS;
 		case 'q':
-			return Step::EType::QUADRATIC_REL;
+			return Step::Type_e::QUADRATIC_REL;
 		case 'T':
-			return Step::EType::QUADRATIC_SMOOTH_ABS;
+			return Step::Type_e::QUADRATIC_SMOOTH_ABS;
 		case 't':
-			return Step::EType::QUADRATIC_SMOOTH_REL;
+			return Step::Type_e::QUADRATIC_SMOOTH_REL;
 		case 'A':
-			return Step::EType::ARC_ABS;
+			return Step::Type_e::ARC_ABS;
 		case 'a':
-			return Step::EType::ARC_REL;
+			return Step::Type_e::ARC_REL;
 		default:
-			return Step::EType::UNKNOWN;
+			return Step::Type_e::UNKNOWN;
 	}
 }
 
@@ -1907,22 +1907,22 @@ decltype(PathElement::path) PathElement::parse(const std::string& str){
 	
 	skipWhitespaces(s);
 	
-	Step::EType curType = Step::EType::UNKNOWN;
+	Step::Type_e curType = Step::Type_e::UNKNOWN;
 	
 	while(!s.eof()){
 		ASSERT(!std::isspace(s.peek()))//spaces should be skept
 		
 		{
 			auto t = Step::charToType(s.peek());
-			if(t != Step::EType::UNKNOWN){
+			if(t != Step::Type_e::UNKNOWN){
 				curType = t;
 				s.get();
-			}else if(curType == Step::EType::UNKNOWN){
-				curType = Step::EType::MOVE_ABS;
-			}else if(curType == Step::EType::MOVE_ABS){
-				curType = Step::EType::LINE_ABS;
-			}else if(curType == Step::EType::MOVE_REL){
-				curType = Step::EType::LINE_REL;
+			}else if(curType == Step::Type_e::UNKNOWN){
+				curType = Step::Type_e::MOVE_ABS;
+			}else if(curType == Step::Type_e::MOVE_ABS){
+				curType = Step::Type_e::LINE_ABS;
+			}else if(curType == Step::Type_e::MOVE_REL){
+				curType = Step::Type_e::LINE_REL;
 			}
 		}
 		
@@ -1932,10 +1932,10 @@ decltype(PathElement::path) PathElement::parse(const std::string& str){
 		step.type = curType;
 		
 		switch(step.type){
-			case Step::EType::MOVE_ABS:
-			case Step::EType::MOVE_REL:
-			case Step::EType::LINE_ABS:
-			case Step::EType::LINE_REL:
+			case Step::Type_e::MOVE_ABS:
+			case Step::Type_e::MOVE_REL:
+			case Step::Type_e::LINE_ABS:
+			case Step::Type_e::LINE_REL:
 				s >> step.x;
 				if(s.fail()){
 					return ret;
@@ -1946,24 +1946,24 @@ decltype(PathElement::path) PathElement::parse(const std::string& str){
 					return ret;
 				}
 				break;
-			case Step::EType::CLOSE:
+			case Step::Type_e::CLOSE:
 				break;
-			case Step::EType::HORIZONTAL_LINE_ABS:
-			case Step::EType::HORIZONTAL_LINE_REL:
+			case Step::Type_e::HORIZONTAL_LINE_ABS:
+			case Step::Type_e::HORIZONTAL_LINE_REL:
 				s >> step.x;
 				if(s.fail()){
 					return ret;
 				}
 				break;
-			case Step::EType::VERTICAL_LINE_ABS:
-			case Step::EType::VERTICAL_LINE_REL:
+			case Step::Type_e::VERTICAL_LINE_ABS:
+			case Step::Type_e::VERTICAL_LINE_REL:
 				s >> step.y;
 				if(s.fail()){
 					return ret;
 				}
 				break;
-			case Step::EType::CUBIC_ABS:
-			case Step::EType::CUBIC_REL:
+			case Step::Type_e::CUBIC_ABS:
+			case Step::Type_e::CUBIC_REL:
 				s >> step.x1;
 				if(s.fail()){
 					return ret;
@@ -1994,8 +1994,8 @@ decltype(PathElement::path) PathElement::parse(const std::string& str){
 					return ret;
 				}
 				break;
-			case Step::EType::CUBIC_SMOOTH_ABS:
-			case Step::EType::CUBIC_SMOOTH_REL:
+			case Step::Type_e::CUBIC_SMOOTH_ABS:
+			case Step::Type_e::CUBIC_SMOOTH_REL:
 				s >> step.x2;
 				if(s.fail()){
 					return ret;
@@ -2016,8 +2016,8 @@ decltype(PathElement::path) PathElement::parse(const std::string& str){
 					return ret;
 				}
 				break;
-			case Step::EType::QUADRATIC_ABS:
-			case Step::EType::QUADRATIC_REL:
+			case Step::Type_e::QUADRATIC_ABS:
+			case Step::Type_e::QUADRATIC_REL:
 				s >> step.x1;
 				if(s.fail()){
 					return ret;
@@ -2038,8 +2038,8 @@ decltype(PathElement::path) PathElement::parse(const std::string& str){
 					return ret;
 				}
 				break;
-			case Step::EType::QUADRATIC_SMOOTH_ABS:
-			case Step::EType::QUADRATIC_SMOOTH_REL:
+			case Step::Type_e::QUADRATIC_SMOOTH_ABS:
+			case Step::Type_e::QUADRATIC_SMOOTH_REL:
 				s >> step.x;
 				if(s.fail()){
 					return ret;
@@ -2050,8 +2050,8 @@ decltype(PathElement::path) PathElement::parse(const std::string& str){
 					return ret;
 				}
 				break;
-			case Step::EType::ARC_ABS:
-			case Step::EType::ARC_REL:
+			case Step::Type_e::ARC_ABS:
+			case Step::Type_e::ARC_REL:
 				s >> step.rx;
 				if(s.fail()){
 					return ret;
@@ -2163,17 +2163,17 @@ Rgb StylePropertyValue::getRgb() const{
 }
 
 namespace{
-const std::set<EStyleProperty> nonInheritedStyleProoperties = {
-	EStyleProperty::OPACITY
+const std::set<StyleProperty_e> nonInheritedStyleProoperties = {
+	StyleProperty_e::OPACITY
 	//TODO: check if there are other non-inherited properties
 };
 }//~namespace
 
-const StylePropertyValue* Element::getStyleProperty(EStyleProperty property, bool explicitInherit) const{
+const StylePropertyValue* Element::getStyleProperty(StyleProperty_e property, bool explicitInherit) const{
 	if(auto styleable = dynamic_cast<const Styleable*>(this)){
 		auto i = styleable->styles.find(property);
 		if(i != styleable->styles.end()){
-			if(i->second.rule == StylePropertyValue::ERule::INHERIT){
+			if(i->second.rule == StylePropertyValue::Rule_e::INHERIT){
 				explicitInherit = true;
 			}else{
 				return &i->second;
@@ -2192,28 +2192,28 @@ const StylePropertyValue* Element::getStyleProperty(EStyleProperty property, boo
 	return this->parent->getStyleProperty(property, explicitInherit);
 }
 
-Gradient::ESpreadMethod Gradient::stringToSpreadMethod(const std::string& str) {
+Gradient::SpreadMethod_e Gradient::stringToSpreadMethod(const std::string& str) {
 	if(str == "pad"){
-		return ESpreadMethod::PAD;
+		return SpreadMethod_e::PAD;
 	}else if(str == "reflect"){
-		return ESpreadMethod::REFLECT;
+		return SpreadMethod_e::REFLECT;
 	}else if(str == "repeat"){
-		return ESpreadMethod::REPEAT;
+		return SpreadMethod_e::REPEAT;
 	}
-	return ESpreadMethod::DEFAULT;
+	return SpreadMethod_e::DEFAULT;
 }
 
-std::string Gradient::spreadMethodToString(ESpreadMethod sm) {
+std::string Gradient::spreadMethodToString(SpreadMethod_e sm) {
 	switch(sm){
 		default:
 			ASSERT_INFO(false, "sm = " << unsigned(sm))
-		case ESpreadMethod::DEFAULT:
+		case SpreadMethod_e::DEFAULT:
 			return "";
-		case ESpreadMethod::PAD:
+		case SpreadMethod_e::PAD:
 			return "pad";
-		case ESpreadMethod::REFLECT:
+		case SpreadMethod_e::REFLECT:
 			return "reflect";
-		case ESpreadMethod::REPEAT:
+		case SpreadMethod_e::REPEAT:
 			return "repeat";
 	}
 }
@@ -2224,19 +2224,19 @@ void LinearGradientElement::toStream(std::ostream& s, unsigned indent) const {
 	s << ind << "<linearGradient";
 	this->Gradient::attribsToStream(s);
 	
-	if(this->x1.unit != Length::EUnit::PERCENT || this->x1.value != 0){
+	if(this->x1.unit != Length::Unit_e::PERCENT || this->x1.value != 0){
 		s << " x1=\"" << this->x1 << "\"";
 	}
 	
-	if(this->y1.unit != Length::EUnit::PERCENT || this->y1.value != 0){
+	if(this->y1.unit != Length::Unit_e::PERCENT || this->y1.value != 0){
 		s << " y1=\"" << this->y1 << "\"";
 	}
 	
-	if(this->x2.unit != Length::EUnit::PERCENT || this->x2.value != 100){
+	if(this->x2.unit != Length::Unit_e::PERCENT || this->x2.value != 100){
 		s << " x2=\"" << this->x2 << "\"";
 	}
 	
-	if(this->y2.unit != Length::EUnit::PERCENT || this->y2.value != 0){
+	if(this->y2.unit != Length::Unit_e::PERCENT || this->y2.value != 0){
 		s << " y2=\"" << this->y2 << "\"";
 	}
 	
@@ -2256,23 +2256,23 @@ void RadialGradientElement::toStream(std::ostream& s, unsigned indent) const {
 	s << ind << "<radialGradient";
 	this->Gradient::attribsToStream(s);
 	
-	if(this->cx.unit != Length::EUnit::PERCENT || this->cx.value != 50){
+	if(this->cx.unit != Length::Unit_e::PERCENT || this->cx.value != 50){
 		s << " cx=\"" << this->cx << "\"";
 	}
 	
-	if(this->cy.unit != Length::EUnit::PERCENT || this->cy.value != 50){
+	if(this->cy.unit != Length::Unit_e::PERCENT || this->cy.value != 50){
 		s << " cy=\"" << this->cy << "\"";
 	}
 	
-	if(this->r.unit != Length::EUnit::PERCENT || this->r.value != 50){
+	if(this->r.unit != Length::Unit_e::PERCENT || this->r.value != 50){
 		s << " r=\"" << this->r << "\"";
 	}
 	
-	if(this->fx.unit != Length::EUnit::UNKNOWN){
+	if(this->fx.unit != Length::Unit_e::UNKNOWN){
 		s << " fx=\"" << this->fx << "\"";
 	}
 	
-	if(this->fy.unit != Length::EUnit::UNKNOWN){
+	if(this->fy.unit != Length::Unit_e::UNKNOWN){
 		s << " fy=\"" << this->fy << "\"";
 	}
 	
@@ -2291,12 +2291,12 @@ void Gradient::attribsToStream(std::ostream& s)const{
 	this->Referencing::attribsToStream(s);
 	this->Styleable::attribsToStream(s);
 	
-	if(this->spreadMethod != ESpreadMethod::DEFAULT){
+	if(this->spreadMethod != SpreadMethod_e::DEFAULT){
 		s << " spreadMethod=\"" << Gradient::spreadMethodToString(this->spreadMethod) << "\"";
 	}
 	
-	if(this->units != EUnits::OBJECT_BOUNDING_BOX){
-		ASSERT(this->units == EUnits::USER_SPACE_ON_USE)
+	if(this->units != Units_e::OBJECT_BOUNDING_BOX){
+		ASSERT(this->units == Units_e::USER_SPACE_ON_USE)
 		s << " gradientUnits=\"userSpaceOnUse\"";
 	}
 	
@@ -2352,7 +2352,7 @@ Element* Container::findById(const std::string& elementId) {
 	return nullptr;
 }
 
-Length Length::make(real value, EUnit unit) noexcept {
+Length Length::make(real value, Unit_e unit) noexcept {
 	Length ret;
 	
 	ret.unit = unit;
@@ -2364,15 +2364,15 @@ Length Length::make(real value, EUnit unit) noexcept {
 void CircleElement::attribsToStream(std::ostream& s) const {
 	this->Shape::attribsToStream(s);
 	
-	if(this->cx.unit != Length::EUnit::UNKNOWN){
+	if(this->cx.unit != Length::Unit_e::UNKNOWN){
 		s << " cx=\"" << this->cx << "\"";
 	}
 	
-	if(this->cy.unit != Length::EUnit::UNKNOWN){
+	if(this->cy.unit != Length::Unit_e::UNKNOWN){
 		s << " cy=\"" << this->cy << "\"";
 	}
 	
-	if(this->r.unit != Length::EUnit::UNKNOWN){
+	if(this->r.unit != Length::Unit_e::UNKNOWN){
 		s << " r=\"" << this->r << "\"";
 	}
 }
@@ -2382,19 +2382,19 @@ void CircleElement::attribsToStream(std::ostream& s) const {
 void EllipseElement::attribsToStream(std::ostream& s) const {
 	this->Shape::attribsToStream(s);
 	
-	if(this->cx.unit != Length::EUnit::UNKNOWN){
+	if(this->cx.unit != Length::Unit_e::UNKNOWN){
 		s << " cx=\"" << this->cx << "\"";
 	}
 	
-	if(this->cy.unit != Length::EUnit::UNKNOWN){
+	if(this->cy.unit != Length::Unit_e::UNKNOWN){
 		s << " cy=\"" << this->cy << "\"";
 	}
 	
-	if(this->rx.unit != Length::EUnit::UNKNOWN){
+	if(this->rx.unit != Length::Unit_e::UNKNOWN){
 		s << " rx=\"" << this->rx << "\"";
 	}
 	
-	if(this->ry.unit != Length::EUnit::UNKNOWN){
+	if(this->ry.unit != Length::Unit_e::UNKNOWN){
 		s << " ry=\"" << this->ry << "\"";
 	}
 }
@@ -2402,19 +2402,19 @@ void EllipseElement::attribsToStream(std::ostream& s) const {
 void LineElement::attribsToStream(std::ostream& s) const {
 	this->Shape::attribsToStream(s);
 	
-	if(this->x1.unit != Length::EUnit::UNKNOWN){
+	if(this->x1.unit != Length::Unit_e::UNKNOWN){
 		s << " x1=\"" << this->x1 << "\"";
 	}
 	
-	if(this->y1.unit != Length::EUnit::UNKNOWN){
+	if(this->y1.unit != Length::Unit_e::UNKNOWN){
 		s << " y1=\"" << this->y1 << "\"";
 	}
 	
-	if(this->x2.unit != Length::EUnit::UNKNOWN){
+	if(this->x2.unit != Length::Unit_e::UNKNOWN){
 		s << " x2=\"" << this->x2 << "\"";
 	}
 	
-	if(this->y2.unit != Length::EUnit::UNKNOWN){
+	if(this->y2.unit != Length::Unit_e::UNKNOWN){
 		s << " y2=\"" << this->y2 << "\"";
 	}
 }
@@ -2441,11 +2441,11 @@ void RectElement::attribsToStream(std::ostream& s) const {
 	this->Shape::attribsToStream(s);
 	this->Rectangle::attribsToStream(s);
 	
-	if(this->rx.unit != Length::EUnit::UNKNOWN){
+	if(this->rx.unit != Length::Unit_e::UNKNOWN){
 		s << " rx=\"" << this->rx << "\"";
 	}
 	
-	if(this->ry.unit != Length::EUnit::UNKNOWN){
+	if(this->ry.unit != Length::Unit_e::UNKNOWN){
 		s << " ry=\"" << this->ry << "\"";
 	}
 }
@@ -2518,12 +2518,12 @@ void PolygonElement::toStream(std::ostream& s, unsigned indent) const {
 }
 
 
-Gradient::ESpreadMethod Gradient::getSpreadMethod() const noexcept{
-	if(this->spreadMethod != ESpreadMethod::DEFAULT){
+Gradient::SpreadMethod_e Gradient::getSpreadMethod() const noexcept{
+	if(this->spreadMethod != SpreadMethod_e::DEFAULT){
 		return this->spreadMethod;
 	}
 	
-	ASSERT(this->spreadMethod == ESpreadMethod::DEFAULT)
+	ASSERT(this->spreadMethod == SpreadMethod_e::DEFAULT)
 	
 	if(this->ref){
 		if(auto g = dynamic_cast<Gradient*>(this->ref)){
@@ -2531,7 +2531,7 @@ Gradient::ESpreadMethod Gradient::getSpreadMethod() const noexcept{
 		}
 	}
 	
-	return ESpreadMethod::PAD;
+	return SpreadMethod_e::PAD;
 }
 
 const decltype(Container::children)& Gradient::getStops() const noexcept{
@@ -2548,7 +2548,7 @@ const decltype(Container::children)& Gradient::getStops() const noexcept{
 }
 
 Length LinearGradientElement::getX1() const noexcept{
-	if(this->x1.unit != Length::EUnit::UNKNOWN){
+	if(this->x1.unit != Length::Unit_e::UNKNOWN){
 		return this->x1;
 	}
 	
@@ -2557,11 +2557,11 @@ Length LinearGradientElement::getX1() const noexcept{
 			return g->getX1();
 		}
 	}
-	return Length::make(0, Length::EUnit::PERCENT);
+	return Length::make(0, Length::Unit_e::PERCENT);
 }
 
 Length LinearGradientElement::getX2() const noexcept{
-	if(this->x2.unit != Length::EUnit::UNKNOWN){
+	if(this->x2.unit != Length::Unit_e::UNKNOWN){
 		return this->x2;
 	}
 	
@@ -2570,11 +2570,11 @@ Length LinearGradientElement::getX2() const noexcept{
 			return g->getX2();
 		}
 	}
-	return Length::make(100, Length::EUnit::PERCENT);
+	return Length::make(100, Length::Unit_e::PERCENT);
 }
 
 Length LinearGradientElement::getY1() const noexcept{
-	if(this->y1.unit != Length::EUnit::UNKNOWN){
+	if(this->y1.unit != Length::Unit_e::UNKNOWN){
 		return this->y1;
 	}
 	
@@ -2583,11 +2583,11 @@ Length LinearGradientElement::getY1() const noexcept{
 			return g->getY1();
 		}
 	}
-	return Length::make(0, Length::EUnit::PERCENT);
+	return Length::make(0, Length::Unit_e::PERCENT);
 }
 
 Length LinearGradientElement::getY2() const noexcept{
-	if(this->y2.unit != Length::EUnit::UNKNOWN){
+	if(this->y2.unit != Length::Unit_e::UNKNOWN){
 		return this->y2;
 	}
 	
@@ -2596,11 +2596,11 @@ Length LinearGradientElement::getY2() const noexcept{
 			return g->getY2();
 		}
 	}
-	return Length::make(0, Length::EUnit::PERCENT);
+	return Length::make(0, Length::Unit_e::PERCENT);
 }
 
 Length RadialGradientElement::getCx() const noexcept{
-	if(this->cx.unit != Length::EUnit::UNKNOWN){
+	if(this->cx.unit != Length::Unit_e::UNKNOWN){
 		return this->cx;
 	}
 	
@@ -2609,11 +2609,11 @@ Length RadialGradientElement::getCx() const noexcept{
 			return g->getCx();
 		}
 	}
-	return Length::make(50, Length::EUnit::PERCENT);
+	return Length::make(50, Length::Unit_e::PERCENT);
 }
 
 Length RadialGradientElement::getCy() const noexcept{
-	if(this->cy.unit != Length::EUnit::UNKNOWN){
+	if(this->cy.unit != Length::Unit_e::UNKNOWN){
 		return this->cy;
 	}
 	
@@ -2622,11 +2622,11 @@ Length RadialGradientElement::getCy() const noexcept{
 			return g->getCy();
 		}
 	}
-	return Length::make(50, Length::EUnit::PERCENT);
+	return Length::make(50, Length::Unit_e::PERCENT);
 }
 
 Length RadialGradientElement::getR() const noexcept{
-	if(this->r.unit != Length::EUnit::UNKNOWN){
+	if(this->r.unit != Length::Unit_e::UNKNOWN){
 		return this->r;
 	}
 	
@@ -2635,11 +2635,11 @@ Length RadialGradientElement::getR() const noexcept{
 			return g->getR();
 		}
 	}
-	return Length::make(50, Length::EUnit::PERCENT);
+	return Length::make(50, Length::Unit_e::PERCENT);
 }
 
 Length RadialGradientElement::getFx() const noexcept{
-	if(this->fx.unit != Length::EUnit::UNKNOWN){
+	if(this->fx.unit != Length::Unit_e::UNKNOWN){
 		return this->fx;
 	}
 	
@@ -2648,11 +2648,11 @@ Length RadialGradientElement::getFx() const noexcept{
 			return g->getFx();
 		}
 	}
-	return Length::make(0, Length::EUnit::UNKNOWN);
+	return Length::make(0, Length::Unit_e::UNKNOWN);
 }
 
 Length RadialGradientElement::getFy() const noexcept{
-	if(this->fy.unit != Length::EUnit::UNKNOWN){
+	if(this->fy.unit != Length::Unit_e::UNKNOWN){
 		return this->fy;
 	}
 	
@@ -2661,7 +2661,7 @@ Length RadialGradientElement::getFy() const noexcept{
 			return g->getFy();
 		}
 	}
-	return Length::make(0, Length::EUnit::UNKNOWN);
+	return Length::make(0, Length::Unit_e::UNKNOWN);
 }
 
 decltype(SvgElement::viewBox) SvgElement::parseViewbox(const std::string& str) {
@@ -2683,55 +2683,55 @@ decltype(SvgElement::viewBox) SvgElement::parseViewbox(const std::string& str) {
 
 namespace{
 
-EPreserveAspectRatio stringToPreserveAspectRatio(const std::string& str){
+PreserveAspectRatio_e stringToPreserveAspectRatio(const std::string& str){
 	if(str == "none"){
-		return EPreserveAspectRatio::NONE;
+		return PreserveAspectRatio_e::NONE;
 	}else if(str == "xMinYMin"){
-		return EPreserveAspectRatio::X_MIN_Y_MIN;
+		return PreserveAspectRatio_e::X_MIN_Y_MIN;
 	}else if(str == "xMidYMin"){
-		return EPreserveAspectRatio::X_MID_Y_MIN;
+		return PreserveAspectRatio_e::X_MID_Y_MIN;
 	}else if(str == "xMaxYMin"){
-		return EPreserveAspectRatio::X_MAX_Y_MIN;
+		return PreserveAspectRatio_e::X_MAX_Y_MIN;
 	}else if(str == "xMinYMid"){
-		return EPreserveAspectRatio::X_MIN_Y_MID;
+		return PreserveAspectRatio_e::X_MIN_Y_MID;
 	}else if(str == "xMidYMid"){
-		return EPreserveAspectRatio::X_MID_Y_MID;
+		return PreserveAspectRatio_e::X_MID_Y_MID;
 	}else if(str == "xMaxYMid"){
-		return EPreserveAspectRatio::X_MAX_Y_MID;
+		return PreserveAspectRatio_e::X_MAX_Y_MID;
 	}else if(str == "xMinYMax"){
-		return EPreserveAspectRatio::X_MIN_Y_MAX;
+		return PreserveAspectRatio_e::X_MIN_Y_MAX;
 	}else if(str == "xMidYMax"){
-		return EPreserveAspectRatio::X_MID_Y_MAX;
+		return PreserveAspectRatio_e::X_MID_Y_MAX;
 	}else if(str == "xMaxYMax"){
-		return EPreserveAspectRatio::X_MAX_Y_MAX;
+		return PreserveAspectRatio_e::X_MAX_Y_MAX;
 	}
-	return EPreserveAspectRatio::NONE;
+	return PreserveAspectRatio_e::NONE;
 }
 
-std::string preserveAspectRatioToString(EPreserveAspectRatio par){
+std::string preserveAspectRatioToString(PreserveAspectRatio_e par){
 	switch(par){
 		default:
 			ASSERT(false)
 			return std::string();
-		case EPreserveAspectRatio::NONE:
+		case PreserveAspectRatio_e::NONE:
 			return "none";
-		case EPreserveAspectRatio::X_MIN_Y_MIN:
+		case PreserveAspectRatio_e::X_MIN_Y_MIN:
 			return "xMinYMin";
-		case EPreserveAspectRatio::X_MID_Y_MIN:
+		case PreserveAspectRatio_e::X_MID_Y_MIN:
 			return "xMidYMin";
-		case EPreserveAspectRatio::X_MAX_Y_MIN:
+		case PreserveAspectRatio_e::X_MAX_Y_MIN:
 			return "xMaxYMin";
-		case EPreserveAspectRatio::X_MIN_Y_MID:
+		case PreserveAspectRatio_e::X_MIN_Y_MID:
 			return "xMinYMid";
-		case EPreserveAspectRatio::X_MID_Y_MID:
+		case PreserveAspectRatio_e::X_MID_Y_MID:
 			return "xMidYMid";
-		case EPreserveAspectRatio::X_MAX_Y_MID:
+		case PreserveAspectRatio_e::X_MAX_Y_MID:
 			return "xMaxYMid";
-		case EPreserveAspectRatio::X_MIN_Y_MAX:
+		case PreserveAspectRatio_e::X_MIN_Y_MAX:
 			return "xMinYMax";
-		case EPreserveAspectRatio::X_MID_Y_MAX:
+		case PreserveAspectRatio_e::X_MID_Y_MAX:
 			return "xMidYMax";
-		case EPreserveAspectRatio::X_MAX_Y_MAX:
+		case PreserveAspectRatio_e::X_MAX_Y_MAX:
 			return "xMaxYMax";
 	}
 }
@@ -2794,7 +2794,7 @@ void SvgElement::attribsToStream(std::ostream& s) const {
 		s << "\"";
 	}
 	
-	if(this->preserveAspectRatio.preserve != EPreserveAspectRatio::NONE || this->preserveAspectRatio.defer || this->preserveAspectRatio.slice){
+	if(this->preserveAspectRatio.preserve != PreserveAspectRatio_e::NONE || this->preserveAspectRatio.defer || this->preserveAspectRatio.slice){
 		s << " preserveAspectRatio=\"";
 		if(this->preserveAspectRatio.defer){
 			s << "defer ";
@@ -2813,12 +2813,12 @@ real Length::toPx(real dpi) const noexcept{
 	switch(this->unit){
 		default:
 			return 0;
-		case svgdom::Length::EUnit::NUMBER:
-		case svgdom::Length::EUnit::PX:
+		case svgdom::Length::Unit_e::NUMBER:
+		case svgdom::Length::Unit_e::PX:
 			return this->value;
-		case svgdom::Length::EUnit::IN:
+		case svgdom::Length::Unit_e::IN:
 			return this->value * dpi;
-		case svgdom::Length::EUnit::CM:
+		case svgdom::Length::Unit_e::CM:
 			if(dpi <= 0){
 				return 0;
 			}

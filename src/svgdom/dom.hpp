@@ -30,7 +30,7 @@
 namespace svgdom{
 
 struct Length{
-	enum class EUnit{
+	enum class Unit_e{
 		UNKNOWN,
 		NUMBER,
 		PERCENT,
@@ -44,18 +44,18 @@ struct Length{
 	};
 
 	real value;
-	EUnit unit;
+	Unit_e unit;
 	
 	static Length parse(const std::string& str);
 	
-	static Length make(real value, EUnit unit = EUnit::NUMBER)noexcept;
+	static Length make(real value, Unit_e unit = Unit_e::NUMBER)noexcept;
 	
 	bool isValid()const noexcept{
-		return this->unit != EUnit::UNKNOWN;
+		return this->unit != Unit_e::UNKNOWN;
 	}
 	
 	bool isPercent()const noexcept{
-		return this->unit == EUnit::PERCENT;
+		return this->unit == Unit_e::PERCENT;
 	}
 	
 	real toPx(real dpi)const noexcept;
@@ -66,7 +66,7 @@ class Renderer;
 struct Container;
 struct Element;
 
-enum class EStyleProperty{
+enum class StyleProperty_e{
 	UNKNOWN,
 	FONT,
 	FONT_FAMILY,
@@ -139,43 +139,43 @@ struct Rgb{
 	real r, g, b;
 };
 
-enum class EStrokeLineCap{
+enum class StrokeLineCap_e{
 	BUTT,
 	ROUND,
 	SQUARE
 };
 
-enum class EFillRule{
+enum class FillRule_e{
 	NONZERO,
 	EVENODD
 };
 
 struct StylePropertyValue{
-	enum class ERule{
+	enum class Rule_e{
 		NORMAL,
 		NONE, //for color property (e.g. fill, stroke, etc.) means that color is 'none'
 		INHERIT, //means that property inheritance was explicitly stated
 		URL //means that "str" member holds URL
-	} rule = ERule::NORMAL;
+	} rule = Rule_e::NORMAL;
 	
 	bool isNormal()const noexcept{
-		return this->rule == ERule::NORMAL;
+		return this->rule == Rule_e::NORMAL;
 	}
 	
 	bool isNone()const noexcept{
-		return this->rule == ERule::NONE;
+		return this->rule == Rule_e::NONE;
 	}
 	
 	bool isUrl()const noexcept{
-		return this->rule == ERule::URL;
+		return this->rule == Rule_e::URL;
 	}
 	
 	union{
 		std::uint32_t color;
 		real opacity;
 		Length length;
-		EStrokeLineCap strokeLineCap;
-		EFillRule fillRule;
+		StrokeLineCap_e strokeLineCap;
+		FillRule_e fillRule;
 		
 		/**
 		 * @brief reference to another element.
@@ -226,7 +226,7 @@ struct Element : public utki::Unique{
      * @return pointer to the property value.
 	 * @return nullptr in case property was not found.
      */
-	const StylePropertyValue* getStyleProperty(EStyleProperty property, bool explicitInherit = false)const;
+	const StylePropertyValue* getStyleProperty(StyleProperty_e property, bool explicitInherit = false)const;
 	
 	/**
 	 * @brief Find element by its id.
@@ -266,7 +266,7 @@ struct Referencing{
  */
 struct Transformable{
 	struct Transformation{
-		enum class EType{
+		enum class Type_e{
 			MATRIX,
 			TRANSLATE,
 			SCALE,
@@ -301,14 +301,14 @@ struct Transformable{
  * @brief An element which has 'style' attribute or can be styled.
  */
 struct Styleable{
-	std::map<EStyleProperty, StylePropertyValue> styles;
+	std::map<StyleProperty_e, StylePropertyValue> styles;
 	
 	void attribsToStream(std::ostream& s)const;
 	
 	static decltype(styles) parse(const std::string& str);
 	
-	static std::string propertyToString(EStyleProperty p);
-	static EStyleProperty stringToProperty(std::string str);
+	static std::string propertyToString(StyleProperty_e p);
+	static StyleProperty_e stringToProperty(std::string str);
 };
 
 struct GElement : public Container, public Transformable, public Styleable{
@@ -325,15 +325,15 @@ struct DefsElement : public Container, public Transformable, public Styleable{
  * @brief A rectangular element.
  */
 struct Rectangle{
-	Length x = Length::make(0, Length::EUnit::PERCENT);
-	Length y = Length::make(0, Length::EUnit::PERCENT);
-	Length width = Length::make(100, Length::EUnit::PERCENT);
-	Length height = Length::make(100, Length::EUnit::PERCENT);
+	Length x = Length::make(0, Length::Unit_e::PERCENT);
+	Length y = Length::make(0, Length::Unit_e::PERCENT);
+	Length width = Length::make(100, Length::Unit_e::PERCENT);
+	Length height = Length::make(100, Length::Unit_e::PERCENT);
 	
 	void attribsToStream(std::ostream& s)const;
 };
 
-enum class EPreserveAspectRatio{
+enum class PreserveAspectRatio_e{
 	NONE,
 	X_MIN_Y_MIN,
 	X_MID_Y_MIN,
@@ -351,7 +351,7 @@ struct SvgElement : public Container, public Rectangle{
 	std::array<real, 4> viewBox = {{-1, -1, -1, -1}};
 	
 	struct{
-		EPreserveAspectRatio preserve = EPreserveAspectRatio::NONE;
+		PreserveAspectRatio_e preserve = PreserveAspectRatio_e::NONE;
 		bool defer = false;
 		bool slice = false;
 	} preserveAspectRatio;
@@ -384,7 +384,7 @@ struct Shape : public Element, public Styleable, public Transformable{
 
 struct PathElement : public Shape{
 	struct Step{
-		enum class EType{
+		enum class Type_e{
 			UNKNOWN,
 			CLOSE,
 			MOVE_ABS,
@@ -432,8 +432,8 @@ struct PathElement : public Shape{
 			} flags;
 		};
 		
-		static EType charToType(char c);
-		static char typeToChar(EType t);
+		static Type_e charToType(char c);
+		static char typeToChar(Type_e t);
 	};
 	std::vector<Step> path;
 	
@@ -447,8 +447,8 @@ struct PathElement : public Shape{
 };
 
 struct RectElement : public Shape, public Rectangle{
-	Length rx = Length::make(0, Length::EUnit::UNKNOWN);
-	Length ry = Length::make(0, Length::EUnit::UNKNOWN);
+	Length rx = Length::make(0, Length::Unit_e::UNKNOWN);
+	Length ry = Length::make(0, Length::Unit_e::UNKNOWN);
 	
 	void attribsToStream(std::ostream& s)const;
 	
@@ -458,9 +458,9 @@ struct RectElement : public Shape, public Rectangle{
 };
 
 struct CircleElement : public Shape{
-	Length cx = Length::make(0, Length::EUnit::UNKNOWN);
-	Length cy = Length::make(0, Length::EUnit::UNKNOWN);
-	Length r = Length::make(0, Length::EUnit::UNKNOWN);
+	Length cx = Length::make(0, Length::Unit_e::UNKNOWN);
+	Length cy = Length::make(0, Length::Unit_e::UNKNOWN);
+	Length r = Length::make(0, Length::Unit_e::UNKNOWN);
 	
 	void attribsToStream(std::ostream& s)const;
 	
@@ -470,10 +470,10 @@ struct CircleElement : public Shape{
 };
 
 struct EllipseElement : public Shape{
-	Length cx = Length::make(0, Length::EUnit::UNKNOWN);
-	Length cy = Length::make(0, Length::EUnit::UNKNOWN);
-	Length rx = Length::make(0, Length::EUnit::UNKNOWN);
-	Length ry = Length::make(0, Length::EUnit::UNKNOWN);
+	Length cx = Length::make(0, Length::Unit_e::UNKNOWN);
+	Length cy = Length::make(0, Length::Unit_e::UNKNOWN);
+	Length rx = Length::make(0, Length::Unit_e::UNKNOWN);
+	Length ry = Length::make(0, Length::Unit_e::UNKNOWN);
 	
 	void attribsToStream(std::ostream& s)const;
 	
@@ -483,10 +483,10 @@ struct EllipseElement : public Shape{
 };
 
 struct LineElement : public Shape{
-	Length x1 = Length::make(0, Length::EUnit::UNKNOWN);
-	Length y1 = Length::make(0, Length::EUnit::UNKNOWN);
-	Length x2 = Length::make(0, Length::EUnit::UNKNOWN);
-	Length y2 = Length::make(0, Length::EUnit::UNKNOWN);
+	Length x1 = Length::make(0, Length::Unit_e::UNKNOWN);
+	Length y1 = Length::make(0, Length::Unit_e::UNKNOWN);
+	Length x2 = Length::make(0, Length::Unit_e::UNKNOWN);
+	Length y2 = Length::make(0, Length::Unit_e::UNKNOWN);
 	
 	void attribsToStream(std::ostream& s)const;
 	
@@ -521,25 +521,25 @@ struct PolygonElement : public PolylineShape{
  * @brief Common base for gradient elements.
  */
 struct Gradient : public Container, public Referencing, public Styleable, public Transformable{
-	enum class ESpreadMethod{
+	enum class SpreadMethod_e{
 		DEFAULT,
 		PAD,
 		REFLECT,
 		REPEAT
-	} spreadMethod = ESpreadMethod::DEFAULT;
+	} spreadMethod = SpreadMethod_e::DEFAULT;
 	
-	static std::string spreadMethodToString(ESpreadMethod sm);
-	static ESpreadMethod stringToSpreadMethod(const std::string& str);
+	static std::string spreadMethodToString(SpreadMethod_e sm);
+	static SpreadMethod_e stringToSpreadMethod(const std::string& str);
 	
-	ESpreadMethod getSpreadMethod()const noexcept;
+	SpreadMethod_e getSpreadMethod()const noexcept;
 	
-	enum class EUnits{
+	enum class Units_e{
 		USER_SPACE_ON_USE,
 		OBJECT_BOUNDING_BOX
-	} units = EUnits::OBJECT_BOUNDING_BOX;
+	} units = Units_e::OBJECT_BOUNDING_BOX;
 	
 	bool isBoundingBoxUnits()const noexcept{
-		return this->units == EUnits::OBJECT_BOUNDING_BOX;
+		return this->units == Units_e::OBJECT_BOUNDING_BOX;
 	}
 	
 	struct StopElement : public Styleable, public Element{
@@ -554,10 +554,10 @@ struct Gradient : public Container, public Referencing, public Styleable, public
 };
 
 struct LinearGradientElement : public Gradient{
-	Length x1 = Length::make(0, Length::EUnit::UNKNOWN);
-	Length y1 = Length::make(0, Length::EUnit::UNKNOWN);
-	Length x2 = Length::make(100, Length::EUnit::UNKNOWN);
-	Length y2 = Length::make(0, Length::EUnit::UNKNOWN);
+	Length x1 = Length::make(0, Length::Unit_e::UNKNOWN);
+	Length y1 = Length::make(0, Length::Unit_e::UNKNOWN);
+	Length x2 = Length::make(100, Length::Unit_e::UNKNOWN);
+	Length y2 = Length::make(0, Length::Unit_e::UNKNOWN);
 	
 	Length getX1()const noexcept;
 	Length getY1()const noexcept;
@@ -568,11 +568,11 @@ struct LinearGradientElement : public Gradient{
 };
 
 struct RadialGradientElement : public Gradient{
-	Length cx = Length::make(50, Length::EUnit::UNKNOWN);
-	Length cy = Length::make(50, Length::EUnit::UNKNOWN);
-	Length r = Length::make(50, Length::EUnit::UNKNOWN);
-	Length fx = Length::make(50, Length::EUnit::UNKNOWN);
-	Length fy = Length::make(50, Length::EUnit::UNKNOWN);
+	Length cx = Length::make(50, Length::Unit_e::UNKNOWN);
+	Length cy = Length::make(50, Length::Unit_e::UNKNOWN);
+	Length r = Length::make(50, Length::Unit_e::UNKNOWN);
+	Length fx = Length::make(50, Length::Unit_e::UNKNOWN);
+	Length fy = Length::make(50, Length::Unit_e::UNKNOWN);
 	
 	Length getCx()const noexcept;
 	Length getCy()const noexcept;
