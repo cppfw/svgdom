@@ -145,6 +145,12 @@ enum class StrokeLineCap_e{
 	SQUARE
 };
 
+enum class StrokeLineJoin_e{
+	MITER,
+	ROUND,
+	BEVEL
+};
+
 enum class FillRule_e{
 	NONZERO,
 	EVENODD
@@ -175,6 +181,7 @@ struct StylePropertyValue{
 		real opacity;
 		Length length;
 		StrokeLineCap_e strokeLineCap;
+		StrokeLineJoin_e strokeLineJoin;
 		FillRule_e fillRule;
 		
 		/**

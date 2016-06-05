@@ -123,6 +123,20 @@ StylePropertyValue parsePropertyValue(StyleProperty_e type, std::istream& s){
 				}
 			}
 			break;
+		case StyleProperty_e::STROKE_LINEJOIN:
+			{
+				auto str = readTillCharOrWhitespace(s, ';');
+				if(str == "miter"){
+					v.strokeLineJoin = StrokeLineJoin_e::MITER;
+				}else if(str == "round"){
+					v.strokeLineJoin = StrokeLineJoin_e::ROUND;
+				}else if(str == "bevel"){
+					v.strokeLineJoin = StrokeLineJoin_e::BEVEL;
+				}else{
+					TRACE(<< "unknown strokeLineJoin value:" << str << std::endl)
+				}
+			}
+			break;
 		case StyleProperty_e::FILL_RULE:
 			{
 				auto str = readTillCharOrWhitespace(s, ';');
@@ -1047,6 +1061,22 @@ void Styleable::attribsToStream(std::ostream& s) const{
 						break;
 				}
 				break;
+			case StyleProperty_e::STROKE_LINEJOIN:
+				switch(st.second.strokeLineJoin){
+					default:
+						ASSERT(false)
+						break;
+					case StrokeLineJoin_e::MITER:
+						s << "miter";
+						break;
+					case StrokeLineJoin_e::ROUND:
+						s << "round";
+						break;
+					case StrokeLineJoin_e::BEVEL:
+						s << "bevel";
+						break;
+				}
+				break;
 			case StyleProperty_e::FILL_RULE:
 				switch(st.second.fillRule){
 					default:
@@ -1266,6 +1296,8 @@ StyleProperty_e Styleable::stringToProperty(std::string str){
 		return StyleProperty_e::STROKE_WIDTH;
 	}else if(str == "stroke-linecap"){
 		return StyleProperty_e::STROKE_LINECAP;
+	}else if(str == "stroke-linejoin"){
+		return StyleProperty_e::STROKE_LINEJOIN;
 	}else if(str == "stroke-opacity"){
 		return StyleProperty_e::STROKE_OPACITY;
 	}else if(str == "opacity"){
@@ -1296,6 +1328,8 @@ std::string Styleable::propertyToString(StyleProperty_e p){
 			return "stroke-width";
 		case StyleProperty_e::STROKE_LINECAP:
 			return "stroke-linecap";
+		case StyleProperty_e::STROKE_LINEJOIN:
+			return "stroke-linejoin";
 		case StyleProperty_e::STROKE_OPACITY:
 			return "stroke-opacity";
 		case StyleProperty_e::OPACITY:

@@ -1,3 +1,9 @@
+libsvgdom (0.2.7) stable; urgency=medium
+
+  * add stroke-linejoin style support
+
+ -- Ivan Gagis <igagis@gmail.com>  Sun, 05 Jun 2016 14:20:51 +0300
+
 libsvgdom (0.2.6) stable; urgency=medium
 
   * fix build

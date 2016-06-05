@@ -6,7 +6,6 @@
 
 
 int main(int argc, char** argv){
-
 	auto dom = svgdom::load(papki::FSFile("tiger.svg"));
 	
 	ASSERT_ALWAYS(dom)

@@ -38,7 +38,8 @@
         <rebuildPropChanged>false</rebuildPropChanged>
       </toolsSet>
       <flagsDictionary>
-        <element flagsID="0" commonFlags="-funsigned-char -std=c++11 -fPIC"/>
+        <element flagsID="0"
+                 commonFlags="-mtune=generic -march=x86-64 -std=c++11 -funsigned-char -fPIC"/>
         <element flagsID="1" commonFlags="-std=c++11"/>
       </flagsDictionary>
       <codeAssistance>
@@ -51,9 +52,6 @@
           <executablePath>tests/parse/tests</executablePath>
           <ccTool>
             <standard>8</standard>
-            <incDir>
-              <pElem>.</pElem>
-            </incDir>
           </ccTool>
         </makeTool>
         <preBuild>
@@ -61,8 +59,21 @@
           <preBuildCommand></preBuildCommand>
         </preBuild>
       </makefileType>
+      <folder path="0">
+        <ccTool>
+          <incDir>
+            <pElem>/usr/include/utki</pElem>
+            <pElem>src/svgdom</pElem>
+            <pElem>/usr/include/papki</pElem>
+            <pElem>.</pElem>
+          </incDir>
+        </ccTool>
+      </folder>
       <folder path="1">
         <ccTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
           <preprocessorList>
             <Elem>DEBUG</Elem>
           </preprocessorList>
