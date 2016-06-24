@@ -9,6 +9,8 @@
 #include <sstream>
 #include <iomanip>
 #include <cctype>
+#include <cmath>
+#include <ratio>
 
 using namespace svgdom;
 
@@ -2851,12 +2853,12 @@ real Length::toPx(real dpi) const noexcept{
 		case svgdom::Length::Unit_e::PX:
 			return this->value;
 		case svgdom::Length::Unit_e::IN:
-			return this->value * dpi;
+			return std::ceil(this->value * dpi);
 		case svgdom::Length::Unit_e::CM:
 			if(dpi <= 0){
 				return 0;
 			}
-			return this->value * (dpi / real(2.54));
+			return std::ceil(this->value * (dpi / real(2.54)));
 	}
 }
 

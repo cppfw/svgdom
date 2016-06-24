@@ -1,3 +1,9 @@
+libsvgdom (0.2.8) unstable; urgency=medium
+
+  * use ceil() when converting in/cm to pixels
+
+ -- Ivan Gagis <igagis@gmail.com>  Fri, 24 Jun 2016 23:21:14 +0300
+
 libsvgdom (0.2.7) stable; urgency=medium
 
   * add stroke-linejoin style support
