@@ -28,25 +28,25 @@ nuget{
 		
 		[x86,release] { 
 			lib: ..\msvs_solution\Release\libsvgdom.lib;
-			symbols: ..\msvs_solution\Release\libsvgdom.pdb;
+//			symbols: ..\msvs_solution\Release\libsvgdom.pdb;
 //			bin: ..\msvs_solution\Release\libsvgdom.dll;
 		}
 
 		[x86,debug] { 
 			lib: ..\msvs_solution\Debug\libsvgdom.lib;
-			symbols: ..\msvs_solution\Debug\libsvgdom.pdb;
+//			symbols: ..\msvs_solution\Debug\libsvgdom.pdb;
 //			bin: ..\msvs_solution\Debug\libsvgdom.dll;
 		}
 
 		[x64,release] { 
 			lib: ..\msvs_solution\x64\Release\libsvgdom.lib;
-			symbols: ..\msvs_solution\x64\Release\libsvgdom.pdb;
+//			symbols: ..\msvs_solution\x64\Release\libsvgdom.pdb;
 //			bin: ..\msvs_solution\x64\Release\libsvgdom.dll;
 		}
 
 		[x64,debug] { 
 			lib: ..\msvs_solution\x64\Debug\libsvgdom.lib;
-			symbols: ..\msvs_solution\x64\Debug\libsvgdom.pdb;
+//			symbols: ..\msvs_solution\x64\Debug\libsvgdom.pdb;
 //			bin: ..\msvs_solution\x64\Debug\libsvgdom.dll;
 		}  
 	}
