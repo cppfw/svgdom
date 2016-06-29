@@ -1,3 +1,9 @@
+libsvgdom (0.2.11) unstable; urgency=medium
+
+  * bintray deploy fix: create new version every time
+
+ -- Ivan Gagis <igagis@gmail.com>  Wed, 29 Jun 2016 17:42:45 +0300
+
 libsvgdom (0.2.10) unstable; urgency=medium
 
   * bintray deploy fix: create new version every time
