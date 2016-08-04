@@ -24,30 +24,30 @@ nuget{
 		};
 	}
 	files {
-		include: { "..\src\**\*.hpp" };
+		//this is needed to put headers in the base folder
+		nestedInclude: {
+			#destination = ${d_include}svgdom;
+			"..\src\svgdom\**\*.hpp"
+		};
 		
 		[x86,release] { 
 			lib: ..\msvs_solution\Release\libsvgdom.lib;
 			symbols: ..\msvs_solution\libsvgdom\Release\libsvgdom.pdb;
-//			bin: ..\msvs_solution\Release\libsvgdom.dll;
 		}
 
 		[x86,debug] { 
 			lib: ..\msvs_solution\Debug\libsvgdom.lib;
 			symbols: ..\msvs_solution\libsvgdom\Debug\libsvgdom.pdb;
-//			bin: ..\msvs_solution\Debug\libsvgdom.dll;
 		}
 
 		[x64,release] { 
 			lib: ..\msvs_solution\x64\Release\libsvgdom.lib;
 			symbols: ..\msvs_solution\libsvgdom\x64\Release\libsvgdom.pdb;
-//			bin: ..\msvs_solution\x64\Release\libsvgdom.dll;
 		}
 
 		[x64,debug] { 
 			lib: ..\msvs_solution\x64\Debug\libsvgdom.lib;
 			symbols: ..\msvs_solution\libsvgdom\x64\Debug\libsvgdom.pdb;
-//			bin: ..\msvs_solution\x64\Debug\libsvgdom.dll;
 		}  
 	}
 }
