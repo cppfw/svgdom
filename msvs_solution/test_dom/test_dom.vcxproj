@@ -145,25 +145,25 @@
     <ClCompile Include="..\..\tests\parse\main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\libsvgdom\libsvgdom.vcxproj">
       <Project>{22680109-b117-4938-b07d-7b8f07b2f15a}</Project>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
-    <Import Project="..\packages\libutki.1.0.8.5\build\native\libutki.targets" Condition="Exists('..\packages\libutki.1.0.8.5\build\native\libutki.targets')" />
-    <Import Project="..\packages\libpapki.1.0.2.2\build\native\libpapki.targets" Condition="Exists('..\packages\libpapki.1.0.2.2\build\native\libpapki.targets')" />
-    <Import Project="..\packages\pugixml.1.6.0.1\build\native\pugixml.targets" Condition="Exists('..\packages\pugixml.1.6.0.1\build\native\pugixml.targets')" />
+    <Import Project="..\packages\libutki.1.0.22\build\native\libutki.targets" Condition="Exists('..\packages\libutki.1.0.22\build\native\libutki.targets')" />
+    <Import Project="..\packages\libpapki.1.0.15\build\native\libpapki.targets" Condition="Exists('..\packages\libpapki.1.0.15\build\native\libpapki.targets')" />
+    <Import Project="..\packages\pugixml.1.7.2\build\native\pugixml.targets" Condition="Exists('..\packages\pugixml.1.7.2\build\native\pugixml.targets')" />
   </ImportGroup>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\packages\libutki.1.0.8.5\build\native\libutki.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\libutki.1.0.8.5\build\native\libutki.targets'))" />
-    <Error Condition="!Exists('..\packages\libpapki.1.0.2.2\build\native\libpapki.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\libpapki.1.0.2.2\build\native\libpapki.targets'))" />
-    <Error Condition="!Exists('..\packages\pugixml.1.6.0.1\build\native\pugixml.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\pugixml.1.6.0.1\build\native\pugixml.targets'))" />
+    <Error Condition="!Exists('..\packages\libutki.1.0.22\build\native\libutki.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\libutki.1.0.22\build\native\libutki.targets'))" />
+    <Error Condition="!Exists('..\packages\libpapki.1.0.15\build\native\libpapki.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\libpapki.1.0.15\build\native\libpapki.targets'))" />
+    <Error Condition="!Exists('..\packages\pugixml.1.7.2\build\native\pugixml.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\pugixml.1.7.2\build\native\pugixml.targets'))" />
   </Target>
 </Project>

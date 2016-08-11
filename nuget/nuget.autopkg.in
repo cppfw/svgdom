@@ -13,14 +13,14 @@ nuget{
 
 		description: @"C++ SVG DOM library";
 		releaseNotes: "Initial release";
-		copyright: Copyright 2015 Ivan Gagis;
+		copyright: Copyright 2016 Ivan Gagis;
 		tags: { native};
 	}
 	dependencies {
 		packages : {
-			libutki/1.0.8.5;
-			libpapki/1.0.2.2;
-			pugixml/1.7.0;
+			libutki/1.0.22;
+			libpapki/1.0.15;
+			pugixml/1.7.2;
 		};
 	}
 	files {
@@ -32,22 +32,18 @@ nuget{
 		
 		[x86,release] { 
 			lib: ..\msvs_solution\Release\libsvgdom.lib;
-			symbols: ..\msvs_solution\libsvgdom\Release\libsvgdom.pdb;
 		}
 
 		[x86,debug] { 
 			lib: ..\msvs_solution\Debug\libsvgdom.lib;
-			symbols: ..\msvs_solution\libsvgdom\Debug\libsvgdom.pdb;
 		}
 
 		[x64,release] { 
 			lib: ..\msvs_solution\x64\Release\libsvgdom.lib;
-			symbols: ..\msvs_solution\libsvgdom\x64\Release\libsvgdom.pdb;
 		}
 
 		[x64,debug] { 
 			lib: ..\msvs_solution\x64\Debug\libsvgdom.lib;
-			symbols: ..\msvs_solution\libsvgdom\x64\Debug\libsvgdom.pdb;
 		}  
 	}
 }
