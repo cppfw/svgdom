@@ -1,3 +1,9 @@
+libsvgdom (0.2.14) unstable; urgency=medium
+
+  * nuget debug symbols
+
+ -- Ivan Gagis <igagis@gmail.com>  Thu, 11 Aug 2016 23:40:04 +0300
+
 libsvgdom (0.2.13) unstable; urgency=medium
 
   * nuget: add pdb files to package
