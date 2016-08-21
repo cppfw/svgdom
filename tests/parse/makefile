@@ -10,7 +10,7 @@ this_cxxflags += -std=c++11
 
 this_srcs += main.cpp
 
-this_ldlibs += -lsvgdom -lpapki -lpugixml
+this_ldlibs += -lsvgdom -lpapki -lpugixml -lstdc++
 this_ldflags += -L$(prorab_this_dir)../../src
 
 ifeq ($(prorab_os), macosx)
