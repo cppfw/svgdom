@@ -37,7 +37,7 @@ this_cxxflags += -g #include debugging symbols
                 #-P -E #-Wreorder
                 #-O3 -funroll-loops -fomit-frame-pointer
 
-this_ldlibs += -lpugixml -lpapki
+this_ldlibs += -lpugixml -lpapki -lstdc++
 
 ifeq ($(prorab_os),linux)
     this_cxxflags += -fPIC # Since we are building shared library, we need Position-Independend Code
