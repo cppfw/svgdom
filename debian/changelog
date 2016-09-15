@@ -1,3 +1,9 @@
+libsvgdom (0.2.18) unstable; urgency=medium
+
+  * travis bintray key fix
+
+ -- Ivan Gagis <igagis@gmail.com>  Thu, 15 Sep 2016 15:52:56 +0300
+
 libsvgdom (0.2.17) unstable; urgency=medium
 
   * deploy to debian,ununtu,raspberry
