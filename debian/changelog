@@ -1,3 +1,9 @@
+libsvgdom (0.2.17) unstable; urgency=medium
+
+  * deploy to debian,ununtu,raspberry
+
+ -- Ivan Gagis <igagis@gmail.com>  Thu, 15 Sep 2016 15:25:49 +0300
+
 libsvgdom (0.2.16) unstable; urgency=medium
 
   * link to c++
