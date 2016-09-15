@@ -1,3 +1,9 @@
+libsvgdom (0.2.19) unstable; urgency=medium
+
+  * rasp deploy fix
+
+ -- Ivan Gagis <igagis@gmail.com>  Thu, 15 Sep 2016 16:25:26 +0300
+
 libsvgdom (0.2.18) unstable; urgency=medium
 
   * travis bintray key fix
