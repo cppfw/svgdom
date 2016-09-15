@@ -848,6 +848,8 @@ Length Length::parse(const std::string& str) {
 		ret.unit = Length::Unit_e::PX;
 	}else if(u == "cm"){
 		ret.unit = Length::Unit_e::CM;
+	}else if(u == "mm"){
+		ret.unit = Length::Unit_e::MM;
 	}else if(u == "in"){
 		ret.unit = Length::Unit_e::IN;
 	}else if(u == "pt"){
@@ -885,6 +887,9 @@ std::ostream& operator<<(std::ostream& s, const Length& l){
 			break;
 		case Length::Unit_e::CM:
 			s << "cm";
+			break;
+		case Length::Unit_e::MM:
+			s << "mm";
 			break;
 		case Length::Unit_e::IN:
 			s << "in";
@@ -2859,6 +2864,11 @@ real Length::toPx(real dpi) const noexcept{
 				return 0;
 			}
 			return std::ceil(this->value * (dpi / real(2.54)));
+		case svgdom::Length::Unit_e::MM:
+			if(dpi <= 0){
+				return 0;
+			}
+			return std::ceil(this->value * (dpi / real(25.4)));
 	}
 }
 

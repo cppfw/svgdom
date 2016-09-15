@@ -1,10 +1,3 @@
-/* 
- * File:   dom.hpp
- * Author: ivan
- *
- * Created on October 8, 2015, 3:15 PM
- */
-
 #pragma once
 
 #include <vector>
@@ -40,7 +33,8 @@ struct Length{
 		CM,
 		IN,
 		PT,
-		PC
+		PC,
+		MM
 	};
 
 	real value;
