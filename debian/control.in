@@ -1,5 +1,5 @@
 Source: libsvgdom
-Section: misc
+Section: libs
 Priority: extra
 Maintainer: Ivan Gagis <igagis@gmail.com>
 Build-Depends: debhelper (>= 9), prorab,
@@ -15,14 +15,14 @@ Description: cross-platform C++ library for reading SVG files.
  SVG document object model library.
 
 Package: libsvgdom$(soname)-dbg
-Section: libdevel
+Section: debug
 Architecture: any
 Depends: libsvgdom$(soname) (= ${binary:Version}), ${misc:Depends}
 Description: debugging symbols for libsvgdom$(soname) package.
 
 Package: libsvgdom-dev
-Section: devel
-Architecture: all
+Section: libdevel
+Architecture: any
 Depends: libsvgdom$(soname) (= ${binary:Version}), libsvgdom$(soname)-dbg (= ${binary:Version}), ${misc:Depends},
 		libutki-dev, libpapki-dev
 Suggests: libsvgdom-doc
@@ -30,7 +30,7 @@ Description: cross-platform C++ library for reading SVG files.
  SVG document object model library.
 
 Package: libsvgdom-doc
-Section: devel
+Section: doc
 Architecture: all
 Depends: ${misc:Depends}
 Description: documentation for libsvgdom - SVG DOM library.
