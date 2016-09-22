@@ -1,3 +1,9 @@
+libsvgdom (0.2.21) unstable; urgency=medium
+
+  * disable whole program optimization in MSVC
+
+ -- Ivan Gagis <igagis@gmail.com>  Thu, 22 Sep 2016 16:48:59 +0300
+
 libsvgdom (0.2.20) unstable; urgency=medium
 
   * support for mm length unit added
