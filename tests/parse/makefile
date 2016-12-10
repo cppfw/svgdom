@@ -11,7 +11,7 @@ this_cxxflags += -g
 
 this_srcs += main.cpp
 
-this_ldlibs += -lsvgdom -lpapki -lpugixml -lstdc++
+this_ldlibs += -lsvgdom -lpapki `pkg-config --libs pugixml` -lstdc++
 this_ldflags += -L$(prorab_this_dir)../../src
 
 ifeq ($(prorab_os), macosx)
