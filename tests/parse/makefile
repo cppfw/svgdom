@@ -11,15 +11,18 @@ this_cxxflags += -g
 
 this_srcs += main.cpp
 
-this_ldlibs += -lsvgdom -lpapki `pkg-config --libs pugixml` -lstdc++
+this_ldlibs += -lsvgdom -lpapki -lstdc++
 this_ldflags += -L$(prorab_this_dir)../../src
 
-ifeq ($(prorab_os), macosx)
+ifeq ($(os), linux)
+    this_ldlibs += -lpugixml
+else ifeq ($(prorab_os), macosx)
     this_cxxflags += -stdlib=libc++ #this is needed to be able to use c++11 std lib
-    this_ldlibs += -lc++
+    this_ldlibs += -lc++ `pkg-config --libs pugixml`
 else ifeq ($(prorab_os),windows)
     this_cxxflags += -I/usr/include -I/usr/local/include
     this_ldflags += -L/usr/lib -L/usr/local/lib
+    this_ldlibs += -lpugixml
 endif
 
 
