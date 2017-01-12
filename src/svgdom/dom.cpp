@@ -2886,7 +2886,11 @@ real SvgElement::aspectRatio(real dpi)const{
 	real h = this->height.toPx(dpi);
 	
 	if(w <= 0 || h <= 0){
-		return 0;
+		if(this->viewBox[2] <= 0 || this->viewBox[3] <= 0){
+			return 0;
+		}else{
+			return this->viewBox[2] / this->viewBox[3];
+		}
 	}
 	
 	return w / h;
