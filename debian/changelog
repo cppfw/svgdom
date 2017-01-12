@@ -1,3 +1,9 @@
+libsvgdom (0.2.24) unstable; urgency=medium
+
+  * fixing cocoapods deployment
+
+ -- Ivan Gagis <igagis@gmail.com>  Thu, 12 Jan 2017 23:35:12 +0200
+
 libsvgdom (0.2.23) unstable; urgency=medium
 
   * calculate aspect ratio from viewBox in case width and height are not
