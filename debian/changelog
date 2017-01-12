@@ -1,3 +1,10 @@
+libsvgdom (0.2.23) unstable; urgency=medium
+
+  * calculate aspect ratio from viewBox in case width and height are not
+    available or are given in percentages
+
+ -- Ivan Gagis <igagis@gmail.com>  Thu, 12 Jan 2017 16:47:27 +0200
+
 libsvgdom (0.2.22) unstable; urgency=medium
 
   * pugixml include path fix
