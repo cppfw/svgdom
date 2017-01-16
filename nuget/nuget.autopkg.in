@@ -18,9 +18,9 @@ nuget{
 	}
 	dependencies {
 		packages : {
-			libutki/1.0.22;
-			libpapki/1.0.15;
-			pugixml/1.7.2;
+			libutki/1.0.30;
+			libpapki/1.0.26;
+			pugixml/1.8.0;
 		};
 	}
 	files {
@@ -29,21 +29,21 @@ nuget{
 			#destination = ${d_include}svgdom;
 			"..\src\svgdom\**\*.hpp"
 		};
-		
-		[x86,release] { 
+
+		[x86,release] {
 			lib: ..\msvs_solution\Release\libsvgdom.lib;
 		}
 
-		[x86,debug] { 
+		[x86,debug] {
 			lib: ..\msvs_solution\Debug\libsvgdom.lib;
 		}
 
-		[x64,release] { 
+		[x64,release] {
 			lib: ..\msvs_solution\x64\Release\libsvgdom.lib;
 		}
 
-		[x64,debug] { 
+		[x64,debug] {
 			lib: ..\msvs_solution\x64\Debug\libsvgdom.lib;
-		}  
+		}
 	}
 }
