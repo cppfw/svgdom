@@ -34,6 +34,15 @@ void skipWhitespacesAndOrComma(std::istream& s){
 	}
 }
 
+real readInReal(std::istream& s) {
+	//Visual Studio fails to parse numbers to float if it does not actually fit into float,
+	//for example, parsing of "5.47382e-48" to float fails insead of giving 0.
+	//So this workaround is to overcome that.
+	long double x;
+	s >> x;
+	return real(x);
+}
+
 std::string readTillCharOrWhitespace(std::istream& s, char c){
 	std::stringstream ss;
 	while(!s.eof()){
@@ -1198,74 +1207,74 @@ decltype(Transformable::transformations) Transformable::parse(const std::string&
 				ASSERT(false)
 				break;
 			case Transformation::Type_e::MATRIX:
-				s >> t.a;
+				t.a = readInReal(s);
 				if(s.fail()){
 					return ret;
 				}
 				skipWhitespacesAndOrComma(s);
-				s >> t.b;
+				t.b = readInReal(s);
 				if(s.fail()){
 					return ret;
 				}
 				skipWhitespacesAndOrComma(s);
-				s >> t.c;
+				t.c = readInReal(s);
 				if(s.fail()){
 					return ret;
 				}
 				skipWhitespacesAndOrComma(s);
-				s >> t.d;
+				t.d = readInReal(s);
 				if(s.fail()){
 					return ret;
 				}
 				skipWhitespacesAndOrComma(s);
-				s >> t.e;
+				t.e = readInReal(s);
 				if(s.fail()){
 					return ret;
 				}
 				skipWhitespacesAndOrComma(s);
-				s >> t.f;
+				t.f = readInReal(s);
 				if(s.fail()){
 					return ret;
 				}
 				break;
 			case Transformation::Type_e::TRANSLATE:
-				s >> t.x;
+				t.x = readInReal(s);
 				if(s.fail()){
 					return ret;
 				}
 				skipWhitespacesAndOrComma(s);
-				s >> t.y;
+				t.y = readInReal(s);
 				if(s.fail()){
 					s.clear();
 					t.y = 0;
 				}
 				break;
 			case Transformation::Type_e::SCALE:
-				s >> t.x;
+				t.x = readInReal(s);
 				if(s.fail()){
 					return ret;
 				}
 				skipWhitespacesAndOrComma(s);
-				s >> t.y;
+				t.y = readInReal(s);
 				if(s.fail()){
 					s.clear();
 					t.y = t.x;
 				}
 				break;
 			case Transformation::Type_e::ROTATE:
-				s >> t.angle;
+				t.angle = readInReal(s);
 				if(s.fail()){
 					return ret;
 				}
 				skipWhitespacesAndOrComma(s);
-				s >> t.x;
+				t.x = readInReal(s);
 				if(s.fail()){
 					s.clear();
 					t.x = 0;
 					t.y = 0;
 				}else{
 					skipWhitespacesAndOrComma(s);
-					s >> t.y;
+					t.y = readInReal(s);
 					if(s.fail()){
 						return ret;//malformed rotate transformation
 					}
@@ -1273,7 +1282,7 @@ decltype(Transformable::transformations) Transformable::parse(const std::string&
 				break;
 			case Transformation::Type_e::SKEWY:
 			case Transformation::Type_e::SKEWX:
-				s >> t.angle;
+				t.angle = readInReal(s);
 				if(s.fail()){
 					return ret;
 				}
@@ -1923,9 +1932,9 @@ decltype(PolylineShape::points) PolylineShape::parse(const std::string& str) {
 	
 	while(!s.eof()){
 		decltype(ret)::value_type p;
-		s >> p[0];
+		p[0] = readInReal(s);
 		skipWhitespacesAndOrComma(s);
-		s >> p[1];
+		p[1] = readInReal(s);
 		
 		if(s.fail()){
 			break;
@@ -1977,12 +1986,12 @@ decltype(PathElement::path) PathElement::parse(const std::string& str){
 			case Step::Type_e::MOVE_REL:
 			case Step::Type_e::LINE_ABS:
 			case Step::Type_e::LINE_REL:
-				s >> step.x;
+				step.x = readInReal(s);
 				if(s.fail()){
 					return ret;
 				}
 				skipWhitespacesAndOrComma(s);
-				s >> step.y;
+				step.y = readInReal(s);
 				if(s.fail()){
 					return ret;
 				}
@@ -1991,119 +2000,119 @@ decltype(PathElement::path) PathElement::parse(const std::string& str){
 				break;
 			case Step::Type_e::HORIZONTAL_LINE_ABS:
 			case Step::Type_e::HORIZONTAL_LINE_REL:
-				s >> step.x;
+				step.x = readInReal(s);
 				if(s.fail()){
 					return ret;
 				}
 				break;
 			case Step::Type_e::VERTICAL_LINE_ABS:
 			case Step::Type_e::VERTICAL_LINE_REL:
-				s >> step.y;
+				step.y = readInReal(s);
 				if(s.fail()){
 					return ret;
 				}
 				break;
 			case Step::Type_e::CUBIC_ABS:
 			case Step::Type_e::CUBIC_REL:
-				s >> step.x1;
+				step.x1 = readInReal(s);
 				if(s.fail()){
 					return ret;
 				}
 				skipWhitespacesAndOrComma(s);
-				s >> step.y1;
+				step.y1 = readInReal(s);
 				if(s.fail()){
 					return ret;
 				}
 				skipWhitespacesAndOrComma(s);
-				s >> step.x2;
+				step.x2 = readInReal(s);
 				if(s.fail()){
 					return ret;
 				}
 				skipWhitespacesAndOrComma(s);
-				s >> step.y2;
+				step.y2 = readInReal(s);
 				if(s.fail()){
 					return ret;
 				}
 				skipWhitespacesAndOrComma(s);
-				s >> step.x;
+				step.x = readInReal(s);
 				if(s.fail()){
 					return ret;
 				}
 				skipWhitespacesAndOrComma(s);
-				s >> step.y;
+				step.y = readInReal(s);
 				if(s.fail()){
 					return ret;
 				}
 				break;
 			case Step::Type_e::CUBIC_SMOOTH_ABS:
 			case Step::Type_e::CUBIC_SMOOTH_REL:
-				s >> step.x2;
+				step.x2 = readInReal(s);
 				if(s.fail()){
 					return ret;
 				}
 				skipWhitespacesAndOrComma(s);
-				s >> step.y2;
+				step.y2 = readInReal(s);
 				if(s.fail()){
 					return ret;
 				}
 				skipWhitespacesAndOrComma(s);
-				s >> step.x;
+				step.x = readInReal(s);
 				if(s.fail()){
 					return ret;
 				}
 				skipWhitespacesAndOrComma(s);
-				s >> step.y;
+				step.y = readInReal(s);
 				if(s.fail()){
 					return ret;
 				}
 				break;
 			case Step::Type_e::QUADRATIC_ABS:
 			case Step::Type_e::QUADRATIC_REL:
-				s >> step.x1;
+				step.x1 = readInReal(s);
 				if(s.fail()){
 					return ret;
 				}
 				skipWhitespacesAndOrComma(s);
-				s >> step.y1;
+				step.y1 = readInReal(s);
 				if(s.fail()){
 					return ret;
 				}
 				skipWhitespacesAndOrComma(s);
-				s >> step.x;
+				step.x = readInReal(s);
 				if(s.fail()){
 					return ret;
 				}
 				skipWhitespacesAndOrComma(s);
-				s >> step.y;
+				step.y = readInReal(s);
 				if(s.fail()){
 					return ret;
 				}
 				break;
 			case Step::Type_e::QUADRATIC_SMOOTH_ABS:
 			case Step::Type_e::QUADRATIC_SMOOTH_REL:
-				s >> step.x;
+				step.x = readInReal(s);
 				if(s.fail()){
 					return ret;
 				}
 				skipWhitespacesAndOrComma(s);
-				s >> step.y;
+				step.y = readInReal(s);
 				if(s.fail()){
 					return ret;
 				}
 				break;
 			case Step::Type_e::ARC_ABS:
 			case Step::Type_e::ARC_REL:
-				s >> step.rx;
+				step.rx = readInReal(s);
 				if(s.fail()){
 					return ret;
 				}
 				skipWhitespacesAndOrComma(s);
-				s >> step.ry;
+				step.ry = readInReal(s);
 				if(s.fail()){
 					return ret;
 				}
 				skipWhitespacesAndOrComma(s);
-				s >> step.xAxisRotation;
+				step.xAxisRotation = readInReal(s);
 				if(s.fail()){
 					return ret;
 				}
@@ -2126,12 +2135,12 @@ decltype(PathElement::path) PathElement::parse(const std::string& str){
 					step.flags.sweep = (f != 0);
 				}
 				skipWhitespacesAndOrComma(s);
-				s >> step.x;
+				step.x = readInReal(s);
 				if(s.fail()){
 					return ret;
 				}
 				skipWhitespacesAndOrComma(s);
-				s >> step.y;
+				step.y = readInReal(s);
 				if(s.fail()){
 					return ret;
 				}
@@ -2713,7 +2722,7 @@ decltype(SvgElement::viewBox) SvgElement::parseViewbox(const std::string& str) {
 	decltype(SvgElement::viewBox) ret;
 	
 	for(unsigned i = 0; i != ret.size(); ++i){
-		s >> ret[i];
+		ret[i] = readInReal(s);
 		if(s.fail()){
 			return {{-1, -1, -1, -1}};
 		}
