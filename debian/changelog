@@ -1,3 +1,9 @@
+libsvgdom (0.2.26) unstable; urgency=medium
+
+  * raspberry_pi testing update
+
+ -- Ivan Gagis <igagis@gmail.com>  Sat, 11 Feb 2017 01:21:35 +0200
+
 libsvgdom (0.2.25) unstable; urgency=medium
 
   * VisualStudio reading float from stream workaround

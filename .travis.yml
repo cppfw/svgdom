@@ -10,7 +10,7 @@ env:
   - secure: "y+Nuee9K4ysuIXcsU0B4Vf5KxNEwPiKmTWUWKJKhIfyINid+9OYoFQqtK54vqkyKIpngluXbWF5tV0fYuAsG4zWOQ2KNIVgEDO+3GgRltnjIdUz1YnkwHowzWswx6sfnI3QBWIsitNwa51Wouh0zwfZDOeD18NMlcpAYobUzSeK+mwDKtcLM63EqyuhJaWyj0Pc9a/IMzMVaIKE73GQM6Tx2d2c8W/6yJwP/fAV4jR/9BmD2o3TMlJtvEaZ3n0Q9sA/kutCTOspQToHqii8etGX70I67I1wVz2gjiXhh48N1Bmc4o2xFbKSi9106+RH7fuzaA5rj+JNlwr3RffJ9ggSS9v8FcH13NzWkPKL9Ovxfyr87ntVJhd9oRcz/EmyuY9D7IyH3GuZ5YLwfN3Q8JIsO+gQeLo4j2wyF1F0mdm5S9s9QLIJt2jmeX+Uw8blRubyfZlHPmUiJQqprTooHTvIeuHqjcPTLkaYQZv8jaZwI7kHFfOD1R8MxofekWiKvhpUXQHAyln6LZ59aqtPDTj4tEQ+kEiCNcVTnt0CczlI71BiO8VKRDjxsys0yV7Am1M/ur35rw50gEblqqMVO/fwdneEGjOlmJ/6Frn8uhuKpEThZdKXTiiQataWOnQ0DLLnBlhtXjdfc9DWbrH7c8UcrFu+R746XL7QkTyAO2AE="
   - PRORAB_GIT_USERNAME=igagis
   - PRORAB_GIT_ACCESS_TOKEN=$HOMEBREW_GITHUB_ACCESS_TOKEN
-  - linuxDependencies="debhelper prorab doxygen libutki-dev libpapki-dev libpugixml-dev"
+  - linuxDependencies="lintian debhelper prorab doxygen libutki-dev libpapki-dev libpugixml-dev"
 
 
 
@@ -89,8 +89,9 @@ before_install:
     sudo apt-get install -qq prorab;
     sudo prorab-make-raspberry-chroot.sh /srv/chroot/rasp-armhf &&
     echo "deb http://dl.bintray.com/igagis/rasp unstable main" | sudo tee /srv/chroot/rasp-armhf/etc/apt/sources.list.d/igagis.list > /dev/null &&
+    sudo chroot /srv/chroot/rasp-armhf sed -i -e 's/jessie/testing/g' /etc/apt/sources.list &&
     sudo chroot /srv/chroot/rasp-armhf apt-get update &&
-    sudo chroot /srv/chroot/rasp-armhf apt-get install --allow-unauthenticated -qq -y $linuxDependencies &&
+    sudo chroot /srv/chroot/rasp-armhf apt-get install --allow-unauthenticated -qq -y $linuxDependencies g++ &&
     sudo mkdir -p /srv/chroot/rasp-armhf/build &&
     sudo rsync -av $TRAVIS_BUILD_DIR/ /srv/chroot/rasp-armhf/build/;
   fi
