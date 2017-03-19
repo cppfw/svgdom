@@ -20,6 +20,11 @@
 #	endif
 #endif
 
+//math.h defines OVERFLOW, undefine it
+#ifdef OVERFLOW
+#	undef OVERFLOW
+#endif
+
 namespace svgdom{
 
 struct Length{
