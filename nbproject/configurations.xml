@@ -20,10 +20,12 @@
       <itemPath>debian/changelog</itemPath>
       <itemPath>debian/control.in</itemPath>
       <itemPath>nbproject/private/launcher.properties</itemPath>
+      <itemPath>android/libsvgdom-$(version).pom.in</itemPath>
       <itemPath>cocoapods/libsvgdom.podspec.in</itemPath>
       <itemPath>homebrew/libsvgdom.rb.in</itemPath>
       <itemPath>makefile</itemPath>
       <itemPath>nuget/nuget.autopkg.in</itemPath>
+      <itemPath>travis_bintray_android.json.in</itemPath>
       <itemPath>travis_bintray_deb.json.in</itemPath>
       <itemPath>travis_bintray_rasp.json.in</itemPath>
       <itemPath>travis_bintray_ubu.json.in</itemPath>
