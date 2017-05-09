@@ -7,7 +7,7 @@ environment:
   PRORAB_GIT_USERNAME: igagis
   PRORAB_GIT_ACCESS_TOKEN:
     secure: mpW6B2ols1a2FkshjKjryBuvBt8A1TpU9WGn+/d6PIQiZlzA0Rpo1ETKpmy0bnvX
-  DEPS: make,gcc-g++,prorab,utki,papki
+  DEPS: make,gcc-g++,prorab,utki,papki,libpugixml-devel
 
 install:
   - cmd: C:\cygwin64\setup-x86_64.exe -g -q -X -s http://igagis.crabdance.com -s http://cygwin.mirror.constant.com -P cygport,calm,%DEPS%
