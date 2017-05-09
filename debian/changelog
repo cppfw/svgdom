@@ -1,3 +1,9 @@
+libsvgdom (0.2.31) unstable; urgency=medium
+
+  * deploy to cygwin
+
+ -- Ivan Gagis <igagis@gmail.com>  Tue, 09 May 2017 16:08:34 +0300
+
 libsvgdom (0.2.30) unstable; urgency=medium
 
   * deploy to android
