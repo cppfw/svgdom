@@ -10,9 +10,9 @@ SVG document object model."
 SRC_URI="https://github.com/igagis/svgdom/archive/${VERSION}.tar.gz"
 
 #compile time dependencies
-DEPEND="prorab, utki, papki"
+DEPEND="prorab utki papki"
 
-REQUIRES="utki, papki"
+REQUIRES="utki papki"
 
 src_compile() {
   cd ${B}
