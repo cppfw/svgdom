@@ -383,6 +383,7 @@ struct Parser{
 		
 		auto ret = utki::makeUnique<SvgElement>();
 		
+		this->fillStyleable(*ret, n);
 		this->fillRectangle(*ret, n);
 		this->fillContainer(*ret, n);
 
@@ -955,7 +956,7 @@ std::string indentStr(unsigned indent){
 	return ss.str();
 }
 
-}//~namespace
+}
 
 
 void SvgElement::toStream(std::ostream& s, unsigned indent) const{
@@ -963,6 +964,7 @@ void SvgElement::toStream(std::ostream& s, unsigned indent) const{
 	
 	s << ind << "<svg";
 	this->attribsToStream(s);
+	this->Styleable::attribsToStream(s);
 	
 	if(this->children.size() == 0){
 		s << "/>";
@@ -2217,7 +2219,7 @@ const std::set<StyleProperty_e> nonInheritedStyleProoperties = {
 	StyleProperty_e::OPACITY
 	//TODO: check if there are other non-inherited properties
 };
-}//~namespace
+}
 
 const StylePropertyValue* Element::getStyleProperty(StyleProperty_e property, bool explicitInherit) const{
 	if(auto styleable = dynamic_cast<const Styleable*>(this)){

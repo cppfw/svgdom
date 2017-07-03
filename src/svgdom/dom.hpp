@@ -353,7 +353,7 @@ enum class PreserveAspectRatio_e{
 };
 
 
-struct SvgElement : public Container, public Rectangle{
+struct SvgElement : public Container, public Rectangle, public Styleable{
 	std::array<real, 4> viewBox = {{-1, -1, -1, -1}};
 	
 	struct{
