@@ -34,12 +34,80 @@ void skipWhitespacesAndOrComma(std::istream& s){
 	}
 }
 
+std::string readInNumberString(std::istream& s){
+	std::stringstream ss;
+	
+	bool sign = false;
+	bool expSign = false;
+	bool exponent = false;
+	bool dot = false;
+	
+	while(!s.eof()){
+		auto c = s.peek();
+//		TRACE(<< "c = " << char(c) << std::endl)
+		switch(c){
+			case '0':
+			case '1':
+			case '2':
+			case '3':
+			case '4':
+			case '5':
+			case '6':
+			case '7':
+			case '8':
+			case '9':
+				sign = true;
+				if(exponent){
+					expSign = true;
+				}
+				break;
+			case '+':
+			case '-':
+				if(sign){
+					if(expSign){
+						return ss.str();
+					}
+					expSign = true;
+					if(!exponent){
+						return ss.str();
+					}
+				}
+				sign = true;
+				break;
+			case 'e':
+			case 'E':
+				sign = true;
+				if(exponent){
+					return ss.str();
+				}
+				exponent = true;
+				break;
+			case '.':
+				if(dot || exponent){
+					return ss.str();
+				}
+				sign = true;
+				dot = true;
+				break;
+			default:
+				return ss.str();
+		}
+		ss << char(s.get());
+	}
+	return ss.str();
+}
+
 real readInReal(std::istream& s) {
-	//Visual Studio fails to parse numbers to float if it does not actually fit into float,
-	//for example, parsing of "5.47382e-48" to float fails insead of giving 0.
-	//So this workaround is to overcome that.
+	//On MacOS reading in the number which is terminated by non-number and non-whitespace character,
+	//e.g. "0c" will result in stream error, i.e. s.fail() will return true and stream will be in unreadable state.
+	//To workaround this, need to read in the number to a separate string and parse it from there.
+	std::istringstream iss(readInNumberString(s));
+	
+	//Visual Studio standard library fails to parse numbers to 'float' if it does not actually fit into 'float',
+	//for example, parsing of "5.47382e-48" to float fails instead of giving 0.
+	//To workaround this read in to the biggest precision type 'long double'.
 	long double x;
-	s >> x;
+	iss >> x;
 	return real(x);
 }
 
@@ -1954,6 +2022,8 @@ decltype(PolylineShape::points) PolylineShape::parse(const std::string& str) {
 decltype(PathElement::path) PathElement::parse(const std::string& str){
 	decltype(PathElement::path) ret;
 	
+//	TRACE(<< "str = " << str << std::endl)
+	
 	std::istringstream s(str);
 	s >> std::skipws;
 	
@@ -1963,6 +2033,8 @@ decltype(PathElement::path) PathElement::parse(const std::string& str){
 	
 	while(!s.eof()){
 		ASSERT(!std::isspace(s.peek()))//spaces should be skept
+		
+//		TRACE(<< "s.peek() = " << char(s.peek()) << std::endl)
 		
 		{
 			auto t = Step::charToType(s.peek());
@@ -1992,11 +2064,13 @@ decltype(PathElement::path) PathElement::parse(const std::string& str){
 				if(s.fail()){
 					return ret;
 				}
+//				TRACE(<< "step.x = " << step.x << std::endl)
 				skipWhitespacesAndOrComma(s);
 				step.y = readInReal(s);
 				if(s.fail()){
 					return ret;
 				}
+//				TRACE(<< "step.y = " << step.y << std::endl)
 				break;
 			case Step::Type_e::CLOSE:
 				break;
