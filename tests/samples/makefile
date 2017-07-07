@@ -36,12 +36,17 @@ else
 endif
 
 
+
+
 define this_rules
 test:: $(prorab_this_name)
 	@echo running $$^...
 	$(this_test_cmd)
 endef
 $(eval $(this_rules))
+
+
+
 
 #add dependency on libsvgdom
 $(prorab_this_name): $(abspath $(d)../../src/libsvgdom$(soext))
