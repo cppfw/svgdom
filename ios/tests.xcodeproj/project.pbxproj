@@ -7,16 +7,16 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2C27C63A1F1033FC00579360 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2C27C6391F1033FC00579360 /* main.cpp */; };
 		2C36A5975714C99CC79D45D7 /* libPods-tests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3277674DEDA6F26ACE161F1B /* libPods-tests.a */; };
 		2C7FB83F1C5F9BBC00148CAA /* dom.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2C7FB83E1C5F9BBC00148CAA /* dom.cpp */; };
-		2C7FB8411C5F9BCA00148CAA /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2C7FB8401C5F9BCA00148CAA /* main.cpp */; };
 		2CE5FF891C5F99B700CD8537 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2CE5FF881C5F99B700CD8537 /* Assets.xcassets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		1184EAA5BBDC0641937177C7 /* Pods-tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-tests/Pods-tests.release.xcconfig"; sourceTree = "<group>"; };
+		2C27C6391F1033FC00579360 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = main.cpp; path = ../../tests/samples/main.cpp; sourceTree = "<group>"; };
 		2C7FB83E1C5F9BBC00148CAA /* dom.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = dom.cpp; path = ../src/svgdom/dom.cpp; sourceTree = "<group>"; };
-		2C7FB8401C5F9BCA00148CAA /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = main.cpp; path = ../../tests/parse/main.cpp; sourceTree = "<group>"; };
 		2CE5FF791C5F99B700CD8537 /* tests.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = tests.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2CE5FF881C5F99B700CD8537 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		2CE5FF8D1C5F99B700CD8537 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -58,7 +58,7 @@
 		2CE5FF7B1C5F99B700CD8537 /* tests */ = {
 			isa = PBXGroup;
 			children = (
-				2C7FB8401C5F9BCA00148CAA /* main.cpp */,
+				2C27C6391F1033FC00579360 /* main.cpp */,
 				2CE5FF881C5F99B700CD8537 /* Assets.xcassets */,
 				2CE5FF8D1C5F99B700CD8537 /* Info.plist */,
 				2CE5FF7C1C5F99B700CD8537 /* Supporting Files */,
@@ -119,7 +119,7 @@
 		2CE5FF711C5F99B700CD8537 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0720;
+				LastUpgradeCheck = 0830;
 				ORGANIZATIONNAME = "Ivan Gagis";
 				TargetAttributes = {
 					2CE5FF781C5F99B700CD8537 = {
@@ -209,8 +209,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2C27C63A1F1033FC00579360 /* main.cpp in Sources */,
 				2C7FB83F1C5F9BBC00148CAA /* dom.cpp in Sources */,
-				2C7FB8411C5F9BCA00148CAA /* main.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -230,8 +230,10 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -274,8 +276,10 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
