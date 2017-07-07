@@ -1,3 +1,9 @@
+libsvgdom (0.2.39) unstable; urgency=medium
+
+  * MacOS Length parsing fix
+
+ -- Ivan Gagis <igagis@gmail.com>  Sat, 08 Jul 2017 00:40:59 +0300
+
 libsvgdom (0.2.38) unstable; urgency=medium
 
   * test release
