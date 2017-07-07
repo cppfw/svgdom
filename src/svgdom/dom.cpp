@@ -1031,6 +1031,9 @@ void SvgElement::toStream(std::ostream& s, unsigned indent) const{
 	auto ind = indentStr(indent);
 	
 	s << ind << "<svg";
+	if(indent == 0){//if outermost "svg" element
+		s << " xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\"";
+	}
 	this->attribsToStream(s);
 	this->Styleable::attribsToStream(s);
 	

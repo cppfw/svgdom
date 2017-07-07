@@ -7,9 +7,6 @@
       </df>
     </df>
     <df root="tests" name="1">
-      <df name="parse">
-        <in>main.cpp</in>
-      </df>
     </df>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
@@ -47,7 +44,6 @@
       </toolsSet>
       <flagsDictionary>
         <element flagsID="0" commonFlags="-funsigned-char -std=c++11 -fPIC"/>
-        <element flagsID="1" commonFlags="-std=c++11"/>
       </flagsDictionary>
       <codeAssistance>
       </codeAssistance>
@@ -80,10 +76,6 @@
         <ccTool flags="0">
         </ccTool>
       </item>
-      <item path="tests/parse/main.cpp" ex="false" tool="1" flavor2="8">
-        <ccTool flags="1">
-        </ccTool>
-      </item>
     </conf>
     <conf name="Debug" type="0">
       <toolsSet>
@@ -94,7 +86,6 @@
       <flagsDictionary>
         <element flagsID="0"
                  commonFlags="-mtune=generic -march=x86-64 -std=c++11 -funsigned-char -fPIC -fstack-protector-strong"/>
-        <element flagsID="1" commonFlags="-std=c++11"/>
       </flagsDictionary>
       <codeAssistance>
       </codeAssistance>
@@ -142,10 +133,6 @@
       </folder>
       <item path="src/svgdom/dom.cpp" ex="false" tool="1" flavor2="8">
         <ccTool flags="0">
-        </ccTool>
-      </item>
-      <item path="tests/parse/main.cpp" ex="false" tool="1" flavor2="8">
-        <ccTool flags="1">
         </ccTool>
       </item>
     </conf>
