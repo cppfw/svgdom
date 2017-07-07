@@ -1,3 +1,9 @@
+libsvgdom (0.2.37) unstable; urgency=medium
+
+  * number parsing fix: need to skip whitespaces before
+
+ -- Ivan Gagis <igagis@gmail.com>  Fri, 07 Jul 2017 14:50:18 +0300
+
 libsvgdom (0.2.36) unstable; urgency=medium
 
   * MacOS  parsing of numbers fix
