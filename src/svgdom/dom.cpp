@@ -911,7 +911,7 @@ Length Length::parse(const std::string& str) {
 	
 	ss >> std::skipws;
 	
-	ss >> ret.value;
+	ret.value = readInReal(ss);
 	
 	std::string u;
 	
