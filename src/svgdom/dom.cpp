@@ -17,6 +17,23 @@ using namespace svgdom;
 
 namespace{
 
+void skipTillCharInclusive(std::istream& s, char c){
+	while(!s.eof()){
+		if(s.get() == c){
+			break;
+		}
+	}
+}
+
+void skipWhitespaces(std::istream& s){
+	while(!s.eof()){
+		if(!std::isspace(s.peek())){
+			break;
+		}
+		s.get();
+	}
+}
+
 void skipWhitespacesAndOrComma(std::istream& s){
 	bool commaSkipped = false;
 	while(!s.eof()){
@@ -43,7 +60,7 @@ std::string readInNumberString(std::istream& s){
 	bool dot = false;
 	
 	while(!s.eof()){
-		auto c = s.peek();
+		auto c = char(s.peek());
 //		TRACE(<< "c = " << char(c) << std::endl)
 		switch(c){
 			case '0':
@@ -98,6 +115,8 @@ std::string readInNumberString(std::istream& s){
 }
 
 real readInReal(std::istream& s) {
+	skipWhitespaces(s);
+	
 	//On MacOS reading in the number which is terminated by non-number and non-whitespace character,
 	//e.g. "0c" will result in stream error, i.e. s.fail() will return true and stream will be in unreadable state.
 	//To workaround this, need to read in the number to a separate string and parse it from there.
@@ -134,22 +153,6 @@ std::string readTillChar(std::istream& s, char c){
 }
 
 
-void skipTillCharInclusive(std::istream& s, char c){
-	while(!s.eof()){
-		if(s.get() == c){
-			break;
-		}
-	}
-}
-
-void skipWhitespaces(std::istream& s){
-	while(!s.eof()){
-		if(!std::isspace(s.peek())){
-			break;
-		}
-		s.get();
-	}
-}
 
 enum class XmlNamespace_e{
 	UNKNOWN,
@@ -1032,7 +1035,7 @@ void SvgElement::toStream(std::ostream& s, unsigned indent) const{
 	
 	s << ind << "<svg";
 	if(indent == 0){//if outermost "svg" element
-		s << " xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\"";
+		s << " xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" version=\"1.1\"";
 	}
 	this->attribsToStream(s);
 	this->Styleable::attribsToStream(s);

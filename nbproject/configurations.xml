@@ -7,6 +7,9 @@
       </df>
     </df>
     <df root="tests" name="1">
+      <df name="samples">
+        <in>main.cpp</in>
+      </df>
     </df>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
@@ -44,6 +47,7 @@
       </toolsSet>
       <flagsDictionary>
         <element flagsID="0" commonFlags="-funsigned-char -std=c++11 -fPIC"/>
+        <element flagsID="1" commonFlags="-std=c++11"/>
       </flagsDictionary>
       <codeAssistance>
       </codeAssistance>
@@ -52,7 +56,7 @@
           <buildCommandWorkingDir>.</buildCommandWorkingDir>
           <buildCommand>make</buildCommand>
           <cleanCommand>make clean</cleanCommand>
-          <executablePath>tests/parse/tests</executablePath>
+          <executablePath>tests/samples/parsesvg</executablePath>
           <ccTool>
             <standard>8</standard>
             <incDir>
@@ -74,6 +78,10 @@
       </folder>
       <item path="src/svgdom/dom.cpp" ex="false" tool="1" flavor2="8">
         <ccTool flags="0">
+        </ccTool>
+      </item>
+      <item path="tests/samples/main.cpp" ex="false" tool="1" flavor2="8">
+        <ccTool flags="1">
         </ccTool>
       </item>
     </conf>
