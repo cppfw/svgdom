@@ -29,13 +29,6 @@ endif
 $(eval $(prorab-build-app))
 
 
-ifeq ($(os),windows)
-    this_test_cmd := $(prorab_echo)(cd $(d); cp ../../src/libsvgdom.dll .; $$^)
-else
-    this_test_cmd := $(prorab_echo)(cd $(d); LD_LIBRARY_PATH=../../src $$^)
-endif
-
-
 this_svgs := $(patsubst %.svg,%,$(shell ls $(d)testdata/*.svg))
 
 define this_rules
@@ -44,8 +37,8 @@ test:: $(prorab_this_name)
 	$(prorab_echo)cp $(d)../../src/*.dll . || true
 	$(prorab_echo)for f in $(this_svgs); do \
 	    echo "checking file $$$$f.svg..." && \
-	    LD_LIBRARY_PATH=$(d)../../src $(d)./parsesvg $$$$f.svg && \
-	    cmp $(d)out.svg $$$$f.svg.cmp; \
+	    LD_LIBRARY_PATH=$(d)../../src DYLD_LIBRARY_PATH=$$$$LD_LIBRARY_PATH $(d)./parsesvg $$$$f.svg && \
+	    cmp out.svg $$$$f.svg.cmp; \
 	    if [ $$$$? -ne 0 ]; then prorab-error.sh "parsed SVG did not match etalon sample"; exit 1; fi \
 	done
 	@prorab-passed.sh
