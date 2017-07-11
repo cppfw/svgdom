@@ -1,3 +1,9 @@
+libsvgdom (0.2.41) unstable; urgency=medium
+
+  * bugfix: parsing invalid number from stream
+
+ -- Ivan Gagis <igagis@gmail.com>  Tue, 11 Jul 2017 20:34:56 +0300
+
 libsvgdom (0.2.40) unstable; urgency=medium
 
   * release nuget package
