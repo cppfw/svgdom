@@ -58,6 +58,7 @@ std::string readInNumberString(std::istream& s){
 	bool expSign = false;
 	bool exponent = false;
 	bool dot = false;
+	bool validNumber = false;
 	
 	while(!s.eof()){
 		auto c = char(s.peek());
@@ -77,6 +78,7 @@ std::string readInNumberString(std::istream& s){
 				if(exponent){
 					expSign = true;
 				}
+				validNumber = true;
 				break;
 			case '+':
 			case '-':
@@ -107,6 +109,12 @@ std::string readInNumberString(std::istream& s){
 				dot = true;
 				break;
 			default:
+				if(!validNumber){
+					//WORKAROUND: if no valid number was read then we need to leave stream in failed state
+					//to do that, try to read in the float number (we know it should fail since no valid number detected on stream).
+					float x;
+					s >> x;
+				}
 				return ss.str();
 		}
 		ss << char(s.get());
