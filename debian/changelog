@@ -1,3 +1,9 @@
+libsvgdom (0.2.42) unstable; urgency=medium
+
+  * deploy to cygwin
+
+ -- Ivan Gagis <igagis@gmail.com>  Wed, 12 Jul 2017 20:50:17 +0300
+
 libsvgdom (0.2.41) unstable; urgency=medium
 
   * bugfix: parsing invalid number from stream
