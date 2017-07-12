@@ -2959,15 +2959,17 @@ real Length::toPx(real dpi) const noexcept{
 		case svgdom::Length::Unit_e::IN:
 			return std::ceil(this->value * dpi);
 		case svgdom::Length::Unit_e::CM:
-			if(dpi <= 0){
-				return 0;
-			}
 			return std::ceil(this->value * (dpi / real(2.54)));
 		case svgdom::Length::Unit_e::MM:
-			if(dpi <= 0){
-				return 0;
-			}
 			return std::ceil(this->value * (dpi / real(25.4)));
+		case svgdom::Length::Unit_e::PT: // 1pt = 1/72 of an inch
+			return std::ceil(this->value * (dpi / real(72)));
+		case svgdom::Length::Unit_e::PC: // 1pc = 1/6 of an inch
+			return std::ceil(this->value * (dpi / real(6)));
+		case svgdom::Length::Unit_e::EM:
+		case svgdom::Length::Unit_e::EX:
+			//em and ex depend on the font size. Text is not supported by svgdom, so return 0 size.
+			return 0;
 	}
 }
 
