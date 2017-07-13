@@ -25,6 +25,7 @@ before_build:
   - cmd: xcopy /S C:\projects\build C:\cygwin64\home\appveyor\
   - cmd: xcopy /S C:\projects\build C:\cygwin\home\appveyor\
   - nuget restore msvs_solution/msvs_solution.sln
+  - nuget update msvs_solution/msvs_solution.sln
 
 build_script:
   - cmd: if "%APPVEYOR_REPO_TAG%"=="true"
