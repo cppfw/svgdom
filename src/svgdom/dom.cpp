@@ -58,6 +58,7 @@ std::string readInNumberString(std::istream& s){
 	bool expSign = false;
 	bool exponent = false;
 	bool dot = false;
+	bool validNumber = false;
 	
 	while(!s.eof()){
 		auto c = char(s.peek());
@@ -77,6 +78,7 @@ std::string readInNumberString(std::istream& s){
 				if(exponent){
 					expSign = true;
 				}
+				validNumber = true;
 				break;
 			case '+':
 			case '-':
@@ -107,6 +109,12 @@ std::string readInNumberString(std::istream& s){
 				dot = true;
 				break;
 			default:
+				if(!validNumber){
+					//WORKAROUND: if no valid number was read then we need to leave stream in failed state
+					//to do that, try to read in the float number (we know it should fail since no valid number detected on stream).
+					float x;
+					s >> x;
+				}
 				return ss.str();
 		}
 		ss << char(s.get());
@@ -911,7 +919,7 @@ Length Length::parse(const std::string& str) {
 	
 	ss >> std::skipws;
 	
-	ss >> ret.value;
+	ret.value = readInReal(ss);
 	
 	std::string u;
 	
@@ -2951,15 +2959,17 @@ real Length::toPx(real dpi) const noexcept{
 		case svgdom::Length::Unit_e::IN:
 			return std::ceil(this->value * dpi);
 		case svgdom::Length::Unit_e::CM:
-			if(dpi <= 0){
-				return 0;
-			}
 			return std::ceil(this->value * (dpi / real(2.54)));
 		case svgdom::Length::Unit_e::MM:
-			if(dpi <= 0){
-				return 0;
-			}
 			return std::ceil(this->value * (dpi / real(25.4)));
+		case svgdom::Length::Unit_e::PT: // 1pt = 1/72 of an inch
+			return std::ceil(this->value * (dpi / real(72)));
+		case svgdom::Length::Unit_e::PC: // 1pc = 1/6 of an inch
+			return std::ceil(this->value * (dpi / real(6)));
+		case svgdom::Length::Unit_e::EM:
+		case svgdom::Length::Unit_e::EX:
+			//em and ex depend on the font size. Text is not supported by svgdom, so return 0 size.
+			return 0;
 	}
 }
 
