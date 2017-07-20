@@ -633,10 +633,16 @@ std::unique_ptr<SvgElement> load(const papki::File& f);
  * @param s - input stream to load SVG from.
  * @return unique pointer to the root of SVG document tree.
  */
-
 std::unique_ptr<SvgElement> load(std::istream& s);
 
-}//~namespace
+/**
+ * @brief Load SVG document.
+ * Load SVG document from std::string.
+ * @param s - input string to load SVG from.
+ * @return unique pointer to the root of SVG document tree.
+ */
+std::unique_ptr<SvgElement> load(std::string& s);
 
+}//~namespace
 
 std::ostream& operator<<(std::ostream& s, const svgdom::Length& l);
