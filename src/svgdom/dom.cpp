@@ -2248,46 +2248,46 @@ decltype(PathElement::path) PathElement::parse(const std::string& str){
 	return ret;
 }
 
-void Container::render(Renderer& renderer) const{
+void Container::accept(Visitor& visitor) const{
 	for(auto& e : this->children){
-		e->render(renderer);
+		e->accept(visitor);
 	}
 }
 
-void PathElement::render(Renderer& renderer) const{
-	renderer.render(*this);
+void PathElement::accept(Visitor& visitor) const{
+	visitor.visit(*this);
 }
 
-void RectElement::render(Renderer& renderer) const {
-	renderer.render(*this);
+void RectElement::accept(Visitor& visitor) const {
+	visitor.visit(*this);
 }
 
-void CircleElement::render(Renderer& renderer) const {
-	renderer.render(*this);
+void CircleElement::accept(Visitor& visitor) const {
+	visitor.visit(*this);
 }
 
-void EllipseElement::render(Renderer& renderer) const {
-	renderer.render(*this);
+void EllipseElement::accept(Visitor& visitor) const {
+	visitor.visit(*this);
 }
 
-void LineElement::render(Renderer& renderer) const {
-	renderer.render(*this);
+void LineElement::accept(Visitor& visitor) const {
+	visitor.visit(*this);
 }
 
-void PolygonElement::render(Renderer& renderer) const {
-	renderer.render(*this);
+void PolygonElement::accept(Visitor& visistor) const {
+	visistor.visit(*this);
 }
 
-void PolylineElement::render(Renderer& renderer) const {
-	renderer.render(*this);
+void PolylineElement::accept(Visitor& visitor) const {
+	visitor.visit(*this);
 }
 
-void GElement::render(Renderer& renderer) const{
-	renderer.render(*this);
+void GElement::accept(Visitor& visitor) const{
+	visitor.visit(*this);
 }
 
-void SvgElement::render(Renderer& renderer) const{
-	renderer.render(*this);
+void SvgElement::accept(Visitor& visitor) const{
+	visitor.visit(*this);
 }
 
 Rgb StylePropertyValue::getRgb() const{

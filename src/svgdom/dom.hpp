@@ -60,7 +60,7 @@ struct Length{
 	real toPx(real dpi)const noexcept;
 };
 
-class Renderer;
+class Visitor;
 
 struct Container;
 struct Element;
@@ -221,7 +221,7 @@ struct Element : public utki::Unique{
 	
 	std::string toString()const;
 	
-	virtual void render(Renderer& renderer)const{}
+	virtual void accept(Visitor& visitor)const{}
 	
 	/**
 	 * @brief Get style property of the element.
@@ -252,7 +252,7 @@ struct Container : public Element{
 	
 	void childrenToStream(std::ostream& s, unsigned indent)const;
 	
-	void render(Renderer& renderer)const override;
+	void accept(Visitor& visitor)const override;
 	
 	Element* findById(const std::string& elementId) override;
 };
@@ -320,7 +320,7 @@ struct Styleable{
 struct GElement : public Container, public Transformable, public Styleable{
 	void toStream(std::ostream& s, unsigned indent = 0)const override;
 	
-	void render(Renderer& renderer)const override;
+	void accept(Visitor& visitor)const override;
 };
 
 struct DefsElement : public Container, public Transformable, public Styleable{
@@ -370,7 +370,7 @@ struct SvgElement : public Container, public Rectangle, public Styleable{
 	
 	void toStream(std::ostream& s, unsigned indent = 0)const override;
 	
-	void render(Renderer& renderer) const override;
+	void accept(Visitor& visitor) const override;
 	
 	/**
 	 * @brief Get aspect ratio of the element.
@@ -449,7 +449,7 @@ struct PathElement : public Shape{
 	
 	static decltype(path) parse(const std::string& str);
 	
-	void render(Renderer& renderer) const override;
+	void accept(Visitor& visitor) const override;
 };
 
 struct RectElement : public Shape, public Rectangle{
@@ -460,7 +460,7 @@ struct RectElement : public Shape, public Rectangle{
 	
 	void toStream(std::ostream& s, unsigned indent) const override;
 	
-	void render(Renderer& renderer) const override;
+	void accept(Visitor& visitor) const override;
 };
 
 struct CircleElement : public Shape{
@@ -472,7 +472,7 @@ struct CircleElement : public Shape{
 	
 	void toStream(std::ostream& s, unsigned indent) const override;
 	
-	void render(Renderer& renderer) const override;
+	void accept(Visitor& visitor) const override;
 };
 
 struct EllipseElement : public Shape{
@@ -485,7 +485,7 @@ struct EllipseElement : public Shape{
 	
 	void toStream(std::ostream& s, unsigned indent) const override;
 	
-	void render(Renderer& renderer) const override;
+	void accept(Visitor& visitor) const override;
 };
 
 struct LineElement : public Shape{
@@ -498,7 +498,7 @@ struct LineElement : public Shape{
 	
 	void toStream(std::ostream& s, unsigned indent) const override;
 	
-	void render(Renderer& renderer) const override;
+	void accept(Visitor& visitor) const override;
 };
 
 struct PolylineShape : public Shape{
@@ -513,13 +513,13 @@ struct PolylineShape : public Shape{
 struct PolylineElement : public PolylineShape{
 	void toStream(std::ostream& s, unsigned indent) const override;
 	
-	void render(Renderer& renderer) const override;
+	void accept(Visitor& visitor) const override;
 };
 
 struct PolygonElement : public PolylineShape{
 	void toStream(std::ostream& s, unsigned indent) const override;
 	
-	void render(Renderer& renderer) const override;
+	void accept(Visitor& visitor) const override;
 };
 
 
@@ -594,28 +594,26 @@ struct RadialGradientElement : public Gradient{
 };
 
 /**
- * @brief Renderer interface.
- * A renderer interface which allows traversing of the SVG element tree.
+ * @brief Visitor interface.
+ * A visitor interface which allows traversing of the SVG element tree.
  * It utilizes the 'visitor' pattern.
- * Each Element-based class can override the 'render' method which will call
- * corresponding render method from Renderer. And user can override Renderer's methods
- * to implement their own rendering of each SVG element.
+ * Each Element-based class can override the 'accept' method which will call
+ * corresponding 'visit' method from Visitor. And user can override Visitor's methods
+ * to implement their own operation to perform on each SVG element.
  */
-class Renderer{
+class Visitor{
 public:
-	virtual void render(const PathElement& e){}
-	virtual void render(const RectElement& e){}
-	virtual void render(const CircleElement& e){}
-	virtual void render(const EllipseElement& e){}
-	virtual void render(const LineElement& e){}
-	virtual void render(const PolylineElement& e){}
-	virtual void render(const PolygonElement& e){}
+	virtual void visit(const PathElement& e){}
+	virtual void visit(const RectElement& e){}
+	virtual void visit(const CircleElement& e){}
+	virtual void visit(const EllipseElement& e){}
+	virtual void visit(const LineElement& e){}
+	virtual void visit(const PolylineElement& e){}
+	virtual void visit(const PolygonElement& e){}
+	virtual void visit(const GElement& e){}
+	virtual void visit(const SvgElement& e){}
 	
-	virtual void render(const GElement& e){}
-	
-	virtual void render(const SvgElement& e){}
-	
-	virtual ~Renderer()noexcept{}
+	virtual ~Visitor()noexcept{}
 };
 
 
@@ -643,6 +641,6 @@ std::unique_ptr<SvgElement> load(std::istream& s);
  */
 std::unique_ptr<SvgElement> load(std::string& s);
 
-}//~namespace
+}
 
 std::ostream& operator<<(std::ostream& s, const svgdom::Length& l);
