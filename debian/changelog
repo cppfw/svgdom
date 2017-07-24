@@ -1,3 +1,9 @@
+libsvgdom (0.2.45) unstable; urgency=medium
+
+  * style url fix
+
+ -- Ivan Gagis <igagis@gmail.com>  Mon, 24 Jul 2017 19:43:59 +0300
+
 libsvgdom (0.2.44) unstable; urgency=medium
 
   * 'use' and 'symbol' elements added, some minor bugs fixed
