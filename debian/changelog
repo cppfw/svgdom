@@ -1,3 +1,9 @@
+libsvgdom (0.2.44) unstable; urgency=medium
+
+  * 'use' and 'symbol' elements added, some minor bugs fixed
+
+ -- Ivan Gagis <igagis@gmail.com>  Mon, 24 Jul 2017 18:26:36 +0300
+
 libsvgdom (0.2.43) unstable; urgency=medium
 
   * support pt and pc length units
