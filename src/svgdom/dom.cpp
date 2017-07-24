@@ -12,6 +12,11 @@
 #include <cmath>
 #include <ratio>
 
+//math.h defines OVERFLOW macro which we don't need.
+#ifdef OVERFLOW
+#	undef OVERFLOW
+#endif
+
 using namespace svgdom;
 
 
