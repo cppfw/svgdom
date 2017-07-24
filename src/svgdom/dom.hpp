@@ -387,24 +387,28 @@ enum class PreserveAspectRatio_e{
 	X_MAX_Y_MAX
 };
 
+struct ViewBoxed {
+	std::array<real, 4> viewBox = { { -1, -1, -1, -1 } };
 
-struct SvgElement :
-		public Container,
-		public Rectangle,
-		public Styleable
-{
-	std::array<real, 4> viewBox = {{-1, -1, -1, -1}};
-	
-	struct{
+	struct {
 		PreserveAspectRatio_e preserve = PreserveAspectRatio_e::NONE;
 		bool defer = false;
 		bool slice = false;
 	} preserveAspectRatio;
-	
-	static decltype(viewBox) parseViewbox(const std::string& str);
-	
+
 	void parseAndFillPreserveAspectRatio(const std::string& str);
-	
+
+	static decltype(viewBox) parseViewbox(const std::string& str);
+
+	void attribsToStream(std::ostream& s)const;
+};
+
+struct SvgElement :
+		public Container,
+		public Rectangle,
+		public Styleable,
+		public ViewBoxed
+{
 	void attribsToStream(std::ostream& s)const;
 	
 	void toStream(std::ostream& s, unsigned indent = 0)const override;

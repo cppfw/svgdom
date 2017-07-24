@@ -334,6 +334,24 @@ struct Parser{
 			}
 		}
 	}
+
+	void fillViewBoxed(ViewBoxed& v, const pugi::xml_node& n) {
+		for (auto a = n.first_attribute(); !a.empty(); a = a.next_attribute()) {
+			auto nsn = this->getNamespace(a.name());
+			switch (nsn.ns) {
+			case XmlNamespace_e::SVG:
+				if (nsn.name == "viewBox") {
+					v.viewBox = SvgElement::parseViewbox(a.value());
+				}
+				else if (nsn.name == "preserveAspectRatio") {
+					v.parseAndFillPreserveAspectRatio(a.value());
+				}
+				break;
+			default:
+				break;
+			}
+		}
+	}
 	
 	void fillContainer(Container& c, const pugi::xml_node& n){
 		this->fillElement(c, n);
@@ -457,21 +475,7 @@ struct Parser{
 		this->fillStyleable(*ret, n);
 		this->fillRectangle(*ret, n);
 		this->fillContainer(*ret, n);
-
-		for(auto a = n.first_attribute(); !a.empty(); a = a.next_attribute()){
-			auto nsn = this->getNamespace(a.name());
-			switch(nsn.ns){
-				case XmlNamespace_e::SVG:
-					if(nsn.name == "viewBox"){
-						ret->viewBox = SvgElement::parseViewbox(a.value());
-					}else if(nsn.name == "preserveAspectRatio"){
-						ret->parseAndFillPreserveAspectRatio(a.value());
-					}
-					break;
-				default:
-					break;
-			}
-		}
+		this->fillViewBoxed(*ret, n);
 		
 		return ret;
 	}
@@ -2846,7 +2850,7 @@ Length RadialGradientElement::getFy() const noexcept{
 	return Length::make(0, Length::Unit_e::UNKNOWN);
 }
 
-decltype(SvgElement::viewBox) SvgElement::parseViewbox(const std::string& str) {
+decltype(SvgElement::viewBox) ViewBoxed::parseViewbox(const std::string& str) {
 	std::istringstream s(str);
 	
 	s >> std::skipws;
@@ -2919,7 +2923,7 @@ std::string preserveAspectRatioToString(PreserveAspectRatio_e par){
 }
 }//~namespace
 
-void SvgElement::parseAndFillPreserveAspectRatio(const std::string& str) {
+void ViewBoxed::parseAndFillPreserveAspectRatio(const std::string& str) {
 	std::istringstream s(str);
 	
 	s >> std::skipws;
@@ -2957,38 +2961,43 @@ void SvgElement::parseAndFillPreserveAspectRatio(const std::string& str) {
 }
 
 
-void SvgElement::attribsToStream(std::ostream& s) const {
-	this->Container::attribsToStream(s);
-	this->Rectangle::attribsToStream(s);
-	
-	if(this->viewBox[0] >= 0){
+void ViewBoxed::attribsToStream(std::ostream& s)const {
+	if (this->viewBox[0] >= 0) {
 		s << " viewBox=\"";
-		
+
 		bool isFirst = true;
-		for(auto i = this->viewBox.begin(); i != this->viewBox.end(); ++i){
-			if(isFirst){
+		for (auto i = this->viewBox.begin(); i != this->viewBox.end(); ++i) {
+			if (isFirst) {
 				isFirst = false;
-			}else{
+			}
+			else {
 				s << " ";
 			}
 			s << (*i);
 		}
 		s << "\"";
 	}
-	
-	if(this->preserveAspectRatio.preserve != PreserveAspectRatio_e::NONE || this->preserveAspectRatio.defer || this->preserveAspectRatio.slice){
+
+	if (this->preserveAspectRatio.preserve != PreserveAspectRatio_e::NONE || this->preserveAspectRatio.defer || this->preserveAspectRatio.slice) {
 		s << " preserveAspectRatio=\"";
-		if(this->preserveAspectRatio.defer){
+		if (this->preserveAspectRatio.defer) {
 			s << "defer ";
 		}
-		
+
 		s << preserveAspectRatioToString(this->preserveAspectRatio.preserve);
-		
-		if(this->preserveAspectRatio.slice){
+
+		if (this->preserveAspectRatio.slice) {
 			s << " slice";
 		}
 		s << "\"";
 	}
+}
+
+
+void SvgElement::attribsToStream(std::ostream& s) const {
+	this->Container::attribsToStream(s);
+	this->Rectangle::attribsToStream(s);
+	this->ViewBoxed::attribsToStream(s);
 }
 
 real Length::toPx(real dpi) const noexcept{
