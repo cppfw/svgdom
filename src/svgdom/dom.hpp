@@ -247,7 +247,7 @@ struct Element : public utki::Unique{
 /**
  * @brief An element which can have child elements.
  */
-struct Container : public Element{
+struct Container : public Element {
 	std::vector<std::unique_ptr<Element>> children;
 	
 	void childrenToStream(std::ostream& s, unsigned indent)const;
@@ -255,6 +255,10 @@ struct Container : public Element{
 	void accept(Visitor& visitor)const override;
 	
 	Element* findById(const std::string& elementId) override;
+
+protected:
+	//Container is not a final SVG element, so make the constructor protected.
+	Container(){}
 };
 
 /**
@@ -263,14 +267,13 @@ struct Container : public Element{
 struct Referencing{
 	/**
 	 * @brief Referenced element.
-	 * If the reference is IRI then this variable is nullptr.
+	 * If the reference is an IRI to an object outside of the SVG document then this variable is nullptr.
 	 */
 	Element* ref = nullptr;
 
 	/**
 	 * @brief IRI reference.
-	 * If this reference does not reference an SVG element but is an IRI then 'ref' is nullptr and this
-	 * variable holds the IRI string.
+	 * This variable holds the IRI string.
 	 */
 	std::string iri;
 	
@@ -343,6 +346,8 @@ struct DefsElement :
 		public Styleable
 {
 	void toStream(std::ostream& s, unsigned indent = 0)const override;
+
+	void accept(Visitor& visitor)const override {}
 };
 
 /**
@@ -355,6 +360,18 @@ struct Rectangle{
 	Length height = Length::make(100, Length::Unit_e::PERCENT);
 	
 	void attribsToStream(std::ostream& s)const;
+};
+
+struct UseElement :
+	public Element,
+	public Transformable,
+	public Styleable,
+	public Referencing,
+	public Rectangle
+{
+	void toStream(std::ostream& s, unsigned indent = 0)const override;
+
+	void accept(Visitor& visitor)const override;
 };
 
 enum class PreserveAspectRatio_e{
@@ -646,6 +663,7 @@ public:
 	virtual void visit(const PolygonElement& e){}
 	virtual void visit(const GElement& e){}
 	virtual void visit(const SvgElement& e){}
+	virtual void visit(const UseElement& e) {}
 	
 	virtual ~Visitor()noexcept{}
 };

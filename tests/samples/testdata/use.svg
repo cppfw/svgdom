@@ -1,0 +1,29 @@
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" 
+  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="80" height="80" xmlns="http://www.w3.org/2000/svg"
+xmlns:xlink="http://www.w3.org/1999/xlink"
+>
+  <style>
+    .classA {
+      fill: red;
+    }
+  </style> 
+  <defs>
+    <g id="Port">
+      <circle style="fill: inherit;" r="10"/>
+    </g>
+  </defs>
+ 
+  <!--text y="15">black</text-->
+  
+  <use x="50" y="10" xlink:href="#Port" />
+  
+  <!--text y="35">red</text-->
+  
+  <use x="50" y="30" href="#Port" class="classA"/>
+  
+  <!--text y="55">blue</text-->
+  
+  <use x="50" y="50" href="#Port" style="fill: blue;"/>
+</svg>

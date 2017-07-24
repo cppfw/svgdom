@@ -171,7 +171,7 @@ enum class XmlNamespace_e{
 const std::string DSvgNamespace = "http://www.w3.org/2000/svg";
 const std::string DXlinkNamespace = "http://www.w3.org/1999/xlink";
 
-StylePropertyValue parsePropertyValue(StyleProperty_e type, std::istream& s){
+StylePropertyValue parseStylePropertyValue(StyleProperty_e type, std::istream& s){
 	StylePropertyValue v;
 	
 	switch(type){
@@ -243,9 +243,10 @@ StylePropertyValue parsePropertyValue(StyleProperty_e type, std::istream& s){
 	return v;
 }
 
-StylePropertyValue parsePropertyValue(StyleProperty_e type, const std::string& str){
+StylePropertyValue parseStylePropertyValue(StyleProperty_e type, const std::string& str){
 	std::istringstream s(str);
-	return parsePropertyValue(type, s);
+	skipWhitespaces(s);
+	return parseStylePropertyValue(type, s);
 }
 
 struct Parser{
@@ -312,6 +313,7 @@ struct Parser{
 			auto nsn = this->getNamespace(a.name());
 			switch(nsn.ns){
 				case XmlNamespace_e::XLINK:
+				case XmlNamespace_e::SVG: //in some SVG documents the svg namespace is used instead of xlink, though this is against SVG spec we allow to do so.
 					if(nsn.name == "href"){
 						e.iri = a.value();
 					}
@@ -386,7 +388,7 @@ struct Parser{
 					{
 						StyleProperty_e type = Styleable::stringToProperty(nsn.name);
 						if(type != StyleProperty_e::UNKNOWN){
-							s.styles[type] = parsePropertyValue(type, a.value());
+							s.styles[type] = parseStylePropertyValue(type, a.value());
 						}
 					}
 					break;
@@ -507,6 +509,21 @@ struct Parser{
 		this->fillStyleable(*ret, n);
 		this->fillContainer(*ret, n);
 		
+		return ret;
+	}
+
+	std::unique_ptr<UseElement> parseUseElement(const pugi::xml_node& n) {
+		ASSERT(getNamespace(n.name()).ns == XmlNamespace_e::SVG)
+		ASSERT(getNamespace(n.name()).name == "use")
+
+		auto ret = utki::makeUnique<UseElement>();
+
+		this->fillElement(*ret, n);
+		this->fillTransformable(*ret, n);
+		this->fillStyleable(*ret, n);
+		this->fillReferencing(*ret, n);
+		this->fillRectangle(*ret, n);
+
 		return ret;
 	}
 	
@@ -820,6 +837,8 @@ std::unique_ptr<svgdom::Element> Parser::parseNode(const pugi::xml_node& n){
 				return this->parseGElement(n);
 			}else if(nsn.name == "defs"){
 				return this->parseDefsElement(n);
+			}else if (nsn.name == "use") {
+				return this->parseUseElement(n);
 			}else if(nsn.name == "path"){
 				return this->parsePathElement(n);
 			}else if(nsn.name == "linearGradient"){
@@ -855,9 +874,6 @@ void resolveReferences(Element& e, SvgElement& svg){
 	if(auto r = dynamic_cast<Referencing*>(&e)){
 		if(r->iri.length() != 0 && r->iri[0] == '#'){
 			r->ref = svg.findById(r->iri.substr(1, r->iri.length() - 1));
-			if(r->ref){
-				r->iri.clear();
-			}
 		}
 	}
 	
@@ -884,9 +900,10 @@ std::unique_ptr<SvgElement> load(const pugi::xml_document& doc){
 	//return first node which is successfully parsed
 	for(auto n = doc.first_child(); !n.empty(); n = n.next_sibling()){
 		auto element = parser.parseNode(doc.first_child());
-	
-		auto ret = std::unique_ptr<SvgElement>(dynamic_cast<SvgElement*>(element.release()));
-		if(ret){
+
+		if(auto svgElement = dynamic_cast<SvgElement*>(element.get())){
+			auto ret = std::unique_ptr<SvgElement>(svgElement);
+			element.release();
 			resolveReferences(*ret, *ret);
 			return ret;
 		}
@@ -1091,6 +1108,8 @@ void GElement::toStream(std::ostream& s, unsigned indent) const{
 void DefsElement::toStream(std::ostream& s, unsigned indent) const{
 	auto ind = indentStr(indent);
 	
+//	TRACE(<< "DefsElement::toStream():" << std::endl)
+
 	s << ind << "<defs";
 	this->Container::attribsToStream(s);
 	this->Transformable::attribsToStream(s);
@@ -1103,6 +1122,21 @@ void DefsElement::toStream(std::ostream& s, unsigned indent) const{
 		this->childrenToStream(s, indent + 1);
 		s << ind << "</defs>";
 	}
+	s << std::endl;
+}
+
+void UseElement::toStream(std::ostream& s, unsigned indent) const {
+	auto ind = indentStr(indent);
+
+//	TRACE(<< "UseElement::toStream():" << std::endl)
+
+	s << ind << "<use";
+	this->Element::attribsToStream(s);
+	this->Transformable::attribsToStream(s);
+	this->Styleable::attribsToStream(s);
+	this->Rectangle::attribsToStream(s);
+	this->Referencing::attribsToStream(s);
+	s << "/>";
 	s << std::endl;
 }
 
@@ -1470,7 +1504,7 @@ decltype(Styleable::styles) Styleable::parse(const std::string& str){
 		
 		skipWhitespaces(s);
 		
-		StylePropertyValue v = parsePropertyValue(type, s);
+		StylePropertyValue v = parseStylePropertyValue(type, s);
 		
 		skipWhitespaces(s);
 		
@@ -2290,6 +2324,10 @@ void SvgElement::accept(Visitor& visitor) const{
 	visitor.visit(*this);
 }
 
+void UseElement::accept(Visitor& visitor) const {
+	visitor.visit(*this);
+}
+
 Rgb StylePropertyValue::getRgb() const{
 	auto c = this->color;
 	
@@ -2304,8 +2342,24 @@ Rgb StylePropertyValue::getRgb() const{
 
 namespace{
 const std::set<StyleProperty_e> nonInheritedStyleProoperties = {
-	StyleProperty_e::OPACITY
-	//TODO: check if there are other non-inherited properties
+	StyleProperty_e::ALIGNMENT_BASELINE,
+	StyleProperty_e::BASELINE_SHIFT,
+	StyleProperty_e::CLIP,
+	StyleProperty_e::CLIP_PATH,
+	StyleProperty_e::DISPLAY,
+	StyleProperty_e::DOMINANT_BASELINE,
+	StyleProperty_e::ENABLE_BACKGROUND,
+	StyleProperty_e::FILTER,
+	StyleProperty_e::FLOOD_COLOR,
+	StyleProperty_e::FLOOD_OPACITY,
+	StyleProperty_e::LIGHTING_COLOR,
+	StyleProperty_e::MASK,
+	StyleProperty_e::OPACITY,
+	StyleProperty_e::OVERFLOW,
+	StyleProperty_e::STOP_COLOR,
+	StyleProperty_e::STOP_OPACITY,
+	StyleProperty_e::TEXT_DECORATION,
+	StyleProperty_e::UNICODE_BIDI
 };
 }
 
