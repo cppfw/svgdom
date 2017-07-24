@@ -200,8 +200,8 @@ struct StylePropertyValue{
 	 * @brief get color as RGB.
 	 * If this style property represents a color then this method returns the
 	 * color as red, green and blue values.
-     * @return RGB structure holding red, green and blue.S
-     */
+	 * @return RGB structure holding red, green and blue.
+	 */
 	Rgb getRgb()const;
 };
 
@@ -261,7 +261,17 @@ struct Container : public Element{
  * @brief an element which can reference another element.
  */
 struct Referencing{
+	/**
+	 * @brief Referenced element.
+	 * If the reference is IRI then this variable is nullptr.
+	 */
 	Element* ref = nullptr;
+
+	/**
+	 * @brief IRI reference.
+	 * If this reference does not reference an SVG element but is an IRI then 'ref' is nullptr and this
+	 * variable holds the IRI string.
+	 */
 	std::string iri;
 	
 	void attribsToStream(std::ostream& s)const;
@@ -317,13 +327,21 @@ struct Styleable{
 	static StyleProperty_e stringToProperty(std::string str);
 };
 
-struct GElement : public Container, public Transformable, public Styleable{
+struct GElement :
+		public Container,
+		public Transformable,
+		public Styleable
+{
 	void toStream(std::ostream& s, unsigned indent = 0)const override;
 	
 	void accept(Visitor& visitor)const override;
 };
 
-struct DefsElement : public Container, public Transformable, public Styleable{
+struct DefsElement :
+		public Container,
+		public Transformable,
+		public Styleable
+{
 	void toStream(std::ostream& s, unsigned indent = 0)const override;
 };
 
@@ -353,7 +371,11 @@ enum class PreserveAspectRatio_e{
 };
 
 
-struct SvgElement : public Container, public Rectangle, public Styleable{
+struct SvgElement :
+		public Container,
+		public Rectangle,
+		public Styleable
+{
 	std::array<real, 4> viewBox = {{-1, -1, -1, -1}};
 	
 	struct{
@@ -384,7 +406,11 @@ struct SvgElement : public Container, public Rectangle, public Styleable{
 /**
  * @brief Element representing a geometric shape.
  */
-struct Shape : public Element, public Styleable, public Transformable{
+struct Shape :
+		public Element,
+		public Styleable,
+		public Transformable
+{
 	void attribsToStream(std::ostream& s)const;
 };
 
@@ -452,7 +478,10 @@ struct PathElement : public Shape{
 	void accept(Visitor& visitor) const override;
 };
 
-struct RectElement : public Shape, public Rectangle{
+struct RectElement :
+		public Shape,
+		public Rectangle
+{
 	Length rx = Length::make(0, Length::Unit_e::UNKNOWN);
 	Length ry = Length::make(0, Length::Unit_e::UNKNOWN);
 	
@@ -526,7 +555,12 @@ struct PolygonElement : public PolylineShape{
 /**
  * @brief Common base for gradient elements.
  */
-struct Gradient : public Container, public Referencing, public Styleable, public Transformable{
+struct Gradient :
+		public Container,
+		public Referencing,
+		public Styleable,
+		public Transformable
+{
 	enum class SpreadMethod_e{
 		DEFAULT,
 		PAD,
