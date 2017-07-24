@@ -160,10 +160,9 @@ enum class XmlNamespace_e{
 const std::string DSvgNamespace = "http://www.w3.org/2000/svg";
 const std::string DXlinkNamespace = "http://www.w3.org/1999/xlink";
 
-StylePropertyValue parseStylePropertyValue(StyleProperty_e type, std::istream& s){
+//input parameter 'str' should have no leading or trailing whitespaces
+StylePropertyValue parseStylePropertyValue(StyleProperty_e type, const std::string& str){
 	StylePropertyValue v;
-
-	std::string str = readTillCharOrWhitespace(s, ';');
 
 	if (str == "inherit") {
 		v.rule = StylePropertyValue::Rule_e::INHERIT;
@@ -181,14 +180,9 @@ StylePropertyValue parseStylePropertyValue(StyleProperty_e type, std::istream& s
 			{
 				std::istringstream iss(str);
 				v.opacity = readInReal(iss);
-				if (s.fail()) {
-					s.clear();
-				}
-				else {
-					utki::clampRange(v.opacity, real(0), real(1));
-				}
-				break;
+				utki::clampRange(v.opacity, real(0), real(1));
 			}
+			break;
 		case StyleProperty_e::STOP_COLOR:
 		case StyleProperty_e::FILL:
 		case StyleProperty_e::STROKE:
@@ -234,10 +228,10 @@ StylePropertyValue parseStylePropertyValue(StyleProperty_e type, std::istream& s
 	return v;
 }
 
-StylePropertyValue parseStylePropertyValue(StyleProperty_e type, const std::string& str){
-	std::istringstream s(str);
+StylePropertyValue parseStylePropertyValue(StyleProperty_e type, std::istream& s){
 	skipWhitespaces(s);
-	return parseStylePropertyValue(type, s);
+	std::string str = readTillCharOrWhitespace(s, ';');
+	return parseStylePropertyValue(type, str);
 }
 
 struct Parser{
@@ -1492,8 +1486,6 @@ decltype(Styleable::styles) Styleable::parse(const std::string& str){
 		if(s.get() != ':'){
 			return ret;//expected colon
 		}
-		
-		skipWhitespaces(s);
 		
 		StylePropertyValue v = parseStylePropertyValue(type, s);
 		
