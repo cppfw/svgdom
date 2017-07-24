@@ -22,6 +22,7 @@ using namespace svgdom;
 
 namespace{
 
+	
 void skipTillCharInclusive(std::istream& s, char c){
 	while(!s.eof()){
 		if(s.get() == c){
@@ -154,6 +155,27 @@ std::string readTillCharOrWhitespace(std::istream& s, char c){
 	return ss.str();
 }
 
+std::string readTillChar(std::istream& s, char c){
+	std::stringstream ss;
+	while(!s.eof()){
+		if(s.peek() == c || s.peek() == std::char_traits<char>::eof()){
+			break;
+		}
+		ss << char(s.get());
+	}
+	return ss.str();
+}
+
+std::string trimTail(const std::string& s){
+	const auto t = s.find_last_not_of(" \t\n\r");
+	if(t == std::string::npos){
+		return s;
+	}
+	
+	return s.substr(0, t + 1);
+}
+
+
 
 
 enum class XmlNamespace_e{
@@ -235,7 +257,8 @@ StylePropertyValue parseStylePropertyValue(StyleProperty_e type, const std::stri
 
 StylePropertyValue parseStylePropertyValue(StyleProperty_e type, std::istream& s){
 	skipWhitespaces(s);
-	std::string str = readTillCharOrWhitespace(s, ';');
+	std::string str = readTillChar(s, ';');
+	str = trimTail(str);
 	return parseStylePropertyValue(type, str);
 }
 
@@ -1848,6 +1871,15 @@ std::string StylePropertyValue::paintToString()const{
 				return s.str();
 			}else{
 				return this->str;
+			}
+		case Rule_e::URL:
+			if(!this->url){
+				return "none";
+			}
+			{
+				std::stringstream ss;
+				ss << "url(#" << this->url->id << ")";
+				return ss.str();
 			}
 	}
 }
