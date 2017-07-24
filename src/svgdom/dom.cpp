@@ -149,17 +149,6 @@ std::string readTillCharOrWhitespace(std::istream& s, char c){
 	return ss.str();
 }
 
-std::string readTillChar(std::istream& s, char c){
-	std::stringstream ss;
-	while(!s.eof()){
-		if(s.peek() == c || s.peek() == std::char_traits<char>::eof()){
-			break;
-		}
-		ss << char(s.get());
-	}
-	return ss.str();
-}
-
 
 
 enum class XmlNamespace_e{
@@ -173,7 +162,14 @@ const std::string DXlinkNamespace = "http://www.w3.org/1999/xlink";
 
 StylePropertyValue parseStylePropertyValue(StyleProperty_e type, std::istream& s){
 	StylePropertyValue v;
-	
+
+	std::string str = readTillCharOrWhitespace(s, ';');
+
+	if (str == "inherit") {
+		v.rule = StylePropertyValue::Rule_e::INHERIT;
+		return v;
+	}
+
 	switch(type){
 		default:
 			ASSERT(false)
@@ -182,61 +178,56 @@ StylePropertyValue parseStylePropertyValue(StyleProperty_e type, std::istream& s
 		case StyleProperty_e::OPACITY:
 		case StyleProperty_e::STROKE_OPACITY:
 		case StyleProperty_e::FILL_OPACITY:
-			s >> v.opacity;
-			if(s.fail()){
-				s.clear();
-			}else{
-				utki::clampRange(v.opacity, real(0), real(1));
+			{
+				std::istringstream iss(str);
+				v.opacity = readInReal(iss);
+				if (s.fail()) {
+					s.clear();
+				}
+				else {
+					utki::clampRange(v.opacity, real(0), real(1));
+				}
+				break;
 			}
-			break;
 		case StyleProperty_e::STOP_COLOR:
 		case StyleProperty_e::FILL:
 		case StyleProperty_e::STROKE:
-			v = StylePropertyValue::parsePaint(readTillChar(s, ';'));
+			v = StylePropertyValue::parsePaint(str);
 //				TRACE(<< "paint read = " << std::hex << v.integer << std::endl)
 			break;
 		case StyleProperty_e::STROKE_WIDTH:
-			v.length = Length::parse(readTillChar(s, ';'));
+			v.length = Length::parse(str);
 //				TRACE(<< "stroke-width read = " << v.length << std::endl)
 			break;
 		case StyleProperty_e::STROKE_LINECAP:
-			{
-				auto str = readTillCharOrWhitespace(s, ';');
-				if(str == "butt"){
-					v.strokeLineCap = StrokeLineCap_e::BUTT;
-				}else if(str == "round"){
-					v.strokeLineCap = StrokeLineCap_e::ROUND;
-				}else if(str == "square"){
-					v.strokeLineCap = StrokeLineCap_e::SQUARE;
-				}else{
-					TRACE(<< "unknown strokeLineCap value:" << str << std::endl)
-				}
+			if(str == "butt"){
+				v.strokeLineCap = StrokeLineCap_e::BUTT;
+			}else if(str == "round"){
+				v.strokeLineCap = StrokeLineCap_e::ROUND;
+			}else if(str == "square"){
+				v.strokeLineCap = StrokeLineCap_e::SQUARE;
+			}else{
+				TRACE(<< "unknown strokeLineCap value:" << str << std::endl)
 			}
 			break;
 		case StyleProperty_e::STROKE_LINEJOIN:
-			{
-				auto str = readTillCharOrWhitespace(s, ';');
-				if(str == "miter"){
-					v.strokeLineJoin = StrokeLineJoin_e::MITER;
-				}else if(str == "round"){
-					v.strokeLineJoin = StrokeLineJoin_e::ROUND;
-				}else if(str == "bevel"){
-					v.strokeLineJoin = StrokeLineJoin_e::BEVEL;
-				}else{
-					TRACE(<< "unknown strokeLineJoin value:" << str << std::endl)
-				}
+			if(str == "miter"){
+				v.strokeLineJoin = StrokeLineJoin_e::MITER;
+			}else if(str == "round"){
+				v.strokeLineJoin = StrokeLineJoin_e::ROUND;
+			}else if(str == "bevel"){
+				v.strokeLineJoin = StrokeLineJoin_e::BEVEL;
+			}else{
+				TRACE(<< "unknown strokeLineJoin value:" << str << std::endl)
 			}
 			break;
 		case StyleProperty_e::FILL_RULE:
-			{
-				auto str = readTillCharOrWhitespace(s, ';');
-				if(str == "nonzero"){
-					v.fillRule = FillRule_e::NONZERO;
-				}else if(str == "evenodd"){
-					v.fillRule = FillRule_e::EVENODD;
-				}else{
-					TRACE(<< "unknown fill-rule value:" << str << std::endl)
-				}
+			if(str == "nonzero"){
+				v.fillRule = FillRule_e::NONZERO;
+			}else if(str == "evenodd"){
+				v.fillRule = FillRule_e::EVENODD;
+			}else{
+				TRACE(<< "unknown fill-rule value:" << str << std::endl)
 			}
 			break;
 	}
