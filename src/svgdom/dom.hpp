@@ -347,7 +347,7 @@ struct DefsElement :
 {
 	void toStream(std::ostream& s, unsigned indent = 0)const override;
 
-	void accept(Visitor& visitor)const override {}
+	void accept(Visitor& visitor)const override;
 };
 
 /**
@@ -401,6 +401,10 @@ struct ViewBoxed {
 	static decltype(viewBox) parseViewbox(const std::string& str);
 
 	void attribsToStream(std::ostream& s)const;
+
+	bool isViewBoxSpecified()const {
+		return this->viewBox[2] >= 0;//width is not negative
+	}
 };
 
 struct SvgElement :
@@ -422,6 +426,18 @@ struct SvgElement :
 	 * @return 0 if any of height or weight is specified in percent.
 	 */
 	real aspectRatio(real dpi)const;
+};
+
+struct SymbolElement :
+		public Container,
+		public Styleable,
+		public ViewBoxed
+{
+	void attribsToStream(std::ostream& s)const;
+
+	void toStream(std::ostream& s, unsigned indent = 0)const override;
+
+	void accept(Visitor& visitor) const override;
 };
 
 /**
@@ -667,7 +683,9 @@ public:
 	virtual void visit(const PolygonElement& e){}
 	virtual void visit(const GElement& e){}
 	virtual void visit(const SvgElement& e){}
+	virtual void visit(const SymbolElement& e) {}
 	virtual void visit(const UseElement& e) {}
+	virtual void visit(const DefsElement& e) {}
 	
 	virtual ~Visitor()noexcept{}
 };

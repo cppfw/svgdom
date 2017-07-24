@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="80" height="80">
+	<defs>
+		<symbol id="Port" style="fill:green" viewBox="-10 -20 50 60">
+			<circle style="fill:inherit" r="10"/>
+		</symbol>
+	</defs>
+	<symbol id="Trololo" preserveAspectRatio="defer xMidYMid">
+		<circle style="fill:inherit" r="10"/>
+	</symbol>
+	<symbol id="Trololo1" preserveAspectRatio="xMidYMid slice">
+		<circle style="fill:inherit" r="10"/>
+	</symbol>
+	<symbol id="Trololo2" preserveAspectRatio="xMidYMid">
+		<circle style="fill:inherit" r="10"/>
+	</symbol>
+	<use x="50" y="10" xlink:href="#Port"/>
+</svg>

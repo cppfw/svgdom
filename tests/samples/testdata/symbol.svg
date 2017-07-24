@@ -1,0 +1,27 @@
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" 
+  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="80" height="80" xmlns="http://www.w3.org/2000/svg"
+xmlns:xlink="http://www.w3.org/1999/xlink"
+>
+  <defs>
+    <symbol id="Port" viewBox="-10 -20 50 60" style="fill:green">
+      <circle style="fill: inherit;" r="10"/>
+    </symbol>
+  </defs>
+ 
+  <symbol id="Trololo" preserveAspectRatio="defer xMidYMid meet">
+      <circle style="fill: inherit;" r="10"/>
+  </symbol>
+ 
+  <symbol id="Trololo1" preserveAspectRatio=" xMidYMid slice">
+      <circle style="fill: inherit;" r="10"/>
+  </symbol>
+  
+  <symbol id="Trololo2" preserveAspectRatio=" xMidYMid">
+      <circle style="fill: inherit;" r="10"/>
+  </symbol>
+   
+  <use x="50" y="10" xlink:href="#Port" />
+
+</svg>

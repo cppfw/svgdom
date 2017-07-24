@@ -479,6 +479,21 @@ struct Parser{
 		
 		return ret;
 	}
+
+	std::unique_ptr<SymbolElement> parseSymbolElement(const pugi::xml_node& n) {
+		ASSERT(getNamespace(n.name()).ns == XmlNamespace_e::SVG)
+		ASSERT(getNamespace(n.name()).name == "symbol")
+
+//		TRACE(<< "parseSymbolElement():" << std::endl)
+
+		auto ret = utki::makeUnique<SymbolElement>();
+
+		this->fillStyleable(*ret, n);
+		this->fillContainer(*ret, n);
+		this->fillViewBoxed(*ret, n);
+
+		return ret;
+	}
 	
 	std::unique_ptr<GElement> parseGElement(const pugi::xml_node& n){
 		ASSERT(getNamespace(n.name()).ns == XmlNamespace_e::SVG)
@@ -823,10 +838,13 @@ std::unique_ptr<svgdom::Element> Parser::parseNode(const pugi::xml_node& n){
 	});
 	
 	auto nsn = getNamespace(n.name());
+//	TRACE(<< "nsn.name = " << nsn.name << std::endl)
 	switch(nsn.ns){
 		case XmlNamespace_e::SVG:
 			if(nsn.name == "svg"){
 				return this->parseSvgElement(n);
+			}else if(nsn.name == "symbol") {
+				return this->parseSymbolElement(n);
 			}else if(nsn.name == "g"){
 				return this->parseGElement(n);
 			}else if(nsn.name == "defs"){
@@ -1057,7 +1075,6 @@ void SvgElement::toStream(std::ostream& s, unsigned indent) const{
 		s << " xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" version=\"1.1\"";
 	}
 	this->attribsToStream(s);
-	this->Styleable::attribsToStream(s);
 	
 	if(this->children.size() == 0){
 		s << "/>";
@@ -1065,6 +1082,23 @@ void SvgElement::toStream(std::ostream& s, unsigned indent) const{
 		s << ">" << std::endl;
 		this->childrenToStream(s, indent + 1);
 		s << ind << "</svg>";
+	}
+	s << std::endl;
+}
+
+void SymbolElement::toStream(std::ostream& s, unsigned indent) const {
+	auto ind = indentStr(indent);
+
+	s << ind << "<symbol";
+	
+	this->attribsToStream(s);
+
+	if (this->children.size() == 0) {
+		s << "/>";
+	}else{
+		s << ">" << std::endl;
+		this->childrenToStream(s, indent + 1);
+		s << ind << "</symbol>";
 	}
 	s << std::endl;
 }
@@ -2316,6 +2350,14 @@ void SvgElement::accept(Visitor& visitor) const{
 	visitor.visit(*this);
 }
 
+void SymbolElement::accept(Visitor& visitor) const {
+	visitor.visit(*this);
+}
+
+void DefsElement::accept(Visitor& visitor) const {
+	visitor.visit(*this);
+}
+
 void UseElement::accept(Visitor& visitor) const {
 	visitor.visit(*this);
 }
@@ -2962,7 +3004,7 @@ void ViewBoxed::parseAndFillPreserveAspectRatio(const std::string& str) {
 
 
 void ViewBoxed::attribsToStream(std::ostream& s)const {
-	if (this->viewBox[0] >= 0) {
+	if (this->isViewBoxSpecified()) {
 		s << " viewBox=\"";
 
 		bool isFirst = true;
@@ -2996,7 +3038,14 @@ void ViewBoxed::attribsToStream(std::ostream& s)const {
 
 void SvgElement::attribsToStream(std::ostream& s) const {
 	this->Container::attribsToStream(s);
+	this->Styleable::attribsToStream(s);
 	this->Rectangle::attribsToStream(s);
+	this->ViewBoxed::attribsToStream(s);
+}
+
+void SymbolElement::attribsToStream(std::ostream& s) const {
+	this->Container::attribsToStream(s);
+	this->Styleable::attribsToStream(s);
 	this->ViewBoxed::attribsToStream(s);
 }
 

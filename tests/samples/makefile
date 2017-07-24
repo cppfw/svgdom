@@ -34,7 +34,7 @@ this_svgs := $(patsubst %.svg,%,$(shell ls $(d)testdata/*.svg))
 define this_rules
 test:: $(prorab_this_name)
 	@prorab-running-test.sh samples
-	$(prorab_echo)cp $(d)../../src/*.dll . || true
+	$(prorab_echo)cp $(d)../../src/*.dll $(d) || true
 	$(prorab_echo)for f in $(this_svgs); do \
 	    echo "checking file $$$$f.svg..." && \
 	    LD_LIBRARY_PATH=$(d)../../src DYLD_LIBRARY_PATH=$$$$LD_LIBRARY_PATH $(d)./parsesvg $$$$f.svg && \
