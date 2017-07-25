@@ -2414,7 +2414,7 @@ Rgb StylePropertyValue::getRgb() const{
 }
 
 namespace{
-const std::set<StyleProperty_e> nonInheritedStyleProoperties = {
+const std::set<StyleProperty_e> nonInheritedStyleProperties = {
 	StyleProperty_e::ALIGNMENT_BASELINE,
 	StyleProperty_e::BASELINE_SHIFT,
 	StyleProperty_e::CLIP,
@@ -2455,7 +2455,7 @@ const StylePropertyValue* Element::getStyleProperty(StyleProperty_e property, bo
 		}
 	}
 	
-	if(!explicitInherit && nonInheritedStyleProoperties.find(property) != nonInheritedStyleProoperties.end()){
+	if(!explicitInherit && nonInheritedStyleProperties.find(property) != nonInheritedStyleProperties.end()){
 		return nullptr;
 	}
 	
