@@ -1731,13 +1731,31 @@ StylePropertyValue StylePropertyValue::parsePaint(const std::string& str){
 	
 	ASSERT(!std::isspace(str[0])) //leading spaces should be skept already	
 	
-	//check if 'none'
 	{
-		const std::string cmp = "none";
-		if(cmp == str.substr(0, cmp.length())){
-			ret.type = StylePropertyValue::Type_e::NONE;
-			return ret;
+		std::string url = "url(";
+		if(url == str.substr(0, url.length())){
+			std::istringstream s(str);
+			
+			std::string tmpStr;
+			s >> std::setw(int(url.length())) >> tmpStr >> std::setw(0);
+			ASSERT(tmpStr == url)
+			
+			skipWhitespaces(s);
+			tmpStr = readTillCharOrWhitespace(s, ')');
+			
+			skipWhitespaces(s);
+			if(s.get() == ')'){
+				ret.str = tmpStr;
+				ret.type = StylePropertyValue::Type_e::URL;
+				ret.url = nullptr;
+				return ret;
+			}
 		}
+	}
+	
+	if(str == "none"){
+		ret.type = StylePropertyValue::Type_e::NONE;
+		return ret;
 	}
 	
 	if(str == "currentColor"){
@@ -1810,28 +1828,6 @@ StylePropertyValue StylePropertyValue::parsePaint(const std::string& str){
 				ret.color = r | (g << 8) | (b << 16);
 			}
 			return ret;
-		}
-	}
-	
-	{
-		std::string url = "url(";
-		if(url == str.substr(0, url.length())){
-			std::istringstream s(str);
-			
-			std::string tmpStr;
-			s >> std::setw(int(url.length())) >> tmpStr >> std::setw(0);
-			ASSERT(tmpStr == url)
-			
-			skipWhitespaces(s);
-			tmpStr = readTillCharOrWhitespace(s, ')');
-			
-			skipWhitespaces(s);
-			if(s.get() == ')'){
-				ret.str = tmpStr;
-				ret.type = StylePropertyValue::Type_e::URL;
-				ret.url = nullptr;
-				return ret;
-			}
 		}
 	}
 	
