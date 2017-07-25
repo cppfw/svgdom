@@ -258,6 +258,7 @@ struct Element : public utki::Unique{
 	
 	virtual void accept(Visitor& visitor)const{}
 	
+	//TODO: remove
 	virtual std::unique_ptr<Element> clone()const = 0;
 	
 	/**
@@ -284,7 +285,7 @@ struct Element : public utki::Unique{
 /**
  * @brief An element which can have child elements.
  */
-struct Container : public Element {
+struct Container : public Element{
 	std::vector<std::unique_ptr<Element>> children;
 	
 	void childrenToStream(std::ostream& s, unsigned indent)const;
@@ -298,8 +299,10 @@ protected:
 	 * @brief Copy constructor.
 	 * @param c - container to copy.
 	 */
+	//TODO:remove
 	Container(const Container& c);
 	
+	//TODO: remove
 	Container(){}
 };
 
