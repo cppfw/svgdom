@@ -905,10 +905,10 @@ std::unique_ptr<svgdom::Element> Parser::parseNode(const pugi::xml_node& n){
 	return nullptr;
 }
 
-void resolveReferences(Element& e, SvgElement& svg){
+void resolveReferences(Element& e, SvgElement& root){
 	if(auto r = dynamic_cast<Referencing*>(&e)){
 		if(r->iri.length() != 0 && r->iri[0] == '#'){
-			r->ref = svg.findById(r->iri.substr(1, r->iri.length() - 1));
+			r->ref = root.findById(r->iri.substr(1, r->iri.length() - 1));
 		}
 	}
 	
@@ -916,7 +916,7 @@ void resolveReferences(Element& e, SvgElement& svg){
 		for(auto& p : s->styles){
 			if(p.second.isUrl()){
 				if(p.second.str.length() != 0 && p.second.str[0] == '#'){
-					p.second.url = svg.findById(p.second.str.substr(1, p.second.str.length() - 1));
+					p.second.url = root.findById(p.second.str.substr(1, p.second.str.length() - 1));
 				}
 			}
 		}
@@ -924,7 +924,7 @@ void resolveReferences(Element& e, SvgElement& svg){
 	
 	if(auto container = dynamic_cast<Container*>(&e)){
 		for(auto& c : container->children){
-			resolveReferences(*c, svg);
+			resolveReferences(*c, root);
 		}
 	}
 }
