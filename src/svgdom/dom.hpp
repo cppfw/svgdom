@@ -367,6 +367,8 @@ struct GElement :
 		public Transformable,
 		public Styleable
 {
+	void attribsToStream(std::ostream& s)const;
+	
 	void toStream(std::ostream& s, unsigned indent = 0)const override;
 	
 	void accept(Visitor& visitor)const override;
@@ -395,9 +397,7 @@ struct Rectangle{
 };
 
 struct UseElement :
-	public Element,
-	public Transformable,
-	public Styleable,
+	public GElement,
 	public Referencing,
 	public Rectangle
 {

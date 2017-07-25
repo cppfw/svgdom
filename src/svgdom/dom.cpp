@@ -1138,13 +1138,17 @@ std::string Element::toString() const{
 	return s.str();
 }
 
+void GElement::attribsToStream(std::ostream& s) const{
+	this->Container::attribsToStream(s);
+	this->Transformable::attribsToStream(s);
+	this->Styleable::attribsToStream(s);
+}
+
 void GElement::toStream(std::ostream& s, unsigned indent) const{
 	auto ind = indentStr(indent);
 	
 	s << ind << "<g";
-	this->Container::attribsToStream(s);
-	this->Transformable::attribsToStream(s);
-	this->Styleable::attribsToStream(s);
+	this->attribsToStream(s);
 	
 	if(this->children.size() == 0){
 		s << "/>";
@@ -1182,9 +1186,7 @@ void UseElement::toStream(std::ostream& s, unsigned indent) const {
 //	TRACE(<< "UseElement::toStream():" << std::endl)
 
 	s << ind << "<use";
-	this->Element::attribsToStream(s);
-	this->Transformable::attribsToStream(s);
-	this->Styleable::attribsToStream(s);
+	this->GElement::attribsToStream(s);
 	this->Rectangle::attribsToStream(s);
 	this->Referencing::attribsToStream(s);
 	s << "/>";
