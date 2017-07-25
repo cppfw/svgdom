@@ -2436,6 +2436,11 @@ const std::set<StyleProperty_e> nonInheritedStyleProperties = {
 };
 }
 
+bool Styleable::isStylePropertyInherited(StyleProperty_e p) {
+	return nonInheritedStyleProperties.find(p) == nonInheritedStyleProperties.end();
+}
+
+
 const StylePropertyValue* Styleable::findStyleProperty(StyleProperty_e p)const{
 	auto i = this->styles.find(p);
 	if(i != this->styles.end()){
@@ -2455,7 +2460,7 @@ const StylePropertyValue* Element::getStyleProperty(StyleProperty_e property, bo
 		}
 	}
 	
-	if(!explicitInherit && nonInheritedStyleProperties.find(property) != nonInheritedStyleProperties.end()){
+	if(!explicitInherit && !Styleable::isStylePropertyInherited(property)){
 		return nullptr;
 	}
 	

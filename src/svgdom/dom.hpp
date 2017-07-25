@@ -374,6 +374,8 @@ struct Styleable{
 	
 	static decltype(styles) parse(const std::string& str);
 	
+	static bool isStylePropertyInherited(StyleProperty_e p);
+	
 	static std::string propertyToString(StyleProperty_e p);
 	static StyleProperty_e stringToProperty(std::string str);
 };
