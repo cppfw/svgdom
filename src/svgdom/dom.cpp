@@ -3142,11 +3142,16 @@ real SvgElement::aspectRatio(real dpi)const{
 	return w / h;
 }
 
-Container::Container(const Container& c) {
+
+Container::Container(const Container& c) :
+		Element(c)
+{
 	for(auto& e : c.children){
 		this->children.push_back(e->clone());
+		this->children.back()->parent = this;
 	}
 }
+
 
 
 std::unique_ptr<Element> RectElement::clone() const {

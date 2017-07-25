@@ -297,7 +297,6 @@ protected:
 	 */
 	Container(const Container& c);
 	
-	//Container is not a final SVG element, so make the constructor protected.
 	Container(){}
 };
 
