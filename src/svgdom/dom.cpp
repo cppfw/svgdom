@@ -3141,3 +3141,114 @@ real SvgElement::aspectRatio(real dpi)const{
 	
 	return w / h;
 }
+
+Container::Container(const Container& c) {
+	for(auto& e : c.children){
+		this->children.push_back(e->clone());
+	}
+}
+
+
+std::unique_ptr<Element> RectElement::clone() const {
+	return utki::makeUnique<
+			std::remove_cv<
+					std::remove_pointer<decltype(this)>::type
+				>::type
+		>(*this);
+}
+
+std::unique_ptr<Element> GElement::clone() const {
+	return utki::makeUnique<
+				std::remove_cv<
+						std::remove_pointer<decltype(this)>::type
+					>::type
+			>(*this);
+}
+
+std::unique_ptr<Element> LineElement::clone() const {
+	return utki::makeUnique<
+				std::remove_cv<
+						std::remove_pointer<decltype(this)>::type
+					>::type
+			>(*this);
+}
+
+std::unique_ptr<Element> PolylineElement::clone() const {
+	return utki::makeUnique<
+				std::remove_cv<
+						std::remove_pointer<decltype(this)>::type
+					>::type
+			>(*this);
+}
+
+std::unique_ptr<Element> SvgElement::clone() const {
+	return utki::makeUnique<
+				std::remove_cv<
+						std::remove_pointer<decltype(this)>::type
+					>::type
+			>(*this);
+}
+
+std::unique_ptr<Element> CircleElement::clone() const {
+	return utki::makeUnique<
+				std::remove_cv<
+						std::remove_pointer<decltype(this)>::type
+					>::type
+			>(*this);
+}
+
+std::unique_ptr<Element> EllipseElement::clone() const {
+	return utki::makeUnique<
+				std::remove_cv<
+						std::remove_pointer<decltype(this)>::type
+					>::type
+			>(*this);
+}
+
+std::unique_ptr<Element> Gradient::StopElement::clone() const {
+	return utki::makeUnique<
+				std::remove_cv<
+						std::remove_pointer<decltype(this)>::type
+					>::type
+			>(*this);
+}
+
+std::unique_ptr<Element> PolygonElement::clone() const {
+	return utki::makeUnique<
+				std::remove_cv<
+						std::remove_pointer<decltype(this)>::type
+					>::type
+			>(*this);
+}
+
+std::unique_ptr<Element> PathElement::clone() const {
+	return utki::makeUnique<
+				std::remove_cv<
+						std::remove_pointer<decltype(this)>::type
+					>::type
+			>(*this);
+}
+
+std::unique_ptr<Element> RadialGradientElement::clone() const {
+	return utki::makeUnique<
+				std::remove_cv<
+						std::remove_pointer<decltype(this)>::type
+					>::type
+			>(*this);
+}
+
+std::unique_ptr<Element> LinearGradientElement::clone() const {
+	return utki::makeUnique<
+				std::remove_cv<
+						std::remove_pointer<decltype(this)>::type
+					>::type
+			>(*this);
+}
+
+std::unique_ptr<Element> DefsElement::clone() const {
+	return utki::makeUnique<
+				std::remove_cv<
+						std::remove_pointer<decltype(this)>::type
+					>::type
+			>(*this);
+}
