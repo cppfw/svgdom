@@ -192,7 +192,7 @@ StylePropertyValue parseStylePropertyValue(StyleProperty_e type, const std::stri
 	StylePropertyValue v;
 
 	if (str == "inherit") {
-		v.rule = StylePropertyValue::Rule_e::INHERIT;
+		v.type = StylePropertyValue::Type_e::INHERIT;
 		return v;
 	}
 
@@ -1720,12 +1720,12 @@ const std::map<std::string, std::uint32_t> colorNames = {
 
 }//~namespace
 
-
+//'str' should have no leading and/or trailing white spaces.
 StylePropertyValue StylePropertyValue::parsePaint(const std::string& str){
 	StylePropertyValue ret;
 	
 	if(str.size() == 0){
-		ret.rule = StylePropertyValue::Rule_e::NONE;
+		ret.type = StylePropertyValue::Type_e::NONE;
 		return ret;
 	}
 	
@@ -1735,9 +1735,14 @@ StylePropertyValue StylePropertyValue::parsePaint(const std::string& str){
 	{
 		const std::string cmp = "none";
 		if(cmp == str.substr(0, cmp.length())){
-			ret.rule = StylePropertyValue::Rule_e::NONE;
+			ret.type = StylePropertyValue::Type_e::NONE;
 			return ret;
 		}
+	}
+	
+	if(str == "currentColor"){
+		ret.type = StylePropertyValue::Type_e::CURRENT_COLOR;
+		return ret;
 	}
 	
 	//check if # notation
@@ -1772,7 +1777,7 @@ StylePropertyValue StylePropertyValue::parsePaint(const std::string& str){
 						| (std::uint32_t(d[4]) << 20) | (std::uint32_t(d[5]) << 16);
 				break;
 			default:
-				ret.rule = StylePropertyValue::Rule_e::NONE;
+				ret.type = StylePropertyValue::Type_e::NONE;
 				break;
 		}
 		
@@ -1823,7 +1828,7 @@ StylePropertyValue StylePropertyValue::parsePaint(const std::string& str){
 			skipWhitespaces(s);
 			if(s.get() == ')'){
 				ret.str = tmpStr;
-				ret.rule = StylePropertyValue::Rule_e::URL;
+				ret.type = StylePropertyValue::Type_e::URL;
 				ret.url = nullptr;
 				return ret;
 			}
@@ -1849,13 +1854,15 @@ StylePropertyValue StylePropertyValue::parsePaint(const std::string& str){
 }
 
 std::string StylePropertyValue::paintToString()const{
-	switch(this->rule){
+	switch(this->type){
 		default:
-		case Rule_e::NONE:
+		case Type_e::NONE:
 			return "none";
-		case Rule_e::INHERIT:
+		case Type_e::INHERIT:
 			return "inherit";
-		case Rule_e::NORMAL:
+		case Type_e::CURRENT_COLOR:
+			return "currentColor";
+		case Type_e::NORMAL:
 			if(this->str.size() == 0){
 				//it is a # notation
 
@@ -1872,7 +1879,7 @@ std::string StylePropertyValue::paintToString()const{
 			}else{
 				return this->str;
 			}
-		case Rule_e::URL:
+		case Type_e::URL:
 			if(!this->url){
 				return "none";
 			}
@@ -2433,7 +2440,7 @@ const StylePropertyValue* Element::getStyleProperty(StyleProperty_e property, bo
 	if(auto styleable = dynamic_cast<const Styleable*>(this)){
 		auto i = styleable->styles.find(property);
 		if(i != styleable->styles.end()){
-			if(i->second.rule == StylePropertyValue::Rule_e::INHERIT){
+			if(i->second.type == StylePropertyValue::Type_e::INHERIT){
 				explicitInherit = true;
 			}else{
 				return &i->second;

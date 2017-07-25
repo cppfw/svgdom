@@ -156,23 +156,47 @@ enum class FillRule_e{
 };
 
 struct StylePropertyValue{
-	enum class Rule_e{
+	enum class Type_e{
+		/**
+		 * @brief No special value is used.
+		 */
 		NORMAL,
-		NONE, //for color property (e.g. fill, stroke, etc.) means that color is 'none'
-		INHERIT, //means that property inheritance was explicitly stated
-		URL //means that "str" member holds URL
-	} rule = Rule_e::NORMAL;
+		
+		/**
+		 * @brief For paint 'none' value.
+		 * For paint property (e.g. fill, stroke, etc.) means that color is 'none'
+		 */
+		NONE,
+		
+		/**
+		 * @brief For paint 'currentColor' value.
+		 * Means "use 'color' property value".
+		 */
+		CURRENT_COLOR,
+		
+		/**
+		 * @brief Property 'inherit' value.
+		 * Means that property inheritance was explicitly stated using the 'inherit' keyword.
+		 */
+		INHERIT,
+		
+		/**
+		 * @brief For paint 'url' value.
+		 * Means that "str" member holds URL.
+		 */
+		URL
+	} type = Type_e::NORMAL;
 	
 	bool isNormal()const noexcept{
-		return this->rule == Rule_e::NORMAL;
+		return this->type == Type_e::NORMAL;
 	}
 	
 	bool isNone()const noexcept{
-		return this->rule == Rule_e::NONE;
+		return this->type == Type_e::NONE;
 	}
 	
 	bool isUrl()const noexcept{
-		return this->rule == Rule_e::URL;
+		return this->type == Type_e::URL;
 	}
 	
 	union{
@@ -185,11 +209,19 @@ struct StylePropertyValue{
 		
 		/**
 		 * @brief reference to another element.
-		 * Can be nullptr. It is used only if 'rule' is ERule::URL.
+		 * Can be nullptr. It is used only if 'rule' is Type_e::URL.
 		 */
 		Element* url; //used if rule is URL
 	};
 	
+	/**
+	 * @brief String data.
+	 * This variable holds any string data which can be associated with the
+	 * property value.
+	 * In case the Type is URL it holds the url string.
+	 * In case the Type is NORMAL and property value is a color specified by color name
+	 * then it holds the color name.
+	 */
 	std::string str;
 	
 	static StylePropertyValue parsePaint(const std::string& str);
