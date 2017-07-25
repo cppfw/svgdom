@@ -2436,14 +2436,21 @@ const std::set<StyleProperty_e> nonInheritedStyleProoperties = {
 };
 }
 
+const StylePropertyValue* Styleable::findStyleProperty(StyleProperty_e p)const{
+	auto i = this->styles.find(p);
+	if(i != this->styles.end()){
+		return &i->second;
+	}
+	return nullptr;
+}
+
 const StylePropertyValue* Element::getStyleProperty(StyleProperty_e property, bool explicitInherit) const{
 	if(auto styleable = dynamic_cast<const Styleable*>(this)){
-		auto i = styleable->styles.find(property);
-		if(i != styleable->styles.end()){
-			if(i->second.type == StylePropertyValue::Type_e::INHERIT){
+		if(auto p = styleable->findStyleProperty(property)){
+			if(p->type == StylePropertyValue::Type_e::INHERIT){
 				explicitInherit = true;
 			}else{
-				return &i->second;
+				return p;
 			}
 		}
 	}

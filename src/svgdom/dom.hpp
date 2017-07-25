@@ -368,6 +368,8 @@ struct Transformable{
 struct Styleable{
 	std::map<StyleProperty_e, StylePropertyValue> styles;
 	
+	const StylePropertyValue* findStyleProperty(StyleProperty_e p)const;
+	
 	void attribsToStream(std::ostream& s)const;
 	
 	static decltype(styles) parse(const std::string& str);
