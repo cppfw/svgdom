@@ -211,6 +211,7 @@ struct StylePropertyValue{
 		 * @brief reference to another element.
 		 * Can be nullptr. It is used only if 'rule' is Type_e::URL.
 		 */
+		//TODO: remove
 		Element* url; //used if rule is URL
 	};
 	
@@ -222,6 +223,7 @@ struct StylePropertyValue{
 	 * In case the Type is NORMAL and property value is a color specified by color name
 	 * then it holds the color name.
 	 */
+	//TODO: move to union?
 	std::string str;
 	
 	static StylePropertyValue parsePaint(const std::string& str);
@@ -241,6 +243,7 @@ struct StylePropertyValue{
  * @brief Base class for all SVG document elements.
  */
 struct Element : public utki::Unique{
+	//TODO: remove
 	Container* parent = nullptr;
 	
 	std::string id;
@@ -308,6 +311,7 @@ struct Referencing{
 	 * @brief Referenced element.
 	 * If the reference is an IRI to an object outside of the SVG document then this variable is nullptr.
 	 */
+	//TODO: remove
 	Element* ref = nullptr;
 
 	/**
@@ -408,13 +412,17 @@ struct Rectangle{
 };
 
 struct UseElement :
-	public GElement,
+	public Element,
+	public Transformable,
+	public Styleable,
 	public Referencing,
 	public Rectangle
 {
 	void toStream(std::ostream& s, unsigned indent = 0)const override;
 
 	void accept(Visitor& visitor)const override;
+	
+	std::unique_ptr<Element> clone() const override;
 };
 
 enum class PreserveAspectRatio_e{

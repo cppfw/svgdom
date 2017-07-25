@@ -1186,7 +1186,9 @@ void UseElement::toStream(std::ostream& s, unsigned indent) const {
 //	TRACE(<< "UseElement::toStream():" << std::endl)
 
 	s << ind << "<use";
-	this->GElement::attribsToStream(s);
+	this->Element::attribsToStream(s);
+	this->Transformable::attribsToStream(s);
+	this->Styleable::attribsToStream(s);
 	this->Rectangle::attribsToStream(s);
 	this->Referencing::attribsToStream(s);
 	s << "/>";
@@ -3251,6 +3253,14 @@ std::unique_ptr<Element> LinearGradientElement::clone() const {
 }
 
 std::unique_ptr<Element> DefsElement::clone() const {
+	return utki::makeUnique<
+				std::remove_cv<
+						std::remove_pointer<decltype(this)>::type
+					>::type
+			>(*this);
+}
+
+std::unique_ptr<Element> UseElement::clone() const {
 	return utki::makeUnique<
 				std::remove_cv<
 						std::remove_pointer<decltype(this)>::type
