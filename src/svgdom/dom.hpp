@@ -258,9 +258,6 @@ struct Element : public utki::Unique{
 	
 	virtual void accept(Visitor& visitor)const{}
 	
-	//TODO: remove
-	virtual std::unique_ptr<Element> clone()const = 0;
-	
 	/**
 	 * @brief Get style property of the element.
 	 * Properties are CSS, so it will get the property from parent elements in case this element
@@ -297,17 +294,6 @@ struct Container : public Element{
 	void relayAccept(Visitor& visitor)const;
 	
 	Element* findById(const std::string& elementId) override;
-
-protected:
-	/**
-	 * @brief Copy constructor.
-	 * @param c - container to copy.
-	 */
-	//TODO:remove
-	Container(const Container& c);
-	
-	//TODO: remove
-	Container(){}
 };
 
 /**
@@ -394,8 +380,6 @@ struct GElement :
 	void toStream(std::ostream& s, unsigned indent = 0)const override;
 	
 	void accept(Visitor& visitor)const override;
-	
-	std::unique_ptr<Element> clone() const override;
 };
 
 struct DefsElement :
@@ -406,8 +390,6 @@ struct DefsElement :
 	void toStream(std::ostream& s, unsigned indent = 0)const override;
 
 	void accept(Visitor& visitor)const override;
-	
-	std::unique_ptr<Element> clone() const override;
 };
 
 /**
@@ -432,8 +414,6 @@ struct UseElement :
 	void toStream(std::ostream& s, unsigned indent = 0)const override;
 
 	void accept(Visitor& visitor)const override;
-	
-	std::unique_ptr<Element> clone() const override;
 };
 
 enum class PreserveAspectRatio_e{
@@ -481,8 +461,6 @@ struct SvgElement :
 	
 	void accept(Visitor& visitor) const override;
 	
-	std::unique_ptr<Element> clone() const override;
-	
 	/**
 	 * @brief Get aspect ratio of the element.
 	 * @param dpi - dots per inch.
@@ -492,7 +470,11 @@ struct SvgElement :
 	real aspectRatio(real dpi)const;
 };
 
-struct SymbolElement : public SvgElement{
+struct SymbolElement :
+		public Container,
+		public Styleable,
+		public ViewBoxed
+{
 	void attribsToStream(std::ostream& s)const;
 
 	void toStream(std::ostream& s, unsigned indent = 0)const override;
@@ -573,8 +555,6 @@ struct PathElement : public Shape{
 	static decltype(path) parse(const std::string& str);
 	
 	void accept(Visitor& visitor) const override;
-	
-	std::unique_ptr<Element> clone() const override;
 };
 
 struct RectElement :
@@ -589,8 +569,6 @@ struct RectElement :
 	void toStream(std::ostream& s, unsigned indent) const override;
 	
 	void accept(Visitor& visitor) const override;
-	
-	std::unique_ptr<Element> clone() const override;
 };
 
 struct CircleElement : public Shape{
@@ -603,8 +581,6 @@ struct CircleElement : public Shape{
 	void toStream(std::ostream& s, unsigned indent) const override;
 	
 	void accept(Visitor& visitor) const override;
-	
-	std::unique_ptr<Element> clone() const override;
 };
 
 struct EllipseElement : public Shape{
@@ -618,9 +594,6 @@ struct EllipseElement : public Shape{
 	void toStream(std::ostream& s, unsigned indent) const override;
 	
 	void accept(Visitor& visitor) const override;
-	
-	std::unique_ptr<Element> clone() const override;
-
 };
 
 struct LineElement : public Shape{
@@ -634,8 +607,6 @@ struct LineElement : public Shape{
 	void toStream(std::ostream& s, unsigned indent) const override;
 	
 	void accept(Visitor& visitor) const override;
-	
-	std::unique_ptr<Element> clone() const override;
 };
 
 struct PolylineShape : public Shape{
@@ -651,16 +622,12 @@ struct PolylineElement : public PolylineShape{
 	void toStream(std::ostream& s, unsigned indent) const override;
 	
 	void accept(Visitor& visitor) const override;
-	
-	std::unique_ptr<Element> clone() const override;
 };
 
 struct PolygonElement : public PolylineShape{
 	void toStream(std::ostream& s, unsigned indent) const override;
 	
 	void accept(Visitor& visitor) const override;
-	
-	std::unique_ptr<Element> clone() const override;
 };
 
 
@@ -699,8 +666,6 @@ struct Gradient :
 		real offset;
 		
 		void toStream(std::ostream& s, unsigned indent)const override;
-		
-		std::unique_ptr<Element> clone() const override;
 	};
 	
 	const decltype(Container::children)& getStops()const noexcept;
@@ -720,8 +685,6 @@ struct LinearGradientElement : public Gradient{
 	Length getY2()const noexcept;
 	
 	void toStream(std::ostream& s, unsigned indent) const override;
-	
-	std::unique_ptr<Element> clone() const override;
 };
 
 struct RadialGradientElement : public Gradient{
@@ -748,8 +711,6 @@ struct RadialGradientElement : public Gradient{
 	Length getFy()const noexcept;
 	
 	void toStream(std::ostream& s, unsigned indent) const override;
-	
-	std::unique_ptr<Element> clone() const override;
 };
 
 /**
