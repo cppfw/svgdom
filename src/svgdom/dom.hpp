@@ -250,12 +250,19 @@ struct Element : public utki::Unique{
 	
 	virtual ~Element()noexcept{}
 	
+	//TODO: move all attribsToStream to cpp
 	void attribsToStream(std::ostream& s)const;
 	
+	//TODO: implement via Visitor
 	virtual void toStream(std::ostream& s, unsigned indent = 0)const = 0;
 	
+	//TODO: implement via Visitor
 	std::string toString()const;
 	
+	/**
+	 * @brief Accept method for Visitor pattern.
+	 * @param visitor - visitor to accept.
+	 */
 	virtual void accept(Visitor& visitor)const{}
 	
 	/**
@@ -276,15 +283,18 @@ struct Element : public utki::Unique{
      * @return pointer to the found element.
 	 * @return nullptr in case the element with given id was not found.
      */
+	//TODO: implement via Visitor
 	virtual Element* findById(const std::string& elementId);
 };
 
 /**
  * @brief An element which can have child elements.
  */
+//TODO: do not derive from Element
 struct Container : public Element{
 	std::vector<std::unique_ptr<Element>> children;
 	
+	//TODO: move to cpp
 	void childrenToStream(std::ostream& s, unsigned indent)const;
 	
 	/**
@@ -347,8 +357,10 @@ struct Transformable{
 	
 	void attribsToStream(std::ostream& s)const;
 	
+	//TODO: move to cpp
 	void transformationsToStream(std::ostream& s)const;
 	
+	//TODO: move to cpp
 	static decltype(Transformable::transformations) parse(const std::string& str);
 };
 
@@ -362,10 +374,12 @@ struct Styleable{
 	
 	void attribsToStream(std::ostream& s)const;
 	
+	//TODO: move to cpp
 	static decltype(styles) parse(const std::string& str);
 	
 	static bool isStylePropertyInherited(StyleProperty_e p);
 	
+	//TODO: move to cpp
 	static std::string propertyToString(StyleProperty_e p);
 	static StyleProperty_e stringToProperty(std::string str);
 };
@@ -416,6 +430,7 @@ struct UseElement :
 	void accept(Visitor& visitor)const override;
 };
 
+//TODO: move to ViewBoxed
 enum class PreserveAspectRatio_e{
 	NONE,
 	X_MIN_Y_MIN,
@@ -429,8 +444,12 @@ enum class PreserveAspectRatio_e{
 	X_MAX_Y_MAX
 };
 
+/**
+ * @brief SVG element which has viewBox attribute.
+ * Provides handling of viewBox and preserveAspectRatio attributes.
+ */
 struct ViewBoxed {
-	std::array<real, 4> viewBox = { { -1, -1, -1, -1 } };
+	std::array<real, 4> viewBox = {{-1, -1, -1, -1}};
 
 	struct {
 		PreserveAspectRatio_e preserve = PreserveAspectRatio_e::NONE;
@@ -438,8 +457,10 @@ struct ViewBoxed {
 		bool slice = false;
 	} preserveAspectRatio;
 
+	//TODO: move to cpp
 	void parseAndFillPreserveAspectRatio(const std::string& str);
 
+	//TODO: move to cpp
 	static decltype(viewBox) parseViewbox(const std::string& str);
 
 	void attribsToStream(std::ostream& s)const;
@@ -543,6 +564,7 @@ struct PathElement : public Shape{
 			} flags;
 		};
 		
+		//TODO: move to cpp
 		static Type_e charToType(char c);
 		static char typeToChar(Type_e t);
 	};
@@ -552,6 +574,7 @@ struct PathElement : public Shape{
 	
 	void toStream(std::ostream& s, unsigned indent = 0)const override;
 	
+	//TODO: move to cpp
 	static decltype(path) parse(const std::string& str);
 	
 	void accept(Visitor& visitor) const override;
@@ -614,6 +637,7 @@ struct PolylineShape : public Shape{
 	
 	void attribsToStream(std::ostream& s)const;
 	
+	//TODO: move to cpp
 	static decltype(points) parse(const std::string& str);
 };
 
@@ -647,6 +671,7 @@ struct Gradient :
 		REPEAT
 	} spreadMethod = SpreadMethod_e::DEFAULT;
 	
+	//TODO: remove when svgren is refactored
 	SpreadMethod_e getSpreadMethod()const noexcept;
 	
 	enum class Units_e{
@@ -658,12 +683,16 @@ struct Gradient :
 		return this->units == Units_e::OBJECT_BOUNDING_BOX;
 	}
 	
-	struct StopElement : public Styleable, public Element{
+	struct StopElement :
+			public Element,
+			public Styleable
+	{
 		real offset;
 		
 		void toStream(std::ostream& s, unsigned indent)const override;
 	};
 	
+	//TODO: remove when svgren is refactored
 	const decltype(Container::children)& getStops()const noexcept;
 	
 	void attribsToStream(std::ostream& s)const;
@@ -675,6 +704,7 @@ struct LinearGradientElement : public Gradient{
 	Length x2 = Length::make(100, Length::Unit_e::UNKNOWN);
 	Length y2 = Length::make(0, Length::Unit_e::UNKNOWN);
 	
+	//TODO: remove when svgren is refactored
 	Length getX1()const noexcept;
 	Length getY1()const noexcept;
 	Length getX2()const noexcept;
@@ -690,6 +720,7 @@ struct RadialGradientElement : public Gradient{
 	Length fx = Length::make(50, Length::Unit_e::UNKNOWN);
 	Length fy = Length::make(50, Length::Unit_e::UNKNOWN);
 	
+	//TODO: remove when svgren is refactored
 	Length getCx()const noexcept;
 	Length getCy()const noexcept;
 	Length getR()const noexcept;
@@ -698,12 +729,14 @@ struct RadialGradientElement : public Gradient{
 	 * Can return unit as UNKNOWN in that case fx should coincide with cx.
 	 * @return Fx.
 	 */
+	//TODO: remove when svgren is refactored
 	Length getFx()const noexcept;
 	
 	/**
 	 * Can return unit as UNKNOWN in that case fy should coincide with cy.
 	 * @return Fy.
 	 */
+	//TODO: remove when svgren is refactored
 	Length getFy()const noexcept;
 	
 	void toStream(std::ostream& s, unsigned indent) const override;
@@ -762,4 +795,5 @@ std::unique_ptr<SvgElement> load(std::string& s);
 
 }
 
+//TODO: move somewhere
 std::ostream& operator<<(std::ostream& s, const svgdom::Length& l);
