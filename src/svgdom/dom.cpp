@@ -807,20 +807,6 @@ std::ostream& operator<<(std::ostream& s, const Length& l){
 }
 
 
-namespace{
-
-std::string indentStr(unsigned indent){
-	std::string ind;
-
-	std::stringstream ss;
-	for(unsigned i = 0; i != indent; ++i){
-		ss << "\t";
-	}
-	return ss.str();
-}
-
-}
-
 
 void SvgElement::toStream(std::ostream& s, unsigned indent) const{
 	auto ind = indentStr(indent);
@@ -860,27 +846,9 @@ void SymbolElement::toStream(std::ostream& s, unsigned indent) const {
 
 
 
-void GElement::attribsToStream(std::ostream& s) const{
-	this->Container::attribsToStream(s);
-	this->Transformable::attribsToStream(s);
-	this->Styleable::attribsToStream(s);
-}
 
-void GElement::toStream(std::ostream& s, unsigned indent) const{
-	auto ind = indentStr(indent);
-	
-	s << ind << "<g";
-	this->attribsToStream(s);
-	
-	if(this->children.size() == 0){
-		s << "/>";
-	}else{
-		s << ">" << std::endl;
-		this->childrenToStream(s, indent + 1);
-		s << ind << "</g>";
-	}
-	s << std::endl;
-}
+
+
 
 void DefsElement::toStream(std::ostream& s, unsigned indent) const{
 	auto ind = indentStr(indent);
@@ -1695,68 +1663,12 @@ decltype(PathElement::path) PathElement::parse(const std::string& str){
 	return ret;
 }
 
-void RadialGradientElement::accept(Visitor& visitor) const {
-	visitor.visit(*this);
-}
 
 
-void LinearGradientElement::accept(Visitor& visitor) const {
-	visitor.visit(*this);
-}
 
 
-void Gradient::StopElement::accept(Visitor& visitor) const {
-	visitor.visit(*this);
-}
 
 
-void PathElement::accept(Visitor& visitor) const{
-	visitor.visit(*this);
-}
-
-void RectElement::accept(Visitor& visitor) const {
-	visitor.visit(*this);
-}
-
-void CircleElement::accept(Visitor& visitor) const {
-	visitor.visit(*this);
-}
-
-void EllipseElement::accept(Visitor& visitor) const {
-	visitor.visit(*this);
-}
-
-void LineElement::accept(Visitor& visitor) const {
-	visitor.visit(*this);
-}
-
-void PolygonElement::accept(Visitor& visistor) const {
-	visistor.visit(*this);
-}
-
-void PolylineElement::accept(Visitor& visitor) const {
-	visitor.visit(*this);
-}
-
-void GElement::accept(Visitor& visitor) const{
-	visitor.visit(*this);
-}
-
-void SvgElement::accept(Visitor& visitor) const{
-	visitor.visit(*this);
-}
-
-void SymbolElement::accept(Visitor& visitor) const {
-	visitor.visit(*this);
-}
-
-void DefsElement::accept(Visitor& visitor) const {
-	visitor.visit(*this);
-}
-
-void UseElement::accept(Visitor& visitor) const {
-	visitor.visit(*this);
-}
 
 Rgb StylePropertyValue::getRgb() const{
 	auto c = this->color;

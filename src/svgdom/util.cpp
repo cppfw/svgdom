@@ -161,3 +161,14 @@ std::string svgdom::trimTail(const std::string& s){
 	
 	return s.substr(0, t + 1);
 }
+
+
+std::string svgdom::indentStr(unsigned indent){
+	std::string ind;
+
+	std::stringstream ss;
+	for(unsigned i = 0; i != indent; ++i){
+		ss << "\t";
+	}
+	return ss.str();
+}
