@@ -1,6 +1,7 @@
 #include "util.hxx"
 
 #include <sstream>
+#include <cctype>
 
 using namespace svgdom;
 
