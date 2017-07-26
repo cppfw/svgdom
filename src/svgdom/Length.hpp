@@ -4,6 +4,11 @@
 
 #include "config.hpp"
 
+
+#ifdef IN
+#	undef IN
+#endif
+
 namespace svgdom{
 
 /**

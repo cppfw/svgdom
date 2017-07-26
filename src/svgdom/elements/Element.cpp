@@ -2,6 +2,8 @@
 
 #include <sstream>
 
+#include "Container.hpp"
+
 using namespace svgdom;
 
 
@@ -15,4 +17,26 @@ std::string Element::toString() const{
 	std::stringstream s;
 	this->toStream(s, 0);
 	return s.str();
+}
+
+const StylePropertyValue* Element::getStyleProperty(StyleProperty_e property, bool explicitInherit) const{
+	if(auto styleable = dynamic_cast<const Styleable*>(this)){
+		if(auto p = styleable->findStyleProperty(property)){
+			if(p->type == StylePropertyValue::Type_e::INHERIT){
+				explicitInherit = true;
+			}else{
+				return p;
+			}
+		}
+	}
+	
+	if(!explicitInherit && !Styleable::isStylePropertyInherited(property)){
+		return nullptr;
+	}
+	
+	if(!this->parent){
+		return nullptr;
+	}
+	
+	return this->parent->getStyleProperty(property, explicitInherit);
 }

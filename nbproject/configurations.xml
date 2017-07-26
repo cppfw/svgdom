@@ -3,8 +3,13 @@
   <logicalFolder name="root" displayName="root" projectFiles="true" kind="ROOT">
     <df root="src" name="0">
       <df name="svgdom">
+        <df name="elements">
+          <in>Element.cpp</in>
+          <in>Styleable.cpp</in>
+        </df>
         <in>Length.cpp</in>
         <in>dom.cpp</in>
+        <in>util.cpp</in>
       </df>
     </df>
     <df root="tests" name="1">
@@ -62,7 +67,6 @@
             <standard>8</standard>
             <incDir>
               <pElem>.</pElem>
-              <pElem>.</pElem>
             </incDir>
           </ccTool>
         </makeTool>
@@ -86,9 +90,21 @@
         <ccTool flags="0">
         </ccTool>
       </item>
-      <item path="src/svgdom/elements/Element.cpp" ex="false" tool="1" flavor2="0">
+      <item path="src/svgdom/elements/Container.cpp" ex="false" tool="1" flavor2="0">
       </item>
-      <item path="src/svgdom/elements/Element.hpp" ex="false" tool="3" flavor2="0">
+      <item path="src/svgdom/elements/Container.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/svgdom/elements/Element.cpp" ex="false" tool="1" flavor2="8">
+        <ccTool flags="0">
+        </ccTool>
+      </item>
+      <item path="src/svgdom/elements/Styleable.cpp" ex="false" tool="1" flavor2="8">
+        <ccTool flags="0">
+        </ccTool>
+      </item>
+      <item path="src/svgdom/util.cpp" ex="false" tool="1" flavor2="8">
+        <ccTool flags="0">
+        </ccTool>
       </item>
       <item path="tests/samples/main.cpp" ex="false" tool="1" flavor2="8">
         <ccTool flags="1">
@@ -153,9 +169,9 @@
         <ccTool flags="0">
         </ccTool>
       </item>
-      <item path="src/svgdom/elements/Element.cpp" ex="false" tool="1" flavor2="0">
+      <item path="src/svgdom/elements/Container.cpp" ex="false" tool="1" flavor2="0">
       </item>
-      <item path="src/svgdom/elements/Element.hpp" ex="false" tool="3" flavor2="0">
+      <item path="src/svgdom/elements/Container.hpp" ex="false" tool="3" flavor2="0">
       </item>
     </conf>
   </confs>

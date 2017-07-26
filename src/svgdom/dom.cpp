@@ -898,11 +898,7 @@ void SymbolElement::toStream(std::ostream& s, unsigned indent) const {
 	s << std::endl;
 }
 
-void Container::childrenToStream(std::ostream& s, unsigned indent) const{
-	for(auto& e : this->children){
-		e->toStream(s, indent);
-	}
-}
+
 
 void GElement::attribsToStream(std::ostream& s) const{
 	this->Container::attribsToStream(s);
@@ -1942,12 +1938,6 @@ void Gradient::StopElement::accept(Visitor& visitor) const {
 }
 
 
-void Container::relayAccept(Visitor& visitor) const{
-	for(auto& e : this->children){
-		e->accept(visitor);
-	}
-}
-
 void PathElement::accept(Visitor& visitor) const{
 	visitor.visit(*this);
 }
@@ -2017,27 +2007,7 @@ const StylePropertyValue* Styleable::findStyleProperty(StyleProperty_e p)const{
 	return nullptr;
 }
 
-const StylePropertyValue* Element::getStyleProperty(StyleProperty_e property, bool explicitInherit) const{
-	if(auto styleable = dynamic_cast<const Styleable*>(this)){
-		if(auto p = styleable->findStyleProperty(property)){
-			if(p->type == StylePropertyValue::Type_e::INHERIT){
-				explicitInherit = true;
-			}else{
-				return p;
-			}
-		}
-	}
-	
-	if(!explicitInherit && !Styleable::isStylePropertyInherited(property)){
-		return nullptr;
-	}
-	
-	if(!this->parent){
-		return nullptr;
-	}
-	
-	return this->parent->getStyleProperty(property, explicitInherit);
-}
+
 
 
 void LinearGradientElement::toStream(std::ostream& s, unsigned indent) const {
@@ -2161,18 +2131,7 @@ Element* Element::findById(const std::string& elementId) {
 	return nullptr;
 }
 
-Element* Container::findById(const std::string& elementId) {
-	if(auto e = this->Element::findById(elementId)){
-		return e;
-	}
-	
-	for(auto& c : this->children){
-		if(auto e = c->findById(elementId)){
-			return e;
-		}
-	}
-	return nullptr;
-}
+
 
 
 void CircleElement::attribsToStream(std::ostream& s) const {
