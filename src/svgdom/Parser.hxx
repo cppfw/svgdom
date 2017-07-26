@@ -17,15 +17,16 @@
 
 namespace svgdom{
 
-struct Parser{
+class Parser{
 	enum class XmlNamespace_e{
 		UNKNOWN,
 		SVG,
 		XLINK
 	};
 	
-	typedef std::map<std::string, XmlNamespace_e> T_NamespaceMap;
-	std::vector<T_NamespaceMap> namespaces;
+	std::vector<
+			std::map<std::string, XmlNamespace_e>
+		> namespaces;
 	
 	std::vector<XmlNamespace_e> defaultNamespace;
 	
@@ -37,9 +38,7 @@ struct Parser{
 		std::string name;
 	};
 	
-	NamespaceNamePair getNamespace(const std::string& fullName);
-	
-	std::unique_ptr<svgdom::Element> parseNode(const pugi::xml_node& n);
+	NamespaceNamePair getNamespace(const std::string& xmlAttributeName);
 
 	void fillElement(Element& e, const pugi::xml_node& n);
 	void fillReferencing(Referencing& e, const pugi::xml_node& n);
@@ -66,6 +65,9 @@ struct Parser{
 	std::unique_ptr<EllipseElement> parseEllipseElement(const pugi::xml_node& n);
 	std::unique_ptr<LinearGradientElement> parseLinearGradientElement(const pugi::xml_node& n);
 	std::unique_ptr<RadialGradientElement> parseRadialGradientElement(const pugi::xml_node& n);
+	
+public:
+	std::unique_ptr<svgdom::Element> parseNode(const pugi::xml_node& n);
 };
 
 }

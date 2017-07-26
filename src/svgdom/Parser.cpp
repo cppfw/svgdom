@@ -46,7 +46,7 @@ std::unique_ptr<svgdom::Element> Parser::parseNode(const pugi::xml_node& n){
 	{
 		std::string xmlns = "xmlns:";
 		
-		this->namespaces.push_back(T_NamespaceMap());
+		this->namespaces.push_back(decltype(this->namespaces)::value_type());
 		
 		for(auto a = n.first_attribute(); !a.empty(); a = a.next_attribute()){
 			auto attr = std::string(a.name());
@@ -130,20 +130,20 @@ Parser::XmlNamespace_e Parser::findNamespace(const std::string& ns) {
 	return XmlNamespace_e::UNKNOWN;
 }
 
-Parser::NamespaceNamePair Parser::getNamespace(const std::string& fullName) {
+Parser::NamespaceNamePair Parser::getNamespace(const std::string& xmlAttributeName) {
 	NamespaceNamePair ret;
 
-	auto colonIndex = fullName.find_first_of(':');
+	auto colonIndex = xmlAttributeName.find_first_of(':');
 	if (colonIndex == std::string::npos) {
 		ret.ns = this->defaultNamespace.back();
-		ret.name = fullName;
+		ret.name = xmlAttributeName;
 		return ret;
 	}
 
-	ASSERT(fullName.length() >= colonIndex + 1)
+	ASSERT(xmlAttributeName.length() >= colonIndex + 1)
 
-	ret.ns = this->findNamespace(fullName.substr(0, colonIndex));
-	ret.name = fullName.substr(colonIndex + 1, fullName.length() - 1 - colonIndex);
+	ret.ns = this->findNamespace(xmlAttributeName.substr(0, colonIndex));
+	ret.name = xmlAttributeName.substr(colonIndex + 1, xmlAttributeName.length() - 1 - colonIndex);
 
 	return ret;
 }

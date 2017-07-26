@@ -87,5 +87,3 @@ std::unique_ptr<SvgElement> svgdom::load(std::string& s){
 
 	return ::load(doc);
 }
-
-
