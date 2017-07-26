@@ -1,26 +1,11 @@
 #pragma once
 
-#include <memory>
-#include <ostream>
-
-#include <utki/Unique.hpp>
-#include <utki/Void.hpp>
 #include <utki/config.hpp>
 
 #include <papki/File.hpp>
 
-#include "config.hpp"
-#include "Length.hpp"
-#include "elements/Styleable.hpp"
-#include "elements/Element.hpp"
-#include "elements/Container.hpp"
-#include "elements/Referencing.hpp"
-#include "elements/Transformable.hpp"
-#include "elements/ViewBoxed.hpp"
-#include "elements/Rectangle.hpp"
 #include "elements/Structurals.hpp"
-#include "elements/Shapes.hpp"
-#include "elements/Gradients.hpp"
+
 
 
 namespace svgdom{
