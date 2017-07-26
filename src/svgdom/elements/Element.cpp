@@ -40,3 +40,10 @@ const StylePropertyValue* Element::getStyleProperty(StyleProperty_e property, bo
 	
 	return this->parent->getStyleProperty(property, explicitInherit);
 }
+
+Element* Element::findById(const std::string& elementId) {
+	if(this->id == elementId){
+		return this;
+	}
+	return nullptr;
+}

@@ -81,7 +81,6 @@ enum class StyleProperty_e{
  * @brief Red, green and blue values.
  * All values are in range [0:1].
  */
-//TODO: move to other file
 struct Rgb{
 	real r, g, b;
 };
@@ -106,6 +105,7 @@ enum class FillRule_e{
 //TODO: remove
 struct Element;
 
+//TODO: rename to StyleValue
 struct StylePropertyValue{
 	enum class Type_e{
 		/**

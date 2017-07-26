@@ -2,6 +2,7 @@
 
 #include <sstream>
 #include <iomanip>
+#include <cmath>
 
 #include "util.hxx"
 
@@ -56,4 +57,69 @@ Length Length::parse(const std::string& str) {
 	}
 	
 	return ret;
+}
+
+real Length::toPx(real dpi) const noexcept{
+	switch(this->unit){
+		default:
+			return 0;
+		case svgdom::Length::Unit_e::NUMBER:
+		case svgdom::Length::Unit_e::PX:
+			return this->value;
+		case svgdom::Length::Unit_e::IN:
+			return std::ceil(this->value * dpi);
+		case svgdom::Length::Unit_e::CM:
+			return std::ceil(this->value * (dpi / real(2.54)));
+		case svgdom::Length::Unit_e::MM:
+			return std::ceil(this->value * (dpi / real(25.4)));
+		case svgdom::Length::Unit_e::PT: // 1pt = 1/72 of an inch
+			return std::ceil(this->value * (dpi / real(72)));
+		case svgdom::Length::Unit_e::PC: // 1pc = 1/6 of an inch
+			return std::ceil(this->value * (dpi / real(6)));
+		case svgdom::Length::Unit_e::EM:
+		case svgdom::Length::Unit_e::EX:
+			//em and ex depend on the font size. Text is not supported by svgdom, so return 0 size.
+			return 0;
+	}
+}
+
+
+std::ostream& operator<<(std::ostream& s, const Length& l){
+	s << l.value;
+	
+	switch(l.unit){
+		case Length::Unit_e::UNKNOWN:
+		case Length::Unit_e::NUMBER:
+		default:
+			break;
+		case Length::Unit_e::PERCENT:
+			s << "%";
+			break;
+		case Length::Unit_e::EM:
+			s << "em";
+			break;
+		case Length::Unit_e::EX:
+			s << "ex";
+			break;
+		case Length::Unit_e::PX:
+			s << "px";
+			break;
+		case Length::Unit_e::CM:
+			s << "cm";
+			break;
+		case Length::Unit_e::MM:
+			s << "mm";
+			break;
+		case Length::Unit_e::IN:
+			s << "in";
+			break;
+		case Length::Unit_e::PT:
+			s << "pt";
+			break;
+		case Length::Unit_e::PC:
+			s << "pc";
+			break;
+	}
+	
+	return s;
 }
