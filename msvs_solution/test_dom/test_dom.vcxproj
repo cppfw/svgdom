@@ -268,7 +268,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\tests\samples\main.cpp" />
+    <ClCompile Include="..\..\tests\samples\*.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\libsvgdom\libsvgdom.vcxproj">
