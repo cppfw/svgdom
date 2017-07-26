@@ -569,6 +569,3 @@ std::unique_ptr<SvgElement> load(std::istream& s);
 std::unique_ptr<SvgElement> load(std::string& s);
 
 }
-
-//TODO: move somewhere
-std::ostream& operator<<(std::ostream& s, const svgdom::Length& l);

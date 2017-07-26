@@ -205,6 +205,9 @@ struct Styleable{
 	//TODO: move to cpp
 	static decltype(styles) parse(const std::string& str);
 	
+	//TODO: move to cpp
+	static StylePropertyValue parseStylePropertyValue(StyleProperty_e type, const std::string& str);
+	
 	static bool isStylePropertyInherited(StyleProperty_e p);
 	
 	//TODO: move to cpp

@@ -14,6 +14,36 @@ void svgdom::skipWhitespaces(std::istream& s){
 	}
 }
 
+void svgdom::skipTillCharInclusive(std::istream& s, char c){
+	while(!s.eof()){
+		if(s.get() == c){
+			break;
+		}
+	}
+}
+
+std::string svgdom::readTillChar(std::istream& s, char c){
+	std::stringstream ss;
+	while(!s.eof()){
+		if(s.peek() == c || s.peek() == std::char_traits<char>::eof()){
+			break;
+		}
+		ss << char(s.get());
+	}
+	return ss.str();
+}
+
+std::string svgdom::readTillCharOrWhitespace(std::istream& s, char c){
+	std::stringstream ss;
+	while(!s.eof()){
+		if(std::isspace(s.peek()) || s.peek() == c || s.peek() == std::char_traits<char>::eof()){
+			break;
+		}
+		ss << char(s.get());
+	}
+	return ss.str();
+}
+
 
 namespace{
 std::string readInNumberString(std::istream& s){
@@ -105,3 +135,11 @@ real svgdom::readInReal(std::istream& s) {
 	return real(x);
 }
 
+std::string svgdom::trimTail(const std::string& s){
+	const auto t = s.find_last_not_of(" \t\n\r");
+	if(t == std::string::npos){
+		return s;
+	}
+	
+	return s.substr(0, t + 1);
+}
