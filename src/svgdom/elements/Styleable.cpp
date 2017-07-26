@@ -2,6 +2,8 @@
 
 #include <set>
 #include <iomanip>
+#include <cctype>
+#include <array>
 
 #include <utki/debug.hpp>
 #include <utki/util.hpp>

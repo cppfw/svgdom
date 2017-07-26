@@ -1,6 +1,7 @@
 #include "Shapes.hpp"
 
 #include <sstream>
+#include <cctype>
 
 #include <utki/debug.hpp>
 
