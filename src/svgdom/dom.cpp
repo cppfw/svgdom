@@ -827,13 +827,6 @@ std::ostream& operator<<(std::ostream& s, const Length& l){
 
 
 
-void Element::attribsToStream(std::ostream& s) const{
-	if(this->id.length() != 0){
-		s << " id=\"" << this->id << "\"";
-	}
-}
-
-
 
 void Rectangle::attribsToStream(std::ostream& s)const{
 	if(this->x.value != 0){
@@ -909,12 +902,6 @@ void Container::childrenToStream(std::ostream& s, unsigned indent) const{
 	for(auto& e : this->children){
 		e->toStream(s, indent);
 	}
-}
-
-std::string Element::toString() const{
-	std::stringstream s;
-	this->toStream(s, 0);
-	return s.str();
 }
 
 void GElement::attribsToStream(std::ostream& s) const{
@@ -1939,6 +1926,21 @@ decltype(PathElement::path) PathElement::parse(const std::string& str){
 	
 	return ret;
 }
+
+void RadialGradientElement::accept(Visitor& visitor) const {
+	visitor.visit(*this);
+}
+
+
+void LinearGradientElement::accept(Visitor& visitor) const {
+	visitor.visit(*this);
+}
+
+
+void Gradient::StopElement::accept(Visitor& visitor) const {
+	visitor.visit(*this);
+}
+
 
 void Container::relayAccept(Visitor& visitor) const{
 	for(auto& e : this->children){

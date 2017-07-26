@@ -14,6 +14,7 @@
 #include "config.hpp"
 #include "Length.hpp"
 #include "elements/Styleable.hpp"
+#include "elements/Element.hpp"
 
 #if M_OS == M_OS_WINDOWS
 #	ifdef IN
@@ -27,59 +28,6 @@ namespace svgdom{
 
 
 
-class Visitor;
-
-struct Container;
-struct Element;
-
-
-/**
- * @brief Base class for all SVG document elements.
- */
-struct Element : public utki::Unique{
-	//TODO: remove
-	Container* parent = nullptr;
-	
-	std::string id;
-	
-	virtual ~Element()noexcept{}
-	
-	//TODO: move all attribsToStream to cpp
-	void attribsToStream(std::ostream& s)const;
-	
-	//TODO: implement via Visitor
-	virtual void toStream(std::ostream& s, unsigned indent = 0)const = 0;
-	
-	//TODO: implement via Visitor
-	std::string toString()const;
-	
-	/**
-	 * @brief Accept method for Visitor pattern.
-	 * @param visitor - visitor to accept.
-	 */
-	virtual void accept(Visitor& visitor)const{}
-	
-	/**
-	 * @brief Get style property of the element.
-	 * Properties are CSS, so it will get the property from parent elements in case this element
-	 * does not define the property.
-     * @param property - property to get.
-     * @param explicitInherit - the flag is used to indicate that an explicit inheritance is indicated for non-inherited properties.
-     * @return pointer to the property value.
-	 * @return nullptr in case property was not found.
-     */
-	const StylePropertyValue* getStyleProperty(StyleProperty_e property, bool explicitInherit = false)const;
-	
-	/**
-	 * @brief Find element by its id.
-	 * Searches the elements tree to find an element with indicated id.
-     * @param elementId - element id to search for.
-     * @return pointer to the found element.
-	 * @return nullptr in case the element with given id was not found.
-     */
-	//TODO: implement via Visitor
-	virtual Element* findById(const std::string& elementId);
-};
 
 /**
  * @brief An element which can have child elements.
@@ -465,6 +413,8 @@ struct Gradient :
 		real offset;
 		
 		void toStream(std::ostream& s, unsigned indent)const override;
+		
+		void accept(Visitor& visitor) const override;
 	};
 	
 	//TODO: remove when svgren is refactored
@@ -486,6 +436,8 @@ struct LinearGradientElement : public Gradient{
 	Length getY2()const noexcept;
 	
 	void toStream(std::ostream& s, unsigned indent) const override;
+	
+	void accept(Visitor& visitor) const override;
 };
 
 struct RadialGradientElement : public Gradient{
@@ -515,6 +467,9 @@ struct RadialGradientElement : public Gradient{
 	Length getFy()const noexcept;
 	
 	void toStream(std::ostream& s, unsigned indent) const override;
+	
+	void accept(Visitor& visitor) const override;
+
 };
 
 /**
@@ -539,6 +494,9 @@ public:
 	virtual void visit(const SymbolElement& e) {}
 	virtual void visit(const UseElement& e) {}
 	virtual void visit(const DefsElement& e) {}
+	virtual void visit(const Gradient::StopElement& e){}
+	virtual void visit(const LinearGradientElement& e){}
+	virtual void visit(const RadialGradientElement& e){}
 	
 	virtual ~Visitor()noexcept{}
 };
