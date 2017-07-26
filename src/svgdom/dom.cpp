@@ -2347,7 +2347,7 @@ decltype(PathElement::path) PathElement::parse(const std::string& str){
 	return ret;
 }
 
-void Container::accept(Visitor& visitor) const{
+void Container::relayAccept(Visitor& visitor) const{
 	for(auto& e : this->children){
 		e->accept(visitor);
 	}

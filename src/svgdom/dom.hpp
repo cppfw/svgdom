@@ -290,7 +290,11 @@ struct Container : public Element{
 	
 	void childrenToStream(std::ostream& s, unsigned indent)const;
 	
-	void accept(Visitor& visitor)const override;
+	/**
+	 * @brief Relay accept to children.
+	 * @param visitor - visitor to accept.
+	 */
+	void relayAccept(Visitor& visitor)const;
 	
 	Element* findById(const std::string& elementId) override;
 
