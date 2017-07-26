@@ -2109,20 +2109,7 @@ void Gradient::StopElement::toStream(std::ostream& s, unsigned indent) const {
 	s << "/>" << std::endl;
 }
 
-void Referencing::attribsToStream(std::ostream& s) const {
-	if(this->iri.length() == 0 && !this->ref){
-		return;
-	}
-	s << " xlink:href=\"";
-	
-	if(this->ref){
-		s << '#' << this->ref->id;
-	}else{
-		s << this->iri;
-	}
-	
-	s << "\"";
-}
+
 
 Element* Element::findById(const std::string& elementId) {
 	if(this->id == elementId){

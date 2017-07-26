@@ -14,30 +14,11 @@
 #include "elements/Styleable.hpp"
 #include "elements/Element.hpp"
 #include "elements/Container.hpp"
+#include "elements/Referencing.hpp"
 
 
 namespace svgdom{
 
-
-/**
- * @brief an element which can reference another element.
- */
-struct Referencing{
-	/**
-	 * @brief Referenced element.
-	 * If the reference is an IRI to an object outside of the SVG document then this variable is nullptr.
-	 */
-	//TODO: remove
-	Element* ref = nullptr;
-
-	/**
-	 * @brief IRI reference.
-	 * This variable holds the IRI string.
-	 */
-	std::string iri;
-	
-	void attribsToStream(std::ostream& s)const;
-};
 
 /**
  * @brief An element which has 'transform' attribute or similar.

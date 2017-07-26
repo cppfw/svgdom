@@ -98,6 +98,16 @@
         <ccTool flags="0">
         </ccTool>
       </item>
+      <item path="src/svgdom/elements/Referencing.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="src/svgdom/elements/Referencing.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
       <item path="src/svgdom/elements/Styleable.cpp" ex="false" tool="1" flavor2="8">
         <ccTool flags="0">
         </ccTool>
@@ -172,6 +182,16 @@
       <item path="src/svgdom/elements/Container.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/svgdom/elements/Container.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/svgdom/elements/Referencing.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="src/svgdom/elements/Referencing.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
       </item>
     </conf>
   </confs>
