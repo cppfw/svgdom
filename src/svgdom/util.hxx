@@ -8,6 +8,8 @@ namespace svgdom{
 
 void skipWhitespaces(std::istream& s);
 
+void skipWhitespacesAndOrComma(std::istream& s);
+
 void skipTillCharInclusive(std::istream& s, char c);
 
 std::string readTillChar(std::istream& s, char c);

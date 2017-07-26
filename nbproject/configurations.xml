@@ -112,6 +112,16 @@
         <ccTool flags="0">
         </ccTool>
       </item>
+      <item path="src/svgdom/elements/Transformable.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="src/svgdom/elements/Transformable.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
       <item path="src/svgdom/util.cpp" ex="false" tool="1" flavor2="8">
         <ccTool flags="0">
         </ccTool>
@@ -189,6 +199,16 @@
             flavor2="0">
       </item>
       <item path="src/svgdom/elements/Referencing.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="src/svgdom/elements/Transformable.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="src/svgdom/elements/Transformable.hpp"
             ex="false"
             tool="3"
             flavor2="0">

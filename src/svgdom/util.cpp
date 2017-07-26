@@ -15,6 +15,23 @@ void svgdom::skipWhitespaces(std::istream& s){
 	}
 }
 
+void svgdom::skipWhitespacesAndOrComma(std::istream& s){
+	bool commaSkipped = false;
+	while(!s.eof()){
+		if(std::isspace(s.peek())){
+			s.get();
+		}else if(s.peek() == ','){
+			if(commaSkipped){
+				break;
+			}
+			s.get();
+			commaSkipped = true;
+		}else{
+			break;
+		}
+	}
+}
+
 void svgdom::skipTillCharInclusive(std::istream& s, char c){
 	while(!s.eof()){
 		if(s.get() == c){
