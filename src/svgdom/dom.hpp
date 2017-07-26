@@ -647,10 +647,6 @@ struct Gradient :
 		REPEAT
 	} spreadMethod = SpreadMethod_e::DEFAULT;
 	
-	//TODO: move to cpp
-	static std::string spreadMethodToString(SpreadMethod_e sm);
-	static SpreadMethod_e stringToSpreadMethod(const std::string& str);
-	
 	SpreadMethod_e getSpreadMethod()const noexcept;
 	
 	enum class Units_e{

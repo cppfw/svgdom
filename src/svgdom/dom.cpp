@@ -262,6 +262,32 @@ StylePropertyValue parseStylePropertyValue(StyleProperty_e type, std::istream& s
 	return parseStylePropertyValue(type, str);
 }
 
+Gradient::SpreadMethod_e gradientStringToSpreadMethod(const std::string& str) {
+	if(str == "pad"){
+		return Gradient::SpreadMethod_e::PAD;
+	}else if(str == "reflect"){
+		return Gradient::SpreadMethod_e::REFLECT;
+	}else if(str == "repeat"){
+		return Gradient::SpreadMethod_e::REPEAT;
+	}
+	return Gradient::SpreadMethod_e::DEFAULT;
+}
+
+std::string gradientSpreadMethodToString(Gradient::SpreadMethod_e sm) {
+	switch(sm){
+		default:
+			ASSERT_INFO(false, "sm = " << unsigned(sm))
+		case Gradient::SpreadMethod_e::DEFAULT:
+			return "";
+		case Gradient::SpreadMethod_e::PAD:
+			return "pad";
+		case Gradient::SpreadMethod_e::REFLECT:
+			return "reflect";
+		case Gradient::SpreadMethod_e::REPEAT:
+			return "repeat";
+	}
+}
+
 struct Parser{
 	typedef std::map<std::string, XmlNamespace_e> T_NamespaceMap;
 	std::vector<T_NamespaceMap> namespaces;
@@ -439,7 +465,7 @@ struct Parser{
 			switch(nsn.ns){
 				case XmlNamespace_e::SVG:
 					if(nsn.name == "spreadMethod"){
-						g.spreadMethod = Gradient::stringToSpreadMethod(a.value());
+						g.spreadMethod = gradientStringToSpreadMethod(a.value());
 					}else if(nsn.name == "gradientTransform"){
 						g.transformations = Transformable::parse(a.value());
 					}else if(nsn.name == "gradientUnits"){
@@ -2471,31 +2497,6 @@ const StylePropertyValue* Element::getStyleProperty(StyleProperty_e property, bo
 	return this->parent->getStyleProperty(property, explicitInherit);
 }
 
-Gradient::SpreadMethod_e Gradient::stringToSpreadMethod(const std::string& str) {
-	if(str == "pad"){
-		return SpreadMethod_e::PAD;
-	}else if(str == "reflect"){
-		return SpreadMethod_e::REFLECT;
-	}else if(str == "repeat"){
-		return SpreadMethod_e::REPEAT;
-	}
-	return SpreadMethod_e::DEFAULT;
-}
-
-std::string Gradient::spreadMethodToString(SpreadMethod_e sm) {
-	switch(sm){
-		default:
-			ASSERT_INFO(false, "sm = " << unsigned(sm))
-		case SpreadMethod_e::DEFAULT:
-			return "";
-		case SpreadMethod_e::PAD:
-			return "pad";
-		case SpreadMethod_e::REFLECT:
-			return "reflect";
-		case SpreadMethod_e::REPEAT:
-			return "repeat";
-	}
-}
 
 void LinearGradientElement::toStream(std::ostream& s, unsigned indent) const {
 	auto ind = indentStr(indent);
@@ -2571,7 +2572,7 @@ void Gradient::attribsToStream(std::ostream& s)const{
 	this->Styleable::attribsToStream(s);
 	
 	if(this->spreadMethod != SpreadMethod_e::DEFAULT){
-		s << " spreadMethod=\"" << Gradient::spreadMethodToString(this->spreadMethod) << "\"";
+		s << " spreadMethod=\"" << gradientSpreadMethodToString(this->spreadMethod) << "\"";
 	}
 	
 	if(this->units != Units_e::OBJECT_BOUNDING_BOX){
