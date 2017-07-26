@@ -17,6 +17,7 @@
 #include "elements/Referencing.hpp"
 #include "elements/Transformable.hpp"
 #include "elements/ViewBoxed.hpp"
+#include "elements/Rectangle.hpp"
 
 
 namespace svgdom{
@@ -45,17 +46,6 @@ struct DefsElement :
 	void accept(Visitor& visitor)const override;
 };
 
-/**
- * @brief A rectangular element.
- */
-struct Rectangle{
-	Length x = Length::make(0, Length::Unit_e::PERCENT);
-	Length y = Length::make(0, Length::Unit_e::PERCENT);
-	Length width = Length::make(100, Length::Unit_e::PERCENT);
-	Length height = Length::make(100, Length::Unit_e::PERCENT);
-	
-	void attribsToStream(std::ostream& s)const;
-};
 
 struct UseElement :
 	public Element,
