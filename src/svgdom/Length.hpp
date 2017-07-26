@@ -1,8 +1,14 @@
 #pragma once
 
+#include <string>
+
+#include "config.hpp"
 
 namespace svgdom{
 
+/**
+ * @brief SVG attribute value of type 'length'.
+ */
 struct Length{
 	enum class Unit_e{
 		UNKNOWN,

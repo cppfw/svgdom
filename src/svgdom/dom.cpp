@@ -1,9 +1,3 @@
-#include "dom.hpp"
-#include "config.hpp"
-#include "Exc.hpp"
-
-#include <pugixml.hpp>
-
 #include <map>
 #include <set>
 #include <sstream>
@@ -11,6 +5,13 @@
 #include <cctype>
 #include <cmath>
 #include <ratio>
+
+#include <pugixml.hpp>
+
+#include "dom.hpp"
+#include "config.hpp"
+#include "Exc.hpp"
+#include "util.hxx"
 
 //math.h defines OVERFLOW macro which we don't need.
 #ifdef OVERFLOW
@@ -31,14 +32,7 @@ void skipTillCharInclusive(std::istream& s, char c){
 	}
 }
 
-void skipWhitespaces(std::istream& s){
-	while(!s.eof()){
-		if(!std::isspace(s.peek())){
-			break;
-		}
-		s.get();
-	}
-}
+
 
 void skipWhitespacesAndOrComma(std::istream& s){
 	bool commaSkipped = false;
@@ -57,92 +51,7 @@ void skipWhitespacesAndOrComma(std::istream& s){
 	}
 }
 
-std::string readInNumberString(std::istream& s){
-	std::stringstream ss;
-	
-	bool sign = false;
-	bool expSign = false;
-	bool exponent = false;
-	bool dot = false;
-	bool validNumber = false;
-	
-	while(!s.eof()){
-		auto c = char(s.peek());
-//		TRACE(<< "c = " << char(c) << std::endl)
-		switch(c){
-			case '0':
-			case '1':
-			case '2':
-			case '3':
-			case '4':
-			case '5':
-			case '6':
-			case '7':
-			case '8':
-			case '9':
-				sign = true;
-				if(exponent){
-					expSign = true;
-				}
-				validNumber = true;
-				break;
-			case '+':
-			case '-':
-				if(sign){
-					if(expSign){
-						return ss.str();
-					}
-					expSign = true;
-					if(!exponent){
-						return ss.str();
-					}
-				}
-				sign = true;
-				break;
-			case 'e':
-			case 'E':
-				sign = true;
-				if(exponent){
-					return ss.str();
-				}
-				exponent = true;
-				break;
-			case '.':
-				if(dot || exponent){
-					return ss.str();
-				}
-				sign = true;
-				dot = true;
-				break;
-			default:
-				if(!validNumber){
-					//WORKAROUND: if no valid number was read then we need to leave stream in failed state
-					//to do that, try to read in the float number (we know it should fail since no valid number detected on stream).
-					float x;
-					s >> x;
-				}
-				return ss.str();
-		}
-		ss << char(s.get());
-	}
-	return ss.str();
-}
 
-real readInReal(std::istream& s) {
-	skipWhitespaces(s);
-	
-	//On MacOS reading in the number which is terminated by non-number and non-whitespace character,
-	//e.g. "0c" will result in stream error, i.e. s.fail() will return true and stream will be in unreadable state.
-	//To workaround this, need to read in the number to a separate string and parse it from there.
-	std::istringstream iss(readInNumberString(s));
-	
-	//Visual Studio standard library fails to parse numbers to 'float' if it does not actually fit into 'float',
-	//for example, parsing of "5.47382e-48" to float fails instead of giving 0.
-	//To workaround this read in to the biggest precision type 'long double'.
-	long double x;
-	iss >> x;
-	return real(x);
-}
 
 std::string readTillCharOrWhitespace(std::istream& s, char c){
 	std::stringstream ss;
@@ -988,47 +897,6 @@ std::unique_ptr<SvgElement> svgdom::load(const papki::File& f){
 	return ::load(doc);
 }
 
-
-
-Length Length::parse(const std::string& str) {
-	Length ret;
-
-	std::istringstream ss(str);
-	
-	ss >> std::skipws;
-	
-	ret.value = readInReal(ss);
-	
-	std::string u;
-	
-	ss >> std::setw(2) >> u >> std::setw(0);
-	
-	if(u.length() == 0){
-		ret.unit = Length::Unit_e::NUMBER;
-	}else if(u == "%"){
-		ret.unit = Length::Unit_e::PERCENT;
-	}else if(u == "em"){
-		ret.unit = Length::Unit_e::EM;
-	}else if(u == "ex"){
-		ret.unit = Length::Unit_e::EX;
-	}else if(u == "px"){
-		ret.unit = Length::Unit_e::PX;
-	}else if(u == "cm"){
-		ret.unit = Length::Unit_e::CM;
-	}else if(u == "mm"){
-		ret.unit = Length::Unit_e::MM;
-	}else if(u == "in"){
-		ret.unit = Length::Unit_e::IN;
-	}else if(u == "pt"){
-		ret.unit = Length::Unit_e::PT;
-	}else if(u == "pc"){
-		ret.unit = Length::Unit_e::PC;
-	}else{
-		ret.unit = Length::Unit_e::UNKNOWN;
-	}
-	
-	return ret;
-}
 
 
 
@@ -2632,14 +2500,6 @@ Element* Container::findById(const std::string& elementId) {
 	return nullptr;
 }
 
-Length Length::make(real value, Unit_e unit) noexcept {
-	Length ret;
-	
-	ret.unit = unit;
-	ret.value = value;
-	
-	return ret;
-}
 
 void CircleElement::attribsToStream(std::ostream& s) const {
 	this->Shape::attribsToStream(s);

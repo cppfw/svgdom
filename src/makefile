@@ -1,18 +1,12 @@
 include prorab.mk
 
-
 debug := false
-
 
 this_name := svgdom
 
 this_soname := $(shell cat $(prorab_this_dir)soname.txt)
 
-
-#Sources
-this_srcs += svgdom/dom.cpp
-
-
+this_srcs := $(call prorab-src-dir,.)
 
 
 this_cxxflags := 
