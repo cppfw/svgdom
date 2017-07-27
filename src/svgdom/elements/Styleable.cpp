@@ -474,8 +474,7 @@ const std::map<std::string, std::uint32_t> colorNames = {
 	{"yellow", 0xffff},
 	{"yellowgreen", 0x32cd9a}
 };
-
-}//~namespace
+}
 
 //'str' should have no leading and/or trailing white spaces.
 StylePropertyValue StylePropertyValue::parsePaint(const std::string& str){
@@ -642,4 +641,8 @@ std::string StylePropertyValue::paintToString()const{
 				return ss.str();
 			}
 	}
+}
+
+std::string StylePropertyValue::getLocalIdFromIri() const {
+	return iriToLocalId(this->str);
 }

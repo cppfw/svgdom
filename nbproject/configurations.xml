@@ -94,9 +94,8 @@
         </ccTool>
       </folder>
       <item path="src/svgdom/Length.cpp" ex="false" tool="1" flavor2="8">
-        <ccTool flags="1">
+        <ccTool flags="0">
           <incDir>
-            <pElem>src/svgdom</pElem>
             <pElem>.</pElem>
           </incDir>
         </ccTool>
@@ -116,21 +115,15 @@
         </ccTool>
       </item>
       <item path="src/svgdom/elements/Container.cpp" ex="false" tool="1" flavor2="8">
-        <ccTool flags="1">
+        <ccTool flags="0">
           <incDir>
-            <pElem>src/svgdom/elements</pElem>
-            <pElem>src/svgdom</pElem>
-            <pElem>/usr/include/utki</pElem>
             <pElem>.</pElem>
           </incDir>
         </ccTool>
       </item>
       <item path="src/svgdom/elements/Element.cpp" ex="false" tool="1" flavor2="8">
-        <ccTool flags="1">
+        <ccTool flags="0">
           <incDir>
-            <pElem>src/svgdom/elements</pElem>
-            <pElem>src/svgdom</pElem>
-            <pElem>/usr/include/utki</pElem>
             <pElem>.</pElem>
           </incDir>
         </ccTool>
@@ -179,11 +172,8 @@
         </ccTool>
       </item>
       <item path="src/svgdom/elements/Styleable.cpp" ex="false" tool="1" flavor2="8">
-        <ccTool flags="1">
+        <ccTool flags="0">
           <incDir>
-            <pElem>src/svgdom/elements</pElem>
-            <pElem>/usr/include/utki</pElem>
-            <pElem>src/svgdom</pElem>
             <pElem>.</pElem>
           </incDir>
         </ccTool>
@@ -192,27 +182,22 @@
             ex="false"
             tool="1"
             flavor2="8">
-        <ccTool flags="1">
+        <ccTool flags="0">
           <incDir>
-            <pElem>src/svgdom/elements</pElem>
-            <pElem>src/svgdom</pElem>
             <pElem>.</pElem>
           </incDir>
         </ccTool>
       </item>
       <item path="src/svgdom/elements/ViewBoxed.cpp" ex="false" tool="1" flavor2="8">
-        <ccTool flags="1">
+        <ccTool flags="0">
           <incDir>
-            <pElem>src/svgdom/elements</pElem>
-            <pElem>src/svgdom</pElem>
             <pElem>.</pElem>
           </incDir>
         </ccTool>
       </item>
       <item path="src/svgdom/util.cpp" ex="false" tool="1" flavor2="8">
-        <ccTool flags="1">
+        <ccTool flags="0">
           <incDir>
-            <pElem>src/svgdom</pElem>
             <pElem>.</pElem>
           </incDir>
         </ccTool>

@@ -27,7 +27,7 @@ struct Referencing{
 	 * @return ID of the locally referenced element.
 	 * @return Empty string if this Referencing does not refer to any element or the reference is not local IRI.
 	 */
-	std::string getLocalIri()const;
+	std::string getLocalIdFromIri()const;
 	
 	void attribsToStream(std::ostream& s)const;
 };

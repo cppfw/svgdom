@@ -172,3 +172,10 @@ std::string svgdom::indentStr(unsigned indent){
 	}
 	return ss.str();
 }
+
+std::string svgdom::iriToLocalId(const std::string& iri){
+	if(iri.length() != 0 && iri[0] == '#'){
+		return iri.substr(1, iri.length() - 1);
+	}
+	return nullptr;
+}

@@ -1,5 +1,7 @@
 #include "Referencing.hpp"
 
+#include "../util.hxx"
+
 using namespace svgdom;
 
 
@@ -18,10 +20,7 @@ void Referencing::attribsToStream(std::ostream& s) const {
 	s << "\"";
 }
 
-std::string Referencing::getLocalIri() const {
-	if(this->iri.length() != 0 && this->iri[0] == '#'){
-		return this->iri.substr(1, this->iri.length() - 1);
-	}
-	return nullptr;
+std::string Referencing::getLocalIdFromIri() const {
+	return iriToLocalId(this->iri);
 }
 

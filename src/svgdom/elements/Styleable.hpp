@@ -177,6 +177,14 @@ struct StylePropertyValue{
 	//TODO: move to union?
 	std::string str;
 	
+	/**
+	 * @brief Get ID of the locally referenced element.
+	 * If this value represents an URL this method will return local ID of the referenced element.
+	 * @return ID of the locally referenced element.
+	 * @return Empty string if this value is not URL or the reference is not local IRI.
+	 */
+	std::string getLocalIdFromIri()const;
+	
 	//TODO: move to cpp
 	static StylePropertyValue parsePaint(const std::string& str);
 	
