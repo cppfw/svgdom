@@ -12,7 +12,6 @@ namespace svgdom{
  */
 struct Shape :
 		public Element,
-		public Styleable,
 		public Transformable
 {
 	void attribsToStream(std::ostream& s)const;

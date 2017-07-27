@@ -14,7 +14,6 @@ namespace svgdom{
 struct Gradient :
 		public Container,
 		public Referencing,
-		public Styleable,
 		public Transformable
 {
 	enum class SpreadMethod_e{
@@ -36,10 +35,7 @@ struct Gradient :
 		return this->units == Units_e::OBJECT_BOUNDING_BOX;
 	}
 	
-	struct StopElement :
-			public Element,
-			public Styleable
-	{
+	struct StopElement : public Element{
 		real offset;
 		
 		void toStream(std::ostream& s, unsigned indent)const override;

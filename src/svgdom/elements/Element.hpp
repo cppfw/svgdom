@@ -4,7 +4,6 @@
 
 #include <utki/Unique.hpp>
 
-//TODO: remove
 #include "Styleable.hpp"
 
 namespace svgdom{
@@ -17,7 +16,10 @@ class Visitor;
 /**
  * @brief Base class for all SVG document elements.
  */
-struct Element : public utki::Unique{
+struct Element :
+		public utki::Unique,
+		public Styleable //All SVG elements are Styleable according to SVG spec
+{
 	//TODO: remove
 	Container* parent = nullptr;
 	

@@ -11,8 +11,7 @@ namespace svgdom{
 
 struct GElement :
 		public Container,
-		public Transformable,
-		public Styleable
+		public Transformable
 {
 	void attribsToStream(std::ostream& s)const;
 	
@@ -23,8 +22,7 @@ struct GElement :
 
 struct DefsElement :
 		public Container,
-		public Transformable,
-		public Styleable
+		public Transformable
 {
 	void toStream(std::ostream& s, unsigned indent = 0)const override;
 
@@ -35,7 +33,6 @@ struct DefsElement :
 struct UseElement :
 	public Element,
 	public Transformable,
-	public Styleable,
 	public Referencing,
 	public Rectangle
 {
@@ -49,7 +46,6 @@ struct UseElement :
 struct SvgElement :
 		public Container,
 		public Rectangle,
-		public Styleable,
 		public ViewBoxed
 {
 	void attribsToStream(std::ostream& s)const;
@@ -69,7 +65,6 @@ struct SvgElement :
 
 struct SymbolElement :
 		public Container,
-		public Styleable,
 		public ViewBoxed
 {
 	void attribsToStream(std::ostream& s)const;
