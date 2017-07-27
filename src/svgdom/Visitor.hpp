@@ -15,21 +15,28 @@ namespace svgdom{
  */
 class Visitor{
 public:
-	virtual void visit(const PathElement& e){}
-	virtual void visit(const RectElement& e){}
-	virtual void visit(const CircleElement& e){}
-	virtual void visit(const EllipseElement& e){}
-	virtual void visit(const LineElement& e){}
-	virtual void visit(const PolylineElement& e){}
-	virtual void visit(const PolygonElement& e){}
-	virtual void visit(const GElement& e){}
-	virtual void visit(const SvgElement& e){}
-	virtual void visit(const SymbolElement& e) {}
-	virtual void visit(const UseElement& e) {}
-	virtual void visit(const DefsElement& e) {}
-	virtual void visit(const Gradient::StopElement& e){}
-	virtual void visit(const LinearGradientElement& e){}
-	virtual void visit(const RadialGradientElement& e){}
+	virtual void visit(const PathElement& e);
+	virtual void visit(const RectElement& e);
+	virtual void visit(const CircleElement& e);
+	virtual void visit(const EllipseElement& e);
+	virtual void visit(const LineElement& e);
+	virtual void visit(const PolylineElement& e);
+	virtual void visit(const PolygonElement& e);
+	virtual void visit(const GElement& e);
+	virtual void visit(const SvgElement& e);
+	virtual void visit(const SymbolElement& e);
+	virtual void visit(const UseElement& e);
+	virtual void visit(const DefsElement& e);
+	virtual void visit(const Gradient::StopElement& e);
+	virtual void visit(const LinearGradientElement& e);
+	virtual void visit(const RadialGradientElement& e);
+	
+	/**
+	 * @brief Default visit method.
+	 * This method is called by all the visit methods by default.
+	 * @param e - SVG element to visit.
+	 */
+	virtual void defaultVisit(const Element& e){}
 	
 	virtual ~Visitor()noexcept{}
 };

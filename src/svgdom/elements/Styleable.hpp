@@ -174,7 +174,6 @@ struct StylePropertyValue{
 	 * In case the Type is NORMAL and property value is a color specified by color name
 	 * then it holds the color name.
 	 */
-	//TODO: move to union?
 	std::string str;
 	
 	/**
