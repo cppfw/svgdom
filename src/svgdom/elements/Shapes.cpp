@@ -127,73 +127,6 @@ void RectElement::attribsToStream(std::ostream& s) const {
 	}
 }
 
-void RectElement::toStream(std::ostream& s, unsigned indent) const {
-	auto ind = indentStr(indent);
-	
-	s << ind << "<rect";
-
-	this->attribsToStream(s);
-	
-	s << "/>";
-	s << std::endl;
-}
-
-void CircleElement::toStream(std::ostream& s, unsigned indent) const {
-	auto ind = indentStr(indent);
-	
-	s << ind << "<circle";
-
-	this->attribsToStream(s);
-	
-	s << "/>";
-	s << std::endl;
-}
-
-
-void EllipseElement::toStream(std::ostream& s, unsigned indent) const {
-	auto ind = indentStr(indent);
-	
-	s << ind << "<ellipse";
-
-	this->attribsToStream(s);
-	
-	s << "/>";
-	s << std::endl;
-}
-
-void LineElement::toStream(std::ostream& s, unsigned indent) const {
-	auto ind = indentStr(indent);
-	
-	s << ind << "<line";
-
-	this->attribsToStream(s);
-	
-	s << "/>";
-	s << std::endl;
-}
-
-void PolylineElement::toStream(std::ostream& s, unsigned indent) const {
-	auto ind = indentStr(indent);
-	
-	s << ind << "<polyline";
-
-	this->attribsToStream(s);
-	
-	s << "/>";
-	s << std::endl;
-}
-
-void PolygonElement::toStream(std::ostream& s, unsigned indent) const {
-	auto ind = indentStr(indent);
-	
-	s << ind << "<polygon";
-
-	this->attribsToStream(s);
-	
-	s << "/>";
-	s << std::endl;
-}
-
 decltype(PathElement::path) PathElement::parse(const std::string& str){
 	decltype(PathElement::path) ret;
 	
@@ -407,17 +340,6 @@ decltype(PathElement::path) PathElement::parse(const std::string& str){
 	}
 	
 	return ret;
-}
-
-void PathElement::toStream(std::ostream& s, unsigned indent) const{
-	auto ind = indentStr(indent);
-	
-	s << ind << "<path";
-
-	this->attribsToStream(s);
-	
-	s << "/>";
-	s << std::endl;
 }
 
 void Shape::attribsToStream(std::ostream& s) const {

@@ -37,9 +37,7 @@ struct Gradient :
 		real offset;
 		
 		void attribsToStream(std::ostream& s)const;
-		
-		void toStream(std::ostream& s, unsigned indent)const override;
-		
+
 		void accept(Visitor& visitor) const override;
 	};
 	
@@ -54,8 +52,6 @@ struct LinearGradientElement : public Gradient{
 	
 	void attribsToStream(std::ostream& s)const;
 	
-	void toStream(std::ostream& s, unsigned indent) const override;
-	
 	void accept(Visitor& visitor) const override;
 };
 
@@ -68,10 +64,7 @@ struct RadialGradientElement : public Gradient{
 	
 	void attribsToStream(std::ostream& s)const;
 	
-	void toStream(std::ostream& s, unsigned indent) const override;
-	
 	void accept(Visitor& visitor) const override;
-
 };
 
 }

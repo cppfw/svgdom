@@ -22,9 +22,6 @@ struct Element :
 	//TODO: move all attribsToStream to cpp
 	void attribsToStream(std::ostream& s)const;
 	
-	//TODO: implement via Visitor
-	virtual void toStream(std::ostream& s, unsigned indent = 0)const = 0;
-	
 	std::string toString()const;
 	
 	/**

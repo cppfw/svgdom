@@ -156,11 +156,69 @@ struct StreamWriter : public Visitor{
 		s << std::endl;
 	}
 
+	void visit(const PathElement& e) override{
+		auto ind = indentStr(indent);
 	
-	//TODO: implement
+		s << ind << "<path";
+
+		e.attribsToStream(s);
+
+		s << "/>";
+		s << std::endl;
+	}
+
+	void visit(const CircleElement& e) override{
+		auto ind = indentStr(indent);
 	
-	void defaultVisit(const Element& e) override{
-		e.toStream(this->s, this->indent);
+		s << ind << "<circle";
+		e.attribsToStream(s);
+		s << "/>";
+		s << std::endl;
+	}
+	
+	void visit(const PolylineElement& e) override{
+		auto ind = indentStr(indent);
+
+		s << ind << "<polyline";
+		e.attribsToStream(s);
+		s << "/>";
+		s << std::endl;
+	}
+	
+	void visit(const PolygonElement& e) override{
+		auto ind = indentStr(indent);
+	
+		s << ind << "<polygon";
+		e.attribsToStream(s);
+		s << "/>";
+		s << std::endl;
+	}
+	
+	void visit(const EllipseElement& e) override{
+		auto ind = indentStr(indent);
+	
+		s << ind << "<ellipse";
+		e.attribsToStream(s);
+		s << "/>";
+		s << std::endl;
+	}
+	
+	void visit(const RectElement& e) override{
+		auto ind = indentStr(indent);
+	
+		s << ind << "<rect";
+		e.attribsToStream(s);
+		s << "/>";
+		s << std::endl;
+	}
+
+	void visit(const LineElement& e) override{
+		auto ind = indentStr(indent);
+	
+		s << ind << "<line";
+		e.attribsToStream(s);
+		s << "/>";
+		s << std::endl;
 	}
 };
 }

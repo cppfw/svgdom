@@ -12,42 +12,6 @@ void GElement::attribsToStream(std::ostream& s) const{
 	this->Styleable::attribsToStream(s);
 }
 
-
-void DefsElement::toStream(std::ostream& s, unsigned indent) const{
-	auto ind = indentStr(indent);
-	
-//	TRACE(<< "DefsElement::toStream():" << std::endl)
-
-	s << ind << "<defs";
-	this->Element::attribsToStream(s);
-	this->Transformable::attribsToStream(s);
-	this->Styleable::attribsToStream(s);
-	
-	if(this->children.size() == 0){
-		s << "/>";
-	}else{
-		s << ">" << std::endl;
-		this->childrenToStream(s, indent + 1);
-		s << ind << "</defs>";
-	}
-	s << std::endl;
-}
-
-void UseElement::toStream(std::ostream& s, unsigned indent) const {
-	auto ind = indentStr(indent);
-
-//	TRACE(<< "UseElement::toStream():" << std::endl)
-
-	s << ind << "<use";
-	this->Element::attribsToStream(s);
-	this->Transformable::attribsToStream(s);
-	this->Styleable::attribsToStream(s);
-	this->Rectangle::attribsToStream(s);
-	this->Referencing::attribsToStream(s);
-	s << "/>";
-	s << std::endl;
-}
-
 void SvgElement::attribsToStream(std::ostream& s) const {
 	this->Element::attribsToStream(s);
 	this->Styleable::attribsToStream(s);
@@ -74,23 +38,6 @@ real SvgElement::aspectRatio(real dpi)const{
 	}
 	
 	return w / h;
-}
-
-void SymbolElement::toStream(std::ostream& s, unsigned indent) const {
-	auto ind = indentStr(indent);
-
-	s << ind << "<symbol";
-	
-	this->attribsToStream(s);
-
-	if (this->children.size() == 0) {
-		s << "/>";
-	}else{
-		s << ">" << std::endl;
-		this->childrenToStream(s, indent + 1);
-		s << ind << "</symbol>";
-	}
-	s << std::endl;
 }
 
 void GElement::accept(Visitor& visitor) const{

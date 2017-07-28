@@ -75,8 +75,6 @@ struct PathElement : public Shape{
 	
 	void attribsToStream(std::ostream& s)const;
 	
-	void toStream(std::ostream& s, unsigned indent = 0)const override;
-	
 	//TODO: move to cpp
 	static decltype(path) parse(const std::string& str);
 	
@@ -92,8 +90,6 @@ struct RectElement :
 	
 	void attribsToStream(std::ostream& s)const;
 	
-	void toStream(std::ostream& s, unsigned indent) const override;
-	
 	void accept(Visitor& visitor) const override;
 };
 
@@ -103,8 +99,6 @@ struct CircleElement : public Shape{
 	Length r = Length::make(0, Length::Unit_e::UNKNOWN);
 	
 	void attribsToStream(std::ostream& s)const;
-	
-	void toStream(std::ostream& s, unsigned indent) const override;
 	
 	void accept(Visitor& visitor) const override;
 };
@@ -117,8 +111,6 @@ struct EllipseElement : public Shape{
 	
 	void attribsToStream(std::ostream& s)const;
 	
-	void toStream(std::ostream& s, unsigned indent) const override;
-	
 	void accept(Visitor& visitor) const override;
 };
 
@@ -129,8 +121,6 @@ struct LineElement : public Shape{
 	Length y2 = Length::make(0, Length::Unit_e::UNKNOWN);
 	
 	void attribsToStream(std::ostream& s)const;
-	
-	void toStream(std::ostream& s, unsigned indent) const override;
 	
 	void accept(Visitor& visitor) const override;
 };
@@ -146,14 +136,10 @@ struct PolylineShape : public Shape{
 
 
 struct PolylineElement : public PolylineShape{
-	void toStream(std::ostream& s, unsigned indent) const override;
-	
 	void accept(Visitor& visitor) const override;
 };
 
 struct PolygonElement : public PolylineShape{
-	void toStream(std::ostream& s, unsigned indent) const override;
-	
 	void accept(Visitor& visitor) const override;
 };
 
