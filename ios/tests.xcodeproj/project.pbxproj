@@ -22,6 +22,8 @@
 		2C27C65E1F2934BD00579360 /* Parser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2C27C6511F2934BD00579360 /* Parser.cpp */; };
 		2C27C65F1F2934BD00579360 /* util.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2C27C6521F2934BD00579360 /* util.cpp */; };
 		2C36A5975714C99CC79D45D7 /* libPods-tests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3277674DEDA6F26ACE161F1B /* libPods-tests.a */; };
+		2C5FB1D11F2BDAFD006E65B8 /* StreamWriter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2C5FB1D01F2BDAFD006E65B8 /* StreamWriter.cpp */; };
+		2C5FB1D31F2BDCBF006E65B8 /* Visitor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2C5FB1D21F2BDCBF006E65B8 /* Visitor.cpp */; };
 		2C7FB83F1C5F9BBC00148CAA /* dom.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2C7FB83E1C5F9BBC00148CAA /* dom.cpp */; };
 		2CE5FF891C5F99B700CD8537 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2CE5FF881C5F99B700CD8537 /* Assets.xcassets */; };
 /* End PBXBuildFile section */
@@ -52,6 +54,8 @@
 		2C27C6501F2934BD00579360 /* Length.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Length.cpp; path = ../src/svgdom/Length.cpp; sourceTree = "<group>"; };
 		2C27C6511F2934BD00579360 /* Parser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Parser.cpp; path = ../src/svgdom/Parser.cpp; sourceTree = "<group>"; };
 		2C27C6521F2934BD00579360 /* util.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = util.cpp; path = ../src/svgdom/util.cpp; sourceTree = "<group>"; };
+		2C5FB1D01F2BDAFD006E65B8 /* StreamWriter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = StreamWriter.cpp; path = ../src/svgdom/StreamWriter.cpp; sourceTree = "<group>"; };
+		2C5FB1D21F2BDCBF006E65B8 /* Visitor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Visitor.cpp; path = ../src/svgdom/Visitor.cpp; sourceTree = "<group>"; };
 		2C7FB83E1C5F9BBC00148CAA /* dom.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = dom.cpp; path = ../src/svgdom/dom.cpp; sourceTree = "<group>"; };
 		2CE5FF791C5F99B700CD8537 /* tests.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = tests.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2CE5FF881C5F99B700CD8537 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -103,6 +107,8 @@
 		2CE5FF701C5F99B700CD8537 = {
 			isa = PBXGroup;
 			children = (
+				2C5FB1D21F2BDCBF006E65B8 /* Visitor.cpp */,
+				2C5FB1D01F2BDAFD006E65B8 /* StreamWriter.cpp */,
 				2C27C63B1F2934BD00579360 /* elements */,
 				2C27C6501F2934BD00579360 /* Length.cpp */,
 				2C27C6511F2934BD00579360 /* Parser.cpp */,
@@ -285,8 +291,10 @@
 				2C27C63A1F1033FC00579360 /* main.cpp in Sources */,
 				2C27C65D1F2934BD00579360 /* Length.cpp in Sources */,
 				2C27C6541F2934BD00579360 /* Element.cpp in Sources */,
+				2C5FB1D31F2BDCBF006E65B8 /* Visitor.cpp in Sources */,
 				2C27C65F1F2934BD00579360 /* util.cpp in Sources */,
 				2C7FB83F1C5F9BBC00148CAA /* dom.cpp in Sources */,
+				2C5FB1D11F2BDAFD006E65B8 /* StreamWriter.cpp in Sources */,
 				2C27C6551F2934BD00579360 /* Gradients.cpp in Sources */,
 				2C27C65A1F2934BD00579360 /* Styleable.cpp in Sources */,
 				2C27C6561F2934BD00579360 /* Rectangle.cpp in Sources */,
