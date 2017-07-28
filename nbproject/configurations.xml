@@ -198,10 +198,8 @@
         </ccTool>
       </item>
       <item path="src/svgdom/elements/ViewBoxed.cpp" ex="false" tool="1" flavor2="8">
-        <ccTool flags="1">
+        <ccTool flags="0">
           <incDir>
-            <pElem>src/svgdom/elements</pElem>
-            <pElem>src/svgdom</pElem>
             <pElem>.</pElem>
           </incDir>
         </ccTool>

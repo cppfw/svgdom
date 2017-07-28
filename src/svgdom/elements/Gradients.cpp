@@ -42,6 +42,19 @@ void LinearGradientElement::toStream(std::ostream& s, unsigned indent) const {
 	auto ind = indentStr(indent);
 	
 	s << ind << "<linearGradient";
+	this->attribsToStream(s);
+	
+	if(this->children.size() == 0){
+		s << "/>";
+	}else{
+		s << ">" << std::endl;
+		this->childrenToStream(s, indent + 1);
+		s << ind << "</linearGradient>";
+	}
+	s << std::endl;
+}
+
+void LinearGradientElement::attribsToStream(std::ostream& s) const{
 	this->Gradient::attribsToStream(s);
 	
 	if(this->x1.unit != Length::Unit_e::PERCENT || this->x1.value != 0){
@@ -59,21 +72,9 @@ void LinearGradientElement::toStream(std::ostream& s, unsigned indent) const {
 	if(this->y2.unit != Length::Unit_e::PERCENT || this->y2.value != 0){
 		s << " y2=\"" << this->y2 << "\"";
 	}
-	
-	if(this->children.size() == 0){
-		s << "/>";
-	}else{
-		s << ">" << std::endl;
-		this->childrenToStream(s, indent + 1);
-		s << ind << "</linearGradient>";
-	}
-	s << std::endl;
 }
 
-void RadialGradientElement::toStream(std::ostream& s, unsigned indent) const {
-	auto ind = indentStr(indent);
-	
-	s << ind << "<radialGradient";
+void RadialGradientElement::attribsToStream(std::ostream& s) const {
 	this->Gradient::attribsToStream(s);
 	
 	if(this->cx.unit != Length::Unit_e::PERCENT || this->cx.value != 50){
@@ -95,6 +96,14 @@ void RadialGradientElement::toStream(std::ostream& s, unsigned indent) const {
 	if(this->fy.unit != Length::Unit_e::UNKNOWN){
 		s << " fy=\"" << this->fy << "\"";
 	}
+}
+
+
+void RadialGradientElement::toStream(std::ostream& s, unsigned indent) const {
+	auto ind = indentStr(indent);
+	
+	s << ind << "<radialGradient";
+	this->attribsToStream(s);
 	
 	if(this->children.size() == 0){
 		s << "/>";
@@ -127,12 +136,15 @@ void Gradient::attribsToStream(std::ostream& s)const{
 	}
 }
 
+void Gradient::StopElement::attribsToStream(std::ostream& s) const {
+	s << " offset=\"" << this->offset << "\"";
+	this->Element::attribsToStream(s);
+	this->Styleable::attribsToStream(s);
+}
 
 void Gradient::StopElement::toStream(std::ostream& s, unsigned indent) const {
 	auto ind = indentStr(indent);
 	s << ind << "<stop";
-	s << " offset=\"" << this->offset << "\"";
-	this->Element::attribsToStream(s);
-	this->Styleable::attribsToStream(s);
+	this->attribsToStream(s);
 	s << "/>" << std::endl;
 }

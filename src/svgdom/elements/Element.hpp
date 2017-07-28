@@ -19,15 +19,12 @@ struct Element :
 {
 	std::string id;
 	
-	virtual ~Element()noexcept{}
-	
 	//TODO: move all attribsToStream to cpp
 	void attribsToStream(std::ostream& s)const;
 	
 	//TODO: implement via Visitor
 	virtual void toStream(std::ostream& s, unsigned indent = 0)const = 0;
 	
-	//TODO: implement via Visitor
 	std::string toString()const;
 	
 	/**

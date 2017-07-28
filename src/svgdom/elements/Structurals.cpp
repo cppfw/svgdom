@@ -12,21 +12,6 @@ void GElement::attribsToStream(std::ostream& s) const{
 	this->Styleable::attribsToStream(s);
 }
 
-void GElement::toStream(std::ostream& s, unsigned indent) const{
-	auto ind = indentStr(indent);
-	
-	s << ind << "<g";
-	this->attribsToStream(s);
-	
-	if(this->children.size() == 0){
-		s << "/>";
-	}else{
-		s << ">" << std::endl;
-		this->childrenToStream(s, indent + 1);
-		s << ind << "</g>";
-	}
-	s << std::endl;
-}
 
 void DefsElement::toStream(std::ostream& s, unsigned indent) const{
 	auto ind = indentStr(indent);
@@ -74,25 +59,6 @@ void SymbolElement::attribsToStream(std::ostream& s) const {
 	this->Element::attribsToStream(s);
 	this->Styleable::attribsToStream(s);
 	this->ViewBoxed::attribsToStream(s);
-}
-
-void SvgElement::toStream(std::ostream& s, unsigned indent) const{
-	auto ind = indentStr(indent);
-	
-	s << ind << "<svg";
-	if(indent == 0){//if outermost "svg" element
-		s << " xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" version=\"1.1\"";
-	}
-	this->attribsToStream(s);
-	
-	if(this->children.size() == 0){
-		s << "/>";
-	}else{
-		s << ">" << std::endl;
-		this->childrenToStream(s, indent + 1);
-		s << ind << "</svg>";
-	}
-	s << std::endl;
 }
 
 real SvgElement::aspectRatio(real dpi)const{

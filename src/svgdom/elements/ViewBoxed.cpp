@@ -9,57 +9,57 @@ using namespace svgdom;
 
 namespace{
 
-PreserveAspectRatio_e stringToPreserveAspectRatio(const std::string& str){
+ViewBoxed::PreserveAspectRatio_e stringToPreserveAspectRatio(const std::string& str){
 	if(str == "none"){
-		return PreserveAspectRatio_e::NONE;
+		return ViewBoxed::PreserveAspectRatio_e::NONE;
 	}else if(str == "xMinYMin"){
-		return PreserveAspectRatio_e::X_MIN_Y_MIN;
+		return ViewBoxed::PreserveAspectRatio_e::X_MIN_Y_MIN;
 	}else if(str == "xMidYMin"){
-		return PreserveAspectRatio_e::X_MID_Y_MIN;
+		return ViewBoxed::PreserveAspectRatio_e::X_MID_Y_MIN;
 	}else if(str == "xMaxYMin"){
-		return PreserveAspectRatio_e::X_MAX_Y_MIN;
+		return ViewBoxed::PreserveAspectRatio_e::X_MAX_Y_MIN;
 	}else if(str == "xMinYMid"){
-		return PreserveAspectRatio_e::X_MIN_Y_MID;
+		return ViewBoxed::PreserveAspectRatio_e::X_MIN_Y_MID;
 	}else if(str == "xMidYMid"){
-		return PreserveAspectRatio_e::X_MID_Y_MID;
+		return ViewBoxed::PreserveAspectRatio_e::X_MID_Y_MID;
 	}else if(str == "xMaxYMid"){
-		return PreserveAspectRatio_e::X_MAX_Y_MID;
+		return ViewBoxed::PreserveAspectRatio_e::X_MAX_Y_MID;
 	}else if(str == "xMinYMax"){
-		return PreserveAspectRatio_e::X_MIN_Y_MAX;
+		return ViewBoxed::PreserveAspectRatio_e::X_MIN_Y_MAX;
 	}else if(str == "xMidYMax"){
-		return PreserveAspectRatio_e::X_MID_Y_MAX;
+		return ViewBoxed::PreserveAspectRatio_e::X_MID_Y_MAX;
 	}else if(str == "xMaxYMax"){
-		return PreserveAspectRatio_e::X_MAX_Y_MAX;
+		return ViewBoxed::PreserveAspectRatio_e::X_MAX_Y_MAX;
 	}
-	return PreserveAspectRatio_e::NONE;
+	return ViewBoxed::PreserveAspectRatio_e::NONE;
 }
 }
 
 namespace{
-std::string preserveAspectRatioToString(PreserveAspectRatio_e par){
+std::string preserveAspectRatioToString(ViewBoxed::PreserveAspectRatio_e par){
 	switch(par){
 		default:
 			ASSERT(false)
 			return std::string();
-		case PreserveAspectRatio_e::NONE:
+		case ViewBoxed::PreserveAspectRatio_e::NONE:
 			return "none";
-		case PreserveAspectRatio_e::X_MIN_Y_MIN:
+		case ViewBoxed::PreserveAspectRatio_e::X_MIN_Y_MIN:
 			return "xMinYMin";
-		case PreserveAspectRatio_e::X_MID_Y_MIN:
+		case ViewBoxed::PreserveAspectRatio_e::X_MID_Y_MIN:
 			return "xMidYMin";
-		case PreserveAspectRatio_e::X_MAX_Y_MIN:
+		case ViewBoxed::PreserveAspectRatio_e::X_MAX_Y_MIN:
 			return "xMaxYMin";
-		case PreserveAspectRatio_e::X_MIN_Y_MID:
+		case ViewBoxed::PreserveAspectRatio_e::X_MIN_Y_MID:
 			return "xMinYMid";
-		case PreserveAspectRatio_e::X_MID_Y_MID:
+		case ViewBoxed::PreserveAspectRatio_e::X_MID_Y_MID:
 			return "xMidYMid";
-		case PreserveAspectRatio_e::X_MAX_Y_MID:
+		case ViewBoxed::PreserveAspectRatio_e::X_MAX_Y_MID:
 			return "xMaxYMid";
-		case PreserveAspectRatio_e::X_MIN_Y_MAX:
+		case ViewBoxed::PreserveAspectRatio_e::X_MIN_Y_MAX:
 			return "xMinYMax";
-		case PreserveAspectRatio_e::X_MID_Y_MAX:
+		case ViewBoxed::PreserveAspectRatio_e::X_MID_Y_MAX:
 			return "xMidYMax";
-		case PreserveAspectRatio_e::X_MAX_Y_MAX:
+		case ViewBoxed::PreserveAspectRatio_e::X_MAX_Y_MAX:
 			return "xMaxYMax";
 	}
 }

@@ -16,7 +16,7 @@ struct GElement :
 {
 	void attribsToStream(std::ostream& s)const;
 	
-	void toStream(std::ostream& s, unsigned indent = 0)const override;
+	void toStream(std::ostream& s, unsigned indent = 0)const override{}
 	
 	void accept(Visitor& visitor)const override;
 };
@@ -53,7 +53,7 @@ struct SvgElement :
 {
 	void attribsToStream(std::ostream& s)const;
 	
-	void toStream(std::ostream& s, unsigned indent = 0)const override;
+	void toStream(std::ostream& s, unsigned indent = 0)const override{}
 	
 	void accept(Visitor& visitor) const override;
 	
