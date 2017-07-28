@@ -12,6 +12,7 @@ namespace svgdom{
  * @brief Common base for gradient elements.
  */
 struct Gradient :
+		public Element,
 		public Container,
 		public Referencing,
 		public Transformable
@@ -22,9 +23,6 @@ struct Gradient :
 		REFLECT,
 		REPEAT
 	} spreadMethod = SpreadMethod_e::DEFAULT;
-	
-	//TODO: remove when svgren is refactored
-	SpreadMethod_e getSpreadMethod()const noexcept;
 	
 	enum class Units_e{
 		USER_SPACE_ON_USE,
@@ -43,9 +41,6 @@ struct Gradient :
 		void accept(Visitor& visitor) const override;
 	};
 	
-	//TODO: remove when svgren is refactored
-	const decltype(Container::children)& getStops()const noexcept;
-	
 	void attribsToStream(std::ostream& s)const;
 };
 
@@ -54,12 +49,6 @@ struct LinearGradientElement : public Gradient{
 	Length y1 = Length::make(0, Length::Unit_e::UNKNOWN);
 	Length x2 = Length::make(100, Length::Unit_e::UNKNOWN);
 	Length y2 = Length::make(0, Length::Unit_e::UNKNOWN);
-	
-	//TODO: remove when svgren is refactored
-	Length getX1()const noexcept;
-	Length getY1()const noexcept;
-	Length getX2()const noexcept;
-	Length getY2()const noexcept;
 	
 	void toStream(std::ostream& s, unsigned indent) const override;
 	
@@ -72,25 +61,6 @@ struct RadialGradientElement : public Gradient{
 	Length r = Length::make(50, Length::Unit_e::UNKNOWN);
 	Length fx = Length::make(50, Length::Unit_e::UNKNOWN);
 	Length fy = Length::make(50, Length::Unit_e::UNKNOWN);
-	
-	//TODO: remove when svgren is refactored
-	Length getCx()const noexcept;
-	Length getCy()const noexcept;
-	Length getR()const noexcept;
-	
-	/**
-	 * Can return unit as UNKNOWN in that case fx should coincide with cx.
-	 * @return Fx.
-	 */
-	//TODO: remove when svgren is refactored
-	Length getFx()const noexcept;
-	
-	/**
-	 * Can return unit as UNKNOWN in that case fy should coincide with cy.
-	 * @return Fy.
-	 */
-	//TODO: remove when svgren is refactored
-	Length getFy()const noexcept;
 	
 	void toStream(std::ostream& s, unsigned indent) const override;
 	

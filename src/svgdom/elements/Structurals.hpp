@@ -10,6 +10,7 @@
 namespace svgdom{
 
 struct GElement :
+		public Element,
 		public Container,
 		public Transformable
 {
@@ -21,6 +22,7 @@ struct GElement :
 };
 
 struct DefsElement :
+		public Element,
 		public Container,
 		public Transformable
 {
@@ -44,6 +46,7 @@ struct UseElement :
 
 
 struct SvgElement :
+		public Element,
 		public Container,
 		public Rectangle,
 		public ViewBoxed
@@ -64,6 +67,7 @@ struct SvgElement :
 };
 
 struct SymbolElement :
+		public Element,
 		public Container,
 		public ViewBoxed
 {

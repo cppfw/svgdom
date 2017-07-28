@@ -1,8 +1,6 @@
 #pragma once
 
 #include <vector>
-
-//TODO: remove
 #include <ostream>
 
 #include "../config.hpp"

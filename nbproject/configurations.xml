@@ -95,8 +95,9 @@
         </ccTool>
       </folder>
       <item path="src/svgdom/Length.cpp" ex="false" tool="1" flavor2="8">
-        <ccTool flags="0">
+        <ccTool flags="1">
           <incDir>
+            <pElem>src/svgdom</pElem>
             <pElem>.</pElem>
           </incDir>
         </ccTool>
@@ -108,7 +109,12 @@
           </incDir>
         </ccTool>
       </item>
-      <item path="src/svgdom/Visitor.cpp" ex="false" tool="1" flavor2="0">
+      <item path="src/svgdom/Visitor.cpp" ex="false" tool="1" flavor2="8">
+        <ccTool flags="0">
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </ccTool>
       </item>
       <item path="src/svgdom/dom.cpp" ex="false" tool="1" flavor2="8">
         <ccTool flags="0">
@@ -192,15 +198,18 @@
         </ccTool>
       </item>
       <item path="src/svgdom/elements/ViewBoxed.cpp" ex="false" tool="1" flavor2="8">
-        <ccTool flags="0">
+        <ccTool flags="1">
           <incDir>
+            <pElem>src/svgdom/elements</pElem>
+            <pElem>src/svgdom</pElem>
             <pElem>.</pElem>
           </incDir>
         </ccTool>
       </item>
       <item path="src/svgdom/util.cpp" ex="false" tool="1" flavor2="8">
-        <ccTool flags="0">
+        <ccTool flags="1">
           <incDir>
+            <pElem>src/svgdom</pElem>
             <pElem>.</pElem>
           </incDir>
         </ccTool>

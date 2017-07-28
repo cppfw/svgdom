@@ -1,10 +1,3 @@
-/* 
- * File:   Exc.hpp
- * Author: ivan
- *
- * Created on October 14, 2015, 11:34 PM
- */
-
 #pragma once
 
 #include <utki/Exc.hpp>

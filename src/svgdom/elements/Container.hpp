@@ -9,8 +9,7 @@ namespace svgdom{
 /**
  * @brief An element which can have child elements.
  */
-//TODO: do not derive from Element
-struct Container : public Element{
+struct Container{
 	std::vector<std::unique_ptr<Element>> children;
 	
 	//TODO: move to cpp
@@ -21,8 +20,6 @@ struct Container : public Element{
 	 * @param visitor - visitor to accept.
 	 */
 	void relayAccept(Visitor& visitor)const;
-	
-	Element* findById(const std::string& elementId) override;
 };
 
 }

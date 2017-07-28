@@ -503,7 +503,6 @@ StylePropertyValue StylePropertyValue::parsePaint(const std::string& str){
 			if(s.get() == ')'){
 				ret.str = tmpStr;
 				ret.type = StylePropertyValue::Type_e::URL;
-				ret.url = nullptr;
 				return ret;
 			}
 		}
@@ -632,12 +631,9 @@ std::string StylePropertyValue::paintToString()const{
 				return this->str;
 			}
 		case Type_e::URL:
-			if(!this->url){
-				return "none";
-			}
 			{
 				std::stringstream ss;
-				ss << "url(#" << this->url->id << ")";
+				ss << "url(" << this->str << ")";
 				return ss.str();
 			}
 	}

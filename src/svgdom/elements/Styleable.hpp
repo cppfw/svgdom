@@ -102,8 +102,6 @@ enum class FillRule_e{
 	EVENODD
 };
 
-//TODO: remove
-struct Element;
 
 //TODO: rename to StyleValue
 struct StylePropertyValue{
@@ -157,13 +155,6 @@ struct StylePropertyValue{
 		StrokeLineCap_e strokeLineCap;
 		StrokeLineJoin_e strokeLineJoin;
 		FillRule_e fillRule;
-		
-		/**
-		 * @brief reference to another element.
-		 * Can be nullptr. It is used only if 'rule' is Type_e::URL.
-		 */
-		//TODO: remove
-		Element* url; //used if rule is URL
 	};
 	
 	/**

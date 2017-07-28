@@ -7,7 +7,7 @@ using namespace svgdom;
 
 
 void GElement::attribsToStream(std::ostream& s) const{
-	this->Container::attribsToStream(s);
+	this->Element::attribsToStream(s);
 	this->Transformable::attribsToStream(s);
 	this->Styleable::attribsToStream(s);
 }
@@ -34,7 +34,7 @@ void DefsElement::toStream(std::ostream& s, unsigned indent) const{
 //	TRACE(<< "DefsElement::toStream():" << std::endl)
 
 	s << ind << "<defs";
-	this->Container::attribsToStream(s);
+	this->Element::attribsToStream(s);
 	this->Transformable::attribsToStream(s);
 	this->Styleable::attribsToStream(s);
 	
@@ -64,14 +64,14 @@ void UseElement::toStream(std::ostream& s, unsigned indent) const {
 }
 
 void SvgElement::attribsToStream(std::ostream& s) const {
-	this->Container::attribsToStream(s);
+	this->Element::attribsToStream(s);
 	this->Styleable::attribsToStream(s);
 	this->Rectangle::attribsToStream(s);
 	this->ViewBoxed::attribsToStream(s);
 }
 
 void SymbolElement::attribsToStream(std::ostream& s) const {
-	this->Container::attribsToStream(s);
+	this->Element::attribsToStream(s);
 	this->Styleable::attribsToStream(s);
 	this->ViewBoxed::attribsToStream(s);
 }

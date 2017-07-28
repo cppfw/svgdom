@@ -164,18 +164,16 @@ void Parser::fillElement(Element& e, const pugi::xml_node& n) {
 }
 
 void Parser::fillContainer(Container& c, const pugi::xml_node& n) {
-	this->fillElement(c, n);
-
 	ASSERT(c.children.size() == 0)
 	for(auto i = n.first_child(); !i.empty(); i = i.next_sibling()) {
 		if (auto res = this->parseNode(i)) {
 			c.children.push_back(std::move(res));
-			c.children.back()->parent = &c;
 		}
 	}
 }
 
 void Parser::fillGradient(Gradient& g, const pugi::xml_node& n) {
+	this->fillElement(g, n);
 	this->fillContainer(g, n);
 	this->fillReferencing(g, n);
 	this->fillStyleable(g, n);
@@ -337,6 +335,7 @@ std::unique_ptr<DefsElement> Parser::parseDefsElement(const pugi::xml_node& n) {
 
 	auto ret = utki::makeUnique<DefsElement>();
 
+	this->fillElement(*ret, n);
 	this->fillTransformable(*ret, n);
 	this->fillStyleable(*ret, n);
 	this->fillContainer(*ret, n);
@@ -380,6 +379,7 @@ std::unique_ptr<GElement> Parser::parseGElement(const pugi::xml_node& n) {
 
 	auto ret = utki::makeUnique<GElement>();
 
+	this->fillElement(*ret, n);
 	this->fillTransformable(*ret, n);
 	this->fillStyleable(*ret, n);
 	this->fillContainer(*ret, n);
@@ -611,6 +611,7 @@ std::unique_ptr<SvgElement> Parser::parseSvgElement(const pugi::xml_node& n) {
 
 	auto ret = utki::makeUnique<SvgElement>();
 
+	this->fillElement(*ret, n);
 	this->fillStyleable(*ret, n);
 	this->fillRectangle(*ret, n);
 	this->fillContainer(*ret, n);
@@ -627,6 +628,7 @@ std::unique_ptr<SymbolElement> Parser::parseSymbolElement(const pugi::xml_node& 
 
 	auto ret = utki::makeUnique<SymbolElement>();
 
+	this->fillElement(*ret, n);
 	this->fillStyleable(*ret, n);
 	this->fillContainer(*ret, n);
 	this->fillViewBoxed(*ret, n);
