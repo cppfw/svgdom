@@ -103,8 +103,7 @@ enum class FillRule_e{
 };
 
 
-//TODO: rename to StyleValue
-struct StylePropertyValue{
+struct StyleValue{
 	enum class Type_e{
 		/**
 		 * @brief No special value is used.
@@ -176,7 +175,7 @@ struct StylePropertyValue{
 	std::string getLocalIdFromIri()const;
 	
 	//TODO: move to cpp
-	static StylePropertyValue parsePaint(const std::string& str);
+	static StyleValue parsePaint(const std::string& str);
 	
 	//TODO: move to cpp
 	std::string paintToString()const;
@@ -194,9 +193,9 @@ struct StylePropertyValue{
  * @brief An element which has 'style' attribute or can be styled.
  */
 struct Styleable{
-	std::map<StyleProperty_e, StylePropertyValue> styles;
+	std::map<StyleProperty_e, StyleValue> styles;
 	
-	const StylePropertyValue* findStyleProperty(StyleProperty_e p)const;
+	const StyleValue* findStyleProperty(StyleProperty_e p)const;
 	
 	void attribsToStream(std::ostream& s)const;
 	
@@ -204,7 +203,7 @@ struct Styleable{
 	static decltype(styles) parse(const std::string& str);
 	
 	//TODO: move to cpp
-	static StylePropertyValue parseStylePropertyValue(StyleProperty_e type, const std::string& str);
+	static StyleValue parseStylePropertyValue(StyleProperty_e type, const std::string& str);
 	
 	static bool isStylePropertyInherited(StyleProperty_e p);
 	

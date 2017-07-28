@@ -104,11 +104,11 @@ void Styleable::attribsToStream(std::ostream& s) const{
 }
 
 //input parameter 'str' should have no leading or trailing white spaces
-StylePropertyValue Styleable::parseStylePropertyValue(StyleProperty_e type, const std::string& str){
-	StylePropertyValue v;
+StyleValue Styleable::parseStylePropertyValue(StyleProperty_e type, const std::string& str){
+	StyleValue v;
 
 	if (str == "inherit") {
-		v.type = StylePropertyValue::Type_e::INHERIT;
+		v.type = StyleValue::Type_e::INHERIT;
 		return v;
 	}
 
@@ -129,7 +129,7 @@ StylePropertyValue Styleable::parseStylePropertyValue(StyleProperty_e type, cons
 		case StyleProperty_e::STOP_COLOR:
 		case StyleProperty_e::FILL:
 		case StyleProperty_e::STROKE:
-			v = StylePropertyValue::parsePaint(str);
+			v = StyleValue::parsePaint(str);
 //				TRACE(<< "paint read = " << std::hex << v.integer << std::endl)
 			break;
 		case StyleProperty_e::STROKE_WIDTH:
@@ -173,7 +173,7 @@ StylePropertyValue Styleable::parseStylePropertyValue(StyleProperty_e type, cons
 
 
 namespace{
-StylePropertyValue parseStylePropertyValue(StyleProperty_e type, std::istream& s){
+StyleValue parseStylePropertyValue(StyleProperty_e type, std::istream& s){
 	skipWhitespaces(s);
 	std::string str = readTillChar(s, ';');
 	str = trimTail(str);
@@ -205,7 +205,7 @@ decltype(Styleable::styles) Styleable::parse(const std::string& str){
 			return ret;//expected colon
 		}
 		
-		StylePropertyValue v = ::parseStylePropertyValue(type, s);
+		StyleValue v = ::parseStylePropertyValue(type, s);
 		
 		skipWhitespaces(s);
 		
@@ -304,7 +304,7 @@ std::string Styleable::propertyToString(StyleProperty_e p){
 	}
 }
 
-const StylePropertyValue* Styleable::findStyleProperty(StyleProperty_e p)const{
+const StyleValue* Styleable::findStyleProperty(StyleProperty_e p)const{
 	auto i = this->styles.find(p);
 	if(i != this->styles.end()){
 		return &i->second;
@@ -312,7 +312,7 @@ const StylePropertyValue* Styleable::findStyleProperty(StyleProperty_e p)const{
 	return nullptr;
 }
 
-Rgb StylePropertyValue::getRgb() const{
+Rgb StyleValue::getRgb() const{
 	auto c = this->color;
 	
 	Rgb ret;
@@ -477,11 +477,11 @@ const std::map<std::string, std::uint32_t> colorNames = {
 }
 
 //'str' should have no leading and/or trailing white spaces.
-StylePropertyValue StylePropertyValue::parsePaint(const std::string& str){
-	StylePropertyValue ret;
+StyleValue StyleValue::parsePaint(const std::string& str){
+	StyleValue ret;
 	
 	if(str.size() == 0){
-		ret.type = StylePropertyValue::Type_e::NONE;
+		ret.type = StyleValue::Type_e::NONE;
 		return ret;
 	}
 	
@@ -502,19 +502,19 @@ StylePropertyValue StylePropertyValue::parsePaint(const std::string& str){
 			skipWhitespaces(s);
 			if(s.get() == ')'){
 				ret.str = tmpStr;
-				ret.type = StylePropertyValue::Type_e::URL;
+				ret.type = StyleValue::Type_e::URL;
 				return ret;
 			}
 		}
 	}
 	
 	if(str == "none"){
-		ret.type = StylePropertyValue::Type_e::NONE;
+		ret.type = StyleValue::Type_e::NONE;
 		return ret;
 	}
 	
 	if(str == "currentColor"){
-		ret.type = StylePropertyValue::Type_e::CURRENT_COLOR;
+		ret.type = StyleValue::Type_e::CURRENT_COLOR;
 		return ret;
 	}
 	
@@ -550,7 +550,7 @@ StylePropertyValue StylePropertyValue::parsePaint(const std::string& str){
 						| (std::uint32_t(d[4]) << 20) | (std::uint32_t(d[5]) << 16);
 				break;
 			default:
-				ret.type = StylePropertyValue::Type_e::NONE;
+				ret.type = StyleValue::Type_e::NONE;
 				break;
 		}
 		
@@ -604,7 +604,7 @@ StylePropertyValue StylePropertyValue::parsePaint(const std::string& str){
 	return ret;
 }
 
-std::string StylePropertyValue::paintToString()const{
+std::string StyleValue::paintToString()const{
 	switch(this->type){
 		default:
 		case Type_e::NONE:
@@ -639,6 +639,6 @@ std::string StylePropertyValue::paintToString()const{
 	}
 }
 
-std::string StylePropertyValue::getLocalIdFromIri() const {
+std::string StyleValue::getLocalIdFromIri() const {
 	return iriToLocalId(this->str);
 }
