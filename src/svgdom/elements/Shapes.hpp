@@ -67,7 +67,6 @@ struct PathElement : public Shape{
 			} flags;
 		};
 		
-		//TODO: move to cpp
 		static Type_e charToType(char c);
 		static char typeToChar(Type_e t);
 	};
@@ -75,7 +74,6 @@ struct PathElement : public Shape{
 	
 	void attribsToStream(std::ostream& s)const;
 	
-	//TODO: move to cpp
 	static decltype(path) parse(const std::string& str);
 	
 	void accept(Visitor& visitor) const override;
@@ -130,7 +128,6 @@ struct PolylineShape : public Shape{
 	
 	void attribsToStream(std::ostream& s)const;
 	
-	//TODO: move to cpp
 	static decltype(points) parse(const std::string& str);
 };
 

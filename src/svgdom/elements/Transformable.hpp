@@ -38,10 +38,8 @@ struct Transformable{
 	
 	void attribsToStream(std::ostream& s)const;
 	
-	//TODO: move to cpp
 	void transformationsToStream(std::ostream& s)const;
 	
-	//TODO: move to cpp
 	static decltype(Transformable::transformations) parse(const std::string& str);
 };
 

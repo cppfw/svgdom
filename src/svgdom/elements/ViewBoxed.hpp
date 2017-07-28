@@ -32,10 +32,8 @@ struct ViewBoxed {
 		bool slice = false;
 	} preserveAspectRatio;
 
-	//TODO: move to cpp
 	void parseAndFillPreserveAspectRatio(const std::string& str);
 
-	//TODO: move to cpp
 	static decltype(viewBox) parseViewbox(const std::string& str);
 
 	void attribsToStream(std::ostream& s)const;

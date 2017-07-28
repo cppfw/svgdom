@@ -174,10 +174,8 @@ struct StyleValue{
 	 */
 	std::string getLocalIdFromIri()const;
 	
-	//TODO: move to cpp
 	static StyleValue parsePaint(const std::string& str);
 	
-	//TODO: move to cpp
 	std::string paintToString()const;
 	
 	/**
@@ -199,15 +197,12 @@ struct Styleable{
 	
 	void attribsToStream(std::ostream& s)const;
 	
-	//TODO: move to cpp
 	static decltype(styles) parse(const std::string& str);
 	
-	//TODO: move to cpp
 	static StyleValue parseStylePropertyValue(StyleProperty_e type, const std::string& str);
 	
 	static bool isStylePropertyInherited(StyleProperty_e p);
 	
-	//TODO: move to cpp
 	static std::string propertyToString(StyleProperty_e p);
 	static StyleProperty_e stringToProperty(std::string str);
 };

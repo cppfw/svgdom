@@ -49,5 +49,4 @@ struct Length{
 
 }
 
-//TODO: move somewhere
 std::ostream& operator<<(std::ostream& s, const svgdom::Length& l);

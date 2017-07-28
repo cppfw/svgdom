@@ -19,7 +19,6 @@ struct Element :
 {
 	std::string id;
 	
-	//TODO: move all attribsToStream to cpp
 	void attribsToStream(std::ostream& s)const;
 	
 	std::string toString()const;
