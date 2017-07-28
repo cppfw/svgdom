@@ -1,3 +1,9 @@
+libsvgdom (0.2.58) unstable; urgency=medium
+
+  * ios project fixed
+
+ -- Ivan Gagis <igagis@gmail.com>  Sat, 29 Jul 2017 00:31:36 +0300
+
 libsvgdom (0.2.57) unstable; urgency=medium
 
   * ios project fixed

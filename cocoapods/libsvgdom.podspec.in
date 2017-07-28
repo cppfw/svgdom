@@ -9,7 +9,7 @@ Pod::Spec.new do |s|
   
   s.source = { :git => "https://github.com/igagis/svgdom.git", :tag => s.version }
 
-  s.source_files  = "src/**/*.{hpp,cpp}"
+  s.source_files  = "src/**/*.{hpp,hxx,cpp}"
   s.header_mappings_dir = "src"
 
   s.dependency 'libutki', '>= 1.0.8'
