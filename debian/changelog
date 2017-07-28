@@ -1,3 +1,9 @@
+libsvgdom (0.2.56) unstable; urgency=medium
+
+  * refactoring
+
+ -- Ivan Gagis <igagis@gmail.com>  Fri, 28 Jul 2017 16:17:20 +0300
+
 libsvgdom (0.2.55) unstable; urgency=medium
 
   * test release
