@@ -1,4 +1,5 @@
 #include "Container.hpp"
+#include "../Visitor.hpp"
 
 using namespace svgdom;
 
