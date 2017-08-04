@@ -28,6 +28,9 @@
       <df name="samples">
         <in>main.cpp</in>
       </df>
+      <df name="toString">
+        <in>main.cpp</in>
+      </df>
     </df>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
@@ -168,6 +171,10 @@
         </ccTool>
       </item>
       <item path="tests/samples/main.cpp" ex="false" tool="1" flavor2="8">
+        <ccTool flags="1">
+        </ccTool>
+      </item>
+      <item path="tests/toString/main.cpp" ex="false" tool="1" flavor2="8">
         <ccTool flags="1">
         </ccTool>
       </item>
