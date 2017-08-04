@@ -5,7 +5,7 @@ using namespace svgdom;
 
 
 
-void Container::relayAccept(Visitor& visitor) const{
+void Container::relayAccept(svgdom::Visitor& visitor) const{
 	for(auto& e : this->children){
 		e->accept(visitor);
 	}
