@@ -207,7 +207,9 @@ void StreamWriter::visit(const SymbolElement& e) {
 void StreamWriter::visit(const CustomStringElement& e) {
   auto ind = indentStr(this->indent);
   
-  s << ind;
-  s << e.getCustomString();
-  s << std::endl;
+	if (!e.getCustomString().empty()) {
+	  s << ind;
+	  s << e.getCustomString();
+	  s << std::endl;
+	}
 }
