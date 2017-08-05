@@ -28,12 +28,14 @@ endif
 
 $(eval $(prorab-build-app))
 
+this_dirs := $(subst /, ,$(d))
+this_test := $(word $(words $(this_dirs)),$(this_dirs))
 
 this_svgs := $(patsubst %.svg,%,$(shell ls $(d)testdata/*.svg))
 
 define this_rules
 test:: $(prorab_this_name)
-	@prorab-running-test.sh samples
+	@prorab-running-test.sh $(this_test)
 	$(prorab_echo)cp $(d)../../src/*.dll $(d) || true
 	$(prorab_echo)for f in $(this_svgs); do \
 	    echo "checking file $$$$f.svg..." && \

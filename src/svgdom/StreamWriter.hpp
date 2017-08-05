@@ -5,7 +5,10 @@
 namespace svgdom{
 
 class StreamWriter : public Visitor{
+protected:
 	std::ostream& s;
+	
+	std::string indentStr();
 	
 	unsigned indent = 0;
 	

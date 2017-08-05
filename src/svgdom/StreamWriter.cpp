@@ -1,10 +1,21 @@
-#include "StreamWriter.hxx"
+#include "StreamWriter.hpp"
 
 #include <utki/util.hpp>
 
 #include "util.hxx"
 
 using namespace svgdom;
+
+std::string StreamWriter::indentStr() {
+	std::string ind;
+
+	std::stringstream ss;
+	for(unsigned i = 0; i != this->indent; ++i){
+		ss << "\t";
+	}
+	return ss.str();
+}
+
 
 void StreamWriter::childrenToStream(const Container& e) {
 	++this->indent;
@@ -18,7 +29,7 @@ void StreamWriter::childrenToStream(const Container& e) {
 
 
 void StreamWriter::visit(const GElement& e) {
-	auto ind = indentStr(this->indent);
+	auto ind = indentStr();
 
 	this->s << ind << "<g";
 	e.attribsToStream(this->s);
@@ -34,7 +45,7 @@ void StreamWriter::visit(const GElement& e) {
 }
 
 void StreamWriter::visit(const SvgElement& e) {
-	auto ind = indentStr(this->indent);
+	auto ind = indentStr();
 
 	this->s << ind << "<svg";
 	if (this->indent == 0) {//if outermost "svg" element
@@ -53,7 +64,7 @@ void StreamWriter::visit(const SvgElement& e) {
 }
 
 void StreamWriter::visit(const LineElement& e) {
-	auto ind = indentStr(indent);
+	auto ind = indentStr();
 
 	s << ind << "<line";
 	e.attribsToStream(s);
@@ -62,7 +73,7 @@ void StreamWriter::visit(const LineElement& e) {
 }
 
 void StreamWriter::visit(const RectElement& e) {
-	auto ind = indentStr(indent);
+	auto ind = indentStr();
 
 	s << ind << "<rect";
 	e.attribsToStream(s);
@@ -71,7 +82,7 @@ void StreamWriter::visit(const RectElement& e) {
 }
 
 void StreamWriter::visit(const EllipseElement& e) {
-	auto ind = indentStr(indent);
+	auto ind = indentStr();
 
 	s << ind << "<ellipse";
 	e.attribsToStream(s);
@@ -80,7 +91,7 @@ void StreamWriter::visit(const EllipseElement& e) {
 }
 
 void StreamWriter::visit(const PolygonElement& e) {
-	auto ind = indentStr(indent);
+	auto ind = indentStr();
 
 	s << ind << "<polygon";
 	e.attribsToStream(s);
@@ -89,7 +100,7 @@ void StreamWriter::visit(const PolygonElement& e) {
 }
 
 void StreamWriter::visit(const PolylineElement& e) {
-	auto ind = indentStr(indent);
+	auto ind = indentStr();
 
 	s << ind << "<polyline";
 	e.attribsToStream(s);
@@ -98,7 +109,7 @@ void StreamWriter::visit(const PolylineElement& e) {
 }
 
 void StreamWriter::visit(const CircleElement& e) {
-	auto ind = indentStr(indent);
+	auto ind = indentStr();
 
 	s << ind << "<circle";
 	e.attribsToStream(s);
@@ -107,7 +118,7 @@ void StreamWriter::visit(const CircleElement& e) {
 }
 
 void StreamWriter::visit(const PathElement& e) {
-	auto ind = indentStr(indent);
+	auto ind = indentStr();
 
 	s << ind << "<path";
 
@@ -118,7 +129,7 @@ void StreamWriter::visit(const PathElement& e) {
 }
 
 void StreamWriter::visit(const UseElement& e) {
-	auto ind = indentStr(indent);
+	auto ind = indentStr();
 
 	s << ind << "<use";
 	e.Element::attribsToStream(s);
@@ -131,14 +142,14 @@ void StreamWriter::visit(const UseElement& e) {
 }
 
 void StreamWriter::visit(const Gradient::StopElement& e) {
-	auto ind = indentStr(this->indent);
+	auto ind = indentStr();
 	this->s << ind << "<stop";
 	e.attribsToStream(this->s);
 	this->s << "/>" << std::endl;
 }
 
 void StreamWriter::visit(const RadialGradientElement& e) {
-	auto ind = indentStr(this->indent);
+	auto ind = indentStr();
 
 	this->s << ind << "<radialGradient";
 	e.attribsToStream(this->s);
@@ -154,7 +165,7 @@ void StreamWriter::visit(const RadialGradientElement& e) {
 }
 
 void StreamWriter::visit(const LinearGradientElement& e) {
-	auto ind = indentStr(this->indent);
+	auto ind = indentStr();
 
 	this->s << ind << "<linearGradient";
 	e.attribsToStream(this->s);
@@ -170,7 +181,7 @@ void StreamWriter::visit(const LinearGradientElement& e) {
 }
 
 void StreamWriter::visit(const DefsElement& e) {
-	auto ind = indentStr(this->indent);
+	auto ind = indentStr();
 
 	this->s << ind << "<defs";
 	e.Element::attribsToStream(s);
@@ -188,7 +199,7 @@ void StreamWriter::visit(const DefsElement& e) {
 }
 
 void StreamWriter::visit(const SymbolElement& e) {
-	auto ind = indentStr(this->indent);
+	auto ind = indentStr();
 
 	this->s << ind << "<symbol";
 
