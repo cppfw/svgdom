@@ -36,12 +36,10 @@ struct Gradient :
 	struct StopElement : public Element{
 		real offset;
 		
-		void attribsToStream(std::ostream& s)const;
-
 		void accept(Visitor& visitor) const override;
 	};
 	
-	void attribsToStream(std::ostream& s)const;
+	std::string spreadMethodToString()const;
 };
 
 struct LinearGradientElement : public Gradient{
@@ -49,8 +47,6 @@ struct LinearGradientElement : public Gradient{
 	Length y1 = Length::make(0, Length::Unit_e::UNKNOWN);
 	Length x2 = Length::make(100, Length::Unit_e::UNKNOWN);
 	Length y2 = Length::make(0, Length::Unit_e::UNKNOWN);
-	
-	void attribsToStream(std::ostream& s)const;
 	
 	void accept(Visitor& visitor) const override;
 };
@@ -61,8 +57,6 @@ struct RadialGradientElement : public Gradient{
 	Length r = Length::make(50, Length::Unit_e::UNKNOWN);
 	Length fx = Length::make(50, Length::Unit_e::UNKNOWN);
 	Length fy = Length::make(50, Length::Unit_e::UNKNOWN);
-	
-	void attribsToStream(std::ostream& s)const;
 	
 	void accept(Visitor& visitor) const override;
 };

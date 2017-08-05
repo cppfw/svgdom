@@ -195,7 +195,7 @@ struct Styleable{
 	
 	const StyleValue* findStyleProperty(StyleProperty_e p)const;
 	
-	void attribsToStream(std::ostream& s)const;
+	std::string stylesToString()const;
 	
 	static decltype(styles) parse(const std::string& str);
 	

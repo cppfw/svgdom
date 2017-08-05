@@ -19,8 +19,6 @@ struct Element :
 {
 	std::string id;
 	
-	void attribsToStream(std::ostream& s)const;
-	
 	std::string toString()const;
 	
 	/**

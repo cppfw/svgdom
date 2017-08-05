@@ -1,7 +1,7 @@
 #pragma once
 
 #include <vector>
-#include <ostream>
+#include <string>
 
 #include "../config.hpp"
 
@@ -36,9 +36,7 @@ struct Transformable{
 	};
 	std::vector<Transformation> transformations;
 	
-	void attribsToStream(std::ostream& s)const;
-	
-	void transformationsToStream(std::ostream& s)const;
+	std::string transformationsToString()const;
 	
 	static decltype(Transformable::transformations) parse(const std::string& str);
 };

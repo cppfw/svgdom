@@ -6,24 +6,6 @@
 using namespace svgdom;
 
 
-void GElement::attribsToStream(std::ostream& s) const{
-	this->Element::attribsToStream(s);
-	this->Transformable::attribsToStream(s);
-	this->Styleable::attribsToStream(s);
-}
-
-void SvgElement::attribsToStream(std::ostream& s) const {
-	this->Element::attribsToStream(s);
-	this->Styleable::attribsToStream(s);
-	this->Rectangle::attribsToStream(s);
-	this->ViewBoxed::attribsToStream(s);
-}
-
-void SymbolElement::attribsToStream(std::ostream& s) const {
-	this->Element::attribsToStream(s);
-	this->Styleable::attribsToStream(s);
-	this->ViewBoxed::attribsToStream(s);
-}
 
 real SvgElement::aspectRatio(real dpi)const{
 	real w = this->width.toPx(dpi);

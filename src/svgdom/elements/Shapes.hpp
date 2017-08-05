@@ -14,7 +14,6 @@ struct Shape :
 		public Element,
 		public Transformable
 {
-	void attribsToStream(std::ostream& s)const;
 };
 
 struct PathElement : public Shape{
@@ -72,7 +71,7 @@ struct PathElement : public Shape{
 	};
 	std::vector<Step> path;
 	
-	void attribsToStream(std::ostream& s)const;
+	std::string pathToString()const;
 	
 	static decltype(path) parse(const std::string& str);
 	
@@ -86,8 +85,6 @@ struct RectElement :
 	Length rx = Length::make(0, Length::Unit_e::UNKNOWN);
 	Length ry = Length::make(0, Length::Unit_e::UNKNOWN);
 	
-	void attribsToStream(std::ostream& s)const;
-	
 	void accept(Visitor& visitor) const override;
 };
 
@@ -95,8 +92,6 @@ struct CircleElement : public Shape{
 	Length cx = Length::make(0, Length::Unit_e::UNKNOWN);
 	Length cy = Length::make(0, Length::Unit_e::UNKNOWN);
 	Length r = Length::make(0, Length::Unit_e::UNKNOWN);
-	
-	void attribsToStream(std::ostream& s)const;
 	
 	void accept(Visitor& visitor) const override;
 };
@@ -107,8 +102,6 @@ struct EllipseElement : public Shape{
 	Length rx = Length::make(0, Length::Unit_e::UNKNOWN);
 	Length ry = Length::make(0, Length::Unit_e::UNKNOWN);
 	
-	void attribsToStream(std::ostream& s)const;
-	
 	void accept(Visitor& visitor) const override;
 };
 
@@ -118,15 +111,13 @@ struct LineElement : public Shape{
 	Length x2 = Length::make(0, Length::Unit_e::UNKNOWN);
 	Length y2 = Length::make(0, Length::Unit_e::UNKNOWN);
 	
-	void attribsToStream(std::ostream& s)const;
-	
 	void accept(Visitor& visitor) const override;
 };
 
 struct PolylineShape : public Shape{
 	std::vector<std::array<real, 2>> points;
 	
-	void attribsToStream(std::ostream& s)const;
+	std::string pointsToString()const;
 	
 	static decltype(points) parse(const std::string& str);
 };

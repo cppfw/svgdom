@@ -32,11 +32,12 @@ struct ViewBoxed {
 		bool slice = false;
 	} preserveAspectRatio;
 
+	std::string viewBoxToString()const;
+	std::string preserveAspectRatioToString()const;
+	
 	void parseAndFillPreserveAspectRatio(const std::string& str);
 
 	static decltype(viewBox) parseViewbox(const std::string& str);
-
-	void attribsToStream(std::ostream& s)const;
 
 	bool isViewBoxSpecified()const {
 		return this->viewBox[2] >= 0;//width is not negative

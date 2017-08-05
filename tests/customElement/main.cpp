@@ -3,15 +3,15 @@
 
 #include <utki/debug.hpp>
 
-struct StringElement : public svgdom::Element{
+struct CustomElement : public svgdom::Element{
 	std::string str;
 	
-	StringElement(std::string&& str) :
+	CustomElement(std::string&& str) :
 			str(std::move(str))
 	{}
 	
-	StringElement(const std::string& str) :
-			StringElement(std::string(str))
+	CustomElement(const std::string& str) :
+			CustomElement(std::string(str))
 	{}
 	
 	void accept(svgdom::Visitor& visitor) const override;
@@ -23,14 +23,15 @@ public:
 			svgdom::StreamWriter(s)
 	{}
 	
-	virtual void visit(const StringElement& e){
-		auto ind = this->indentStr();
-
-		this->s << ind << e.str << std::endl;
+	virtual void visit(const CustomElement& e){
+		this->setName("custom");
+		this->addAttribute("customAttrib1", "value1");
+		this->addAttribute("customAttrib2", "value2");
+		this->write();
 	}
 };
 
-void StringElement::accept(svgdom::Visitor& visitor) const{
+void CustomElement::accept(svgdom::Visitor& visitor) const{
 	if(auto v = dynamic_cast<CustomStreamWriter*>(&visitor)){
 		v->visit(*this);
 	}else{
@@ -67,7 +68,7 @@ int main(int argc, char** argv){
 
 	dom->children.push_back(utki::makeUnique<svgdom::PathElement>(path));
 
-	dom->children.push_back(utki::makeUnique<StringElement>("Any string goes here."));
+	dom->children.push_back(utki::makeUnique<CustomElement>("Any string goes here."));
 	
 	std::stringstream ss;
 	CustomStreamWriter writer(ss);
@@ -79,5 +80,5 @@ int main(int argc, char** argv){
 	TRACE_ALWAYS(<< str << std::endl)
 	
 	ASSERT_ALWAYS(str.find("xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" version=\"1.1\"") != std::string::npos)
-	ASSERT_ALWAYS(str.find("Any string goes here.") != std::string::npos)
+	ASSERT_ALWAYS(str.find("<custom customAttrib1=\"value1\" customAttrib2=\"value2\"/>") != std::string::npos)
 }
