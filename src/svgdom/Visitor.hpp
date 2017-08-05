@@ -3,6 +3,7 @@
 #include "elements/Structurals.hpp"
 #include "elements/Shapes.hpp"
 #include "elements/Gradients.hpp"
+#include "elements/Custom.hpp"
 
 namespace svgdom{
 /**
@@ -30,6 +31,7 @@ public:
 	virtual void visit(const Gradient::StopElement& e);
 	virtual void visit(const LinearGradientElement& e);
 	virtual void visit(const RadialGradientElement& e);
+	virtual void visit(const CustomStringElement& e);
 	
 	/**
 	 * @brief Default visit method.

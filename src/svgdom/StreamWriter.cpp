@@ -203,3 +203,11 @@ void StreamWriter::visit(const SymbolElement& e) {
 	}
 	s << std::endl;
 }
+
+void StreamWriter::visit(const CustomStringElement& e) {
+  auto ind = indentStr(this->indent);
+  
+  s << ind;
+  s << e.getCustomString();
+  s << std::endl;
+}
