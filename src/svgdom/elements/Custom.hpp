@@ -20,8 +20,6 @@ struct CustomStringElement : public Element
   
   void setCustomString(std::string s);
   
-	void attribsToStream(std::ostream& s)const;
-  
   void accept(Visitor& visitor) const override;
 };
 

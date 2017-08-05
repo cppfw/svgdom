@@ -26,6 +26,3 @@ void CustomStringElement::setCustomString(std::string s) {
 void CustomStringElement::accept(Visitor& visitor) const {
   visitor.visit(*this);
 }
-
-void CustomStringElement::attribsToStream(std::ostream& s) const {
-}
