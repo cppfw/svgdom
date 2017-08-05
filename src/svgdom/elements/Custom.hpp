@@ -12,6 +12,10 @@ struct CustomStringElement : public Element
 {
   std::string customString;
   
+	CustomStringElement();
+	
+	CustomStringElement(std::string s);
+	
   std::string getCustomString() const;
   
   void setCustomString(std::string s);

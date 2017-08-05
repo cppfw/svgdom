@@ -11,6 +11,10 @@
 
 using namespace svgdom;
 
+CustomStringElement::CustomStringElement() {}
+
+CustomStringElement::CustomStringElement(std::string s) : customString(s) {}
+
 std::string CustomStringElement::getCustomString() const {
   return customString;
 }
