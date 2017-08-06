@@ -279,11 +279,12 @@ std::string PathElement::pathToString() const {
 		if(curType == step.type){
 			s << " ";
 		}else{
-			if (first)
+			if (first) {
 				first = false;
-			else
+			} else {
 				s << " ";
-
+			}
+			
 			s << Step::typeToChar(step.type);
 			curType = step.type;
 		}
