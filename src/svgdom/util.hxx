@@ -20,8 +20,6 @@ real readInReal(std::istream& s);
 
 std::string trimTail(const std::string& s);
 
-std::string indentStr(unsigned indent);
-
 std::string iriToLocalId(const std::string& iri);
 
 }

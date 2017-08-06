@@ -38,93 +38,19 @@ void PolylineElement::accept(Visitor& visitor) const {
 	visitor.visit(*this);
 }
 
-void CircleElement::attribsToStream(std::ostream& s) const {
-	this->Shape::attribsToStream(s);
+std::string PolylineShape::pointsToString() const {
+	std::stringstream s;
 	
-	if(this->cx.unit != Length::Unit_e::UNKNOWN){
-		s << " cx=\"" << this->cx << "\"";
-	}
-	
-	if(this->cy.unit != Length::Unit_e::UNKNOWN){
-		s << " cy=\"" << this->cy << "\"";
-	}
-	
-	if(this->r.unit != Length::Unit_e::UNKNOWN){
-		s << " r=\"" << this->r << "\"";
-	}
-}
-
-
-
-void EllipseElement::attribsToStream(std::ostream& s) const {
-	this->Shape::attribsToStream(s);
-	
-	if(this->cx.unit != Length::Unit_e::UNKNOWN){
-		s << " cx=\"" << this->cx << "\"";
-	}
-	
-	if(this->cy.unit != Length::Unit_e::UNKNOWN){
-		s << " cy=\"" << this->cy << "\"";
-	}
-	
-	if(this->rx.unit != Length::Unit_e::UNKNOWN){
-		s << " rx=\"" << this->rx << "\"";
-	}
-	
-	if(this->ry.unit != Length::Unit_e::UNKNOWN){
-		s << " ry=\"" << this->ry << "\"";
-	}
-}
-
-void LineElement::attribsToStream(std::ostream& s) const {
-	this->Shape::attribsToStream(s);
-	
-	if(this->x1.unit != Length::Unit_e::UNKNOWN){
-		s << " x1=\"" << this->x1 << "\"";
-	}
-	
-	if(this->y1.unit != Length::Unit_e::UNKNOWN){
-		s << " y1=\"" << this->y1 << "\"";
-	}
-	
-	if(this->x2.unit != Length::Unit_e::UNKNOWN){
-		s << " x2=\"" << this->x2 << "\"";
-	}
-	
-	if(this->y2.unit != Length::Unit_e::UNKNOWN){
-		s << " y2=\"" << this->y2 << "\"";
-	}
-}
-
-void PolylineShape::attribsToStream(std::ostream& s) const {
-	this->Shape::attribsToStream(s);
-	
-	if(this->points.size() != 0){
-		s << " points=\"";
-		bool isFirst = true;
-		for(auto& p : this->points){
-			if(isFirst){
-				isFirst = false;
-			}else{
-				s << ',';
-			}
-			s << p[0] << ',' << p[1];
+	bool isFirst = true;
+	for(auto& p : this->points){
+		if(isFirst){
+			isFirst = false;
+		}else{
+			s << ',';
 		}
-		s << "\"";
+		s << p[0] << ',' << p[1];
 	}
-}
-
-void RectElement::attribsToStream(std::ostream& s) const {
-	this->Shape::attribsToStream(s);
-	this->Rectangle::attribsToStream(s);
-	
-	if(this->rx.unit != Length::Unit_e::UNKNOWN){
-		s << " rx=\"" << this->rx << "\"";
-	}
-	
-	if(this->ry.unit != Length::Unit_e::UNKNOWN){
-		s << " ry=\"" << this->ry << "\"";
-	}
+	return s.str();
 }
 
 decltype(PathElement::path) PathElement::parse(const std::string& str){
@@ -342,21 +268,8 @@ decltype(PathElement::path) PathElement::parse(const std::string& str){
 	return ret;
 }
 
-void Shape::attribsToStream(std::ostream& s) const {
-	this->Element::attribsToStream(s);
-	this->Transformable::attribsToStream(s);
-	this->Styleable::attribsToStream(s);
-}
-
-
-void PathElement::attribsToStream(std::ostream& s) const{
-	this->Shape::attribsToStream(s);
-	
-	if(this->path.size() == 0){
-		return;
-	}
-	
-	s << " d=\"";
+std::string PathElement::pathToString() const {
+	std::stringstream s;
 	
 	Step::Type_e curType = Step::Type_e::UNKNOWN;
 
@@ -455,9 +368,9 @@ void PathElement::attribsToStream(std::ostream& s) const{
 				break;
 		}
 	}
-	
-	s << "\"";
+	return s.str();
 }
+
 
 char PathElement::Step::typeToChar(Type_e t){
 	switch(t){

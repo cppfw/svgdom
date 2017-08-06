@@ -16,7 +16,7 @@ struct Container{
 	 * @brief Relay accept to children.
 	 * @param visitor - visitor to accept.
 	 */
-	void relayAccept(Visitor& visitor)const;
+	void relayAccept(svgdom::Visitor& visitor)const;
 };
 
 }

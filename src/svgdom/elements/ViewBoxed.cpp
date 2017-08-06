@@ -35,36 +35,6 @@ ViewBoxed::PreserveAspectRatio_e stringToPreserveAspectRatio(const std::string& 
 }
 }
 
-namespace{
-std::string preserveAspectRatioToString(ViewBoxed::PreserveAspectRatio_e par){
-	switch(par){
-		default:
-			ASSERT(false)
-			return std::string();
-		case ViewBoxed::PreserveAspectRatio_e::NONE:
-			return "none";
-		case ViewBoxed::PreserveAspectRatio_e::X_MIN_Y_MIN:
-			return "xMinYMin";
-		case ViewBoxed::PreserveAspectRatio_e::X_MID_Y_MIN:
-			return "xMidYMin";
-		case ViewBoxed::PreserveAspectRatio_e::X_MAX_Y_MIN:
-			return "xMaxYMin";
-		case ViewBoxed::PreserveAspectRatio_e::X_MIN_Y_MID:
-			return "xMinYMid";
-		case ViewBoxed::PreserveAspectRatio_e::X_MID_Y_MID:
-			return "xMidYMid";
-		case ViewBoxed::PreserveAspectRatio_e::X_MAX_Y_MID:
-			return "xMaxYMid";
-		case ViewBoxed::PreserveAspectRatio_e::X_MIN_Y_MAX:
-			return "xMinYMax";
-		case ViewBoxed::PreserveAspectRatio_e::X_MID_Y_MAX:
-			return "xMidYMax";
-		case ViewBoxed::PreserveAspectRatio_e::X_MAX_Y_MAX:
-			return "xMaxYMax";
-	}
-}
-}
-
 
 void ViewBoxed::parseAndFillPreserveAspectRatio(const std::string& str) {
 	std::istringstream s(str);
@@ -120,34 +90,64 @@ decltype(ViewBoxed::viewBox) ViewBoxed::parseViewbox(const std::string& str) {
 	return ret;
 }
 
-void ViewBoxed::attribsToStream(std::ostream& s)const {
-	if (this->isViewBoxSpecified()) {
-		s << " viewBox=\"";
-
-		bool isFirst = true;
-		for (auto i = this->viewBox.begin(); i != this->viewBox.end(); ++i) {
-			if (isFirst) {
-				isFirst = false;
-			}
-			else {
-				s << " ";
-			}
-			s << (*i);
+std::string ViewBoxed::viewBoxToString() const {
+	std::stringstream s;
+	bool isFirst = true;
+	for (auto i = this->viewBox.begin(); i != this->viewBox.end(); ++i) {
+		if (isFirst) {
+			isFirst = false;
 		}
-		s << "\"";
+		else {
+			s << " ";
+		}
+		s << (*i);
+	}
+	return s.str();
+}
+
+std::string ViewBoxed::preserveAspectRatioToString() const {
+	std::stringstream s;
+	if (this->preserveAspectRatio.defer) {
+		s << "defer ";
 	}
 
-	if (this->preserveAspectRatio.preserve != PreserveAspectRatio_e::NONE || this->preserveAspectRatio.defer || this->preserveAspectRatio.slice) {
-		s << " preserveAspectRatio=\"";
-		if (this->preserveAspectRatio.defer) {
-			s << "defer ";
-		}
-
-		s << preserveAspectRatioToString(this->preserveAspectRatio.preserve);
-
-		if (this->preserveAspectRatio.slice) {
-			s << " slice";
-		}
-		s << "\"";
+switch(this->preserveAspectRatio.preserve){
+		default:
+			break;
+		case ViewBoxed::PreserveAspectRatio_e::NONE:
+			s << "none";
+			break;
+		case ViewBoxed::PreserveAspectRatio_e::X_MIN_Y_MIN:
+			s << "xMinYMin";
+			break;
+		case ViewBoxed::PreserveAspectRatio_e::X_MID_Y_MIN:
+			s << "xMidYMin";
+			break;
+		case ViewBoxed::PreserveAspectRatio_e::X_MAX_Y_MIN:
+			s << "xMaxYMin";
+			break;
+		case ViewBoxed::PreserveAspectRatio_e::X_MIN_Y_MID:
+			s << "xMinYMid";
+			break;
+		case ViewBoxed::PreserveAspectRatio_e::X_MID_Y_MID:
+			s << "xMidYMid";
+			break;
+		case ViewBoxed::PreserveAspectRatio_e::X_MAX_Y_MID:
+			s << "xMaxYMid";
+			break;
+		case ViewBoxed::PreserveAspectRatio_e::X_MIN_Y_MAX:
+			s << "xMinYMax";
+			break;
+		case ViewBoxed::PreserveAspectRatio_e::X_MID_Y_MAX:
+			s << "xMidYMax";
+			break;
+		case ViewBoxed::PreserveAspectRatio_e::X_MAX_Y_MAX:
+			s << "xMaxYMax";
+			break;
 	}
+
+	if (this->preserveAspectRatio.slice) {
+		s << " slice";
+	}
+	return s.str();
 }

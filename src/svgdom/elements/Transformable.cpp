@@ -7,18 +7,9 @@
 using namespace svgdom;
 
 
-void Transformable::attribsToStream(std::ostream& s) const{
-	if(this->transformations.size() == 0){
-		return;
-	}
+std::string Transformable::transformationsToString() const {
+	std::stringstream s;
 	
-	s << " transform=\"";
-	this->transformationsToStream(s);
-	s << "\"";
-}
-
-
-void Transformable::transformationsToStream(std::ostream& s) const {
 	bool isFirst = true;
 	
 	for(auto& t : this->transformations){
@@ -64,6 +55,8 @@ void Transformable::transformationsToStream(std::ostream& s) const {
 				break;
 		}
 	}
+	
+	return s.str();
 }
 
 

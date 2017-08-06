@@ -14,8 +14,6 @@ struct GElement :
 		public Container,
 		public Transformable
 {
-	void attribsToStream(std::ostream& s)const;
-	
 	void accept(Visitor& visitor)const override;
 };
 
@@ -45,8 +43,6 @@ struct SvgElement :
 		public Rectangle,
 		public ViewBoxed
 {
-	void attribsToStream(std::ostream& s)const;
-	
 	void accept(Visitor& visitor) const override;
 	
 	/**
@@ -63,8 +59,6 @@ struct SymbolElement :
 		public Container,
 		public ViewBoxed
 {
-	void attribsToStream(std::ostream& s)const;
-
 	void accept(Visitor& visitor) const override;
 };
 

@@ -13,13 +13,8 @@
 
 using namespace svgdom;
 
-
-void Styleable::attribsToStream(std::ostream& s) const{
-	if(this->styles.size() == 0){
-		return;
-	}
-	
-	s << " style=\"";
+std::string Styleable::stylesToString() const {
+	std::stringstream s;
 	
 	bool isFirst = true;
 	
@@ -99,9 +94,10 @@ void Styleable::attribsToStream(std::ostream& s) const{
 				break;
 		}
 	}
-	
-	s << "\"";
+	return s.str();
 }
+
+
 
 //input parameter 'str' should have no leading or trailing white spaces
 StyleValue Styleable::parseStylePropertyValue(StyleProperty_e type, const std::string& str){

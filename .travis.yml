@@ -51,6 +51,7 @@ env:
   - secure: "y+Nuee9K4ysuIXcsU0B4Vf5KxNEwPiKmTWUWKJKhIfyINid+9OYoFQqtK54vqkyKIpngluXbWF5tV0fYuAsG4zWOQ2KNIVgEDO+3GgRltnjIdUz1YnkwHowzWswx6sfnI3QBWIsitNwa51Wouh0zwfZDOeD18NMlcpAYobUzSeK+mwDKtcLM63EqyuhJaWyj0Pc9a/IMzMVaIKE73GQM6Tx2d2c8W/6yJwP/fAV4jR/9BmD2o3TMlJtvEaZ3n0Q9sA/kutCTOspQToHqii8etGX70I67I1wVz2gjiXhh48N1Bmc4o2xFbKSi9106+RH7fuzaA5rj+JNlwr3RffJ9ggSS9v8FcH13NzWkPKL9Ovxfyr87ntVJhd9oRcz/EmyuY9D7IyH3GuZ5YLwfN3Q8JIsO+gQeLo4j2wyF1F0mdm5S9s9QLIJt2jmeX+Uw8blRubyfZlHPmUiJQqprTooHTvIeuHqjcPTLkaYQZv8jaZwI7kHFfOD1R8MxofekWiKvhpUXQHAyln6LZ59aqtPDTj4tEQ+kEiCNcVTnt0CczlI71BiO8VKRDjxsys0yV7Am1M/ur35rw50gEblqqMVO/fwdneEGjOlmJ/6Frn8uhuKpEThZdKXTiiQataWOnQ0DLLnBlhtXjdfc9DWbrH7c8UcrFu+R746XL7QkTyAO2AE="
   - PRORAB_GIT_USERNAME=igagis
   - PRORAB_GIT_ACCESS_TOKEN=$HOMEBREW_GITHUB_ACCESS_TOKEN
+  - USE_ANDROID_NDK_VERSION=15c
   - linuxDependencies="lintian debhelper prorab doxygen libutki-dev libpapki-dev libpugixml-dev"
 
 
@@ -77,13 +78,13 @@ before_install:
     pod install --project-directory=ios;
   fi
 - if [ "$BUILD_NAME" == "android" ]; then
-    echo "deb https://dl.bintray.com/igagis/ubu unstable main" | sudo tee /etc/apt/sources.list.d/igagis.list > /dev/null &&
+    echo "deb [arch=amd64] https://dl.bintray.com/igagis/ubu unstable main" | sudo tee /etc/apt/sources.list.d/igagis.list > /dev/null &&
     sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 379CE192D401AB61 &&
     sudo apt-get update -qq &&
     sudo apt-get install -qq prorab;
   fi
 - if [ "$BUILD_NAME" == "debian" ]; then
-    echo "deb http://dl.bintray.com/igagis/deb unstable main" | sudo tee /etc/apt/sources.list.d/igagis.list > /dev/null &&
+    echo "deb [arch=amd64] http://dl.bintray.com/igagis/ubu unstable main" | sudo tee /etc/apt/sources.list.d/igagis.list > /dev/null &&
     sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 379CE192D401AB61 &&
     sudo apt-get update -qq &&
     sudo apt-get install -qq sbuild prorab debhelper &&
@@ -96,7 +97,7 @@ before_install:
     sudo chroot /srv/chroot/deb-amd64 ln -s /usr/bin/gpg1 /usr/bin/gpg;
   fi
 - if [ "$BUILD_NAME" == "ubuntu" ]; then
-    echo "deb http://dl.bintray.com/igagis/ubu unstable main" | sudo tee /etc/apt/sources.list.d/igagis.list > /dev/null &&
+    echo "deb [arch=amd64] http://dl.bintray.com/igagis/ubu unstable main" | sudo tee /etc/apt/sources.list.d/igagis.list > /dev/null &&
     sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 379CE192D401AB61 &&
     sudo apt-get update -qq &&
     sudo apt-get install -qq sbuild prorab debhelper &&
@@ -108,7 +109,7 @@ before_install:
     sudo chroot /srv/chroot/ubu-amd64 apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 379CE192D401AB61;
   fi
 - if [ "$BUILD_NAME" == "raspberry_pi" ]; then
-    echo "deb http://dl.bintray.com/igagis/deb unstable main" | sudo tee /etc/apt/sources.list.d/igagis.list > /dev/null &&
+    echo "deb [arch=amd64] http://dl.bintray.com/igagis/ubu unstable main" | sudo tee /etc/apt/sources.list.d/igagis.list > /dev/null &&
     sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 379CE192D401AB61 &&
     sudo apt-get update -qq &&
     sudo apt-get install -qq prorab;
@@ -120,21 +121,16 @@ before_install:
     sudo mkdir -p /srv/chroot/rasp-armhf/build &&
     sudo rsync -av $TRAVIS_BUILD_DIR/ /srv/chroot/rasp-armhf/build/;
   fi
-- if [ "$BUILD_NAME" == "clang" ]; then
-    echo "deb http://dl.bintray.com/igagis/deb /" | sudo tee /etc/apt/sources.list.d/igagis.list > /dev/null &&
-    sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 379CE192D401AB61 &&
-    sudo apt-get update -qq &&
-    sudo apt-get install -qq $linuxDependencies lintian;
-  fi
+
   
 before_script:
   # download and install android NDK
   - if [ "$BUILD_NAME" == "android" ]; then
       export TERM=dumb &&
-      curl -L https://dl.google.com/android/repository/android-ndk-r14b-linux-x86_64.zip -O &&
-      unzip ./android-ndk-r14b-linux-x86_64.zip > /dev/null &&
-      rm android-ndk-r14b-linux-x86_64.zip &&
-      export ANDROID_NDK_HOME=`pwd`/android-ndk-r14b &&
+      curl -L https://dl.google.com/android/repository/android-ndk-r$USE_ANDROID_NDK_VERSION-linux-x86_64.zip -O &&
+      unzip ./android-ndk-r$USE_ANDROID_NDK_VERSION-linux-x86_64.zip > /dev/null &&
+      rm android-ndk-r$USE_ANDROID_NDK_VERSION-linux-x86_64.zip &&
+      export ANDROID_NDK_HOME=`pwd`/android-ndk-r$USE_ANDROID_NDK_VERSION &&
       export LOCAL_ANDROID_NDK_HOME="$ANDROID_NDK_HOME" &&
       export LOCAL_ANDROID_NDK_HOST_PLATFORM="linux-x86_64" &&
       export PATH=$PATH:${ANDROID_NDK_HOME} &&
@@ -149,10 +145,6 @@ script:
 - if [ "$BUILD_NAME" == "ubuntu" ]; then
     prorab-deb-prepare.sh &&
     sg sbuild -c "sbuild -A -d xenial-amd64-sbuild --debbuildopts '-us -uc'";
-  fi
-- if [ "$BUILD_NAME" == "clang" ]; then
-    prorab-deb-prepare.sh &&
-    dpkg-buildpackage -uc -us;
   fi
 - if [ "$BUILD_NAME" == "macosx" ]; then
     make &&

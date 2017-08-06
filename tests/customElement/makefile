@@ -1,6 +1,6 @@
 include prorab.mk
 
-this_name := parsesvg
+this_name := tests
 
 this_cxxflags += -Wall
 this_cxxflags += -Wno-format #no warnings about format
@@ -31,18 +31,12 @@ $(eval $(prorab-build-app))
 this_dirs := $(subst /, ,$(d))
 this_test := $(word $(words $(this_dirs)),$(this_dirs))
 
-this_svgs := $(patsubst %.svg,%,$(shell ls $(d)testdata/*.svg))
-
 define this_rules
 test:: $(prorab_this_name)
 	@prorab-running-test.sh $(this_test)
 	$(prorab_echo)cp $(d)../../src/*.dll $(d) || true
-	$(prorab_echo)for f in $(this_svgs); do \
-	    echo "checking file $$$$f.svg..." && \
-	    LD_LIBRARY_PATH=$(d)../../src DYLD_LIBRARY_PATH=$$$$LD_LIBRARY_PATH $(d)./parsesvg $$$$f.svg && \
-	    cmp out.svg $$$$f.svg.cmp; \
-	    if [ $$$$? -ne 0 ]; then prorab-error.sh "parsed SVG did not match etalon sample"; exit 1; fi \
-	done
+	$(prorab_echo)LD_LIBRARY_PATH=$(d)../../src DYLD_LIBRARY_PATH=$$$$LD_LIBRARY_PATH $(d)./tests; \
+		if [ $$$$? -ne 0 ]; then prorab-error.sh "test failed"; exit 1; fi
 	@prorab-passed.sh
 endef
 $(eval $(this_rules))

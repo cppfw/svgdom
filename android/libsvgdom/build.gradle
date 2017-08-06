@@ -23,6 +23,7 @@ model {
             cppFlags.add("-fexceptions")
             cppFlags.add("-frtti")
             cppFlags.add("-I" + projectDir.getAbsolutePath() + "/build/ndkLibs/include")
+            cppFlags.add("-fintegrated-as") //needed to avoid assembler error since NDK r15
         }
         abis {
             create("armeabi") {

@@ -5,16 +5,10 @@
 
 #include "Container.hpp"
 #include "../Visitor.hpp"
-#include "../StreamWriter.hxx"
+#include "../StreamWriter.hpp"
 
 using namespace svgdom;
 
-
-void Element::attribsToStream(std::ostream& s) const{
-	if(this->id.length() != 0){
-		s << " id=\"" << this->id << "\"";
-	}
-}
 
 
 std::string Element::toString() const{
