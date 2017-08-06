@@ -272,11 +272,19 @@ std::string PathElement::pathToString() const {
 	std::stringstream s;
 	
 	Step::Type_e curType = Step::Type_e::UNKNOWN;
+
+	bool first = true;
 	
 	for(auto& step : this->path){
 		if(curType == step.type){
 			s << " ";
 		}else{
+			if (first) {
+				first = false;
+			} else {
+				s << " ";
+			}
+			
 			s << Step::typeToChar(step.type);
 			curType = step.type;
 		}
