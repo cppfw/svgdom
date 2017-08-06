@@ -23,6 +23,8 @@ public:
 			svgdom::StreamWriter(s)
 	{}
 	
+	using svgdom::StreamWriter::visit;
+
 	virtual void visit(const CustomElement& e){
 		this->setName("custom");
 		this->addAttribute("customAttrib1", "value1");
