@@ -3,21 +3,30 @@
 
 #include <utki/debug.hpp>
 
-struct CustomElement : public svgdom::Element{
-	std::string str;
-	
-	CustomElement(std::string&& str) :
-			str(std::move(str))
-	{}
-	
-	CustomElement(const std::string& str) :
-			CustomElement(std::string(str))
-	{}
+struct CustomElement : public svgdom::Element{	
 	
 	void accept(svgdom::Visitor& visitor) const override;
 };
 
-class CustomStreamWriter : public svgdom::StreamWriter{
+class CustomVisitor : virtual public svgdom::Visitor{
+public:
+	virtual void visit(const CustomElement& e){
+		this->defaultVisit(e);
+	}
+};
+
+void CustomElement::accept(svgdom::Visitor& visitor) const{
+	if(auto v = dynamic_cast<CustomVisitor*>(&visitor)){
+		v->visit(*this);
+	}else{
+		visitor.defaultVisit(*this);
+	}
+}
+
+class CustomStreamWriter :
+		public svgdom::StreamWriter,
+		public CustomVisitor
+{
 public:
 	CustomStreamWriter(std::ostream& s) :
 			svgdom::StreamWriter(s)
@@ -25,21 +34,13 @@ public:
 	
 	using svgdom::StreamWriter::visit;
 
-	virtual void visit(const CustomElement& e){
+	void visit(const CustomElement& e)override{
 		this->setName("custom");
 		this->addAttribute("customAttrib1", "value1");
 		this->addAttribute("customAttrib2", "value2");
 		this->write();
 	}
 };
-
-void CustomElement::accept(svgdom::Visitor& visitor) const{
-	if(auto v = dynamic_cast<CustomStreamWriter*>(&visitor)){
-		v->visit(*this);
-	}else{
-		visitor.defaultVisit(*this);
-	}
-}
 
 int main(int argc, char** argv){
 	auto dom = utki::makeUnique<svgdom::SvgElement>();
@@ -70,7 +71,7 @@ int main(int argc, char** argv){
 
 	dom->children.push_back(utki::makeUnique<svgdom::PathElement>(path));
 
-	dom->children.push_back(utki::makeUnique<CustomElement>("Any string goes here."));
+	dom->children.push_back(utki::makeUnique<CustomElement>());
 	
 	std::stringstream ss;
 	CustomStreamWriter writer(ss);

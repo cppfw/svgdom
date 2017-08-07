@@ -4,7 +4,7 @@
 
 namespace svgdom{
 
-class StreamWriter : public Visitor{
+class StreamWriter : virtual public Visitor{
 private:
 	std::ostream& s;
 	

@@ -18,7 +18,6 @@
         <in>Length.cpp</in>
         <in>Parser.cpp</in>
         <in>StreamWriter.cpp</in>
-        <in>StreamWriter.hxx</in>
         <in>Visitor.cpp</in>
         <in>dom.cpp</in>
         <in>util.cpp</in>
@@ -241,8 +240,6 @@
         </ccTool>
       </folder>
       <item path="src/svgdom/StreamWriter.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="src/svgdom/StreamWriter.hxx" ex="false" tool="3" flavor2="0">
       </item>
       <item path="src/svgdom/Visitor.cpp" ex="false" tool="1" flavor2="0">
       </item>
