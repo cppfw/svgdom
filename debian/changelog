@@ -1,3 +1,9 @@
+libsvgdom (0.2.62) unstable; urgency=medium
+
+  * StreamWriter virtually inherit Visitor
+
+ -- Ivan Gagis <igagis@gmail.com>  Mon, 07 Aug 2017 13:07:55 +0300
+
 libsvgdom (0.2.61) unstable; urgency=medium
 
   * StreamWriter and extending Visitor to support custom elements
