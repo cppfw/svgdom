@@ -11,9 +11,10 @@ private:
 	std::string name;
 	std::vector<std::pair<std::string, std::string>> attributes;
 protected:
+	// s, indent, and indentStr() are protected to allow classes that inherit StreamWriter to write to stream s (eg: for custom StreamWriter and custom Element)
 	std::ostream& s;
-	std::string indentStr();
 	unsigned indent = 0;
+	std::string indentStr();
 	
 	void setName(const std::string& name);
 	void addAttribute(const std::string& name, const std::string& value);
