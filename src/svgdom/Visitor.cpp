@@ -66,3 +66,7 @@ void Visitor::visit(const RadialGradientElement& e) {
 void Visitor::visit(const FilterElement& e){
 	this->defaultVisit(e);
 }
+
+void Visitor::visit(const FeGaussianBlurElement& e){
+	this->defaultVisit(e);
+}

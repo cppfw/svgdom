@@ -140,8 +140,10 @@
         </ccTool>
       </item>
       <item path="src/svgdom/elements/Container.cpp" ex="false" tool="1" flavor2="8">
-        <ccTool flags="0">
+        <ccTool flags="1">
           <incDir>
+            <pElem>src/svgdom/elements</pElem>
+            <pElem>/usr/include/utki</pElem>
             <pElem>.</pElem>
           </incDir>
         </ccTool>

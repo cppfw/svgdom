@@ -50,6 +50,8 @@ class Parser{
 	void fillStyleable(Styleable& s, const pugi::xml_node& n);
 	void fillGradient(Gradient& g, const pugi::xml_node& n);
 	void fillShape(Shape& s, const pugi::xml_node& n);
+	void fillFilterPrimitive(FilterPrimitive& p, const pugi::xml_node& n);
+	void fillInputableFilterPrimitive(InputableFilterPrimitive& p, const pugi::xml_node& n);
 	
 	std::unique_ptr<Gradient::StopElement> parseGradientStopElement(const pugi::xml_node& n);
 	std::unique_ptr<SvgElement> parseSvgElement(const pugi::xml_node& n);
@@ -67,6 +69,7 @@ class Parser{
 	std::unique_ptr<LinearGradientElement> parseLinearGradientElement(const pugi::xml_node& n);
 	std::unique_ptr<RadialGradientElement> parseRadialGradientElement(const pugi::xml_node& n);
 	std::unique_ptr<FilterElement> parseFilterElement(const pugi::xml_node& n);
+	std::unique_ptr<FeGaussianBlurElement> parseFeGaussianBlurElement(const pugi::xml_node& n);
 	
 public:
 	std::unique_ptr<svgdom::Element> parseNode(const pugi::xml_node& n);

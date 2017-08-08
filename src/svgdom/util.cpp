@@ -143,7 +143,13 @@ real svgdom::readInReal(std::istream& s) {
 	//On MacOS reading in the number which is terminated by non-number and non-whitespace character,
 	//e.g. "0c" will result in stream error, i.e. s.fail() will return true and stream will be in unreadable state.
 	//To workaround this, need to read in the number to a separate string and parse it from there.
-	std::istringstream iss(readInNumberString(s));
+	auto str = readInNumberString(s);
+	
+	if(str.length() == 0){
+		return 0;
+	}
+	
+	std::istringstream iss(str);
 	
 	//Visual Studio standard library fails to parse numbers to 'float' if it does not actually fit into 'float',
 	//for example, parsing of "5.47382e-48" to float fails instead of giving 0.
@@ -189,4 +195,39 @@ std::string svgdom::coordinateUnitsToString(CoordinateUnits_e u){
 		case CoordinateUnits_e::USER_SPACE_ON_USE:
 			return "userSpaceOnUse";
 	}
+}
+
+
+std::array<real, 2> svgdom::parseNumberOptionalNumber(const std::string& s, std::array<real, 2> defaults){
+	std::array<real, 2> ret;
+	std::istringstream ss(s);
+	skipWhitespaces(ss);
+	ret[0] = readInReal(ss);
+	if(ss.fail()){
+		return defaults;
+	}
+	skipWhitespacesAndOrComma(ss);
+
+	if(ss.eof()){
+		ret[1] = defaults[1];
+		return ret;
+	}
+	
+	ret[1] = readInReal(ss);
+	if(ss.fail()){
+		ret[1] = defaults[1];
+	}
+	return ret;
+}
+
+std::string svgdom::numberOptionalNumberToString(std::array<real, 2> non, real optionalNumberDefault){
+	std::stringstream ss;
+	
+	ss << non[0];
+	
+	if(non[1] != optionalNumberDefault){
+		ss << " " << non[1];
+	}
+	
+	return ss.str();
 }

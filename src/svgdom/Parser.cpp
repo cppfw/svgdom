@@ -110,6 +110,8 @@ std::unique_ptr<svgdom::Element> Parser::parseNode(const pugi::xml_node& n){
 				return this->parsePolygonElement(n);
 			}else if(nsn.name == "filter"){
 				return this->parseFilterElement(n);
+			}else if(nsn.name == "feGaussianBlur"){
+				return this->parseFeGaussianBlurElement(n);
 			}
 			
 			break;
@@ -472,6 +474,67 @@ std::unique_ptr<FilterElement> Parser::parseFilterElement(const pugi::xml_node& 
 	
 	return ret;
 }
+
+void Parser::fillFilterPrimitive(FilterPrimitive& p, const pugi::xml_node& n) {
+	this->fillElement(p, n);
+	this->fillRectangle(p, n);
+	this->fillStyleable(p, n);
+
+	for(auto a = n.first_attribute(); !a.empty(); a = a.next_attribute()) {
+		auto nsn = this->getNamespace(a.name());
+		switch (nsn.ns) {
+			case XmlNamespace_e::SVG:
+				if (nsn.name == "result") {
+					p.result = a.value();
+				}
+				break;
+			default:
+				break;
+		}
+	}
+}
+
+void Parser::fillInputableFilterPrimitive(InputableFilterPrimitive& p, const pugi::xml_node& n) {
+	this->fillFilterPrimitive(p, n);
+	
+	for(auto a = n.first_attribute(); !a.empty(); a = a.next_attribute()) {
+		auto nsn = this->getNamespace(a.name());
+		switch (nsn.ns) {
+			case XmlNamespace_e::SVG:
+				if (nsn.name == "in") {
+					p.in = a.value();
+				}
+				break;
+			default:
+				break;
+		}
+	}
+}
+
+
+std::unique_ptr<FeGaussianBlurElement> Parser::parseFeGaussianBlurElement(const pugi::xml_node& n) {
+	ASSERT(getNamespace(n.name()).ns == XmlNamespace_e::SVG)
+	ASSERT(getNamespace(n.name()).name == "feGaussianBlur")
+	
+	auto ret = utki::makeUnique<FeGaussianBlurElement>();
+	
+	this->fillInputableFilterPrimitive(*ret, n);
+	
+	for(auto a = n.first_attribute(); !a.empty(); a = a.next_attribute()) {
+		auto nsn = this->getNamespace(a.name());
+		switch (nsn.ns) {
+			case XmlNamespace_e::SVG:
+				if (nsn.name == "stdDeviation") {
+					ret->stdDeviation = parseNumberOptionalNumber(a.value(), {{-1, -1}});
+				}
+				break;
+			default:
+				break;
+		}
+	}
+	return ret;
+}
+
 
 
 std::unique_ptr<LinearGradientElement> Parser::parseLinearGradientElement(const pugi::xml_node& n) {

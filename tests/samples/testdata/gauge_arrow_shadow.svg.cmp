@@ -1,6 +1,8 @@
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="svg4655" width="175.5" height="20.5" viewBox="0 0 46.4344 5.42395">
 	<defs id="defs4649">
-		<filter id="filter4618" style="color-interpolation-filters:" x="-0.0318182" y="-0.525001" width="1.06364" height="2.05"/>
+		<filter id="filter4618" style="color-interpolation-filters:" x="-0.0318182" y="-0.525001" width="1.06364" height="2.05">
+			<feGaussianBlur id="feGaussianBlur4620" stdDeviation="0.578776"/>
+		</filter>
 	</defs>
 	<g id="layer1" transform="translate(1.38906,-292.965)">
 		<path id="rect942" style="opacity:0.8; filter:; fill:#4b1515; fill-opacity:1; stroke:#711f1f; stroke-dasharray:; stroke-miterlimit:; stroke-opacity:1; stroke-width:0.661458" d="m43.6562,295.413 v0.52917 L0,297 v-2.64583 z"/>

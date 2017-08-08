@@ -141,6 +141,24 @@ void StreamWriter::addGradientAttributes(const Gradient& e) {
 	}
 }
 
+void StreamWriter::addFilterPrimitiveAttributes(const FilterPrimitive& e) {
+	this->addElementAttributes(e);
+	this->addStyleableAttributes(e);
+	this->addRectangleAttributes(e);
+	
+	if(e.result.length() != 0){
+		this->addAttribute("result", e.result);
+	}
+}
+
+void StreamWriter::addInputableFilterPrimitiveAttributes(const InputableFilterPrimitive& e) {
+	this->addFilterPrimitiveAttributes(e);
+	
+	if(e.in.length() != 0){
+		this->addAttribute("in", e.in);
+	}
+}
+
 
 void StreamWriter::addShapeAttributes(const Shape& e) {
 	this->addElementAttributes(e);
@@ -369,4 +387,15 @@ void StreamWriter::visit(const FilterElement& e){
 	}
 	
 	this->write(&e);
+}
+
+void StreamWriter::visit(const FeGaussianBlurElement& e){
+	this->setName("feGaussianBlur");
+	
+	this->addInputableFilterPrimitiveAttributes(e);
+	
+	if(e.isStdDeviationSpecified()){
+		this->addAttribute("stdDeviation", numberOptionalNumberToString(e.stdDeviation, -1));
+	}
+	this->write();
 }

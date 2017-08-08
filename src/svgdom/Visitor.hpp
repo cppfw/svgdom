@@ -32,6 +32,7 @@ public:
 	virtual void visit(const LinearGradientElement& e);
 	virtual void visit(const RadialGradientElement& e);
 	virtual void visit(const FilterElement& e);
+	virtual void visit(const FeGaussianBlurElement& e);
 	
 	/**
 	 * @brief Default visit method.

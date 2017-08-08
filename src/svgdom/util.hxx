@@ -1,6 +1,7 @@
 #pragma once
 
 #include <istream>
+#include <array>
 
 #include "config.hpp"
 #include "CoordinateUnits.hpp"
@@ -26,5 +27,9 @@ std::string iriToLocalId(const std::string& iri);
 CoordinateUnits_e parseCoordinateUnits(const std::string& s);
 
 std::string coordinateUnitsToString(CoordinateUnits_e u);
+
+std::array<real, 2> parseNumberOptionalNumber(const std::string& s, std::array<real, 2> defaults);
+
+std::string numberOptionalNumberToString(std::array<real, 2> non, real optionalNumberDefault);
 
 }
