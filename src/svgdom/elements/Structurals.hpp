@@ -12,7 +12,8 @@ namespace svgdom{
 struct GElement :
 		public Element,
 		public Container,
-		public Transformable
+		public Transformable,
+		public Styleable
 {
 	void accept(Visitor& visitor)const override;
 };
@@ -20,17 +21,19 @@ struct GElement :
 struct DefsElement :
 		public Element,
 		public Container,
-		public Transformable
+		public Transformable,
+		public Styleable
 {
 	void accept(Visitor& visitor)const override;
 };
 
 
 struct UseElement :
-	public Element,
-	public Transformable,
-	public Referencing,
-	public Rectangle
+		public Element,
+		public Transformable,
+		public Referencing,
+		public Rectangle,
+		public Styleable
 {
 	void accept(Visitor& visitor)const override;
 };
@@ -41,7 +44,8 @@ struct SvgElement :
 		public Element,
 		public Container,
 		public Rectangle,
-		public ViewBoxed
+		public ViewBoxed,
+		public Styleable
 {
 	void accept(Visitor& visitor) const override;
 	
@@ -57,7 +61,8 @@ struct SvgElement :
 struct SymbolElement :
 		public Element,
 		public Container,
-		public ViewBoxed
+		public ViewBoxed,
+		public Styleable
 {
 	void accept(Visitor& visitor) const override;
 };

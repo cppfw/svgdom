@@ -15,7 +15,8 @@ struct Gradient :
 		public Element,
 		public Container,
 		public Referencing,
-		public Transformable
+		public Transformable,
+		public Styleable
 {
 	enum class SpreadMethod_e{
 		DEFAULT,
@@ -33,7 +34,10 @@ struct Gradient :
 		return this->units == Units_e::OBJECT_BOUNDING_BOX;
 	}
 	
-	struct StopElement : public Element{
+	struct StopElement :
+			public Element,
+			public Styleable
+	{
 		real offset;
 		
 		void accept(Visitor& visitor) const override;

@@ -13,9 +13,7 @@ class Visitor;
 /**
  * @brief Base class for all SVG document elements.
  */
-struct Element :
-		public utki::Unique,
-		public Styleable //All SVG elements are Styleable according to SVG spec
+struct Element : public utki::Unique
 {
 	std::string id;
 	

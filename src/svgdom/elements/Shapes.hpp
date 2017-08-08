@@ -12,7 +12,8 @@ namespace svgdom{
  */
 struct Shape :
 		public Element,
-		public Transformable
+		public Transformable,
+		public Styleable
 {
 };
 
