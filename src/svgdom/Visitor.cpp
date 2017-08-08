@@ -62,3 +62,7 @@ void Visitor::visit(const LinearGradientElement& e) {
 void Visitor::visit(const RadialGradientElement& e) {
 	this->defaultVisit(e);
 }
+
+void Visitor::visit(const FilterElement& e){
+	this->defaultVisit(e);
+}

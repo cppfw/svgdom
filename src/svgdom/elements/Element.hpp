@@ -4,8 +4,6 @@
 
 #include <utki/Unique.hpp>
 
-#include "Styleable.hpp"
-
 namespace svgdom{
 
 class Visitor;

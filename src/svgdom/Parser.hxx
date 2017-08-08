@@ -14,6 +14,7 @@
 #include "elements/Gradients.hpp"
 #include "elements/Shapes.hpp"
 #include "elements/Structurals.hpp"
+#include "elements/Filter.hpp"
 
 namespace svgdom{
 
@@ -65,6 +66,7 @@ class Parser{
 	std::unique_ptr<EllipseElement> parseEllipseElement(const pugi::xml_node& n);
 	std::unique_ptr<LinearGradientElement> parseLinearGradientElement(const pugi::xml_node& n);
 	std::unique_ptr<RadialGradientElement> parseRadialGradientElement(const pugi::xml_node& n);
+	std::unique_ptr<FilterElement> parseFilterElement(const pugi::xml_node& n);
 	
 public:
 	std::unique_ptr<svgdom::Element> parseNode(const pugi::xml_node& n);

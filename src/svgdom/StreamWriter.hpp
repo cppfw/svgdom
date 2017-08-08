@@ -50,6 +50,7 @@ public:
 	void visit(const EllipseElement& e) override;
 	void visit(const RectElement& e) override;
 	void visit(const LineElement& e) override;
+	void visit(const FilterElement& e) override;
 };
 
 }

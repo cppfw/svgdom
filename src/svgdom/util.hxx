@@ -1,8 +1,9 @@
 #pragma once
 
-#include "config.hpp"
-
 #include <istream>
+
+#include "config.hpp"
+#include "CoordinateUnits.hpp"
 
 namespace svgdom{
 
@@ -21,5 +22,9 @@ real readInReal(std::istream& s);
 std::string trimTail(const std::string& s);
 
 std::string iriToLocalId(const std::string& iri);
+
+CoordinateUnits_e parseCoordinateUnits(const std::string& s);
+
+std::string coordinateUnitsToString(CoordinateUnits_e u);
 
 }

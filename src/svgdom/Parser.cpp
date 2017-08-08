@@ -1,4 +1,5 @@
 #include "Parser.hxx"
+#include "util.hxx"
 
 #include <utki/debug.hpp>
 #include <utki/util.hpp>
@@ -107,6 +108,8 @@ std::unique_ptr<svgdom::Element> Parser::parseNode(const pugi::xml_node& n){
 				return this->parsePolylineElement(n);
 			}else if(nsn.name == "polygon"){
 				return this->parsePolygonElement(n);
+			}else if(nsn.name == "filter"){
+				return this->parseFilterElement(n);
 			}
 			
 			break;
@@ -187,11 +190,7 @@ void Parser::fillGradient(Gradient& g, const pugi::xml_node& n) {
 				} else if (nsn.name == "gradientTransform") {
 					g.transformations = Transformable::parse(a.value());
 				} else if (nsn.name == "gradientUnits") {
-					if (std::string("userSpaceOnUse") == a.value()) {
-						g.units = Gradient::Units_e::USER_SPACE_ON_USE;
-					} else if (std::string("objectBoundingBox") == a.value()) {
-						g.units = Gradient::Units_e::OBJECT_BOUNDING_BOX;
-					}
+					g.units = parseCoordinateUnits(a.value());
 				}
 				break;
 			default:
@@ -443,6 +442,37 @@ std::unique_ptr<LineElement> Parser::parseLineElement(const pugi::xml_node& n) {
 
 	return ret;
 }
+
+std::unique_ptr<FilterElement> Parser::parseFilterElement(const pugi::xml_node& n) {
+	ASSERT(getNamespace(n.name()).ns == XmlNamespace_e::SVG)
+	ASSERT(getNamespace(n.name()).name == "filter")
+	
+	auto ret = utki::makeUnique<FilterElement>();
+	
+	this->fillElement(*ret, n);
+	this->fillStyleable(*ret, n);
+	this->fillRectangle(*ret, n);
+	this->fillReferencing(*ret, n);
+	this->fillContainer(*ret, n);
+	
+	for(auto a = n.first_attribute(); !a.empty(); a = a.next_attribute()) {
+		auto nsn = this->getNamespace(a.name());
+		switch (nsn.ns) {
+			case XmlNamespace_e::SVG:
+				if (nsn.name == "filterUnits") {
+					ret->filterUnits = svgdom::parseCoordinateUnits(a.value());
+				} else if (nsn.name == "primitiveUnits") {
+					ret->primitiveUnits = svgdom::parseCoordinateUnits(a.value());
+				}
+				break;
+			default:
+				break;
+		}
+	}
+	
+	return ret;
+}
+
 
 std::unique_ptr<LinearGradientElement> Parser::parseLinearGradientElement(const pugi::xml_node& n) {
 	ASSERT(getNamespace(n.name()).ns == XmlNamespace_e::SVG)

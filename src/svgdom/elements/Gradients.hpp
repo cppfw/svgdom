@@ -5,6 +5,7 @@
 #include "Referencing.hpp"
 #include "Transformable.hpp"
 #include "Styleable.hpp"
+#include "../CoordinateUnits.hpp"
 
 namespace svgdom{
 
@@ -25,13 +26,10 @@ struct Gradient :
 		REPEAT
 	} spreadMethod = SpreadMethod_e::DEFAULT;
 	
-	enum class Units_e{
-		USER_SPACE_ON_USE,
-		OBJECT_BOUNDING_BOX
-	} units = Units_e::OBJECT_BOUNDING_BOX;
+	CoordinateUnits_e units = CoordinateUnits_e::OBJECT_BOUNDING_BOX;
 	
 	bool isBoundingBoxUnits()const noexcept{
-		return this->units == Units_e::OBJECT_BOUNDING_BOX;
+		return this->units == CoordinateUnits_e::OBJECT_BOUNDING_BOX;
 	}
 	
 	struct StopElement :
