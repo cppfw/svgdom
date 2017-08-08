@@ -6,17 +6,15 @@ namespace svgdom{
 
 class StreamWriter : public Visitor{
 private:
-	std::ostream& s;
-	
-	std::string indentStr();
-	
-	unsigned indent = 0;
-	
 	void childrenToStream(const Container& e);
 	
 	std::string name;
 	std::vector<std::pair<std::string, std::string>> attributes;
 protected:
+	std::ostream& s;
+	std::string indentStr();
+	unsigned indent = 0;
+	
 	void setName(const std::string& name);
 	void addAttribute(const std::string& name, const std::string& value);
 	void addAttribute(const std::string& name, const Length& value);
