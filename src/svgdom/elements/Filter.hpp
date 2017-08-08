@@ -1,5 +1,7 @@
 #pragma once
 
+#include <array>
+
 #include "Element.hpp"
 #include "Styleable.hpp"
 #include "Rectangle.hpp"
