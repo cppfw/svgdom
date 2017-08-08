@@ -242,62 +242,91 @@ bool Styleable::isStylePropertyInherited(StyleProperty_e p) {
 	return nonInheritedStyleProperties.find(p) == nonInheritedStyleProperties.end();
 }
 
+namespace{
+std::map<std::string, StyleProperty_e> stringToPropertyMap = {
+	{"alignment-baseline", StyleProperty_e::ALIGNMENT_BASELINE},
+	{"baseline-shift", StyleProperty_e::BASELINE_SHIFT},
+	{"clip", StyleProperty_e::CLIP},
+	{"clip-path", StyleProperty_e::CLIP_PATH},
+	{"clip-rule", StyleProperty_e::CLIP_RULE},
+	{"color", StyleProperty_e::COLOR},
+	{"color-interpolation", StyleProperty_e::COLOR_INTERPOLATION},
+	{"color-interpolation-filters", StyleProperty_e::COLOR_INTERPOLATION_FILTERS},
+	{"color-profile", StyleProperty_e::COLOR_PROFILE},
+	{"color-rendering", StyleProperty_e::COLOR_RENDERING},
+	{"cursor", StyleProperty_e::CURSOR},
+	{"direction", StyleProperty_e::DIRECTION},
+	{"display", StyleProperty_e::DISPLAY},
+	{"dominant-baseline", StyleProperty_e::DOMINANT_BASELINE},
+	{"enable-background", StyleProperty_e::ENABLE_BACKGROUND},
+	{"fill", StyleProperty_e::FILL},
+	{"fill-opacity", StyleProperty_e::FILL_OPACITY},
+	{"fill-rule", StyleProperty_e::FILL_RULE},
+	{"filter", StyleProperty_e::FILTER},
+	{"flood-color", StyleProperty_e::FLOOD_COLOR},
+	{"flood-opacity", StyleProperty_e::FLOOD_OPACITY},
+	{"font", StyleProperty_e::FONT},
+	{"font-family", StyleProperty_e::FONT_FAMILY},
+	{"font-size", StyleProperty_e::FONT_SIZE},
+	{"font-size-adjust", StyleProperty_e::FONT_SIZE_ADJUST},
+	{"font-stretch", StyleProperty_e::FONT_STRETCH},
+	{"font-style", StyleProperty_e::FONT_STYLE},
+	{"font-variant", StyleProperty_e::FONT_VARIANT},
+	{"font-weight", StyleProperty_e::FONT_WEIGHT},
+	{"glyph-orientation-horizontal", StyleProperty_e::GLYPH_ORIENTATION_HORIZONTAL},
+	{"glyph-orientation-vertical", StyleProperty_e::GLYPH_ORIENTATION_VERTICAL},
+	{"image-rendering", StyleProperty_e::IMAGE_RENDERING},
+	{"kerning", StyleProperty_e::KERNING},
+	{"letter-spacing", StyleProperty_e::LETTER_SPACING},
+	{"lighting-color", StyleProperty_e::LIGHTING_COLOR},
+	{"marker", StyleProperty_e::MARKER},
+	{"marker-end", StyleProperty_e::MARKER_END},
+	{"marker-mid", StyleProperty_e::MARKER_MID},
+	{"marker-start", StyleProperty_e::MARKER_START},
+	{"mask", StyleProperty_e::MASK},
+	{"opacity", StyleProperty_e::OPACITY},
+	{"overflow", StyleProperty_e::OVERFLOW},
+	{"pointer-events", StyleProperty_e::POINTER_EVENTS},
+	{"shape-rendering", StyleProperty_e::SHAPE_RENDERING},
+	{"stop-color", StyleProperty_e::STOP_COLOR},
+	{"stop-opacity", StyleProperty_e::STOP_OPACITY},
+	{"stroke", StyleProperty_e::STROKE},
+	{"stroke-dasharray", StyleProperty_e::STROKE_DASHARRAY},
+	{"stroke-dashoffset", StyleProperty_e::STROKE_DASHOFFSET},
+	{"stroke-linecap", StyleProperty_e::STROKE_LINECAP},
+	{"stroke-linejoin", StyleProperty_e::STROKE_LINEJOIN},
+	{"stroke-miterlimit", StyleProperty_e::STROKE_MITERLIMIT},
+	{"stroke-opacity", StyleProperty_e::STROKE_OPACITY},
+	{"stroke-width", StyleProperty_e::STROKE_WIDTH},
+	{"text-anchor", StyleProperty_e::TEXT_ANCHOR},
+	{"text-decoration", StyleProperty_e::TEXT_DECORATION},
+	{"text-rendering", StyleProperty_e::TEXT_RENDERING},
+	{"unicode-bidi", StyleProperty_e::UNICODE_BIDI},
+	{"visibility", StyleProperty_e::VISIBILITY},
+	{"word-spacing", StyleProperty_e::WORD_SPACING},
+	{"writing-mode", StyleProperty_e::WRITING_MODE}
+};
+}
+
+namespace{
+auto propertytoStringMap = utki::flipMap(stringToPropertyMap);
+}
+
 StyleProperty_e Styleable::stringToProperty(std::string str){
-	if(str == "fill"){
-		return StyleProperty_e::FILL;
-	}else if(str == "fill-opacity"){
-		return StyleProperty_e::FILL_OPACITY;
-	}else if(str == "stroke"){
-		return StyleProperty_e::STROKE;
-	}else if(str == "stroke-width"){
-		return StyleProperty_e::STROKE_WIDTH;
-	}else if(str == "stroke-linecap"){
-		return StyleProperty_e::STROKE_LINECAP;
-	}else if(str == "stroke-linejoin"){
-		return StyleProperty_e::STROKE_LINEJOIN;
-	}else if(str == "stroke-opacity"){
-		return StyleProperty_e::STROKE_OPACITY;
-	}else if(str == "opacity"){
-		return StyleProperty_e::OPACITY;
-	}else if(str == "stop-opacity"){
-		return StyleProperty_e::STOP_OPACITY;
-	}else if(str == "stop-color"){
-		return StyleProperty_e::STOP_COLOR;
-	}else if(str == "fill-rule"){
-		return StyleProperty_e::FILL_RULE;
+	auto i = stringToPropertyMap.find(str);
+	if(i != stringToPropertyMap.end()){
+		return i->second;
 	}
 	
 	return StyleProperty_e::UNKNOWN;
 }
 
 std::string Styleable::propertyToString(StyleProperty_e p){
-	switch(p){
-		default:
-			ASSERT(false)
-			return "";
-		case StyleProperty_e::FILL:
-			return "fill";
-		case StyleProperty_e::FILL_OPACITY:
-			return "fill-opacity";
-		case StyleProperty_e::STROKE:
-			return "stroke";
-		case StyleProperty_e::STROKE_WIDTH:
-			return "stroke-width";
-		case StyleProperty_e::STROKE_LINECAP:
-			return "stroke-linecap";
-		case StyleProperty_e::STROKE_LINEJOIN:
-			return "stroke-linejoin";
-		case StyleProperty_e::STROKE_OPACITY:
-			return "stroke-opacity";
-		case StyleProperty_e::OPACITY:
-			return "opacity";
-		case StyleProperty_e::STOP_OPACITY:
-			return "stop-opacity";
-		case StyleProperty_e::STOP_COLOR:
-			return "stop-color";
-		case StyleProperty_e::FILL_RULE:
-			return "fill-rule";
+	auto i = propertytoStringMap.find(p);
+	if(i != propertytoStringMap.end()){
+		return i->second;
 	}
+	return std::string();
 }
 
 const StyleValue* Styleable::findStyleProperty(StyleProperty_e p)const{
