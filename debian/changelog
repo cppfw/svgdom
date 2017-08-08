@@ -1,3 +1,9 @@
+libsvgdom (0.2.63) unstable; urgency=medium
+
+  * element is made not styleable by default
+
+ -- Ivan Gagis <igagis@gmail.com>  Tue, 08 Aug 2017 10:24:17 +0300
+
 libsvgdom (0.2.62) unstable; urgency=medium
 
   * StreamWriter virtually inherit Visitor
