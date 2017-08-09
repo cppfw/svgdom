@@ -21,7 +21,7 @@ public:
 		StyleStack ss;
 		
 		explicit operator bool()const{
-			return this->e;
+			return this->e != nullptr;
 		}
 	};
 	
