@@ -1,3 +1,9 @@
+libsvgdom (0.2.66) unstable; urgency=medium
+
+  * Finder and StyleStack added
+
+ -- Ivan Gagis <igagis@gmail.com>  Wed, 09 Aug 2017 17:35:35 +0300
+
 libsvgdom (0.2.65) unstable; urgency=medium
 
   * test release
