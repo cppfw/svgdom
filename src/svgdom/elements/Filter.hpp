@@ -20,6 +20,8 @@ struct FilterElement :
 	CoordinateUnits_e filterUnits = CoordinateUnits_e::OBJECT_BOUNDING_BOX;
 	CoordinateUnits_e primitiveUnits = CoordinateUnits_e::USER_SPACE_ON_USE;
 	
+	//NOTE: filterRes attribute is dropped, it seems deprecated.
+	
 	void accept(Visitor& visitor) const override;
 };
 

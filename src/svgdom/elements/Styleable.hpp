@@ -106,6 +106,11 @@ enum class FillRule_e{
 struct StyleValue{
 	enum class Type_e{
 		/**
+		 * @brief Invalid style value.
+		 */
+		UNKNOWN,
+		
+		/**
 		 * @brief No special value is used.
 		 */
 		NORMAL,
@@ -133,7 +138,11 @@ struct StyleValue{
 		 * Means that "str" member holds URL.
 		 */
 		URL
-	} type = Type_e::NORMAL;
+	} type = Type_e::UNKNOWN;
+	
+	bool isValid()const noexcept{
+		return this->type != Type_e::UNKNOWN;
+	}
 	
 	bool isNormal()const noexcept{
 		return this->type == Type_e::NORMAL;
@@ -177,6 +186,8 @@ struct StyleValue{
 	static StyleValue parsePaint(const std::string& str);
 	
 	std::string paintToString()const;
+	
+	static StyleValue parseUrl(const std::string& str);
 	
 	/**
 	 * @brief get color as RGB.

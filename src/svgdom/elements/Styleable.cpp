@@ -92,6 +92,9 @@ std::string Styleable::stylesToString() const {
 						break;
 				}
 				break;
+			case StyleProperty_e::FILTER:
+				s << "url(" << st.second.str << ")";
+				break;
 		}
 	}
 	return s.str();
@@ -120,6 +123,7 @@ StyleValue Styleable::parseStylePropertyValue(StyleProperty_e type, const std::s
 				std::istringstream iss(str);
 				v.opacity = readInReal(iss);
 				utki::clampRange(v.opacity, real(0), real(1));
+				v.type = StyleValue::Type_e::NORMAL;
 			}
 			break;
 		case StyleProperty_e::STOP_COLOR:
@@ -130,9 +134,11 @@ StyleValue Styleable::parseStylePropertyValue(StyleProperty_e type, const std::s
 			break;
 		case StyleProperty_e::STROKE_WIDTH:
 			v.length = Length::parse(str);
+			v.type = StyleValue::Type_e::NORMAL;
 //				TRACE(<< "stroke-width read = " << v.length << std::endl)
 			break;
 		case StyleProperty_e::STROKE_LINECAP:
+			v.type = StyleValue::Type_e::NORMAL;
 			if(str == "butt"){
 				v.strokeLineCap = StrokeLineCap_e::BUTT;
 			}else if(str == "round"){
@@ -140,10 +146,12 @@ StyleValue Styleable::parseStylePropertyValue(StyleProperty_e type, const std::s
 			}else if(str == "square"){
 				v.strokeLineCap = StrokeLineCap_e::SQUARE;
 			}else{
+				v.type = StyleValue::Type_e::UNKNOWN;
 				TRACE(<< "unknown strokeLineCap value:" << str << std::endl)
 			}
 			break;
 		case StyleProperty_e::STROKE_LINEJOIN:
+			v.type = StyleValue::Type_e::NORMAL;
 			if(str == "miter"){
 				v.strokeLineJoin = StrokeLineJoin_e::MITER;
 			}else if(str == "round"){
@@ -151,21 +159,57 @@ StyleValue Styleable::parseStylePropertyValue(StyleProperty_e type, const std::s
 			}else if(str == "bevel"){
 				v.strokeLineJoin = StrokeLineJoin_e::BEVEL;
 			}else{
+				v.type = StyleValue::Type_e::UNKNOWN;
 				TRACE(<< "unknown strokeLineJoin value:" << str << std::endl)
 			}
 			break;
 		case StyleProperty_e::FILL_RULE:
+			v.type = StyleValue::Type_e::NORMAL;
 			if(str == "nonzero"){
 				v.fillRule = FillRule_e::NONZERO;
 			}else if(str == "evenodd"){
 				v.fillRule = FillRule_e::EVENODD;
 			}else{
+				v.type = StyleValue::Type_e::UNKNOWN;
 				TRACE(<< "unknown fill-rule value:" << str << std::endl)
 			}
+			break;
+		case StyleProperty_e::FILTER:
+			v = StyleValue::parseUrl(str);
 			break;
 	}
 	return v;
 }
+
+StyleValue StyleValue::parseUrl(const std::string& str) {
+	StyleValue ret;
+	ret.type = StyleValue::Type_e::UNKNOWN;
+	
+	std::string url = "url(";
+	
+	if(url != str.substr(0, url.length())){
+		return ret;
+	}
+	
+	std::istringstream s(str);
+	skipWhitespaces(s);
+	
+	std::string tmpStr;
+	s >> std::setw(int(url.length())) >> tmpStr >> std::setw(0);
+	ASSERT(tmpStr == url)
+
+	skipWhitespaces(s);
+	tmpStr = readTillCharOrWhitespace(s, ')');
+
+	skipWhitespaces(s);
+	if(s.get() == ')'){
+		ret.str = tmpStr;
+		ret.type = StyleValue::Type_e::URL;
+	}
+
+	return ret;
+}
+
 
 
 namespace{
@@ -513,23 +557,9 @@ StyleValue StyleValue::parsePaint(const std::string& str){
 	ASSERT(!std::isspace(str[0])) //leading spaces should be skept already	
 	
 	{
-		std::string url = "url(";
-		if(url == str.substr(0, url.length())){
-			std::istringstream s(str);
-			
-			std::string tmpStr;
-			s >> std::setw(int(url.length())) >> tmpStr >> std::setw(0);
-			ASSERT(tmpStr == url)
-			
-			skipWhitespaces(s);
-			tmpStr = readTillCharOrWhitespace(s, ')');
-			
-			skipWhitespaces(s);
-			if(s.get() == ')'){
-				ret.str = tmpStr;
-				ret.type = StyleValue::Type_e::URL;
-				return ret;
-			}
+		ret = StyleValue::parseUrl(str);
+		if(ret.isValid()){
+			return ret;
 		}
 	}
 	
@@ -568,11 +598,13 @@ StyleValue StyleValue::parsePaint(const std::string& str){
 				ret.color = (std::uint32_t(d[0]) << 4) | (std::uint32_t(d[0]))
 						| (std::uint32_t(d[1]) << 12) | (std::uint32_t(d[1]) << 8)
 						| (std::uint32_t(d[2]) << 20) | (std::uint32_t(d[2]) << 16);
+				ret.type = StyleValue::Type_e::NORMAL;
 				break;
 			case 6:
 				ret.color = (std::uint32_t(d[0]) << 4) | (std::uint32_t(d[1]))
 						| (std::uint32_t(d[2]) << 12) | (std::uint32_t(d[3]) << 8)
 						| (std::uint32_t(d[4]) << 20) | (std::uint32_t(d[5]) << 16);
+				ret.type = StyleValue::Type_e::NORMAL;
 				break;
 			default:
 				ret.type = StyleValue::Type_e::NONE;
@@ -606,6 +638,7 @@ StyleValue StyleValue::parsePaint(const std::string& str){
 			
 			if(s.get() == ')'){
 				ret.color = r | (g << 8) | (b << 16);
+				ret.type = StyleValue::Type_e::NORMAL;
 			}
 			return ret;
 		}
@@ -622,6 +655,7 @@ StyleValue StyleValue::parsePaint(const std::string& str){
 			ASSERT(i->first == name)
 			ret.str = name;
 			ret.color = i->second;
+			ret.type = StyleValue::Type_e::NORMAL;
 			return ret;
 		}
 	}

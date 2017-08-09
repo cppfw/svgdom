@@ -5,6 +5,6 @@
 		</filter>
 	</defs>
 	<g id="layer1" transform="translate(1.38906,-292.965)">
-		<path id="rect942" style="opacity:0.8; filter:; fill:#4b1515; fill-opacity:1; stroke:#711f1f; stroke-dasharray:; stroke-miterlimit:; stroke-opacity:1; stroke-width:0.661458" d="m43.6562,295.413 v0.52917 L0,297 v-2.64583 z"/>
+		<path id="rect942" style="opacity:0.8; filter:url(#filter4618); fill:#4b1515; fill-opacity:1; stroke:#711f1f; stroke-dasharray:; stroke-miterlimit:; stroke-opacity:1; stroke-width:0.661458" d="m43.6562,295.413 v0.52917 L0,297 v-2.64583 z"/>
 	</g>
 </svg>
