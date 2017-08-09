@@ -73,9 +73,7 @@
       </toolsSet>
       <flagsDictionary>
         <element flagsID="0" commonFlags="-funsigned-char -std=c++11 -fPIC"/>
-        <element flagsID="1"
-                 commonFlags="-mtune=generic -march=x86-64 -std=c++11 -funsigned-char -fPIC"/>
-        <element flagsID="2" commonFlags="-std=c++11"/>
+        <element flagsID="1" commonFlags="-std=c++11"/>
       </flagsDictionary>
       <codeAssistance>
       </codeAssistance>
@@ -87,6 +85,9 @@
           <executablePath>tests/samples/parsesvg</executablePath>
           <ccTool flags="0">
             <standard>8</standard>
+            <incDir>
+              <pElem>.</pElem>
+            </incDir>
           </ccTool>
         </makeTool>
         <preBuild>
@@ -96,9 +97,6 @@
       </makefileType>
       <folder path="1">
         <ccTool>
-          <incDir>
-            <pElem>.</pElem>
-          </incDir>
           <preprocessorList>
             <Elem>DEBUG</Elem>
           </preprocessorList>
@@ -106,76 +104,42 @@
       </folder>
       <item path="src/svgdom/Length.cpp" ex="false" tool="1" flavor2="8">
         <ccTool flags="0">
-          <incDir>
-            <pElem>.</pElem>
-          </incDir>
         </ccTool>
       </item>
       <item path="src/svgdom/Parser.cpp" ex="false" tool="1" flavor2="8">
         <ccTool flags="0">
-          <incDir>
-            <pElem>.</pElem>
-          </incDir>
         </ccTool>
       </item>
       <item path="src/svgdom/StreamWriter.cpp" ex="false" tool="1" flavor2="8">
         <ccTool flags="0">
-          <incDir>
-            <pElem>.</pElem>
-          </incDir>
         </ccTool>
       </item>
       <item path="src/svgdom/Visitor.cpp" ex="false" tool="1" flavor2="8">
         <ccTool flags="0">
-          <incDir>
-            <pElem>.</pElem>
-          </incDir>
         </ccTool>
       </item>
       <item path="src/svgdom/dom.cpp" ex="false" tool="1" flavor2="8">
         <ccTool flags="0">
-          <incDir>
-            <pElem>.</pElem>
-          </incDir>
         </ccTool>
       </item>
       <item path="src/svgdom/elements/Container.cpp" ex="false" tool="1" flavor2="8">
-        <ccTool flags="1">
-          <incDir>
-            <pElem>src/svgdom/elements</pElem>
-            <pElem>/usr/include/utki</pElem>
-            <pElem>.</pElem>
-          </incDir>
+        <ccTool flags="0">
         </ccTool>
       </item>
       <item path="src/svgdom/elements/Element.cpp" ex="false" tool="1" flavor2="8">
         <ccTool flags="0">
-          <incDir>
-            <pElem>.</pElem>
-          </incDir>
         </ccTool>
       </item>
       <item path="src/svgdom/elements/Filter.cpp" ex="false" tool="1" flavor2="8">
         <ccTool flags="0">
-          <incDir>
-            <pElem>.</pElem>
-          </incDir>
         </ccTool>
       </item>
       <item path="src/svgdom/elements/Gradients.cpp" ex="false" tool="1" flavor2="8">
         <ccTool flags="0">
-          <incDir>
-            <pElem>.</pElem>
-          </incDir>
         </ccTool>
       </item>
       <item path="src/svgdom/elements/Rectangle.cpp" ex="false" tool="1" flavor2="8">
-        <ccTool flags="1">
-          <incDir>
-            <pElem>src/svgdom/elements</pElem>
-            <pElem>src/svgdom</pElem>
-            <pElem>.</pElem>
-          </incDir>
+        <ccTool flags="0">
         </ccTool>
       </item>
       <item path="src/svgdom/elements/Referencing.cpp"
@@ -183,16 +147,10 @@
             tool="1"
             flavor2="8">
         <ccTool flags="0">
-          <incDir>
-            <pElem>.</pElem>
-          </incDir>
         </ccTool>
       </item>
       <item path="src/svgdom/elements/Shapes.cpp" ex="false" tool="1" flavor2="8">
         <ccTool flags="0">
-          <incDir>
-            <pElem>.</pElem>
-          </incDir>
         </ccTool>
       </item>
       <item path="src/svgdom/elements/Structurals.cpp"
@@ -200,16 +158,10 @@
             tool="1"
             flavor2="8">
         <ccTool flags="0">
-          <incDir>
-            <pElem>.</pElem>
-          </incDir>
         </ccTool>
       </item>
       <item path="src/svgdom/elements/Styleable.cpp" ex="false" tool="1" flavor2="8">
         <ccTool flags="0">
-          <incDir>
-            <pElem>.</pElem>
-          </incDir>
         </ccTool>
       </item>
       <item path="src/svgdom/elements/Transformable.cpp"
@@ -217,35 +169,26 @@
             tool="1"
             flavor2="8">
         <ccTool flags="0">
-          <incDir>
-            <pElem>.</pElem>
-          </incDir>
         </ccTool>
       </item>
       <item path="src/svgdom/elements/ViewBoxed.cpp" ex="false" tool="1" flavor2="8">
         <ccTool flags="0">
-          <incDir>
-            <pElem>.</pElem>
-          </incDir>
         </ccTool>
       </item>
       <item path="src/svgdom/util.cpp" ex="false" tool="1" flavor2="8">
         <ccTool flags="0">
-          <incDir>
-            <pElem>.</pElem>
-          </incDir>
         </ccTool>
       </item>
       <item path="tests/customElement/main.cpp" ex="false" tool="1" flavor2="8">
-        <ccTool flags="2">
+        <ccTool flags="1">
         </ccTool>
       </item>
       <item path="tests/samples/main.cpp" ex="false" tool="1" flavor2="8">
-        <ccTool flags="2">
+        <ccTool flags="1">
         </ccTool>
       </item>
       <item path="tests/toString/main.cpp" ex="false" tool="1" flavor2="8">
-        <ccTool flags="2">
+        <ccTool flags="1">
         </ccTool>
       </item>
     </conf>
