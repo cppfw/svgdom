@@ -62,6 +62,8 @@ struct FeGaussianBlurElement : public InputableFilterPrimitive{
 		return this->stdDeviation[1] >= 0;
 	}
 	
+	std::array<real, 2> getStdDeviation()const noexcept;
+	
 	void accept(Visitor& visitor) const override;
 };
 
