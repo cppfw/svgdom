@@ -149,12 +149,8 @@ script:
   fi
 - if [ "$BUILD_NAME" == "ubuntu" ]; then
     prorab-deb-prepare.sh &&
-    sbuild -A -d xenial-amd64-sbuild --debbuildopts '-us -uc';
+    sg sbuild -c "sbuild -n -A -d xenial-amd64-sbuild --debbuildopts '-us -uc'";
   fi
-#- if [ "$BUILD_NAME" == "ubuntu" ]; then
-#    prorab-deb-prepare.sh &&
-#    sg sbuild -c "sbuild -A -d xenial-amd64-sbuild --debbuildopts '-us -uc'";
-#  fi
 - if [ "$BUILD_NAME" == "macosx" ]; then
     make &&
     make test;
