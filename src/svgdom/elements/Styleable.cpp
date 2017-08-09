@@ -11,6 +11,11 @@
 #include "../util.hxx"
 #include "Element.hpp"
 
+//some header defines OVERFLOW, undefine it
+#ifdef OVERFLOW
+#	undef OVERFLOW
+#endif
+
 using namespace svgdom;
 
 std::string Styleable::stylesToString() const {
