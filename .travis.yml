@@ -114,7 +114,7 @@ before_install:
     sudo apt-get update -qq &&
     sudo apt-get install -qq prorab;
     sudo prorab-make-raspberry-chroot.sh /srv/chroot/rasp-armhf &&
-    echo "deb http://dl.bintray.com/igagis/rasp unstable main" | sudo tee /srv/chroot/rasp-armhf/etc/apt/sources.list.d/igagis.list > /dev/null &&
+    echo "deb [arch=armhf] http://dl.bintray.com/igagis/rasp unstable main" | sudo tee /srv/chroot/rasp-armhf/etc/apt/sources.list.d/igagis.list > /dev/null &&
     sudo chroot /srv/chroot/rasp-armhf sed -i -e 's/jessie/testing/g' /etc/apt/sources.list &&
     sudo chroot /srv/chroot/rasp-armhf apt-get update &&
     sudo chroot /srv/chroot/rasp-armhf apt-get install --allow-unauthenticated -qq -y $linuxDependencies g++ &&
@@ -122,7 +122,7 @@ before_install:
     sudo rsync -av $TRAVIS_BUILD_DIR/ /srv/chroot/rasp-armhf/build/;
   fi
 
-  
+
 before_script:
   # download and install android NDK
   - if [ "$BUILD_NAME" == "android" ]; then
