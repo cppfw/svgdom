@@ -1,3 +1,9 @@
+libsvgdom (0.2.67) unstable; urgency=medium
+
+  * use list instead of vector for storing the child elements
+
+ -- Ivan Gagis <igagis@gmail.com>  Mon, 14 Aug 2017 12:44:38 +0300
+
 libsvgdom (0.2.66) unstable; urgency=medium
 
   * Finder and StyleStack added
