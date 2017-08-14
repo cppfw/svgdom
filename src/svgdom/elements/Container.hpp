@@ -1,6 +1,6 @@
 #pragma once
 
-#include <vector>
+#include <list>
 
 #include "Element.hpp"
 
@@ -10,7 +10,7 @@ namespace svgdom{
  * @brief An element which can have child elements.
  */
 struct Container{
-	std::vector<std::unique_ptr<Element>> children;
+	std::list<std::unique_ptr<Element>> children;
 
 	/**
 	 * @brief Relay accept to children.
