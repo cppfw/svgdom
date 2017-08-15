@@ -34,9 +34,20 @@ std::string Styleable::stylesToString() const {
 		
 		s << propertyToString(st.first) << ":";
 		
+		if(st.second.type == StyleValue::Type_e::INHERIT){
+			s << "inherit";
+			continue;
+		}
+		
 		switch(st.first){
 			default:
-				ASSERT(false)
+				ASSERT_INFO(false, "type = " << unsigned(st.first))
+				break;
+			case StyleProperty_e::COLOR_INTERPOLATION_FILTERS:
+				s << st.second.colorInterpolationFiltersToString();
+				break;
+			case StyleProperty_e::STROKE_MITERLIMIT:
+				s << st.second.strokeMiterlimit;
 				break;
 			case StyleProperty_e::STOP_OPACITY:
 			case StyleProperty_e::OPACITY:
@@ -118,7 +129,18 @@ StyleValue Styleable::parseStylePropertyValue(StyleProperty_e type, const std::s
 
 	switch(type){
 		default:
-			ASSERT(false)
+			ASSERT_INFO(false, "type = " << unsigned(type))
+			break;
+		case StyleProperty_e::COLOR_INTERPOLATION_FILTERS:
+			v = StyleValue::parseColorInterpolation(str);
+			break;
+		case StyleProperty_e::STROKE_MITERLIMIT:
+			{
+				std::stringstream iss(str);
+				v.strokeMiterlimit = readInReal(iss);
+				v.type = StyleValue::Type_e::NORMAL;
+				v.strokeMiterlimit = std::max(v.strokeMiterlimit, real(1));//minimal value is 1
+			}
 			break;
 		case StyleProperty_e::STOP_OPACITY:
 		case StyleProperty_e::OPACITY:
@@ -234,7 +256,6 @@ decltype(Styleable::styles) Styleable::parse(const std::string& str){
 	decltype(Styleable::styles) ret;
 	
 	while(!s.eof()){
-		skipWhitespaces(s);
 		std::string property = readTillCharOrWhitespace(s, ':');
 		
 		StyleProperty_e type = Styleable::stringToProperty(property);
@@ -242,9 +263,13 @@ decltype(Styleable::styles) Styleable::parse(const std::string& str){
 		if(type == StyleProperty_e::UNKNOWN){
 			//unknown style property, skip it
 			TRACE(<< "Unknown style property: " << property << std::endl)
+			TRACE(<< "str = " << str << std::endl)
+			TRACE(<< "ret.size() = " << ret.size() << std::endl)
 			skipTillCharInclusive(s, ';');
 			continue;
 		}
+		
+		skipWhitespaces(s);
 		
 		if(s.get() != ':'){
 			return ret;//expected colon
@@ -259,6 +284,8 @@ decltype(Styleable::styles) Styleable::parse(const std::string& str){
 		}
 		
 		ret[type] = std::move(v);
+		
+		skipWhitespaces(s);
 	}
 	
 	return ret;
@@ -549,6 +576,45 @@ const std::map<std::string, std::uint32_t> colorNames = {
 	{"yellowgreen", 0x32cd9a}
 };
 }
+
+StyleValue StyleValue::parseColorInterpolation(const std::string& str) {
+	StyleValue ret;
+	
+	if(str == "auto"){
+		ret.colorInterpolationFilters = ColorInterpolation_e::AUTO;
+	}else if(str == "linearRGB"){
+		ret.colorInterpolationFilters = ColorInterpolation_e::LINEAR_RGB;
+	}else if(str == "sRGB"){
+		ret.colorInterpolationFilters = ColorInterpolation_e::S_RGB;
+	}else{
+		return ret;
+	}
+	
+	ret.type = StyleValue::Type_e::NORMAL;
+	
+	return ret;
+}
+
+std::string StyleValue::colorInterpolationFiltersToString() const {
+	return colorInterpolationToString(this->colorInterpolationFilters);
+}
+
+
+std::string StyleValue::colorInterpolationToString(ColorInterpolation_e ci){
+	switch(ci){
+		case ColorInterpolation_e::AUTO:
+			return "auto";
+		case ColorInterpolation_e::LINEAR_RGB:
+			return "linearRGB";
+		case ColorInterpolation_e::S_RGB:
+			return "sRGB";
+		default:
+			ASSERT_INFO(false, "ci = " << unsigned(ci))
+			return "";
+	}
+}
+
+
 
 //'str' should have no leading and/or trailing white spaces.
 StyleValue StyleValue::parsePaint(const std::string& str){
