@@ -1,3 +1,9 @@
+libsvgdom (0.2.68) unstable; urgency=medium
+
+  * ConstVisitor added
+
+ -- Ivan Gagis <igagis@gmail.com>  Tue, 15 Aug 2017 16:05:22 +0300
+
 libsvgdom (0.2.67) unstable; urgency=medium
 
   * use list instead of vector for storing the child elements
