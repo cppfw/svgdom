@@ -4,11 +4,19 @@
 
 using namespace svgdom;
 
-void FilterElement::accept(Visitor& visitor) const {
+void FilterElement::accept(Visitor& visitor){
 	visitor.visit(*this);
 }
 
-void FeGaussianBlurElement::accept(Visitor& visitor) const {
+void FilterElement::accept(ConstVisitor& visitor) const {
+	visitor.visit(*this);
+}
+
+void FeGaussianBlurElement::accept(Visitor& visitor){
+	visitor.visit(*this);
+}
+
+void FeGaussianBlurElement::accept(ConstVisitor& visitor) const {
 	visitor.visit(*this);
 }
 

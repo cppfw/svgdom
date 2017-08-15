@@ -3,70 +3,156 @@
 
 using namespace svgdom;
 
-void Visitor::visit(const PathElement& e) {
+void Visitor::visit(PathElement& e) {
 	this->defaultVisit(e);
 }
 
-void Visitor::visit(const RectElement& e) {
+void Visitor::visit(RectElement& e) {
 	this->defaultVisit(e);
 }
 
-void Visitor::visit(const CircleElement& e) {
+void Visitor::visit(CircleElement& e) {
 	this->defaultVisit(e);
 }
 
-void Visitor::visit(const EllipseElement& e) {
+void Visitor::visit(EllipseElement& e) {
 	this->defaultVisit(e);
 }
 
-void Visitor::visit(const LineElement& e) {
+void Visitor::visit(LineElement& e) {
 	this->defaultVisit(e);
 }
 
-void Visitor::visit(const PolylineElement& e) {
+void Visitor::visit(PolylineElement& e) {
 	this->defaultVisit(e);
 }
 
-void Visitor::visit(const PolygonElement& e) {
+void Visitor::visit(PolygonElement& e) {
 	this->defaultVisit(e);
 }
 
-void Visitor::visit(const GElement& e) {
+void Visitor::visit(GElement& e) {
 	this->defaultVisit(e);
 }
 
-void Visitor::visit(const SvgElement& e) {
+void Visitor::visit(SvgElement& e) {
 	this->defaultVisit(e);
 }
 
-void Visitor::visit(const SymbolElement& e) {
+void Visitor::visit(SymbolElement& e) {
 	this->defaultVisit(e);
 }
 
-void Visitor::visit(const UseElement& e) {
+void Visitor::visit(UseElement& e) {
 	this->defaultVisit(e);
 }
 
-void Visitor::visit(const DefsElement& e) {
+void Visitor::visit(DefsElement& e) {
 	this->defaultVisit(e);
 }
 
-void Visitor::visit(const Gradient::StopElement& e) {
+void Visitor::visit(Gradient::StopElement& e) {
 	this->defaultVisit(e);
 }
 
-void Visitor::visit(const LinearGradientElement& e) {
+void Visitor::visit(LinearGradientElement& e) {
 	this->defaultVisit(e);
 }
 
-void Visitor::visit(const RadialGradientElement& e) {
+void Visitor::visit(RadialGradientElement& e) {
 	this->defaultVisit(e);
 }
 
-void Visitor::visit(const FilterElement& e){
+void Visitor::visit(FilterElement& e){
 	this->defaultVisit(e);
 }
 
-void Visitor::visit(const FeGaussianBlurElement& e){
+void Visitor::visit(FeGaussianBlurElement& e){
 	this->defaultVisit(e);
+}
+
+void Visitor::relayAccept(Container& container){
+	auto oldParent = this->curParent_v;
+	auto oldIter = this->curIter_v;
+	this->curParent_v = &container;
+	for(auto i = container.children.begin(), e = container.children.end(); i != e; ++i){
+		this->curIter_v = i;
+		(*i)->accept(*this);
+	}
+	this->curIter_v = oldIter;
+	this->curParent_v = oldParent;
+}
+
+void ConstVisitor::visit(const PathElement& e) {
+	this->defaultVisit(e);
+}
+
+void ConstVisitor::visit(const RectElement& e) {
+	this->defaultVisit(e);
+}
+
+void ConstVisitor::visit(const CircleElement& e) {
+	this->defaultVisit(e);
+}
+
+void ConstVisitor::visit(const EllipseElement& e) {
+	this->defaultVisit(e);
+}
+
+void ConstVisitor::visit(const LineElement& e) {
+	this->defaultVisit(e);
+}
+
+void ConstVisitor::visit(const PolylineElement& e) {
+	this->defaultVisit(e);
+}
+
+void ConstVisitor::visit(const PolygonElement& e) {
+	this->defaultVisit(e);
+}
+
+void ConstVisitor::visit(const GElement& e) {
+	this->defaultVisit(e);
+}
+
+void ConstVisitor::visit(const SvgElement& e) {
+	this->defaultVisit(e);
+}
+
+void ConstVisitor::visit(const SymbolElement& e) {
+	this->defaultVisit(e);
+}
+
+void ConstVisitor::visit(const UseElement& e) {
+	this->defaultVisit(e);
+}
+
+void ConstVisitor::visit(const DefsElement& e) {
+	this->defaultVisit(e);
+}
+
+void ConstVisitor::visit(const Gradient::StopElement& e) {
+	this->defaultVisit(e);
+}
+
+void ConstVisitor::visit(const LinearGradientElement& e) {
+	this->defaultVisit(e);
+}
+
+void ConstVisitor::visit(const RadialGradientElement& e) {
+	this->defaultVisit(e);
+}
+
+void ConstVisitor::visit(const FilterElement& e){
+	this->defaultVisit(e);
+}
+
+void ConstVisitor::visit(const FeGaussianBlurElement& e){
+	this->defaultVisit(e);
+}
+
+void ConstVisitor::relayAccept(const Container& container){
+	for(auto& e : container.children){
+		e->accept(*this);
+	}
 }

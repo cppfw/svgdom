@@ -10,31 +10,59 @@
 
 using namespace svgdom;
 
-void PathElement::accept(Visitor& visitor) const{
+void PathElement::accept(Visitor& visitor){
 	visitor.visit(*this);
 }
 
-void RectElement::accept(Visitor& visitor) const {
+void PathElement::accept(ConstVisitor& visitor) const{
 	visitor.visit(*this);
 }
 
-void CircleElement::accept(Visitor& visitor) const {
+void RectElement::accept(Visitor& visitor){
 	visitor.visit(*this);
 }
 
-void EllipseElement::accept(Visitor& visitor) const {
+void RectElement::accept(ConstVisitor& visitor) const {
 	visitor.visit(*this);
 }
 
-void LineElement::accept(Visitor& visitor) const {
+void CircleElement::accept(Visitor& visitor){
 	visitor.visit(*this);
 }
 
-void PolygonElement::accept(Visitor& visistor) const {
+void CircleElement::accept(ConstVisitor& visitor) const {
+	visitor.visit(*this);
+}
+
+void EllipseElement::accept(Visitor& visitor){
+	visitor.visit(*this);
+}
+
+void EllipseElement::accept(ConstVisitor& visitor) const {
+	visitor.visit(*this);
+}
+
+void LineElement::accept(Visitor& visitor){
+	visitor.visit(*this);
+}
+
+void LineElement::accept(ConstVisitor& visitor) const {
+	visitor.visit(*this);
+}
+
+void PolygonElement::accept(Visitor& visistor){
 	visistor.visit(*this);
 }
 
-void PolylineElement::accept(Visitor& visitor) const {
+void PolygonElement::accept(ConstVisitor& visistor) const {
+	visistor.visit(*this);
+}
+
+void PolylineElement::accept(Visitor& visitor){
+	visitor.visit(*this);
+}
+
+void PolylineElement::accept(ConstVisitor& visitor) const {
 	visitor.visit(*this);
 }
 

@@ -22,7 +22,8 @@ struct FilterElement :
 	
 	//NOTE: filterRes attribute is dropped, it seems deprecated.
 	
-	void accept(Visitor& visitor) const override;
+	void accept(Visitor& visitor)override;
+	void accept(ConstVisitor& visitor) const override;
 };
 
 struct FilterPrimitive :
@@ -64,7 +65,8 @@ struct FeGaussianBlurElement : public InputableFilterPrimitive{
 	
 	std::array<real, 2> getStdDeviation()const noexcept;
 	
-	void accept(Visitor& visitor) const override;
+	void accept(Visitor& visitor)override;
+	void accept(ConstVisitor& visitor) const override;
 };
 
 }

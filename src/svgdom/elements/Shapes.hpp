@@ -76,7 +76,8 @@ struct PathElement : public Shape{
 	
 	static decltype(path) parse(const std::string& str);
 	
-	void accept(Visitor& visitor) const override;
+	void accept(Visitor& visitor)override;
+	void accept(ConstVisitor& visitor) const override;
 };
 
 struct RectElement :
@@ -86,7 +87,9 @@ struct RectElement :
 	Length rx = Length::make(0, Length::Unit_e::UNKNOWN);
 	Length ry = Length::make(0, Length::Unit_e::UNKNOWN);
 	
-	void accept(Visitor& visitor) const override;
+	void accept(Visitor& visitor)override;
+	void accept(ConstVisitor& visitor) const override;
+
 };
 
 struct CircleElement : public Shape{
@@ -94,7 +97,9 @@ struct CircleElement : public Shape{
 	Length cy = Length::make(0, Length::Unit_e::UNKNOWN);
 	Length r = Length::make(0, Length::Unit_e::UNKNOWN);
 	
-	void accept(Visitor& visitor) const override;
+	void accept(Visitor& visitor)override;
+	void accept(ConstVisitor& visitor) const override;
+
 };
 
 struct EllipseElement : public Shape{
@@ -103,7 +108,9 @@ struct EllipseElement : public Shape{
 	Length rx = Length::make(0, Length::Unit_e::UNKNOWN);
 	Length ry = Length::make(0, Length::Unit_e::UNKNOWN);
 	
-	void accept(Visitor& visitor) const override;
+	void accept(Visitor& visitor)override;
+	void accept(ConstVisitor& visitor) const override;
+
 };
 
 struct LineElement : public Shape{
@@ -112,7 +119,9 @@ struct LineElement : public Shape{
 	Length x2 = Length::make(0, Length::Unit_e::UNKNOWN);
 	Length y2 = Length::make(0, Length::Unit_e::UNKNOWN);
 	
-	void accept(Visitor& visitor) const override;
+	void accept(Visitor& visitor)override;
+	void accept(ConstVisitor& visitor) const override;
+
 };
 
 struct PolylineShape : public Shape{
@@ -125,11 +134,15 @@ struct PolylineShape : public Shape{
 
 
 struct PolylineElement : public PolylineShape{
-	void accept(Visitor& visitor) const override;
+	void accept(Visitor& visitor)override;
+	void accept(ConstVisitor& visitor) const override;
+
 };
 
 struct PolygonElement : public PolylineShape{
-	void accept(Visitor& visitor) const override;
+	void accept(Visitor& visitor)override;
+	void accept(ConstVisitor& visitor) const override;
+
 };
 
 }

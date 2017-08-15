@@ -8,15 +8,27 @@
 using namespace svgdom;
 
 
-void RadialGradientElement::accept(Visitor& visitor) const {
+void RadialGradientElement::accept(Visitor& visitor){
 	visitor.visit(*this);
 }
 
-void LinearGradientElement::accept(Visitor& visitor) const {
+void RadialGradientElement::accept(ConstVisitor& visitor) const {
 	visitor.visit(*this);
 }
 
-void Gradient::StopElement::accept(Visitor& visitor) const {
+void LinearGradientElement::accept(Visitor& visitor){
+	visitor.visit(*this);
+}
+
+void LinearGradientElement::accept(ConstVisitor& visitor) const {
+	visitor.visit(*this);
+}
+
+void Gradient::StopElement::accept(Visitor& visitor){
+	visitor.visit(*this);
+}
+
+void Gradient::StopElement::accept(ConstVisitor& visitor) const {
 	visitor.visit(*this);
 }
 

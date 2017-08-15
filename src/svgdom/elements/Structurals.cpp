@@ -22,22 +22,42 @@ real SvgElement::aspectRatio(real dpi)const{
 	return w / h;
 }
 
-void GElement::accept(Visitor& visitor) const{
+void GElement::accept(Visitor& visitor){
 	visitor.visit(*this);
 }
 
-void SvgElement::accept(Visitor& visitor) const{
+void GElement::accept(ConstVisitor& visitor) const{
 	visitor.visit(*this);
 }
 
-void SymbolElement::accept(Visitor& visitor) const {
+void SvgElement::accept(Visitor& visitor){
 	visitor.visit(*this);
 }
 
-void DefsElement::accept(Visitor& visitor) const {
+void SvgElement::accept(ConstVisitor& visitor) const{
 	visitor.visit(*this);
 }
 
-void UseElement::accept(Visitor& visitor) const {
+void SymbolElement::accept(Visitor& visitor){
+	visitor.visit(*this);
+}
+
+void SymbolElement::accept(ConstVisitor& visitor) const {
+	visitor.visit(*this);
+}
+
+void DefsElement::accept(Visitor& visitor){
+	visitor.visit(*this);
+}
+
+void DefsElement::accept(ConstVisitor& visitor) const{
+	visitor.visit(*this);
+}
+
+void UseElement::accept(Visitor& visitor){
+	visitor.visit(*this);
+}
+
+void UseElement::accept(ConstVisitor& visitor) const {
 	visitor.visit(*this);
 }

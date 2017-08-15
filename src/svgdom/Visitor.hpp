@@ -15,6 +15,85 @@ namespace svgdom{
  * to implement their own operation to perform on each SVG element.
  */
 class Visitor{
+protected:
+	/**
+	 * @brief Type of child element iterator into the parent Container.
+	 */
+	typedef decltype(Container::children)::iterator T_ChildIter;
+private:
+	Container* curParent_v = nullptr;
+	T_ChildIter curIter_v;
+	
+protected:
+	/**
+	 * @brief Get current Container whose children are being visited.
+	 * @return Pointer to current traversed Container.
+	 * @return nullptr if root SVG element is being visited.
+	 */
+	decltype(curParent_v) curParent()const{
+		return this->curParent_v;
+	}
+	
+	/**
+	 * @brief Get iterator if current visited child element.
+	 * Returns iterator into the parent Container of the currently visited child element.
+	 * Note, that removing the visited element from its parent during the element is visited will
+	 * lead to undefined behavior. Instead, one should store the iterators until the whole SVG tree
+	 * traversing is completed and only then perform elements removal if needed.
+	 * @return Iterator of currently visited child element.
+	 */
+	T_ChildIter curIter()const{
+		return this->curIter_v;
+	}
+	
+	/**
+	 * @brief Relay accept to children.
+	 * @param container - container to whose children the 'accept' should be relayed.
+	 */
+	void relayAccept(Container& container);
+	
+public:
+	virtual void visit(PathElement& e);
+	virtual void visit(RectElement& e);
+	virtual void visit(CircleElement& e);
+	virtual void visit(EllipseElement& e);
+	virtual void visit(LineElement& e);
+	virtual void visit(PolylineElement& e);
+	virtual void visit(PolygonElement& e);
+	virtual void visit(GElement& e);
+	virtual void visit(SvgElement& e);
+	virtual void visit(SymbolElement& e);
+	virtual void visit(UseElement& e);
+	virtual void visit(DefsElement& e);
+	virtual void visit(Gradient::StopElement& e);
+	virtual void visit(LinearGradientElement& e);
+	virtual void visit(RadialGradientElement& e);
+	virtual void visit(FilterElement& e);
+	virtual void visit(FeGaussianBlurElement& e);
+	
+	/**
+	 * @brief Default visit method.
+	 * This method is called by all the visit methods by default.
+	 * @param e - SVG element to visit.
+	 */
+	virtual void defaultVisit(Element& e){}
+	
+	virtual ~Visitor()noexcept{}
+};
+
+/**
+ * @brief Constant version of Visitor.
+ * Same as Visitor, but it takes all elements as 'const' arguments, so it cannot modify elements.
+ */
+class ConstVisitor{
+protected:
+	
+	/**
+	 * @brief Relay accept to children.
+	 * @param container - container to whose children the 'accept' should be relayed.
+	 */
+	void relayAccept(const Container& container);
+	
 public:
 	virtual void visit(const PathElement& e);
 	virtual void visit(const RectElement& e);
@@ -41,7 +120,7 @@ public:
 	 */
 	virtual void defaultVisit(const Element& e){}
 	
-	virtual ~Visitor()noexcept{}
+	virtual ~ConstVisitor()noexcept{}
 };
 
 }

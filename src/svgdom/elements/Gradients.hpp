@@ -38,7 +38,9 @@ struct Gradient :
 	{
 		real offset;
 		
-		void accept(Visitor& visitor) const override;
+		void accept(Visitor& visitor)override;
+		void accept(ConstVisitor& visitor) const override;
+
 	};
 	
 	std::string spreadMethodToString()const;
@@ -50,7 +52,9 @@ struct LinearGradientElement : public Gradient{
 	Length x2 = Length::make(100, Length::Unit_e::UNKNOWN);
 	Length y2 = Length::make(0, Length::Unit_e::UNKNOWN);
 	
-	void accept(Visitor& visitor) const override;
+	void accept(Visitor& visitor)override;
+	void accept(ConstVisitor& visitor) const override;
+
 };
 
 struct RadialGradientElement : public Gradient{
@@ -60,7 +64,9 @@ struct RadialGradientElement : public Gradient{
 	Length fx = Length::make(50, Length::Unit_e::UNKNOWN);
 	Length fy = Length::make(50, Length::Unit_e::UNKNOWN);
 	
-	void accept(Visitor& visitor) const override;
+	void accept(Visitor& visitor)override;
+	void accept(ConstVisitor& visitor) const override;
+
 };
 
 }

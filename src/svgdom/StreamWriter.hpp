@@ -4,7 +4,7 @@
 
 namespace svgdom{
 
-class StreamWriter : virtual public Visitor{
+class StreamWriter : virtual public ConstVisitor{
 private:
 	void childrenToStream(const Container& e);
 	

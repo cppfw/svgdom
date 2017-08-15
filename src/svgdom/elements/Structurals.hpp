@@ -15,7 +15,8 @@ struct GElement :
 		public Transformable,
 		public Styleable
 {
-	void accept(Visitor& visitor)const override;
+	void accept(Visitor& visitor)override;
+	void accept(ConstVisitor& visitor) const override;
 };
 
 struct DefsElement :
@@ -24,7 +25,8 @@ struct DefsElement :
 		public Transformable,
 		public Styleable
 {
-	void accept(Visitor& visitor)const override;
+	void accept(Visitor& visitor)override;
+	void accept(ConstVisitor& visitor) const override;
 };
 
 
@@ -35,7 +37,8 @@ struct UseElement :
 		public Rectangle,
 		public Styleable
 {
-	void accept(Visitor& visitor)const override;
+	void accept(Visitor& visitor)override;
+	void accept(ConstVisitor& visitor) const override;
 };
 
 
@@ -47,7 +50,8 @@ struct SvgElement :
 		public ViewBoxed,
 		public Styleable
 {
-	void accept(Visitor& visitor) const override;
+	void accept(Visitor& visitor)override;
+	void accept(ConstVisitor& visitor) const override;
 	
 	/**
 	 * @brief Get aspect ratio of the element.
@@ -64,7 +68,8 @@ struct SymbolElement :
 		public ViewBoxed,
 		public Styleable
 {
-	void accept(Visitor& visitor) const override;
+	void accept(Visitor& visitor)override;
+	void accept(ConstVisitor& visitor) const override;
 };
 
 

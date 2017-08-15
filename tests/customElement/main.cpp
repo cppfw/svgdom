@@ -5,22 +5,28 @@
 
 struct CustomElement : public svgdom::Element{	
 	
-	void accept(svgdom::Visitor& visitor) const override;
+	void accept(svgdom::ConstVisitor& visitor) const override;
+	void accept(svgdom::Visitor& visitor) override;
+
 };
 
-class CustomVisitor : virtual public svgdom::Visitor{
+class CustomVisitor : virtual public svgdom::ConstVisitor{
 public:
 	virtual void visit(const CustomElement& e){
 		this->defaultVisit(e);
 	}
 };
 
-void CustomElement::accept(svgdom::Visitor& visitor) const{
+void CustomElement::accept(svgdom::ConstVisitor& visitor) const{
 	if(auto v = dynamic_cast<CustomVisitor*>(&visitor)){
 		v->visit(*this);
 	}else{
 		visitor.defaultVisit(*this);
 	}
+}
+
+void CustomElement::accept(svgdom::Visitor& visitor){
+	visitor.defaultVisit(*this);
 }
 
 class CustomStreamWriter :

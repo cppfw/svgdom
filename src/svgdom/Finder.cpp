@@ -12,7 +12,7 @@ Finder::Finder(const svgdom::Element& root) :
 }
 
 namespace{
-class FindByIdVisitor : virtual public svgdom::Visitor{
+class FindByIdVisitor : virtual public svgdom::ConstVisitor{
 	const std::string& id;
 public:
 	FindByIdVisitor(const std::string& id) :
@@ -27,7 +27,7 @@ public:
 			this->found.e = &e;
 			return;
 		}
-		c.relayAccept(*this);
+		this->relayAccept(c);
 		if(this->found){
 			return;
 		}
