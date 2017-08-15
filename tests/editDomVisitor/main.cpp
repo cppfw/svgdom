@@ -9,7 +9,7 @@ class EditingVisitor : public svgdom::Visitor{
 	std::vector<std::pair<svgdom::Container*, T_ChildIter>> elementsToRemove;
 	
 	void addToRemove(){
-		if(this->curParent()){
+		if(!this->curParent()){
 			//root element does not have parent, nowhere to remove it from
 			return;
 		}
@@ -18,6 +18,10 @@ class EditingVisitor : public svgdom::Visitor{
 	
 public:
 	void visit(svgdom::SvgElement& e) override{
+		this->relayAccept(e);
+	}
+	
+	void visit(svgdom::GElement& e) override{
 		this->relayAccept(e);
 	}
 	
@@ -54,28 +58,34 @@ int main(int argc, char** argv){
 	step.y = 300;
 	path.path.push_back(step);
 
-	step.type = svgdom::PathElement::Step::Type_e::LINE_ABS;
-	step.x = 300;
-	step.y = 300;
-	path.path.push_back(step);
-
-	step.type = svgdom::PathElement::Step::Type_e::LINE_ABS;
-	step.x = 300;
-	step.y = 0;
-	path.path.push_back(step);
-
 	dom->children.push_back(utki::makeUnique<svgdom::PathElement>(path));
 
 	dom->children.push_back(utki::makeUnique<svgdom::LineElement>());
 	
-	//TODO: add more lines
+	{
+		auto g = utki::makeUnique<svgdom::GElement>();
+		g->children.push_back(utki::makeUnique<svgdom::LineElement>());
+		
+		dom->children.push_back(std::move(g));
+	}
 	
 	EditingVisitor visitor;
 	
 	dom->accept(visitor);
 	
-	//TODO: assert
+	ASSERT_ALWAYS(dom->children.size() == 3)
+	ASSERT_ALWAYS(dynamic_cast<svgdom::PathElement*>(dom->children.begin()->get()))
+	ASSERT_ALWAYS(dynamic_cast<svgdom::LineElement*>((++dom->children.begin())->get()))
+	ASSERT_ALWAYS(dynamic_cast<svgdom::GElement*>((++++dom->children.begin())->get()))
+	ASSERT_ALWAYS(dynamic_cast<svgdom::GElement*>((++++dom->children.begin())->get())->children.size() == 1)
+	ASSERT_ALWAYS(
+			dynamic_cast<svgdom::LineElement*>(dynamic_cast<svgdom::GElement*>((++++dom->children.begin())->get())->children.front().get())
+		)
 	
-//	ASSERT_ALWAYS(str.find("xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" version=\"1.1\"") != std::string::npos)
-//	ASSERT_ALWAYS(str.find("<custom customAttrib1=\"value1\" customAttrib2=\"value2\"/>") != std::string::npos)
+	visitor.removeLines();
+	
+	ASSERT_INFO_ALWAYS(dom->children.size() == 2, "dom->children.size() = " << dom->children.size())
+	ASSERT_ALWAYS(dynamic_cast<svgdom::PathElement*>(dom->children.begin()->get()))
+	ASSERT_ALWAYS(dynamic_cast<svgdom::GElement*>((++dom->children.begin())->get()))
+	ASSERT_ALWAYS(dynamic_cast<svgdom::GElement*>((++dom->children.begin())->get())->children.size() == 0)
 }
