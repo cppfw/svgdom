@@ -21,22 +21,17 @@ public:
 	
 	void visitContainer(const svgdom::Element& e, const svgdom::Container& c, const svgdom::Styleable& s){
 		StyleStack::Push push(this->styleStack, s);
-		
 		this->addToCache(e);
-		
 		this->relayAccept(c);
 	}
 	void visitElement(const svgdom::Element& e, const svgdom::Styleable& s){
 		StyleStack::Push push(this->styleStack, s);
-
 		this->addToCache(e);
 	}
 	
 	void defaultVisit(const svgdom::Element& e) override{
-		//TODO:
+		this->addToCache(e);
 	}
-	
-	//TODO: add default visit for container
 	
 	void visit(const svgdom::GElement& e) override{
 		this->visitContainer(e, e, e);
@@ -60,7 +55,7 @@ public:
 		this->visitContainer(e, e, e);
 	}
 	
-	//TODO: use default visit
+	
 	
 	void visit(const svgdom::PolylineElement& e) override{
 		this->visitElement(e, e);

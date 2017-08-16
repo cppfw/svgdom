@@ -42,7 +42,11 @@ int main(int argc, char** argv){
 	
 	dom->accept(visitor);
 	
-	ASSERT_INFO_ALWAYS(visitor.finder.cacheSize() == 17763, "visitor.finder.cacheSize() = " << visitor.finder.cacheSize())
+	auto searchDuration = getTicks() - searchStart;
 	
-	TRACE_ALWAYS(<< "SVG searched in " << float(getTicks() - searchStart) / 1000.0f << " sec." << std::endl)
+	ASSERT_INFO_ALWAYS(searchDuration < 5000, "search duration was longer than 5 seconds, actual duration = " << searchDuration)
+	
+	TRACE_ALWAYS(<< "SVG searched in " << float(searchDuration) / 1000.0f << " sec." << std::endl)
+	
+	ASSERT_INFO_ALWAYS(visitor.finder.cacheSize() == 17763, "visitor.finder.cacheSize() = " << visitor.finder.cacheSize())
 }
