@@ -1,3 +1,9 @@
+libsvgdom (0.2.70) unstable; urgency=medium
+
+  * image element added, Finder refactored
+
+ -- Ivan Gagis <igagis@gmail.com>  Thu, 17 Aug 2017 00:48:30 +0300
+
 libsvgdom (0.2.69) unstable; urgency=medium
 
   * test release
