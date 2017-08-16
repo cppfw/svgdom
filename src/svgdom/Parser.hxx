@@ -15,6 +15,7 @@
 #include "elements/Shapes.hpp"
 #include "elements/Structurals.hpp"
 #include "elements/Filter.hpp"
+#include "elements/ImageElement.hpp"
 
 namespace svgdom{
 
@@ -45,6 +46,7 @@ class Parser{
 	void fillReferencing(Referencing& e, const pugi::xml_node& n);
 	void fillRectangle(Rectangle& r, const pugi::xml_node& n);
 	void fillViewBoxed(ViewBoxed& v, const pugi::xml_node& n);
+	void fillAspectRatioed(AspectRatioed& e, const pugi::xml_node& n);
 	void fillContainer(Container& c, const pugi::xml_node& n);
 	void fillTransformable(Transformable& t, const pugi::xml_node& n);
 	void fillStyleable(Styleable& s, const pugi::xml_node& n);
@@ -70,6 +72,7 @@ class Parser{
 	std::unique_ptr<RadialGradientElement> parseRadialGradientElement(const pugi::xml_node& n);
 	std::unique_ptr<FilterElement> parseFilterElement(const pugi::xml_node& n);
 	std::unique_ptr<FeGaussianBlurElement> parseFeGaussianBlurElement(const pugi::xml_node& n);
+	std::unique_ptr<ImageElement> parseImageElement(const pugi::xml_node& n);
 	
 public:
 	std::unique_ptr<svgdom::Element> parseNode(const pugi::xml_node& n);

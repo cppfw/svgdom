@@ -134,6 +134,16 @@
         <ccTool flags="0">
         </ccTool>
       </item>
+      <item path="src/svgdom/elements/AspectRatioed.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="src/svgdom/elements/AspectRatioed.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
       <item path="src/svgdom/elements/Element.cpp" ex="false" tool="1" flavor2="8">
         <ccTool flags="0">
         </ccTool>
@@ -145,6 +155,16 @@
       <item path="src/svgdom/elements/Gradients.cpp" ex="false" tool="1" flavor2="8">
         <ccTool flags="0">
         </ccTool>
+      </item>
+      <item path="src/svgdom/elements/ImageElement.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="src/svgdom/elements/ImageElement.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
       </item>
       <item path="src/svgdom/elements/Rectangle.cpp" ex="false" tool="1" flavor2="8">
         <ccTool flags="0">
@@ -193,6 +213,16 @@
       </item>
       <item path="tests/editDomVisitor/main.cpp" ex="false" tool="1" flavor2="8">
         <ccTool flags="1">
+        </ccTool>
+      </item>
+      <item path="tests/finder/main.cpp" ex="false" tool="1" flavor2="8">
+        <ccTool flags="1">
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+          <preprocessorList>
+            <Elem>DEBUG</Elem>
+          </preprocessorList>
         </ccTool>
       </item>
       <item path="tests/samples/main.cpp" ex="false" tool="1" flavor2="8">
@@ -268,9 +298,29 @@
         <ccTool flags="0">
         </ccTool>
       </item>
+      <item path="src/svgdom/elements/AspectRatioed.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="src/svgdom/elements/AspectRatioed.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
       <item path="src/svgdom/elements/Filter.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/svgdom/elements/Filter.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/svgdom/elements/ImageElement.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="src/svgdom/elements/ImageElement.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
       </item>
     </conf>
   </confs>

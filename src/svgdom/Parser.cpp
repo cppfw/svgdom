@@ -112,6 +112,8 @@ std::unique_ptr<svgdom::Element> Parser::parseNode(const pugi::xml_node& n){
 				return this->parseFilterElement(n);
 			}else if(nsn.name == "feGaussianBlur"){
 				return this->parseFeGaussianBlurElement(n);
+			}else if(nsn.name == "image"){
+				return this->parseImageElement(n);
 			}
 			
 			break;
@@ -292,8 +294,6 @@ void Parser::fillViewBoxed(ViewBoxed& v, const pugi::xml_node& n) {
 			case XmlNamespace_e::SVG:
 				if (nsn.name == "viewBox") {
 					v.viewBox = SvgElement::parseViewbox(a.value());
-				} else if (nsn.name == "preserveAspectRatio") {
-					v.parseAndFillPreserveAspectRatio(a.value());
 				}
 				break;
 			default:
@@ -301,6 +301,22 @@ void Parser::fillViewBoxed(ViewBoxed& v, const pugi::xml_node& n) {
 		}
 	}
 }
+
+void Parser::fillAspectRatioed(AspectRatioed& e, const pugi::xml_node& n) {
+	for(auto a = n.first_attribute(); !a.empty(); a = a.next_attribute()) {
+		auto nsn = this->getNamespace(a.name());
+		switch (nsn.ns) {
+			case XmlNamespace_e::SVG:
+				if (nsn.name == "preserveAspectRatio") {
+					e.parseAndFillPreserveAspectRatio(a.value());
+				}
+				break;
+			default:
+				break;
+		}
+	}
+}
+
 
 std::unique_ptr<CircleElement> Parser::parseCircleElement(const pugi::xml_node& n) {
 	ASSERT(getNamespace(n.name()).ns == XmlNamespace_e::SVG)
@@ -709,9 +725,27 @@ std::unique_ptr<SvgElement> Parser::parseSvgElement(const pugi::xml_node& n) {
 	this->fillRectangle(*ret, n);
 	this->fillContainer(*ret, n);
 	this->fillViewBoxed(*ret, n);
+	this->fillAspectRatioed(*ret, n);
 
 	return ret;
 }
+
+std::unique_ptr<ImageElement> Parser::parseImageElement(const pugi::xml_node& n) {
+	ASSERT(getNamespace(n.name()).ns == XmlNamespace_e::SVG)
+	ASSERT(getNamespace(n.name()).name == "image")
+
+	auto ret = utki::makeUnique<ImageElement>();
+
+	this->fillElement(*ret, n);
+	this->fillStyleable(*ret, n);
+	this->fillTransformable(*ret, n);
+	this->fillRectangle(*ret, n);
+	this->fillReferencing(*ret, n);
+	this->fillAspectRatioed(*ret, n);
+
+	return ret;
+}
+
 
 std::unique_ptr<SymbolElement> Parser::parseSymbolElement(const pugi::xml_node& n) {
 	ASSERT(getNamespace(n.name()).ns == XmlNamespace_e::SVG)
@@ -725,6 +759,7 @@ std::unique_ptr<SymbolElement> Parser::parseSymbolElement(const pugi::xml_node& 
 	this->fillStyleable(*ret, n);
 	this->fillContainer(*ret, n);
 	this->fillViewBoxed(*ret, n);
+	this->fillAspectRatioed(*ret, n);
 
 	return ret;
 }

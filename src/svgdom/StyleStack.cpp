@@ -5,7 +5,7 @@
 using namespace svgdom;
 
 
-const svgdom::StyleValue* StyleStack::getStyleProperty(svgdom::StyleProperty_e p) {
+const svgdom::StyleValue* StyleStack::getStyleProperty(svgdom::StyleProperty_e p)const{
 	bool explicitInherit = false;
 
 	for (auto i = this->stack.rbegin(); i != this->stack.rend(); ++i) {

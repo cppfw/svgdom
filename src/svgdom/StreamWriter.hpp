@@ -26,6 +26,7 @@ protected:
 	void addTransformableAttributes(const Transformable& e);
 	void addStyleableAttributes(const Styleable& e);
 	void addViewBoxedAttributes(const ViewBoxed& e);
+	void addAspectRatioedAttributes(const AspectRatioed& e);
 	void addRectangleAttributes(const Rectangle& e);
 	void addShapeAttributes(const Shape& e);
 	void addReferencingAttributes(const Referencing& e);
@@ -53,6 +54,7 @@ public:
 	void visit(const LineElement& e) override;
 	void visit(const FilterElement& e) override;
 	void visit(const FeGaussianBlurElement& e) override;
+	void visit(const ImageElement& e) override;
 
 };
 

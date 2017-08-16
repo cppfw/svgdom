@@ -6,47 +6,37 @@
 
 using namespace svgdom;
 
-Finder::Finder(const svgdom::Element& root) :
-	root(root)
-{
-}
-
 namespace{
-class FindByIdVisitor : virtual public svgdom::ConstVisitor{
-	const std::string& id;
+class CacheCreator : virtual public svgdom::ConstVisitor{
 public:
-	FindByIdVisitor(const std::string& id) :
-			id(id)
-	{}
+	std::map<std::string, Finder::ElementInfo> cache;
 	
-	Finder::ElementInfo found;
+	StyleStack styleStack;
+	
+	void addToCache(const svgdom::Element& e){
+		if(e.id.length() != 0){
+			this->cache.insert(std::make_pair(e.id, Finder::ElementInfo(e, this->styleStack)));
+		}
+	}
 	
 	void visitContainer(const svgdom::Element& e, const svgdom::Container& c, const svgdom::Styleable& s){
-		this->found.ss.stack.push_back(&s);
-		if(this->id == e.id){
-			this->found.e = &e;
-			return;
-		}
+		StyleStack::Push push(this->styleStack, s);
+		
+		this->addToCache(e);
+		
 		this->relayAccept(c);
-		if(this->found){
-			return;
-		}
-		this->found.ss.stack.pop_back();
 	}
 	void visitElement(const svgdom::Element& e, const svgdom::Styleable& s){
-		this->found.ss.stack.push_back(&s);
-		if(this->id == e.id){
-			this->found.e = &e;
-			return;
-		}
-		this->found.ss.stack.pop_back();
+		StyleStack::Push push(this->styleStack, s);
+
+		this->addToCache(e);
 	}
+	
 	void defaultVisit(const svgdom::Element& e) override{
-		if(this->id == e.id){
-			this->found.e = &e;
-			return;
-		}
+		//TODO:
 	}
+	
+	//TODO: add default visit for container
 	
 	void visit(const svgdom::GElement& e) override{
 		this->visitContainer(e, e, e);
@@ -69,6 +59,8 @@ public:
 	void visit(const svgdom::FilterElement& e) override{
 		this->visitContainer(e, e, e);
 	}
+	
+	//TODO: use default visit
 	
 	void visit(const svgdom::PolylineElement& e) override{
 		this->visitElement(e, e);
@@ -100,27 +92,32 @@ public:
 	void visit(const svgdom::FeGaussianBlurElement& e) override{
 		this->visitElement(e, e);
 	}
+	void visit(const ImageElement& e) override{
+		this->visitElement(e, e);
+	}
+
 };
 }
 
-const Finder::ElementInfo& Finder::findById(const std::string& id) {
-	auto i = this->cache.find(id);
-	if(i != this->cache.end()){
-		return i->second;
-	}
+Finder::Finder(const svgdom::Element& root) :
+		cache([&root](){
+			CacheCreator visitor;
 	
-	FindByIdVisitor visitor(id);
-	
-	//for empty ID we don't search, but just create an empty entry in cache
-	if(id.length() != 0){
-		this->root.accept(visitor);
-	}
-	
-	auto ret = this->cache.insert(std::make_pair(id, visitor.found));
-	ASSERT(ret.second)
-	return ret.first->second;
-}
+			root.accept(visitor);
+			
+			return std::move(visitor.cache);
+		}())
+{}
 
-void Finder::clearCache() {
-	this->cache.clear();
+const Finder::ElementInfo* Finder::findById(const std::string& id)const{
+	if(id.length() == 0){
+		return nullptr;
+	}
+	
+	auto i = this->cache.find(id);
+	if(i == this->cache.end()){
+		return nullptr;
+	}
+	
+	return &i->second;
 }

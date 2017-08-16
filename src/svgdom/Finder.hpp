@@ -8,26 +8,23 @@
 
 namespace svgdom{
 
-class Finder{
-	
-	const svgdom::Element& root;
-	
+class Finder : public utki::Unique{
 public:
 	
 	Finder(const svgdom::Element& root);
 	
 	struct ElementInfo{
-		const svgdom::Element* e = nullptr;
-		StyleStack ss;
+		const svgdom::Element& e;
+		const StyleStack ss;
 		
-		explicit operator bool()const{
-			return this->e != nullptr;
-		}
+		ElementInfo(const svgdom::Element& e, StyleStack ss) : e(e), ss(ss){}
 	};
 	
-	const ElementInfo& findById(const std::string& id);
+	const ElementInfo* findById(const std::string& id)const;
 	
-	void clearCache();
+	size_t cacheSize()const noexcept{
+		return this->cache.size();
+	}
 	
 private:
 	std::map<std::string, ElementInfo> cache;

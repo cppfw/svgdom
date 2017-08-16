@@ -6,6 +6,7 @@
 #include "Referencing.hpp"
 #include "Rectangle.hpp"
 #include "ViewBoxed.hpp"
+#include "AspectRatioed.hpp"
 
 namespace svgdom{
 
@@ -48,6 +49,7 @@ struct SvgElement :
 		public Container,
 		public Rectangle,
 		public ViewBoxed,
+		public AspectRatioed,
 		public Styleable
 {
 	void accept(Visitor& visitor)override;
@@ -66,6 +68,7 @@ struct SymbolElement :
 		public Element,
 		public Container,
 		public ViewBoxed,
+		public AspectRatioed,
 		public Styleable
 {
 	void accept(Visitor& visitor)override;

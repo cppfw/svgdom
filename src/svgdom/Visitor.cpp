@@ -71,6 +71,10 @@ void Visitor::visit(FeGaussianBlurElement& e){
 	this->defaultVisit(e);
 }
 
+void Visitor::visit(ImageElement& e){
+	this->defaultVisit(e);
+}
+
 void Visitor::relayAccept(Container& container){
 	auto oldParent = this->curParent_v;
 	auto oldIter = this->curIter_v;
@@ -148,6 +152,10 @@ void ConstVisitor::visit(const FilterElement& e){
 }
 
 void ConstVisitor::visit(const FeGaussianBlurElement& e){
+	this->defaultVisit(e);
+}
+
+void ConstVisitor::visit(const ImageElement& e){
 	this->defaultVisit(e);
 }
 

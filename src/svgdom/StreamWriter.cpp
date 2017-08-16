@@ -93,8 +93,10 @@ void StreamWriter::addViewBoxedAttributes(const ViewBoxed& e) {
 	if (e.isViewBoxSpecified()) {
 		this->addAttribute("viewBox", e.viewBoxToString());
 	}
+}
 
-	if (e.preserveAspectRatio.preserve != ViewBoxed::PreserveAspectRatio_e::NONE || e.preserveAspectRatio.defer || e.preserveAspectRatio.slice) {
+void StreamWriter::addAspectRatioedAttributes(const AspectRatioed& e) {
+	if (e.preserveAspectRatio.preserve != AspectRatioed::PreserveAspectRatio_e::NONE || e.preserveAspectRatio.defer || e.preserveAspectRatio.slice) {
 		this->addAttribute("preserveAspectRatio", e.preserveAspectRatioToString());
 	}
 }
@@ -188,7 +190,20 @@ void StreamWriter::visit(const SvgElement& e) {
 	this->addStyleableAttributes(e);
 	this->addRectangleAttributes(e);
 	this->addViewBoxedAttributes(e);
+	this->addAspectRatioedAttributes(e);
 	this->write(&e);
+}
+
+void StreamWriter::visit(const ImageElement& e){
+	this->setName("image");
+	
+	this->addElementAttributes(e);
+	this->addStyleableAttributes(e);
+	this->addTransformableAttributes(e);
+	this->addRectangleAttributes(e);
+	this->addReferencingAttributes(e);
+	this->addAspectRatioedAttributes(e);
+	this->write();
 }
 
 void StreamWriter::visit(const LineElement& e) {
@@ -368,6 +383,7 @@ void StreamWriter::visit(const SymbolElement& e) {
 	this->addElementAttributes(e);
 	this->addStyleableAttributes(e);
 	this->addViewBoxedAttributes(e);
+	this->addAspectRatioedAttributes(e);
 	this->write(&e);
 }
 
