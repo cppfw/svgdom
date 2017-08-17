@@ -53,7 +53,6 @@
       <itemPath>appveyor.yml</itemPath>
       <itemPath>debian/changelog</itemPath>
       <itemPath>debian/control.in</itemPath>
-      <itemPath>nbproject/private/launcher.properties</itemPath>
       <itemPath>android/libsvgdom-$(version).pom.in</itemPath>
       <itemPath>cocoapods/libsvgdom.podspec.in</itemPath>
       <itemPath>homebrew/libsvgdom.rb.in</itemPath>
