@@ -1,3 +1,9 @@
+libsvgdom (0.2.71) unstable; urgency=medium
+
+  * removing unnecessary assertions
+
+ -- Ivan Gagis <igagis@gmail.com>  Thu, 17 Aug 2017 12:52:15 +0300
+
 libsvgdom (0.2.70) unstable; urgency=medium
 
   * image element added, Finder refactored

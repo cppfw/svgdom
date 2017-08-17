@@ -41,7 +41,7 @@ std::string Styleable::stylesToString() const {
 		
 		switch(st.first){
 			default:
-				ASSERT_INFO(false, "type = " << unsigned(st.first))
+				TRACE(<< "Unimplemented style property: " << Styleable::propertyToString(st.first) << ", writing empty value." << std::endl)
 				break;
 			case StyleProperty_e::COLOR_INTERPOLATION_FILTERS:
 				s << st.second.colorInterpolationFiltersToString();
@@ -129,7 +129,7 @@ StyleValue Styleable::parseStylePropertyValue(StyleProperty_e type, const std::s
 
 	switch(type){
 		default:
-			ASSERT_INFO(false, "type = " << unsigned(type))
+			TRACE(<< "unimplemented style property encountered: " << Styleable::propertyToString(type) << std::endl)
 			break;
 		case StyleProperty_e::COLOR_INTERPOLATION_FILTERS:
 			v = StyleValue::parseColorInterpolation(str);
