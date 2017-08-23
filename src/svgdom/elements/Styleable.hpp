@@ -214,6 +214,13 @@ struct StyleValue{
 	 * @return RGB structure holding red, green and blue.
 	 */
 	Rgb getRgb()const;
+	
+	/**
+	 * @brief set color from RGB.
+	 * If this style property represents a color then this method sets the
+	 * color from red, green and blue values.
+	 */
+	void setRgb(const std::uint32_t r, const std::uint32_t g, const std::uint32_t b);
 };
 
 /**

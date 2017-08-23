@@ -425,6 +425,10 @@ Rgb StyleValue::getRgb() const{
 	return ret;
 }
 
+void StyleValue::setRgb(const std::uint32_t r, const std::uint32_t g, const std::uint32_t b) {
+	this->color =  r | (g << 8) | (b << 16);
+}
+
 namespace{
 const std::map<std::string, std::uint32_t> colorNames = {
 	{"aliceblue", 0xfff8f0},
