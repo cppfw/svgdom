@@ -1,7 +1,6 @@
-#ifndef CLONE_VISITOR_HPP
-#define CLONE_VISITOR_HPP
+#pragma once
 
-#include <svgdom/Visitor.hpp>
+#include "Visitor.hpp"
 
 namespace svgdom{
 /**
@@ -52,5 +51,3 @@ public:
 };
 
 }
-
-#endif
