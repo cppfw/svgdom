@@ -1,6 +1,6 @@
 #include "../../src/svgdom/dom.hpp"
 #include "../../src/svgdom/Visitor.hpp"
-#include "../../src/svgdom/CloneVisitor.hpp"
+#include "../../src/svgdom/Cloner.hpp"
 
 #include <utki/debug.hpp>
 
@@ -33,11 +33,11 @@ int main(int argc, char** argv){
 
 	domOriginal->children.push_back(std::move(path));
 
-	CloneVisitor visitor;
+	Cloner cloner;
 	
-	domOriginal->accept(visitor);
+	domOriginal->accept(cloner);
 	
-	std::unique_ptr<svgdom::SvgElement> domClone = visitor.getCloneAs<svgdom::SvgElement>();
+	std::unique_ptr<svgdom::SvgElement> domClone = cloner.getCloneAs<svgdom::SvgElement>();
 
 	std::string domOriginalStr = domOriginal->toString();
 	

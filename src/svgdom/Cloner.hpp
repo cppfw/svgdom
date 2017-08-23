@@ -4,10 +4,10 @@
 
 namespace svgdom{
 /**
- * @brief CloneVisitor.
+ * @brief clone visitor.
  * A visitor which allows cloning of Elements (abd their children).
  */
-class CloneVisitor : virtual public svgdom::ConstVisitor {
+class Cloner : virtual public svgdom::ConstVisitor {
 	svgdom::Container root;
 	svgdom::Container* curParent = &root;
 
