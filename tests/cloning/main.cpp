@@ -33,7 +33,7 @@ int main(int argc, char** argv){
 
 	domOriginal->children.push_back(std::move(path));
 
-	Cloner cloner;
+	svgdom::Cloner cloner;
 	
 	domOriginal->accept(cloner);
 	
