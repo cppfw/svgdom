@@ -701,7 +701,7 @@ StyleValue StyleValue::parsePaint(const std::string& str){
 			s >> std::setw(int(rgb.length())) >> tmpStr >> std::setw(0);
 			ASSERT(tmpStr == rgb)
 			
-			std::uint32_t r, g, b;
+			std::uint8_t r, g, b;
 			
 			skipWhitespaces(s);
 			s >> r;
