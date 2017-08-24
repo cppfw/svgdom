@@ -288,6 +288,7 @@ void Parser::fillAspectRatioed(AspectRatioed& e) {
 }
 
 void Parser::addElement(std::unique_ptr<Element> e) {
+	ASSERT(this->parentStack.back())
 	this->parentStack.back()->children.push_back(std::move(e));
 	this->parentStack.push_back(nullptr);
 }
@@ -295,6 +296,7 @@ void Parser::addElement(std::unique_ptr<Element> e) {
 void Parser::addElement(std::unique_ptr<Element> e, Container* c) {
 	ASSERT(e)
 	ASSERT(c)
+	ASSERT(this->parentStack.back())
 	this->parentStack.back()->children.push_back(std::move(e));
 	this->parentStack.push_back(c);
 }
@@ -752,7 +754,7 @@ void Parser::onElementStart(const utki::Buf<char> name) {
 }
 
 void Parser::onElementEnd(const utki::Buf<char> name) {
-
+	this->parentStack.pop_back();
 }
 
 void Parser::onAttributeParsed(const utki::Buf<char> name, const utki::Buf<char> value) {
@@ -761,7 +763,9 @@ void Parser::onAttributeParsed(const utki::Buf<char> name, const utki::Buf<char>
 }
 
 void Parser::onAttributesEnd(bool isEmptyElement) {
-	this->parseNode();
+	if(this->parentStack.back()){
+		this->parseNode();
+	}
 	this->attributes.clear();
 	this->element.clear();
 }

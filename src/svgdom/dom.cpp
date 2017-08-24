@@ -34,17 +34,30 @@ std::unique_ptr<SvgElement> svgdom::load(const papki::File& f){
 }
 
 std::unique_ptr<SvgElement> svgdom::load(std::istream& s){
-	pugi::xml_document doc;
+	Parser parser;
 	
-	doc.load(s);
+	while(!s.eof()){
+		std::vector<char> buf;
+		for(unsigned i = 0; i != 4096; ++i){
+			char c;
+			s >> c;
+			if(s.eof()){
+				break;
+			}
+			buf.push_back(c);
+		}
+		parser.feed(utki::wrapBuf(buf));
+	}
+	parser.end();
 	
-	return ::load(doc);
+	return parser.getDom();
 }
 
 std::unique_ptr<SvgElement> svgdom::load(std::string& s){
-	pugi::xml_document doc;
+	Parser parser;
 
-	doc.load_string(s.c_str());
+	parser.feed(utki::wrapBuf(s.c_str(), s.length()));
+	parser.end();
 
-	return ::load(doc);
+	return parser.getDom();
 }
