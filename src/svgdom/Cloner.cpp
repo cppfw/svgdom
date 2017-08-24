@@ -1,7 +1,6 @@
-#include <Cloner.hpp>
+#include "Cloner.hpp"
 
 using namespace svgdom;
-using namespace std;
 
 void Cloner::cloneChildren(const Container& e, Container& clone){
 	auto oldParent = curParent;
