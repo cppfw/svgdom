@@ -24,21 +24,25 @@ Gradient::SpreadMethod_e gradientStringToSpreadMethod(const std::string& str) {
 }
 }
 
-std::unique_ptr<svgdom::Element> Parser::parseNode(const pugi::xml_node& n){
+void Parser::parseNode(){
 	//parse default namespace
 	{
-		pugi::xml_attribute dn = n.attribute("xmlns");
-		if(!dn.empty()){
-			if(std::string(dn.value()) == DSvgNamespace){
-				this->defaultNamespace.push_back(XmlNamespace_e::SVG);
+		auto i = this->attributes.find("xmlns");
+		if(i != this->attributes.end()){
+			if(i->second == DSvgNamespace){
+				this->defaultNamespaceStack.push_back(XmlNamespace_e::SVG);
+				this->svgNsPrefix.clear();
+			}else if(i->second == DXlinkNamespace){
+				this->defaultNamespaceStack.push_back(XmlNamespace_e::XLINK);
+				this->xlinkNsPrefix.clear();
 			}else{
-				this->defaultNamespace.push_back(XmlNamespace_e::UNKNOWN);
+				this->defaultNamespaceStack.push_back(XmlNamespace_e::UNKNOWN);
 			}
 		}else{
-			if(this->defaultNamespace.size() == 0){
-				this->defaultNamespace.push_back(XmlNamespace_e::UNKNOWN);
+			if(this->defaultNamespaceStack.size() == 0){
+				this->defaultNamespaceStack.push_back(XmlNamespace_e::UNKNOWN);
 			}else{
-				this->defaultNamespace.push_back(this->defaultNamespace.back());
+				this->defaultNamespaceStack.push_back(this->defaultNamespaceStack.back());
 			}
 		}
 	}
@@ -47,10 +51,10 @@ std::unique_ptr<svgdom::Element> Parser::parseNode(const pugi::xml_node& n){
 	{
 		std::string xmlns = "xmlns:";
 		
-		this->namespaces.push_back(decltype(this->namespaces)::value_type());
+		this->namespacesStack.push_back(decltype(this->namespacesStack)::value_type());
 		
-		for(auto a = n.first_attribute(); !a.empty(); a = a.next_attribute()){
-			auto attr = std::string(a.name());
+		for(auto& e : this->attributes){
+			const auto& attr = e.first;
 			
 			if(attr.substr(0, xmlns.length()) != xmlns){
 				continue;
@@ -59,61 +63,63 @@ std::unique_ptr<svgdom::Element> Parser::parseNode(const pugi::xml_node& n){
 			ASSERT(attr.length() >= xmlns.length())
 			auto ns = attr.substr(xmlns.length(), attr.length() - xmlns.length());
 			
-			if(DSvgNamespace == a.value()){
-				this->namespaces.back()[ns] = XmlNamespace_e::SVG;
-			}else if(DXlinkNamespace == a.value()){
-				this->namespaces.back()[ns] = XmlNamespace_e::XLINK;
+			if(e.second == DSvgNamespace){
+				this->namespacesStack.back()[ns] = XmlNamespace_e::SVG;
+				this->svgNsPrefix = std::string(":") + ns;
+			}else if(e.second == DXlinkNamespace){
+				this->namespacesStack.back()[ns] = XmlNamespace_e::XLINK;
+				this->xlinkNsPrefix = std::string(":") + ns;
 			}
 		}
 	}
 	
 	utki::ScopeExit scopeExit([this](){
-		ASSERT(this->namespaces.size() > 0)
-		this->namespaces.pop_back();
-		ASSERT(this->defaultNamespace.size() > 0)
-		this->defaultNamespace.pop_back();
+		ASSERT(this->namespacesStack.size() > 0)
+		this->namespacesStack.pop_back();
+		ASSERT(this->defaultNamespaceStack.size() > 0)
+		this->defaultNamespaceStack.pop_back();
 	});
 	
-	auto nsn = getNamespace(n.name());
+	auto nsn = getNamespace(this->element);
 //	TRACE(<< "nsn.name = " << nsn.name << std::endl)
 	switch(nsn.ns){
 		case XmlNamespace_e::SVG:
 			if(nsn.name == "svg"){
-				return this->parseSvgElement(n);
+				this->parseSvgElement();
 			}else if(nsn.name == "symbol") {
-				return this->parseSymbolElement(n);
+				this->parseSymbolElement();
 			}else if(nsn.name == "g"){
-				return this->parseGElement(n);
+				this->parseGElement();
 			}else if(nsn.name == "defs"){
-				return this->parseDefsElement(n);
+				this->parseDefsElement();
 			}else if (nsn.name == "use") {
-				return this->parseUseElement(n);
+				this->parseUseElement();
 			}else if(nsn.name == "path"){
-				return this->parsePathElement(n);
+				this->parsePathElement();
 			}else if(nsn.name == "linearGradient"){
-				return this->parseLinearGradientElement(n);
+				this->parseLinearGradientElement();
 			}else if(nsn.name == "radialGradient"){
-				return this->parseRadialGradientElement(n);
+				this->parseRadialGradientElement();
 			}else if(nsn.name == "stop"){
-				return this->parseGradientStopElement(n);
+				this->parseGradientStopElement();
 			}else if(nsn.name == "rect"){
-				return this->parseRectElement(n);
+				this->parseRectElement();
 			}else if(nsn.name == "circle"){
-				return this->parseCircleElement(n);
+				this->parseCircleElement();
 			}else if(nsn.name == "ellipse"){
-				return this->parseEllipseElement(n);
+				this->parseEllipseElement();
 			}else if(nsn.name == "line"){
-				return this->parseLineElement(n);
+				this->parseLineElement();
 			}else if(nsn.name == "polyline"){
-				return this->parsePolylineElement(n);
+				this->parsePolylineElement();
 			}else if(nsn.name == "polygon"){
-				return this->parsePolygonElement(n);
+				this->parsePolygonElement();
 			}else if(nsn.name == "filter"){
-				return this->parseFilterElement(n);
+				this->parseFilterElement();
 			}else if(nsn.name == "feGaussianBlur"){
-				return this->parseFeGaussianBlurElement(n);
+				this->parseFeGaussianBlurElement();
 			}else if(nsn.name == "image"){
-				return this->parseImageElement(n);
+				this->parseImageElement();
 			}
 			
 			break;
@@ -121,12 +127,10 @@ std::unique_ptr<svgdom::Element> Parser::parseNode(const pugi::xml_node& n){
 			//unknown namespace, ignore
 			break;
 	}
-	
-	return nullptr;
 }
 
 Parser::XmlNamespace_e Parser::findNamespace(const std::string& ns) {
-	for(auto i = this->namespaces.rbegin(); i != this->namespaces.rend(); ++i) {
+	for(auto i = this->namespacesStack.rbegin(); i != this->namespacesStack.rend(); ++i) {
 		auto iter = i->find(ns);
 		if (iter == i->end()) {
 			continue;
@@ -137,644 +141,642 @@ Parser::XmlNamespace_e Parser::findNamespace(const std::string& ns) {
 	return XmlNamespace_e::UNKNOWN;
 }
 
-Parser::NamespaceNamePair Parser::getNamespace(const std::string& xmlAttributeName) {
+Parser::NamespaceNamePair Parser::getNamespace(const std::string& xmlName) {
 	NamespaceNamePair ret;
 
-	auto colonIndex = xmlAttributeName.find_first_of(':');
+	auto colonIndex = xmlName.find_first_of(':');
 	if (colonIndex == std::string::npos) {
-		ret.ns = this->defaultNamespace.back();
-		ret.name = xmlAttributeName;
+		ret.ns = this->defaultNamespaceStack.back();
+		ret.name = xmlName;
 		return ret;
 	}
 
-	ASSERT(xmlAttributeName.length() >= colonIndex + 1)
+	ASSERT(xmlName.length() >= colonIndex + 1)
 
-	ret.ns = this->findNamespace(xmlAttributeName.substr(0, colonIndex));
-	ret.name = xmlAttributeName.substr(colonIndex + 1, xmlAttributeName.length() - 1 - colonIndex);
+	ret.ns = this->findNamespace(xmlName.substr(0, colonIndex));
+	ret.name = xmlName.substr(colonIndex + 1, xmlName.length() - 1 - colonIndex);
 
 	return ret;
 }
 
-void Parser::fillElement(Element& e, const pugi::xml_node& n) {
-	for(auto a = n.first_attribute(); !a.empty(); a = a.next_attribute()) {
-		auto nsn = this->getNamespace(a.name());
-		switch (nsn.ns) {
-			case XmlNamespace_e::SVG:
-				if (nsn.name == "id") {
-					e.id = a.value();
-				}
-				break;
-			default:
-				break;
+void Parser::fillElement(Element& e) {
+	auto i = this->attributes.find(this->svgNsPrefix + "id");
+	if(i != this->attributes.end()){
+		e.id = i->second;
+	}
+}
+
+void Parser::fillGradient(Gradient& g) {
+	this->fillElement(g);
+	this->fillReferencing(g);
+	this->fillStyleable(g);
+
+	{
+		auto i = this->attributes.find(this->svgNsPrefix + "spreadMethod");
+		if(i != this->attributes.end()){
+			g.spreadMethod = gradientStringToSpreadMethod(i->second);
+		}
+	}
+	{
+		auto i = this->attributes.find(this->svgNsPrefix + "gradientTransform");
+		if(i != this->attributes.end()){
+			g.transformations = Transformable::parse(i->second);
+		}
+	}
+	{
+		auto i = this->attributes.find(this->svgNsPrefix + "gradientUnits");
+		if(i != this->attributes.end()){
+			g.units = parseCoordinateUnits(i->second);
 		}
 	}
 }
 
-void Parser::fillContainer(Container& c, const pugi::xml_node& n) {
-	ASSERT(c.children.size() == 0)
-	for(auto i = n.first_child(); !i.empty(); i = i.next_sibling()) {
-		if (auto res = this->parseNode(i)) {
-			c.children.push_back(std::move(res));
+void Parser::fillRectangle(Rectangle& r) {
+	{
+		auto i = this->attributes.find(this->svgNsPrefix + "x");
+		if(i != this->attributes.end()){
+			r.x = Length::parse(i->second);
+		}
+	}
+	{
+		auto i = this->attributes.find(this->svgNsPrefix + "y");
+		if(i != this->attributes.end()){
+			r.y = Length::parse(i->second);
+		}
+	}
+	{
+		auto i = this->attributes.find(this->svgNsPrefix + "width");
+		if(i != this->attributes.end()){
+			r.width = Length::parse(i->second);
+		}
+	}
+	{
+		auto i = this->attributes.find(this->svgNsPrefix + "height");
+		if(i != this->attributes.end()){
+			r.height = Length::parse(i->second);
 		}
 	}
 }
 
-void Parser::fillGradient(Gradient& g, const pugi::xml_node& n) {
-	this->fillElement(g, n);
-	this->fillContainer(g, n);
-	this->fillReferencing(g, n);
-	this->fillStyleable(g, n);
-
-	for(auto a = n.first_attribute(); !a.empty(); a = a.next_attribute()) {
-		auto nsn = this->getNamespace(a.name());
-		switch (nsn.ns) {
-			case XmlNamespace_e::SVG:
-				if (nsn.name == "spreadMethod") {
-					g.spreadMethod = gradientStringToSpreadMethod(a.value());
-				} else if (nsn.name == "gradientTransform") {
-					g.transformations = Transformable::parse(a.value());
-				} else if (nsn.name == "gradientUnits") {
-					g.units = parseCoordinateUnits(a.value());
-				}
-				break;
-			default:
-				break;
+void Parser::fillReferencing(Referencing& e) {
+	{
+		auto i = this->attributes.find(this->xlinkNsPrefix + "href");
+		if(i == this->attributes.end()){
+			i = this->attributes.find(this->svgNsPrefix + "href");//in some SVG documents the svg namespace is used instead of xlink, though this is against SVG spec we allow to do so.
+		}
+		if(i != this->attributes.end()){
+			e.iri = i->second;
 		}
 	}
 }
 
-void Parser::fillRectangle(Rectangle& r, const pugi::xml_node& n) {
-	for(auto a = n.first_attribute(); !a.empty(); a = a.next_attribute()) {
-		auto nsn = this->getNamespace(a.name());
-		switch (nsn.ns) {
-			case XmlNamespace_e::SVG:
-				if (nsn.name == "x") {
-					r.x = Length::parse(a.value());
-				} else if (nsn.name == "y") {
-					r.y = Length::parse(a.value());
-				} else if (nsn.name == "width") {
-					r.width = Length::parse(a.value());
-				} else if (nsn.name == "height") {
-					r.height = Length::parse(a.value());
-				}
-				break;
-			default:
-				break;
-		}
-	}
+void Parser::fillShape(Shape& s) {
+	this->fillElement(s);
+	this->fillStyleable(s);
+	this->fillTransformable(s);
 }
 
-void Parser::fillReferencing(Referencing& e, const pugi::xml_node& n) {
-	for(auto a = n.first_attribute(); !a.empty(); a = a.next_attribute()) {
-		auto nsn = this->getNamespace(a.name());
-		switch (nsn.ns) {
-			case XmlNamespace_e::XLINK:
-			case XmlNamespace_e::SVG: //in some SVG documents the svg namespace is used instead of xlink, though this is against SVG spec we allow to do so.
-				if (nsn.name == "href") {
-					e.iri = a.value();
-				}
-				break;
-			default:
-				break;
-		}
-	}
-}
-
-void Parser::fillShape(Shape& s, const pugi::xml_node& n) {
-	this->fillElement(s, n);
-	this->fillStyleable(s, n);
-	this->fillTransformable(s, n);
-}
-
-void Parser::fillStyleable(Styleable& s, const pugi::xml_node& n) {
+void Parser::fillStyleable(Styleable& s) {
 	ASSERT(s.styles.size() == 0)
-
-	for(auto a = n.first_attribute(); !a.empty(); a = a.next_attribute()) {
-		auto nsn = this->getNamespace(a.name());
-		switch (nsn.ns) {
-			case XmlNamespace_e::SVG:
-				if (nsn.name == "style") {
-					s.styles = Styleable::parse(a.value());
-					break;
-				}
-			{
-				StyleProperty_e type = Styleable::stringToProperty(nsn.name);
-				if (type != StyleProperty_e::UNKNOWN) {
-					s.styles[type] = Styleable::parseStylePropertyValue(type, a.value());
-				}
-			}
-				break;
-			default:
-				break;
+	
+	{
+		auto i = this->attributes.find(this->svgNsPrefix + "style");
+		if(i != this->attributes.end()){
+			s.styles = Styleable::parse(i->second);
+		}
+	}
+	
+	for(auto type = StyleProperty_e::UNKNOWN; type != StyleProperty_e::ENUM_SIZE; type = StyleProperty_e(unsigned(type) + 1)){
+		auto name = Styleable::propertyToString(type);
+		if(name.length() == 0){
+			continue;
+		}
+		auto i = this->attributes.find(this->svgNsPrefix + name);
+		if(i != this->attributes.end()){
+			s.styles[type] = Styleable::parseStylePropertyValue(type, i->second);
 		}
 	}
 }
 
-void Parser::fillTransformable(Transformable& t, const pugi::xml_node& n) {
+void Parser::fillTransformable(Transformable& t) {
 	ASSERT(t.transformations.size() == 0)
-
-	for(auto a = n.first_attribute(); !a.empty(); a = a.next_attribute()) {
-		auto nsn = this->getNamespace(a.name());
-		switch (nsn.ns) {
-			case XmlNamespace_e::SVG:
-				if (nsn.name == "transform") {
-					t.transformations = Transformable::parse(a.value());
-				}
-				break;
-			default:
-				break;
+	
+	{
+		auto i = this->attributes.find(this->svgNsPrefix + "transform");
+		if(i != this->attributes.end()){
+			t.transformations = Transformable::parse(i->second);
 		}
 	}
 }
 
-void Parser::fillViewBoxed(ViewBoxed& v, const pugi::xml_node& n) {
-	for(auto a = n.first_attribute(); !a.empty(); a = a.next_attribute()) {
-		auto nsn = this->getNamespace(a.name());
-		switch (nsn.ns) {
-			case XmlNamespace_e::SVG:
-				if (nsn.name == "viewBox") {
-					v.viewBox = SvgElement::parseViewbox(a.value());
-				}
-				break;
-			default:
-				break;
+void Parser::fillViewBoxed(ViewBoxed& v) {
+	{
+		auto i = this->attributes.find(this->svgNsPrefix + "viewBox");
+		if(i != this->attributes.end()){
+			v.viewBox = SvgElement::parseViewbox(i->second);
 		}
 	}
 }
 
-void Parser::fillAspectRatioed(AspectRatioed& e, const pugi::xml_node& n) {
-	for(auto a = n.first_attribute(); !a.empty(); a = a.next_attribute()) {
-		auto nsn = this->getNamespace(a.name());
-		switch (nsn.ns) {
-			case XmlNamespace_e::SVG:
-				if (nsn.name == "preserveAspectRatio") {
-					e.parseAndFillPreserveAspectRatio(a.value());
-				}
-				break;
-			default:
-				break;
+void Parser::fillAspectRatioed(AspectRatioed& e) {
+	{
+		auto i = this->attributes.find(this->svgNsPrefix + "preserveAspectRatio");
+		if(i != this->attributes.end()){
+			e.parseAndFillPreserveAspectRatio(i->second);
 		}
 	}
 }
 
+void Parser::addElement(std::unique_ptr<Element> e) {
+	this->parentStack.back()->children.push_back(std::move(e));
+	this->parentStack.push_back(nullptr);
+}
 
-std::unique_ptr<CircleElement> Parser::parseCircleElement(const pugi::xml_node& n) {
-	ASSERT(getNamespace(n.name()).ns == XmlNamespace_e::SVG)
-	ASSERT(getNamespace(n.name()).name == "circle")
+void Parser::addElement(std::unique_ptr<Element> e, Container* c) {
+	ASSERT(e)
+	ASSERT(c)
+	this->parentStack.back()->children.push_back(std::move(e));
+	this->parentStack.push_back(c);
+}
+
+
+
+void Parser::parseCircleElement() {
+	ASSERT(this->getNamespace(this->element).ns == XmlNamespace_e::SVG)
+	ASSERT(this->getNamespace(this->element).name == "circle")
 
 	auto ret = utki::makeUnique<CircleElement>();
 
-	this->fillShape(*ret, n);
+	this->fillShape(*ret);
 
-	for(auto a = n.first_attribute(); !a.empty(); a = a.next_attribute()) {
-		auto nsn = this->getNamespace(a.name());
-		switch (nsn.ns) {
-			case XmlNamespace_e::SVG:
-				if (nsn.name == "cx") {
-					ret->cx = Length::parse(a.value());
-				} else if (nsn.name == "cy") {
-					ret->cy = Length::parse(a.value());
-				} else if (nsn.name == "r") {
-					ret->r = Length::parse(a.value());
-				}
-				break;
-			default:
-				break;
+	{
+		auto i = this->attributes.find(this->svgNsPrefix + "cx");
+		if(i != this->attributes.end()){
+			ret->cx = Length::parse(i->second);
+		}
+	}
+	{
+		auto i = this->attributes.find(this->svgNsPrefix + "cy");
+		if(i != this->attributes.end()){
+			ret->cy = Length::parse(i->second);
+		}
+	}
+	{
+		auto i = this->attributes.find(this->svgNsPrefix + "r");
+		if(i != this->attributes.end()){
+			ret->r = Length::parse(i->second);
 		}
 	}
 
-	return ret;
+	this->addElement(std::move(ret));
 }
 
-std::unique_ptr<DefsElement> Parser::parseDefsElement(const pugi::xml_node& n) {
-	ASSERT(getNamespace(n.name()).ns == XmlNamespace_e::SVG)
-	ASSERT(getNamespace(n.name()).name == "defs")
+void Parser::parseDefsElement() {
+	ASSERT(this->getNamespace(this->element).ns == XmlNamespace_e::SVG)
+	ASSERT(this->getNamespace(this->element).name == "defs")
 
 	auto ret = utki::makeUnique<DefsElement>();
 
-	this->fillElement(*ret, n);
-	this->fillTransformable(*ret, n);
-	this->fillStyleable(*ret, n);
-	this->fillContainer(*ret, n);
+	this->fillElement(*ret);
+	this->fillTransformable(*ret);
+	this->fillStyleable(*ret);
 
-	return ret;
+	this->addElement(std::move(ret), ret.get());
 }
 
-std::unique_ptr<EllipseElement> Parser::parseEllipseElement(const pugi::xml_node& n) {
-	ASSERT(getNamespace(n.name()).ns == XmlNamespace_e::SVG)
-	ASSERT(getNamespace(n.name()).name == "ellipse")
+void Parser::parseEllipseElement() {
+	ASSERT(this->getNamespace(this->element).ns == XmlNamespace_e::SVG)
+	ASSERT(this->getNamespace(this->element).name == "ellipse")
 
 	auto ret = utki::makeUnique<EllipseElement>();
 
-	this->fillShape(*ret, n);
+	this->fillShape(*ret);
 
-	for(auto a = n.first_attribute(); !a.empty(); a = a.next_attribute()) {
-		auto nsn = this->getNamespace(a.name());
-		switch (nsn.ns) {
-			case XmlNamespace_e::SVG:
-				if (nsn.name == "cx") {
-					ret->cx = Length::parse(a.value());
-				} else if (nsn.name == "cy") {
-					ret->cy = Length::parse(a.value());
-				} else if (nsn.name == "rx") {
-					ret->rx = Length::parse(a.value());
-				} else if (nsn.name == "ry") {
-					ret->ry = Length::parse(a.value());
-				}
-				break;
-			default:
-				break;
+	{
+		auto i = this->attributes.find(this->svgNsPrefix + "cx");
+		if(i != this->attributes.end()){
+			ret->cx = Length::parse(i->second);
+		}
+	}
+	{
+		auto i = this->attributes.find(this->svgNsPrefix + "cy");
+		if(i != this->attributes.end()){
+			ret->cy = Length::parse(i->second);
+		}
+	}
+	{
+		auto i = this->attributes.find(this->svgNsPrefix + "rx");
+		if(i != this->attributes.end()){
+			ret->rx = Length::parse(i->second);
+		}
+	}
+	{
+		auto i = this->attributes.find(this->svgNsPrefix + "ry");
+		if(i != this->attributes.end()){
+			ret->ry = Length::parse(i->second);
 		}
 	}
 
-	return ret;
+	this->addElement(std::move(ret));
 }
 
-std::unique_ptr<GElement> Parser::parseGElement(const pugi::xml_node& n) {
-	ASSERT(getNamespace(n.name()).ns == XmlNamespace_e::SVG)
-	ASSERT(getNamespace(n.name()).name == "g")
+void Parser::parseGElement() {
+	ASSERT(this->getNamespace(this->element).ns == XmlNamespace_e::SVG)
+	ASSERT(this->getNamespace(this->element).name == "g")
 
 	auto ret = utki::makeUnique<GElement>();
 
-	this->fillElement(*ret, n);
-	this->fillTransformable(*ret, n);
-	this->fillStyleable(*ret, n);
-	this->fillContainer(*ret, n);
+	this->fillElement(*ret);
+	this->fillTransformable(*ret);
+	this->fillStyleable(*ret);
 
-	return ret;
+	this->addElement(std::move(ret), ret.get());
 }
 
-std::unique_ptr<Gradient::StopElement> Parser::parseGradientStopElement(const pugi::xml_node& n) {
-	ASSERT(getNamespace(n.name()).ns == XmlNamespace_e::SVG)
-	ASSERT(getNamespace(n.name()).name == "stop")
+void Parser::parseGradientStopElement() {
+	ASSERT(this->getNamespace(this->element).ns == XmlNamespace_e::SVG)
+	ASSERT(this->getNamespace(this->element).name == "stop")
 
 	auto ret = utki::makeUnique<Gradient::StopElement>();
-	this->fillStyleable(*ret, n);
-
-	for(auto a = n.first_attribute(); !a.empty(); a = a.next_attribute()) {
-		auto nsn = this->getNamespace(a.name());
-		switch (nsn.ns) {
-			case XmlNamespace_e::SVG:
-				if (nsn.name == "offset") {
-					std::istringstream s(a.value());
-					s >> ret->offset;
-					if (!s.eof() && s.peek() == '%') {
-						ret->offset /= 100;
-					}
-				}
-				break;
-			default:
-				break;
+	
+	this->fillStyleable(*ret);
+	
+	{
+		auto i = this->attributes.find(this->svgNsPrefix + "offset");
+		if(i != this->attributes.end()){
+			std::istringstream s(i->second);
+			s >> ret->offset;
+			if (!s.eof() && s.peek() == '%') {
+				ret->offset /= 100;
+			}
 		}
 	}
 
-	return ret;
+	this->addElement(std::move(ret));
 }
 
-std::unique_ptr<LineElement> Parser::parseLineElement(const pugi::xml_node& n) {
-	ASSERT(getNamespace(n.name()).ns == XmlNamespace_e::SVG)
-	ASSERT(getNamespace(n.name()).name == "line")
+void Parser::parseLineElement() {
+	ASSERT(this->getNamespace(this->element).ns == XmlNamespace_e::SVG)
+	ASSERT(this->getNamespace(this->element).name == "line")
 
 	auto ret = utki::makeUnique<LineElement>();
 
-	this->fillShape(*ret, n);
+	this->fillShape(*ret);
 
-	for(auto a = n.first_attribute(); !a.empty(); a = a.next_attribute()) {
-		auto nsn = this->getNamespace(a.name());
-		switch (nsn.ns) {
-			case XmlNamespace_e::SVG:
-				if (nsn.name == "x1") {
-					ret->x1 = Length::parse(a.value());
-				} else if (nsn.name == "y1") {
-					ret->y1 = Length::parse(a.value());
-				} else if (nsn.name == "x2") {
-					ret->x2 = Length::parse(a.value());
-				} else if (nsn.name == "y2") {
-					ret->y2 = Length::parse(a.value());
-				}
-				break;
-			default:
-				break;
+	{
+		auto i = this->attributes.find(this->svgNsPrefix + "x1");
+		if(i != this->attributes.end()){
+			ret->x1 = Length::parse(i->second);
+		}
+	}
+	{
+		auto i = this->attributes.find(this->svgNsPrefix + "y1");
+		if(i != this->attributes.end()){
+			ret->y1 = Length::parse(i->second);
+		}
+	}
+	{
+		auto i = this->attributes.find(this->svgNsPrefix + "x2");
+		if(i != this->attributes.end()){
+			ret->x2 = Length::parse(i->second);
+		}
+	}
+	{
+		auto i = this->attributes.find(this->svgNsPrefix + "y2");
+		if(i != this->attributes.end()){
+			ret->y2 = Length::parse(i->second);
 		}
 	}
 
-	return ret;
+	this->addElement(std::move(ret));
 }
 
-std::unique_ptr<FilterElement> Parser::parseFilterElement(const pugi::xml_node& n) {
-	ASSERT(getNamespace(n.name()).ns == XmlNamespace_e::SVG)
-	ASSERT(getNamespace(n.name()).name == "filter")
+void Parser::parseFilterElement() {
+	ASSERT(this->getNamespace(this->element).ns == XmlNamespace_e::SVG)
+	ASSERT(this->getNamespace(this->element).name == "filter")
 	
 	auto ret = utki::makeUnique<FilterElement>();
 	
-	this->fillElement(*ret, n);
-	this->fillStyleable(*ret, n);
-	this->fillRectangle(*ret, n);
-	this->fillReferencing(*ret, n);
-	this->fillContainer(*ret, n);
+	this->fillElement(*ret);
+	this->fillStyleable(*ret);
+	this->fillRectangle(*ret);
+	this->fillReferencing(*ret);
 	
-	for(auto a = n.first_attribute(); !a.empty(); a = a.next_attribute()) {
-		auto nsn = this->getNamespace(a.name());
-		switch (nsn.ns) {
-			case XmlNamespace_e::SVG:
-				if (nsn.name == "filterUnits") {
-					ret->filterUnits = svgdom::parseCoordinateUnits(a.value());
-				} else if (nsn.name == "primitiveUnits") {
-					ret->primitiveUnits = svgdom::parseCoordinateUnits(a.value());
-				}
-				break;
-			default:
-				break;
+	{
+		auto i = this->attributes.find(this->svgNsPrefix + "filterUnits");
+		if(i != this->attributes.end()){
+			ret->filterUnits = svgdom::parseCoordinateUnits(i->second);
+		}
+	}
+	{
+		auto i = this->attributes.find(this->svgNsPrefix + "primitiveUnits");
+		if(i != this->attributes.end()){
+			ret->primitiveUnits = svgdom::parseCoordinateUnits(i->second);
 		}
 	}
 	
-	return ret;
+	this->addElement(std::move(ret), ret.get());
 }
 
-void Parser::fillFilterPrimitive(FilterPrimitive& p, const pugi::xml_node& n) {
-	this->fillElement(p, n);
-	this->fillRectangle(p, n);
-	this->fillStyleable(p, n);
+void Parser::fillFilterPrimitive(FilterPrimitive& p) {
+	this->fillElement(p);
+	this->fillRectangle(p);
+	this->fillStyleable(p);
 
-	for(auto a = n.first_attribute(); !a.empty(); a = a.next_attribute()) {
-		auto nsn = this->getNamespace(a.name());
-		switch (nsn.ns) {
-			case XmlNamespace_e::SVG:
-				if (nsn.name == "result") {
-					p.result = a.value();
-				}
-				break;
-			default:
-				break;
+	{
+		auto i = this->attributes.find(this->svgNsPrefix + "result");
+		if(i != this->attributes.end()){
+			p.result = i->second;
 		}
 	}
 }
 
-void Parser::fillInputableFilterPrimitive(InputableFilterPrimitive& p, const pugi::xml_node& n) {
-	this->fillFilterPrimitive(p, n);
+void Parser::fillInputableFilterPrimitive(InputableFilterPrimitive& p) {
+	this->fillFilterPrimitive(p);
 	
-	for(auto a = n.first_attribute(); !a.empty(); a = a.next_attribute()) {
-		auto nsn = this->getNamespace(a.name());
-		switch (nsn.ns) {
-			case XmlNamespace_e::SVG:
-				if (nsn.name == "in") {
-					p.in = a.value();
-				}
-				break;
-			default:
-				break;
+	{
+		auto i = this->attributes.find(this->svgNsPrefix + "in");
+		if(i != this->attributes.end()){
+			p.in = i->second;
 		}
 	}
 }
 
 
-std::unique_ptr<FeGaussianBlurElement> Parser::parseFeGaussianBlurElement(const pugi::xml_node& n) {
-	ASSERT(getNamespace(n.name()).ns == XmlNamespace_e::SVG)
-	ASSERT(getNamespace(n.name()).name == "feGaussianBlur")
+void Parser::parseFeGaussianBlurElement() {
+	ASSERT(this->getNamespace(this->element).ns == XmlNamespace_e::SVG)
+	ASSERT(this->getNamespace(this->element).name == "feGaussianBlur")
 	
 	auto ret = utki::makeUnique<FeGaussianBlurElement>();
 	
-	this->fillInputableFilterPrimitive(*ret, n);
+	this->fillInputableFilterPrimitive(*ret);
 	
-	for(auto a = n.first_attribute(); !a.empty(); a = a.next_attribute()) {
-		auto nsn = this->getNamespace(a.name());
-		switch (nsn.ns) {
-			case XmlNamespace_e::SVG:
-				if (nsn.name == "stdDeviation") {
-					ret->stdDeviation = parseNumberOptionalNumber(a.value(), {{-1, -1}});
-				}
-				break;
-			default:
-				break;
+	{
+		auto i = this->attributes.find(this->svgNsPrefix + "stdDeviation");
+		if(i != this->attributes.end()){
+			ret->stdDeviation = parseNumberOptionalNumber(i->second, {{-1, -1}});
 		}
 	}
-	return ret;
+	
+	this->addElement(std::move(ret));
 }
 
 
 
-std::unique_ptr<LinearGradientElement> Parser::parseLinearGradientElement(const pugi::xml_node& n) {
-	ASSERT(getNamespace(n.name()).ns == XmlNamespace_e::SVG)
-	ASSERT(getNamespace(n.name()).name == "linearGradient")
+void Parser::parseLinearGradientElement() {
+	ASSERT(this->getNamespace(this->element).ns == XmlNamespace_e::SVG)
+	ASSERT(this->getNamespace(this->element).name == "linearGradient")
 
 	auto ret = utki::makeUnique<LinearGradientElement>();
 
-	this->fillGradient(*ret, n);
+	this->fillGradient(*ret);
 
-	for(auto a = n.first_attribute(); !a.empty(); a = a.next_attribute()) {
-		auto nsn = this->getNamespace(a.name());
-		switch (nsn.ns) {
-			case XmlNamespace_e::SVG:
-				if (nsn.name == "x1") {
-					ret->x1 = Length::parse(a.value());
-				} else if (nsn.name == "y1") {
-					ret->y1 = Length::parse(a.value());
-				} else if (nsn.name == "x2") {
-					ret->x2 = Length::parse(a.value());
-				} else if (nsn.name == "y2") {
-					ret->y2 = Length::parse(a.value());
-				}
-				break;
-			default:
-				break;
+	{
+		auto i = this->attributes.find(this->svgNsPrefix + "x1");
+		if(i != this->attributes.end()){
+			ret->x1 = Length::parse(i->second);
+		}
+	}
+	{
+		auto i = this->attributes.find(this->svgNsPrefix + "y1");
+		if(i != this->attributes.end()){
+			ret->y1 = Length::parse(i->second);
+		}
+	}
+	{
+		auto i = this->attributes.find(this->svgNsPrefix + "x2");
+		if(i != this->attributes.end()){
+			ret->x2 = Length::parse(i->second);
+		}
+	}
+	{
+		auto i = this->attributes.find(this->svgNsPrefix + "y2");
+		if(i != this->attributes.end()){
+			ret->y2 = Length::parse(i->second);
 		}
 	}
 
-	return ret;
+	this->addElement(std::move(ret), ret.get());
 }
 
-std::unique_ptr<PathElement> Parser::parsePathElement(const pugi::xml_node& n) {
-	ASSERT(getNamespace(n.name()).ns == XmlNamespace_e::SVG)
-	ASSERT(getNamespace(n.name()).name == "path")
+void Parser::parsePathElement() {
+	ASSERT(this->getNamespace(this->element).ns == XmlNamespace_e::SVG)
+	ASSERT(this->getNamespace(this->element).name == "path")
 
 	auto ret = utki::makeUnique<PathElement>();
 
-	this->fillShape(*ret, n);
+	this->fillShape(*ret);
 
-	for(auto a = n.first_attribute(); !a.empty(); a = a.next_attribute()) {
-		auto nsn = this->getNamespace(a.name());
-		switch (nsn.ns) {
-			case XmlNamespace_e::SVG:
-				if (nsn.name == "d") {
-					ret->path = PathElement::parse(a.value());
-				}
-				break;
-			default:
-				break;
+	{
+		auto i = this->attributes.find(this->svgNsPrefix + "d");
+		if(i != this->attributes.end()){
+			ret->path = PathElement::parse(i->second);
 		}
 	}
-
-	return ret;
+	
+	this->addElement(std::move(ret));
 }
 
-std::unique_ptr<PolygonElement> Parser::parsePolygonElement(const pugi::xml_node& n) {
-	ASSERT(getNamespace(n.name()).ns == XmlNamespace_e::SVG)
-	ASSERT(getNamespace(n.name()).name == "polygon")
+void Parser::parsePolygonElement() {
+	ASSERT(this->getNamespace(this->element).ns == XmlNamespace_e::SVG)
+	ASSERT(this->getNamespace(this->element).name == "polygon")
 
 	auto ret = utki::makeUnique<PolygonElement>();
 
-	this->fillShape(*ret, n);
+	this->fillShape(*ret);
 
-	for(auto a = n.first_attribute(); !a.empty(); a = a.next_attribute()) {
-		auto nsn = this->getNamespace(a.name());
-		switch (nsn.ns) {
-			case XmlNamespace_e::SVG:
-				if (nsn.name == "points") {
-					ret->points = ret->parse(a.value());
-				}
-				break;
-			default:
-				break;
+	{
+		auto i = this->attributes.find(this->svgNsPrefix + "points");
+		if(i != this->attributes.end()){
+			ret->points = ret->parse(i->second);
 		}
 	}
-
-	return ret;
+	
+	this->addElement(std::move(ret));
 }
 
-std::unique_ptr<PolylineElement> Parser::parsePolylineElement(const pugi::xml_node& n) {
-	ASSERT(getNamespace(n.name()).ns == XmlNamespace_e::SVG)
-	ASSERT(getNamespace(n.name()).name == "polyline")
+void Parser::parsePolylineElement() {
+	ASSERT(this->getNamespace(this->element).ns == XmlNamespace_e::SVG)
+	ASSERT(this->getNamespace(this->element).name == "polyline")
 
 	auto ret = utki::makeUnique<PolylineElement>();
 
-	this->fillShape(*ret, n);
+	this->fillShape(*ret);
 
-	for(auto a = n.first_attribute(); !a.empty(); a = a.next_attribute()) {
-		auto nsn = this->getNamespace(a.name());
-		switch (nsn.ns) {
-			case XmlNamespace_e::SVG:
-				if (nsn.name == "points") {
-					ret->points = ret->parse(a.value());
-				}
-				break;
-			default:
-				break;
+	{
+		auto i = this->attributes.find(this->svgNsPrefix + "points");
+		if(i != this->attributes.end()){
+			ret->points = ret->parse(i->second);
 		}
 	}
-
-	return ret;
+	
+	this->addElement(std::move(ret));
 }
 
-std::unique_ptr<RadialGradientElement> Parser::parseRadialGradientElement(const pugi::xml_node& n) {
-	ASSERT(getNamespace(n.name()).ns == XmlNamespace_e::SVG)
-	ASSERT(getNamespace(n.name()).name == "radialGradient")
+void Parser::parseRadialGradientElement() {
+	ASSERT(this->getNamespace(this->element).ns == XmlNamespace_e::SVG)
+	ASSERT(this->getNamespace(this->element).name == "radialGradient")
 
 	auto ret = utki::makeUnique<RadialGradientElement>();
 
-	this->fillGradient(*ret, n);
-
-	for(auto a = n.first_attribute(); !a.empty(); a = a.next_attribute()) {
-		auto nsn = this->getNamespace(a.name());
-		switch (nsn.ns) {
-			case XmlNamespace_e::SVG:
-				if (nsn.name == "cx") {
-					ret->cx = Length::parse(a.value());
-				} else if (nsn.name == "cy") {
-					ret->cy = Length::parse(a.value());
-				} else if (nsn.name == "r") {
-					ret->r = Length::parse(a.value());
-				} else if (nsn.name == "fx") {
-					ret->fx = Length::parse(a.value());
-				} else if (nsn.name == "fy") {
-					ret->fy = Length::parse(a.value());
-				}
-				break;
-			default:
-				break;
+	this->fillGradient(*ret);
+	
+	{
+		auto i = this->attributes.find(this->svgNsPrefix + "cx");
+		if(i != this->attributes.end()){
+			ret->cx = Length::parse(i->second);
+		}
+	}
+	{
+		auto i = this->attributes.find(this->svgNsPrefix + "cy");
+		if(i != this->attributes.end()){
+			ret->cy = Length::parse(i->second);
+		}
+	}
+	{
+		auto i = this->attributes.find(this->svgNsPrefix + "r");
+		if(i != this->attributes.end()){
+			ret->r = Length::parse(i->second);
+		}
+	}
+	{
+		auto i = this->attributes.find(this->svgNsPrefix + "fx");
+		if(i != this->attributes.end()){
+			ret->fx = Length::parse(i->second);
+		}
+	}
+	{
+		auto i = this->attributes.find(this->svgNsPrefix + "fy");
+		if(i != this->attributes.end()){
+			ret->fy = Length::parse(i->second);
 		}
 	}
 
-	return ret;
+	this->addElement(std::move(ret), ret.get());
 }
 
-std::unique_ptr<RectElement> Parser::parseRectElement(const pugi::xml_node& n) {
-	ASSERT(getNamespace(n.name()).ns == XmlNamespace_e::SVG)
-	ASSERT(getNamespace(n.name()).name == "rect")
+void Parser::parseRectElement() {
+	ASSERT(this->getNamespace(this->element).ns == XmlNamespace_e::SVG)
+	ASSERT(this->getNamespace(this->element).name == "rect")
 
 	auto ret = utki::makeUnique<RectElement>();
 
-	this->fillShape(*ret, n);
-	this->fillRectangle(*ret, n);
+	this->fillShape(*ret);
+	this->fillRectangle(*ret);
 
-	for(auto a = n.first_attribute(); !a.empty(); a = a.next_attribute()) {
-		auto nsn = this->getNamespace(a.name());
-		switch (nsn.ns) {
-			case XmlNamespace_e::SVG:
-				if (nsn.name == "rx") {
-					ret->rx = Length::parse(a.value());
-				} else if (nsn.name == "ry") {
-					ret->ry = Length::parse(a.value());
-				}
-				break;
-			default:
-				break;
+	{
+		auto i = this->attributes.find(this->svgNsPrefix + "rx");
+		if(i != this->attributes.end()){
+			ret->rx = Length::parse(i->second);
+		}
+	}
+	{
+		auto i = this->attributes.find(this->svgNsPrefix + "ry");
+		if(i != this->attributes.end()){
+			ret->ry = Length::parse(i->second);
 		}
 	}
 
-	return ret;
+	this->addElement(std::move(ret));
 }
 
-std::unique_ptr<SvgElement> Parser::parseSvgElement(const pugi::xml_node& n) {
-	ASSERT(getNamespace(n.name()).ns == XmlNamespace_e::SVG)
-	ASSERT(getNamespace(n.name()).name == "svg")
+void Parser::parseSvgElement() {
+	ASSERT(this->getNamespace(this->element).ns == XmlNamespace_e::SVG)
+	ASSERT(this->getNamespace(this->element).name == "svg")
 
 	auto ret = utki::makeUnique<SvgElement>();
 
-	this->fillElement(*ret, n);
-	this->fillStyleable(*ret, n);
-	this->fillRectangle(*ret, n);
-	this->fillContainer(*ret, n);
-	this->fillViewBoxed(*ret, n);
-	this->fillAspectRatioed(*ret, n);
+	this->fillElement(*ret);
+	this->fillStyleable(*ret);
+	this->fillRectangle(*ret);
+	this->fillViewBoxed(*ret);
+	this->fillAspectRatioed(*ret);
 
-	return ret;
+	if(!this->svg){
+		this->svg = ret.get();
+	}
+	
+	this->addElement(std::move(ret), ret.get());
 }
 
-std::unique_ptr<ImageElement> Parser::parseImageElement(const pugi::xml_node& n) {
-	ASSERT(getNamespace(n.name()).ns == XmlNamespace_e::SVG)
-	ASSERT(getNamespace(n.name()).name == "image")
+void Parser::parseImageElement() {
+	ASSERT(this->getNamespace(this->element).ns == XmlNamespace_e::SVG)
+	ASSERT(this->getNamespace(this->element).name == "image")
 
 	auto ret = utki::makeUnique<ImageElement>();
 
-	this->fillElement(*ret, n);
-	this->fillStyleable(*ret, n);
-	this->fillTransformable(*ret, n);
-	this->fillRectangle(*ret, n);
-	this->fillReferencing(*ret, n);
-	this->fillAspectRatioed(*ret, n);
+	this->fillElement(*ret);
+	this->fillStyleable(*ret);
+	this->fillTransformable(*ret);
+	this->fillRectangle(*ret);
+	this->fillReferencing(*ret);
+	this->fillAspectRatioed(*ret);
 
-	return ret;
+	this->addElement(std::move(ret));
 }
 
 
-std::unique_ptr<SymbolElement> Parser::parseSymbolElement(const pugi::xml_node& n) {
-	ASSERT(getNamespace(n.name()).ns == XmlNamespace_e::SVG)
-	ASSERT(getNamespace(n.name()).name == "symbol")
+void Parser::parseSymbolElement() {
+	ASSERT(this->getNamespace(this->element).ns == XmlNamespace_e::SVG)
+	ASSERT(this->getNamespace(this->element).name == "symbol")
 
 	//		TRACE(<< "parseSymbolElement():" << std::endl)
 
 	auto ret = utki::makeUnique<SymbolElement>();
 
-	this->fillElement(*ret, n);
-	this->fillStyleable(*ret, n);
-	this->fillContainer(*ret, n);
-	this->fillViewBoxed(*ret, n);
-	this->fillAspectRatioed(*ret, n);
+	this->fillElement(*ret);
+	this->fillStyleable(*ret);
+	this->fillViewBoxed(*ret);
+	this->fillAspectRatioed(*ret);
 
-	return ret;
+	this->addElement(std::move(ret), ret.get());
 }
 
-std::unique_ptr<UseElement> Parser::parseUseElement(const pugi::xml_node& n) {
-	ASSERT(getNamespace(n.name()).ns == XmlNamespace_e::SVG)
-	ASSERT(getNamespace(n.name()).name == "use")
+void Parser::parseUseElement() {
+	ASSERT(this->getNamespace(this->element).ns == XmlNamespace_e::SVG)
+	ASSERT(this->getNamespace(this->element).name == "use")
 
 	auto ret = utki::makeUnique<UseElement>();
 
-	this->fillElement(*ret, n);
-	this->fillTransformable(*ret, n);
-	this->fillStyleable(*ret, n);
-	this->fillReferencing(*ret, n);
-	this->fillRectangle(*ret, n);
+	this->fillElement(*ret);
+	this->fillTransformable(*ret);
+	this->fillStyleable(*ret);
+	this->fillReferencing(*ret);
+	this->fillRectangle(*ret);
 
-	return ret;
+	this->addElement(std::move(ret));
+}
+
+void Parser::onElementStart(const utki::Buf<char> name) {
+	this->element = utki::toString(name);
+}
+
+void Parser::onElementEnd(const utki::Buf<char> name) {
+
+}
+
+void Parser::onAttributeParsed(const utki::Buf<char> name, const utki::Buf<char> value) {
+	ASSERT(this->element.length() != 0)
+	this->attributes[utki::toString(name)] = utki::toString(value);
+}
+
+void Parser::onAttributesEnd(bool isEmptyElement) {
+	this->parseNode();
+	this->attributes.clear();
+	this->element.clear();
+}
+
+void Parser::onContentParsed(const utki::Buf<char> str) {
+	//do nothing for now
+}
+
+std::unique_ptr<SvgElement> Parser::getDom() {
+	if(!this->svg){
+		return nullptr;
+	}
+	ASSERT(this->root.children.size() != 0)
+	
+	this->root.children.front().release();
+	this->root.children.clear();
+	return std::unique_ptr<SvgElement>(this->svg);
 }

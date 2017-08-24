@@ -11,36 +11,26 @@ using namespace svgdom;
 
 
 
-namespace{
-std::unique_ptr<SvgElement> load(const pugi::xml_document& doc){
+std::unique_ptr<SvgElement> svgdom::load(const papki::File& f){
 	Parser parser;
 	
-	//return first node which is successfully parsed
-	for(auto n = doc.first_child(); !n.empty(); n = n.next_sibling()){
-		auto element = parser.parseNode(doc.first_child());
-
-		if(auto svgElement = dynamic_cast<SvgElement*>(element.get())){
-			auto ret = std::unique_ptr<SvgElement>(svgElement);
-			element.release();
-			return ret;
-		}
-	}
-	return nullptr;
-}
-}
-
-
-std::unique_ptr<SvgElement> svgdom::load(const papki::File& f){
-	pugi::xml_document doc;
 	{
-		auto fileContents = f.loadWholeFileIntoMemory();
-		if(doc.load_buffer(&*fileContents.begin(), fileContents.size()).status != pugi::xml_parse_status::status_ok){
-			TRACE(<< "svgdom::load(): loading XML document failed!" << std::endl)
-			return nullptr;
+		papki::File::Guard fileGuard(f);
+
+		std::array<std::uint8_t, 4096> buf; //4k
+
+		while(true){
+			auto res = f.read(utki::wrapBuf(buf));
+			ASSERT_ALWAYS(res <= buf.size())
+			if(res == 0){
+				break;
+			}
+			parser.feed(utki::wrapBuf(&*buf.begin(), res));
 		}
+		parser.end();
 	}
 	
-	return ::load(doc);
+	return parser.getDom();
 }
 
 std::unique_ptr<SvgElement> svgdom::load(std::istream& s){
