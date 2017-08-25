@@ -121,7 +121,6 @@ void Parser::parseNode(){
 			}else if(nsn.name == "image"){
 				this->parseImageElement();
 			}
-			
 			break;
 		default:
 			//unknown namespace, ignore
@@ -669,12 +668,17 @@ void Parser::onAttributeParsed(const utki::Buf<char> name, const utki::Buf<char>
 }
 
 void Parser::onAttributesEnd(bool isEmptyElement) {
+	TRACE(<< "this->element = " << this->element << std::endl)
+	ASSERT(this->parentStack.size() != 0)//there always should be at least root added as parent
+	TRACE(<< "this->parentStack.size() = " << this->parentStack.size() << std::endl)
 	if(this->parentStack.back()){
 		this->pushNamespaces();
 		utki::ScopeExit scopeExit([this](){
 			this->popNamespaces();
 		});
 		this->parseNode();
+	}else{
+		this->parentStack.push_back(nullptr);
 	}
 	this->attributes.clear();
 	this->element.clear();
