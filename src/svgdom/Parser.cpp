@@ -136,9 +136,6 @@ void Parser::parseNode(){
 
 Parser::XmlNamespace_e Parser::findNamespace(const std::string& ns) {
 	for(auto i = this->namespacesStack.rbegin(), e = this->namespacesStack.rend(); i != e; ++i) {
-		if(i->size() == 0){//optimization
-			continue;
-		}
 		auto iter = i->find(ns);
 		if (iter == i->end()) {
 			continue;
@@ -151,9 +148,6 @@ Parser::XmlNamespace_e Parser::findNamespace(const std::string& ns) {
 
 const std::string* Parser::findFlippedNamespace(XmlNamespace_e ns) {
 	for(auto i = this->flippedNamespacesStack.rbegin(), e = this->flippedNamespacesStack.rend(); i != e; ++i){
-		if(i->size() == 0){//optimization
-			continue;
-		}
 		auto iter = i->find(ns);
 		if(iter == i->end()){
 			continue;
