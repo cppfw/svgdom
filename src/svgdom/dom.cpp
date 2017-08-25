@@ -53,10 +53,19 @@ std::unique_ptr<SvgElement> svgdom::load(std::istream& s){
 	return parser.getDom();
 }
 
-std::unique_ptr<SvgElement> svgdom::load(std::string& s){
+std::unique_ptr<SvgElement> svgdom::load(const std::string& s){
+	return load(utki::wrapBuf(s.c_str(), s.length()));
+}
+
+
+std::unique_ptr<SvgElement> svgdom::load(const utki::Buf<std::uint8_t> buf){
+	return load(utki::wrapBuf(reinterpret_cast<const char*>(&*buf.begin()), buf.size()));
+}
+
+std::unique_ptr<SvgElement> svgdom::load(const utki::Buf<char> buf){
 	Parser parser;
 
-	parser.feed(utki::wrapBuf(s.c_str(), s.length()));
+	parser.feed(buf);
 	parser.end();
 
 	return parser.getDom();
