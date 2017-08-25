@@ -19,10 +19,10 @@ int main(int argc, char** argv){
 	
 	TRACE_ALWAYS(<< "SVG loaded in " << float(getTicks() - loadStart) / 1000.0f << " sec." << std::endl)
 	
-	auto parseStart = getTicks();
-	
-	auto dom = svgdom::load(utki::wrapBuf(buf));
-	ASSERT_ALWAYS(dom)
-	
-	TRACE_ALWAYS(<< "SVG parsed in " << float(getTicks() - parseStart) / 1000.0f << " sec." << std::endl)
+	for(unsigned i = 0; i != 5; ++i){
+		auto parseStart = getTicks();
+		auto dom = svgdom::load(utki::wrapBuf(buf));
+		ASSERT_ALWAYS(dom)
+		TRACE_ALWAYS(<< "SVG parsed in " << float(getTicks() - parseStart) / 1000.0f << " sec." << std::endl)
+	}
 }

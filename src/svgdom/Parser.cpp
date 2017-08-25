@@ -258,19 +258,39 @@ void Parser::fillShape(Shape& s) {
 void Parser::fillStyleable(Styleable& s) {
 	ASSERT(s.styles.size() == 0)
 
-	if(auto a = this->findAttributeOfNamespace(XmlNamespace_e::SVG, "style")){
-		s.styles = Styleable::parse(*a);
-	}
+//	if(auto a = this->findAttributeOfNamespace(XmlNamespace_e::SVG, "style")){
+//		s.styles = Styleable::parse(*a);
+//	}
 
-	for(auto type = StyleProperty_e::UNKNOWN; type != StyleProperty_e::ENUM_SIZE; type = StyleProperty_e(unsigned(type) + 1)){
-		auto name = Styleable::propertyToString(type);
-		if(name.length() == 0){
-			continue;
-		}
-		if(auto a = this->findAttributeOfNamespace(XmlNamespace_e::SVG, name)){
-			s.styles[type] = Styleable::parseStylePropertyValue(type, *a);
+	for(auto& a : this->attributes){
+		auto nsn = this->getNamespace(a.first);
+		switch (nsn.ns) {
+			case XmlNamespace_e::SVG:
+				if (nsn.name == "style") {
+					s.styles = Styleable::parse(a.second);
+					break;
+				}
+				{
+					StyleProperty_e type = Styleable::stringToProperty(nsn.name);
+					if (type != StyleProperty_e::UNKNOWN) {
+						s.styles[type] = Styleable::parseStylePropertyValue(type, a.second);
+					}
+				}
+				break;
+			default:
+				break;
 		}
 	}
+	
+//	for(auto type = StyleProperty_e::UNKNOWN; type != StyleProperty_e::ENUM_SIZE; type = StyleProperty_e(unsigned(type) + 1)){
+//		auto name = Styleable::propertyToString(type);
+//		if(name.length() == 0){
+//			continue;
+//		}
+//		if(auto a = this->findAttributeOfNamespace(XmlNamespace_e::SVG, name)){
+//			s.styles[type] = Styleable::parseStylePropertyValue(type, *a);
+//		}
+//	}
 }
 
 void Parser::fillTransformable(Transformable& t) {
