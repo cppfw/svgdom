@@ -77,6 +77,8 @@ void Parser::popNamespaces() {
 	this->namespacesStack.pop_back();
 	ASSERT(this->defaultNamespaceStack.size() != 0)
 	this->defaultNamespaceStack.pop_back();
+	ASSERT(this->flippedNamespacesStack.size() != 0)
+	this->flippedNamespacesStack.pop_back();
 }
 
 void Parser::parseNode(){
@@ -84,6 +86,7 @@ void Parser::parseNode(){
 //	TRACE(<< "nsn.name = " << nsn.name << std::endl)
 	switch(nsn.ns){
 		case XmlNamespace_e::SVG:
+			//TODO: optimize using map?
 			if(nsn.name == "svg"){
 				this->parseSvgElement();
 			}else if(nsn.name == "symbol") {
@@ -120,12 +123,15 @@ void Parser::parseNode(){
 				this->parseFeGaussianBlurElement();
 			}else if(nsn.name == "image"){
 				this->parseImageElement();
+			}else{
+				break;
 			}
-			break;
+			return;
 		default:
 			//unknown namespace, ignore
 			break;
 	}
+	this->parentStack.push_back(nullptr);
 }
 
 Parser::XmlNamespace_e Parser::findNamespace(const std::string& ns) {
@@ -181,13 +187,13 @@ const std::string* Parser::findAttribute(const std::string& name) {
 
 
 const std::string* Parser::findAttributeOfNamespace(XmlNamespace_e ns, const std::string& name){
-	if(this->defaultNamespaceStack.back() == XmlNamespace_e::SVG){
+	if(this->defaultNamespaceStack.back() == ns){
 		if(auto a = this->findAttribute(name)){
 			return a;
 		}
 	}
 	
-	if(auto prefix = this->findFlippedNamespace(XmlNamespace_e::SVG)){
+	if(auto prefix = this->findFlippedNamespace(ns)){
 		if(auto a = this->findAttribute(*prefix + ":" + name)){
 			return a;
 		}
@@ -292,7 +298,6 @@ void Parser::addElement(std::unique_ptr<Element> e) {
 
 void Parser::addElement(std::unique_ptr<Element> e, Container* c) {
 	ASSERT(e)
-	ASSERT(c)
 	ASSERT(this->parentStack.back())
 	this->parentStack.back()->children.push_back(std::move(e));
 	this->parentStack.push_back(c);
@@ -659,6 +664,7 @@ void Parser::onElementStart(const utki::Buf<char> name) {
 }
 
 void Parser::onElementEnd(const utki::Buf<char> name) {
+	this->popNamespaces();
 	this->parentStack.pop_back();
 }
 
@@ -668,14 +674,11 @@ void Parser::onAttributeParsed(const utki::Buf<char> name, const utki::Buf<char>
 }
 
 void Parser::onAttributesEnd(bool isEmptyElement) {
-	TRACE(<< "this->element = " << this->element << std::endl)
-	ASSERT(this->parentStack.size() != 0)//there always should be at least root added as parent
-	TRACE(<< "this->parentStack.size() = " << this->parentStack.size() << std::endl)
+//	TRACE(<< "this->element = " << this->element << std::endl)
+	ASSERT(this->parentStack.size() != 0)//there should always be at least root added as parent
+//	TRACE(<< "this->parentStack.size() = " << this->parentStack.size() << std::endl)
+	this->pushNamespaces();
 	if(this->parentStack.back()){
-		this->pushNamespaces();
-		utki::ScopeExit scopeExit([this](){
-			this->popNamespaces();
-		});
 		this->parseNode();
 	}else{
 		this->parentStack.push_back(nullptr);
