@@ -24,17 +24,15 @@ Gradient::SpreadMethod_e gradientStringToSpreadMethod(const std::string& str) {
 }
 }
 
-void Parser::parseNode(){
+void Parser::pushNamespaces() {
 	//parse default namespace
 	{
 		auto i = this->attributes.find("xmlns");
 		if(i != this->attributes.end()){
 			if(i->second == DSvgNamespace){
 				this->defaultNamespaceStack.push_back(XmlNamespace_e::SVG);
-				this->svgNsPrefix.clear();
 			}else if(i->second == DXlinkNamespace){
 				this->defaultNamespaceStack.push_back(XmlNamespace_e::XLINK);
-				this->xlinkNsPrefix.clear();
 			}else{
 				this->defaultNamespaceStack.push_back(XmlNamespace_e::UNKNOWN);
 			}
@@ -61,26 +59,28 @@ void Parser::parseNode(){
 			}
 			
 			ASSERT(attr.length() >= xmlns.length())
-			auto ns = attr.substr(xmlns.length(), attr.length() - xmlns.length());
+			auto nsName = attr.substr(xmlns.length(), attr.length() - xmlns.length());
 			
 			if(e.second == DSvgNamespace){
-				this->namespacesStack.back()[ns] = XmlNamespace_e::SVG;
-				this->svgNsPrefix = std::string(":") + ns;
+				this->namespacesStack.back()[nsName] = XmlNamespace_e::SVG;
 			}else if(e.second == DXlinkNamespace){
-				this->namespacesStack.back()[ns] = XmlNamespace_e::XLINK;
-				this->xlinkNsPrefix = std::string(":") + ns;
+				this->namespacesStack.back()[nsName] = XmlNamespace_e::XLINK;
 			}
 		}
+		
+		this->flippedNamespacesStack.push_back(utki::flipMap(this->namespacesStack.back()));
 	}
-	
-	utki::ScopeExit scopeExit([this](){
-		ASSERT(this->namespacesStack.size() > 0)
-		this->namespacesStack.pop_back();
-		ASSERT(this->defaultNamespaceStack.size() > 0)
-		this->defaultNamespaceStack.pop_back();
-	});
-	
-	auto nsn = getNamespace(this->element);
+}
+
+void Parser::popNamespaces() {
+	ASSERT(this->namespacesStack.size() != 0)
+	this->namespacesStack.pop_back();
+	ASSERT(this->defaultNamespaceStack.size() != 0)
+	this->defaultNamespaceStack.pop_back();
+}
+
+void Parser::parseNode(){
+	auto nsn = this->getNamespace(this->element);
 //	TRACE(<< "nsn.name = " << nsn.name << std::endl)
 	switch(nsn.ns){
 		case XmlNamespace_e::SVG:
@@ -141,6 +141,19 @@ Parser::XmlNamespace_e Parser::findNamespace(const std::string& ns) {
 	return XmlNamespace_e::UNKNOWN;
 }
 
+const std::string* Parser::findFlippedNamespace(XmlNamespace_e ns) {
+	for(auto i = this->flippedNamespacesStack.rbegin(); i != this->flippedNamespacesStack.rend(); ++i){
+		auto iter = i->find(ns);
+		if(iter == i->end()){
+			continue;
+		}
+		ASSERT(ns == iter->first)
+		return &iter->second;
+	}
+	return nullptr;
+}
+
+
 Parser::NamespaceNamePair Parser::getNamespace(const std::string& xmlName) {
 	NamespaceNamePair ret;
 
@@ -159,10 +172,34 @@ Parser::NamespaceNamePair Parser::getNamespace(const std::string& xmlName) {
 	return ret;
 }
 
-void Parser::fillElement(Element& e) {
-	auto i = this->attributes.find(this->svgNsPrefix + "id");
+const std::string* Parser::findAttribute(const std::string& name) {
+	auto i = this->attributes.find(name);
 	if(i != this->attributes.end()){
-		e.id = i->second;
+		return &i->second;
+	}
+	return nullptr;
+}
+
+
+const std::string* Parser::findAttributeOfNamespace(XmlNamespace_e ns, const std::string& name){
+	if(this->defaultNamespaceStack.back() == XmlNamespace_e::SVG){
+		if(auto a = this->findAttribute(name)){
+			return a;
+		}
+	}
+	
+	if(auto prefix = this->findFlippedNamespace(XmlNamespace_e::SVG)){
+		if(auto a = this->findAttribute(*prefix + ":" + name)){
+			return a;
+		}
+	}
+	return nullptr;
+}
+
+
+void Parser::fillElement(Element& e) {
+	if(auto a = this->findAttributeOfNamespace(XmlNamespace_e::SVG, "id")){
+		e.id = *a;
 	}
 }
 
@@ -171,62 +208,39 @@ void Parser::fillGradient(Gradient& g) {
 	this->fillReferencing(g);
 	this->fillStyleable(g);
 
-	{
-		auto i = this->attributes.find(this->svgNsPrefix + "spreadMethod");
-		if(i != this->attributes.end()){
-			g.spreadMethod = gradientStringToSpreadMethod(i->second);
-		}
+	if(auto a = this->findAttributeOfNamespace(XmlNamespace_e::SVG, "spreadMethod")){
+		g.spreadMethod = gradientStringToSpreadMethod(*a);
 	}
-	{
-		auto i = this->attributes.find(this->svgNsPrefix + "gradientTransform");
-		if(i != this->attributes.end()){
-			g.transformations = Transformable::parse(i->second);
-		}
+	if(auto a = this->findAttributeOfNamespace(XmlNamespace_e::SVG, "gradientTransform")){
+		g.transformations = Transformable::parse(*a);
 	}
-	{
-		auto i = this->attributes.find(this->svgNsPrefix + "gradientUnits");
-		if(i != this->attributes.end()){
-			g.units = parseCoordinateUnits(i->second);
-		}
+	if(auto a = this->findAttributeOfNamespace(XmlNamespace_e::SVG, "gradientUnits")){
+		g.units = parseCoordinateUnits(*a);
 	}
 }
 
 void Parser::fillRectangle(Rectangle& r) {
-	{
-		auto i = this->attributes.find(this->svgNsPrefix + "x");
-		if(i != this->attributes.end()){
-			r.x = Length::parse(i->second);
-		}
+	if(auto a = this->findAttributeOfNamespace(XmlNamespace_e::SVG, "x")){
+		r.x = Length::parse(*a);
 	}
-	{
-		auto i = this->attributes.find(this->svgNsPrefix + "y");
-		if(i != this->attributes.end()){
-			r.y = Length::parse(i->second);
-		}
+	if(auto a = this->findAttributeOfNamespace(XmlNamespace_e::SVG, "y")){
+		r.y = Length::parse(*a);
 	}
-	{
-		auto i = this->attributes.find(this->svgNsPrefix + "width");
-		if(i != this->attributes.end()){
-			r.width = Length::parse(i->second);
-		}
+	if(auto a = this->findAttributeOfNamespace(XmlNamespace_e::SVG, "width")){
+		r.width = Length::parse(*a);
 	}
-	{
-		auto i = this->attributes.find(this->svgNsPrefix + "height");
-		if(i != this->attributes.end()){
-			r.height = Length::parse(i->second);
-		}
+	if(auto a = this->findAttributeOfNamespace(XmlNamespace_e::SVG, "height")){
+		r.height = Length::parse(*a);
 	}
 }
 
 void Parser::fillReferencing(Referencing& e) {
-	{
-		auto i = this->attributes.find(this->xlinkNsPrefix + "href");
-		if(i == this->attributes.end()){
-			i = this->attributes.find(this->svgNsPrefix + "href");//in some SVG documents the svg namespace is used instead of xlink, though this is against SVG spec we allow to do so.
-		}
-		if(i != this->attributes.end()){
-			e.iri = i->second;
-		}
+	auto a = this->findAttributeOfNamespace(XmlNamespace_e::XLINK, "href");
+	if(!a){
+		a = this->findAttributeOfNamespace(XmlNamespace_e::SVG, "href");//in some SVG documents the svg namespace is used instead of xlink, though this is against SVG spec we allow to do so.
+	}
+	if(a){
+		e.iri = *a;
 	}
 }
 
@@ -238,59 +252,43 @@ void Parser::fillShape(Shape& s) {
 
 void Parser::fillStyleable(Styleable& s) {
 	ASSERT(s.styles.size() == 0)
-	
-	{
-		auto i = this->attributes.find(this->svgNsPrefix + "style");
-		if(i != this->attributes.end()){
-			s.styles = Styleable::parse(i->second);
-		}
+
+	if(auto a = this->findAttributeOfNamespace(XmlNamespace_e::SVG, "style")){
+		s.styles = Styleable::parse(*a);
 	}
-	
+
 	for(auto type = StyleProperty_e::UNKNOWN; type != StyleProperty_e::ENUM_SIZE; type = StyleProperty_e(unsigned(type) + 1)){
 		auto name = Styleable::propertyToString(type);
 		if(name.length() == 0){
 			continue;
 		}
-		auto i = this->attributes.find(this->svgNsPrefix + name);
-		if(i != this->attributes.end()){
-			s.styles[type] = Styleable::parseStylePropertyValue(type, i->second);
+		if(auto a = this->findAttributeOfNamespace(XmlNamespace_e::SVG, name)){
+			s.styles[type] = Styleable::parseStylePropertyValue(type, *a);
 		}
 	}
 }
 
 void Parser::fillTransformable(Transformable& t) {
 	ASSERT(t.transformations.size() == 0)
-	
-	{
-		auto i = this->attributes.find(this->svgNsPrefix + "transform");
-		if(i != this->attributes.end()){
-			t.transformations = Transformable::parse(i->second);
-		}
+	if(auto a = this->findAttributeOfNamespace(XmlNamespace_e::SVG, "transform")){
+		t.transformations = Transformable::parse(*a);
 	}
 }
 
 void Parser::fillViewBoxed(ViewBoxed& v) {
-	{
-		auto i = this->attributes.find(this->svgNsPrefix + "viewBox");
-		if(i != this->attributes.end()){
-			v.viewBox = SvgElement::parseViewbox(i->second);
-		}
+	if(auto a = this->findAttributeOfNamespace(XmlNamespace_e::SVG, "viewBox")){
+		v.viewBox = SvgElement::parseViewbox(*a);
 	}
 }
 
 void Parser::fillAspectRatioed(AspectRatioed& e) {
-	{
-		auto i = this->attributes.find(this->svgNsPrefix + "preserveAspectRatio");
-		if(i != this->attributes.end()){
-			e.parseAndFillPreserveAspectRatio(i->second);
-		}
+	if(auto a = this->findAttributeOfNamespace(XmlNamespace_e::SVG, "preserveAspectRatio")){
+		e.parseAndFillPreserveAspectRatio(*a);
 	}
 }
 
 void Parser::addElement(std::unique_ptr<Element> e) {
-	ASSERT(this->parentStack.back())
-	this->parentStack.back()->children.push_back(std::move(e));
-	this->parentStack.push_back(nullptr);
+	this->addElement(std::move(e), nullptr);
 }
 
 void Parser::addElement(std::unique_ptr<Element> e, Container* c) {
@@ -311,23 +309,14 @@ void Parser::parseCircleElement() {
 
 	this->fillShape(*ret);
 
-	{
-		auto i = this->attributes.find(this->svgNsPrefix + "cx");
-		if(i != this->attributes.end()){
-			ret->cx = Length::parse(i->second);
-		}
+	if(auto a = this->findAttributeOfNamespace(XmlNamespace_e::SVG, "cx")){
+		ret->cx = Length::parse(*a);
 	}
-	{
-		auto i = this->attributes.find(this->svgNsPrefix + "cy");
-		if(i != this->attributes.end()){
-			ret->cy = Length::parse(i->second);
-		}
+	if(auto a = this->findAttributeOfNamespace(XmlNamespace_e::SVG, "cy")){
+		ret->cy = Length::parse(*a);
 	}
-	{
-		auto i = this->attributes.find(this->svgNsPrefix + "r");
-		if(i != this->attributes.end()){
-			ret->r = Length::parse(i->second);
-		}
+	if(auto a = this->findAttributeOfNamespace(XmlNamespace_e::SVG, "r")){
+		ret->r = Length::parse(*a);
 	}
 
 	this->addElement(std::move(ret));
@@ -354,29 +343,17 @@ void Parser::parseEllipseElement() {
 
 	this->fillShape(*ret);
 
-	{
-		auto i = this->attributes.find(this->svgNsPrefix + "cx");
-		if(i != this->attributes.end()){
-			ret->cx = Length::parse(i->second);
-		}
+	if(auto a = this->findAttributeOfNamespace(XmlNamespace_e::SVG, "cx")){
+		ret->cx = Length::parse(*a);
 	}
-	{
-		auto i = this->attributes.find(this->svgNsPrefix + "cy");
-		if(i != this->attributes.end()){
-			ret->cy = Length::parse(i->second);
-		}
+	if(auto a = this->findAttributeOfNamespace(XmlNamespace_e::SVG, "cy")){
+		ret->cy = Length::parse(*a);
 	}
-	{
-		auto i = this->attributes.find(this->svgNsPrefix + "rx");
-		if(i != this->attributes.end()){
-			ret->rx = Length::parse(i->second);
-		}
+	if(auto a = this->findAttributeOfNamespace(XmlNamespace_e::SVG, "rx")){
+		ret->rx = Length::parse(*a);
 	}
-	{
-		auto i = this->attributes.find(this->svgNsPrefix + "ry");
-		if(i != this->attributes.end()){
-			ret->ry = Length::parse(i->second);
-		}
+	if(auto a = this->findAttributeOfNamespace(XmlNamespace_e::SVG, "ry")){
+		ret->ry = Length::parse(*a);
 	}
 
 	this->addElement(std::move(ret));
@@ -403,14 +380,11 @@ void Parser::parseGradientStopElement() {
 	
 	this->fillStyleable(*ret);
 	
-	{
-		auto i = this->attributes.find(this->svgNsPrefix + "offset");
-		if(i != this->attributes.end()){
-			std::istringstream s(i->second);
-			s >> ret->offset;
-			if (!s.eof() && s.peek() == '%') {
-				ret->offset /= 100;
-			}
+	if(auto a = this->findAttributeOfNamespace(XmlNamespace_e::SVG, "offset")){
+		std::istringstream s(*a);
+		s >> ret->offset;
+		if (!s.eof() && s.peek() == '%') {
+			ret->offset /= 100;
 		}
 	}
 
@@ -424,31 +398,20 @@ void Parser::parseLineElement() {
 	auto ret = utki::makeUnique<LineElement>();
 
 	this->fillShape(*ret);
+	
+	if(auto a = this->findAttributeOfNamespace(XmlNamespace_e::SVG, "x1")){
+		ret->x1 = Length::parse(*a);
+	}
+	if(auto a = this->findAttributeOfNamespace(XmlNamespace_e::SVG, "y1")){
+		ret->y1 = Length::parse(*a);
+	}
+	if(auto a = this->findAttributeOfNamespace(XmlNamespace_e::SVG, "x2")){
+		ret->x2 = Length::parse(*a);
+	}
+	if(auto a = this->findAttributeOfNamespace(XmlNamespace_e::SVG, "y2")){
+		ret->y2 = Length::parse(*a);
+	}
 
-	{
-		auto i = this->attributes.find(this->svgNsPrefix + "x1");
-		if(i != this->attributes.end()){
-			ret->x1 = Length::parse(i->second);
-		}
-	}
-	{
-		auto i = this->attributes.find(this->svgNsPrefix + "y1");
-		if(i != this->attributes.end()){
-			ret->y1 = Length::parse(i->second);
-		}
-	}
-	{
-		auto i = this->attributes.find(this->svgNsPrefix + "x2");
-		if(i != this->attributes.end()){
-			ret->x2 = Length::parse(i->second);
-		}
-	}
-	{
-		auto i = this->attributes.find(this->svgNsPrefix + "y2");
-		if(i != this->attributes.end()){
-			ret->y2 = Length::parse(i->second);
-		}
-	}
 
 	this->addElement(std::move(ret));
 }
@@ -464,17 +427,11 @@ void Parser::parseFilterElement() {
 	this->fillRectangle(*ret);
 	this->fillReferencing(*ret);
 	
-	{
-		auto i = this->attributes.find(this->svgNsPrefix + "filterUnits");
-		if(i != this->attributes.end()){
-			ret->filterUnits = svgdom::parseCoordinateUnits(i->second);
-		}
+	if(auto a = this->findAttributeOfNamespace(XmlNamespace_e::SVG, "filterUnits")){
+		ret->filterUnits = svgdom::parseCoordinateUnits(*a);
 	}
-	{
-		auto i = this->attributes.find(this->svgNsPrefix + "primitiveUnits");
-		if(i != this->attributes.end()){
-			ret->primitiveUnits = svgdom::parseCoordinateUnits(i->second);
-		}
+	if(auto a = this->findAttributeOfNamespace(XmlNamespace_e::SVG, "primitiveUnits")){
+		ret->primitiveUnits = svgdom::parseCoordinateUnits(*a);
 	}
 	
 	this->addElement(std::move(ret), ret.get());
@@ -485,22 +442,16 @@ void Parser::fillFilterPrimitive(FilterPrimitive& p) {
 	this->fillRectangle(p);
 	this->fillStyleable(p);
 
-	{
-		auto i = this->attributes.find(this->svgNsPrefix + "result");
-		if(i != this->attributes.end()){
-			p.result = i->second;
-		}
+	if(auto a = this->findAttributeOfNamespace(XmlNamespace_e::SVG, "result")){
+		p.result = *a;
 	}
 }
 
 void Parser::fillInputableFilterPrimitive(InputableFilterPrimitive& p) {
 	this->fillFilterPrimitive(p);
 	
-	{
-		auto i = this->attributes.find(this->svgNsPrefix + "in");
-		if(i != this->attributes.end()){
-			p.in = i->second;
-		}
+	if(auto a = this->findAttributeOfNamespace(XmlNamespace_e::SVG, "in")){
+		p.in = *a;
 	}
 }
 
@@ -512,12 +463,9 @@ void Parser::parseFeGaussianBlurElement() {
 	auto ret = utki::makeUnique<FeGaussianBlurElement>();
 	
 	this->fillInputableFilterPrimitive(*ret);
-	
-	{
-		auto i = this->attributes.find(this->svgNsPrefix + "stdDeviation");
-		if(i != this->attributes.end()){
-			ret->stdDeviation = parseNumberOptionalNumber(i->second, {{-1, -1}});
-		}
+
+	if(auto a = this->findAttributeOfNamespace(XmlNamespace_e::SVG, "stdDeviation")){
+		ret->stdDeviation = parseNumberOptionalNumber(*a, {{-1, -1}});
 	}
 	
 	this->addElement(std::move(ret));
@@ -533,29 +481,17 @@ void Parser::parseLinearGradientElement() {
 
 	this->fillGradient(*ret);
 
-	{
-		auto i = this->attributes.find(this->svgNsPrefix + "x1");
-		if(i != this->attributes.end()){
-			ret->x1 = Length::parse(i->second);
-		}
+	if(auto a = this->findAttributeOfNamespace(XmlNamespace_e::SVG, "x1")){
+		ret->x1 = Length::parse(*a);
 	}
-	{
-		auto i = this->attributes.find(this->svgNsPrefix + "y1");
-		if(i != this->attributes.end()){
-			ret->y1 = Length::parse(i->second);
-		}
+	if(auto a = this->findAttributeOfNamespace(XmlNamespace_e::SVG, "y1")){
+		ret->y1 = Length::parse(*a);
 	}
-	{
-		auto i = this->attributes.find(this->svgNsPrefix + "x2");
-		if(i != this->attributes.end()){
-			ret->x2 = Length::parse(i->second);
-		}
+	if(auto a = this->findAttributeOfNamespace(XmlNamespace_e::SVG, "x2")){
+		ret->x2 = Length::parse(*a);
 	}
-	{
-		auto i = this->attributes.find(this->svgNsPrefix + "y2");
-		if(i != this->attributes.end()){
-			ret->y2 = Length::parse(i->second);
-		}
+	if(auto a = this->findAttributeOfNamespace(XmlNamespace_e::SVG, "y2")){
+		ret->y2 = Length::parse(*a);
 	}
 
 	this->addElement(std::move(ret), ret.get());
@@ -569,11 +505,8 @@ void Parser::parsePathElement() {
 
 	this->fillShape(*ret);
 
-	{
-		auto i = this->attributes.find(this->svgNsPrefix + "d");
-		if(i != this->attributes.end()){
-			ret->path = PathElement::parse(i->second);
-		}
+	if(auto a = this->findAttributeOfNamespace(XmlNamespace_e::SVG, "d")){
+		ret->path = PathElement::parse(*a);
 	}
 	
 	this->addElement(std::move(ret));
@@ -587,11 +520,8 @@ void Parser::parsePolygonElement() {
 
 	this->fillShape(*ret);
 
-	{
-		auto i = this->attributes.find(this->svgNsPrefix + "points");
-		if(i != this->attributes.end()){
-			ret->points = ret->parse(i->second);
-		}
+	if(auto a = this->findAttributeOfNamespace(XmlNamespace_e::SVG, "points")){
+		ret->points = ret->parse(*a);
 	}
 	
 	this->addElement(std::move(ret));
@@ -605,11 +535,8 @@ void Parser::parsePolylineElement() {
 
 	this->fillShape(*ret);
 
-	{
-		auto i = this->attributes.find(this->svgNsPrefix + "points");
-		if(i != this->attributes.end()){
-			ret->points = ret->parse(i->second);
-		}
+	if(auto a = this->findAttributeOfNamespace(XmlNamespace_e::SVG, "points")){
+		ret->points = ret->parse(*a);
 	}
 	
 	this->addElement(std::move(ret));
@@ -622,36 +549,21 @@ void Parser::parseRadialGradientElement() {
 	auto ret = utki::makeUnique<RadialGradientElement>();
 
 	this->fillGradient(*ret);
-	
-	{
-		auto i = this->attributes.find(this->svgNsPrefix + "cx");
-		if(i != this->attributes.end()){
-			ret->cx = Length::parse(i->second);
-		}
+
+	if(auto a = this->findAttributeOfNamespace(XmlNamespace_e::SVG, "cx")){
+		ret->cx = Length::parse(*a);
 	}
-	{
-		auto i = this->attributes.find(this->svgNsPrefix + "cy");
-		if(i != this->attributes.end()){
-			ret->cy = Length::parse(i->second);
-		}
+	if(auto a = this->findAttributeOfNamespace(XmlNamespace_e::SVG, "cy")){
+		ret->cy = Length::parse(*a);
 	}
-	{
-		auto i = this->attributes.find(this->svgNsPrefix + "r");
-		if(i != this->attributes.end()){
-			ret->r = Length::parse(i->second);
-		}
+	if(auto a = this->findAttributeOfNamespace(XmlNamespace_e::SVG, "r")){
+		ret->r = Length::parse(*a);
 	}
-	{
-		auto i = this->attributes.find(this->svgNsPrefix + "fx");
-		if(i != this->attributes.end()){
-			ret->fx = Length::parse(i->second);
-		}
+	if(auto a = this->findAttributeOfNamespace(XmlNamespace_e::SVG, "fx")){
+		ret->fx = Length::parse(*a);
 	}
-	{
-		auto i = this->attributes.find(this->svgNsPrefix + "fy");
-		if(i != this->attributes.end()){
-			ret->fy = Length::parse(i->second);
-		}
+	if(auto a = this->findAttributeOfNamespace(XmlNamespace_e::SVG, "fy")){
+		ret->fy = Length::parse(*a);
 	}
 
 	this->addElement(std::move(ret), ret.get());
@@ -666,17 +578,11 @@ void Parser::parseRectElement() {
 	this->fillShape(*ret);
 	this->fillRectangle(*ret);
 
-	{
-		auto i = this->attributes.find(this->svgNsPrefix + "rx");
-		if(i != this->attributes.end()){
-			ret->rx = Length::parse(i->second);
-		}
+	if(auto a = this->findAttributeOfNamespace(XmlNamespace_e::SVG, "rx")){
+		ret->rx = Length::parse(*a);
 	}
-	{
-		auto i = this->attributes.find(this->svgNsPrefix + "ry");
-		if(i != this->attributes.end()){
-			ret->ry = Length::parse(i->second);
-		}
+	if(auto a = this->findAttributeOfNamespace(XmlNamespace_e::SVG, "ry")){
+		ret->ry = Length::parse(*a);
 	}
 
 	this->addElement(std::move(ret));
@@ -764,6 +670,10 @@ void Parser::onAttributeParsed(const utki::Buf<char> name, const utki::Buf<char>
 
 void Parser::onAttributesEnd(bool isEmptyElement) {
 	if(this->parentStack.back()){
+		this->pushNamespaces();
+		utki::ScopeExit scopeExit([this](){
+			this->popNamespaces();
+		});
 		this->parseNode();
 	}
 	this->attributes.clear();
