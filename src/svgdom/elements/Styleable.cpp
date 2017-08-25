@@ -425,7 +425,7 @@ Rgb StyleValue::getRgb() const{
 	return ret;
 }
 
-void StyleValue::setRgb(std::uint8_t r, std::uint8_t g, std::uint8_t b) {
+void StyleValue::setRgb(std::uint32_t r, std::uint32_t g, std::uint32_t b) {
 	this->color =  r | (g << 8) | (b << 16);
 }
 
@@ -701,7 +701,7 @@ StyleValue StyleValue::parsePaint(const std::string& str){
 			s >> std::setw(int(rgb.length())) >> tmpStr >> std::setw(0);
 			ASSERT(tmpStr == rgb)
 			
-			std::uint8_t r, g, b;
+			std::uint32_t r, g, b;
 			
 			skipWhitespaces(s);
 			s >> r;
