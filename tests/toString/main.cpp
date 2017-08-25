@@ -12,6 +12,11 @@ int main(int argc, char** argv){
 
 	svgdom::PathElement::Step step;
 
+	StyleValue style;
+	style.type = StyleValue::Type_e::NORMAL; 
+	style.setRgb(0, 0, 255); 
+	path.styles[StyleProperty_e::FILL] = style;
+
 	step.type = svgdom::PathElement::Step::Type_e::MOVE_ABS;
 	step.x = 0;
 	step.y = 0;
@@ -39,4 +44,6 @@ int main(int argc, char** argv){
 	TRACE_ALWAYS(<< str << std::endl)
 	
 	ASSERT_ALWAYS(str.find("xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" version=\"1.1\"") != std::string::npos)
+	
+	ASSERT_ALWAYS(str.find("#0000ff") != std::string::npos)
 }
