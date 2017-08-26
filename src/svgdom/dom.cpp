@@ -1,5 +1,3 @@
-#include <pugixml.hpp>
-
 #include "dom.hpp"
 #include "config.hpp"
 #include "Exc.hpp"

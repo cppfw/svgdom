@@ -5,5 +5,5 @@ source 'https://github.com/igagis/cocoapods-repo.git'
 target "tests" do
 	pod 'libutki', '>= 1.0.21'
 	pod 'libpapki', '>= 1.0.3'
-	pod 'pugixml', '>=1.7'
+	pod 'libmikroxml', '>=0.1.1'
 end

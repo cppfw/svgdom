@@ -36,15 +36,15 @@ this_ldlibs += -lpapki -lmikroxml -lstdc++ -lm
 
 ifeq ($(prorab_os),linux)
     this_cxxflags += -fPIC # Since we are building shared library, we need Position-Independend Code
-    this_ldlibs += -lpugixml
+    this_ldlibs +=
 else ifeq ($(prorab_os),windows)
     this_cxxflags += -I/usr/include -I/usr/local/include
     this_ldflags += -L/usr/lib -L/usr/local/lib
-    this_ldlibs += -lpugixml
+    this_ldlibs +=
 else ifeq ($(prorab_os),macosx)
     this_cxxflags += -stdlib=libc++ #this is needed to be able to use c++11 std lib
-    this_cxxflags += `pkg-config --cflags pugixml`
-    this_ldlibs += `pkg-config --libs pugixml`
+    this_cxxflags +=
+    this_ldlibs +=
 endif
 
 
