@@ -17,6 +17,7 @@
           <in>Transformable.cpp</in>
           <in>ViewBoxed.cpp</in>
         </df>
+        <in>Cloner.cpp</in>
         <in>Finder.cpp</in>
         <in>Length.cpp</in>
         <in>Parser.cpp</in>
@@ -28,6 +29,9 @@
       </df>
     </df>
     <df root="tests" name="1">
+      <df name="cloning">
+        <in>main.cpp</in>
+      </df>
       <df name="customElement">
         <in>main.cpp</in>
       </df>
@@ -35,6 +39,9 @@
         <in>main.cpp</in>
       </df>
       <df name="finder">
+        <in>main.cpp</in>
+      </df>
+      <df name="performance">
         <in>main.cpp</in>
       </df>
       <df name="samples">
@@ -213,8 +220,9 @@
         <rebuildPropChanged>false</rebuildPropChanged>
       </toolsSet>
       <flagsDictionary>
-        <element flagsID="0" commonFlags="-funsigned-char -std=c++11 -fPIC"/>
-        <element flagsID="1" commonFlags="-std=c++11"/>
+        <element flagsID="0" commonFlags="-funsigned-char -std=c++11 -O3 -fPIC"/>
+        <element flagsID="1" commonFlags="-funsigned-char -std=c++11 -fPIC"/>
+        <element flagsID="2" commonFlags="-std=c++11"/>
       </flagsDictionary>
       <codeAssistance>
       </codeAssistance>
@@ -239,6 +247,10 @@
           <preBuildCommand></preBuildCommand>
         </preBuild>
       </makefileType>
+      <item path="src/svgdom/Cloner.cpp" ex="false" tool="1" flavor2="8">
+        <ccTool flags="0">
+        </ccTool>
+      </item>
       <item path="src/svgdom/Finder.cpp" ex="false" tool="1" flavor2="8">
         <ccTool flags="0">
         </ccTool>
@@ -248,11 +260,11 @@
         </ccTool>
       </item>
       <item path="src/svgdom/Parser.cpp" ex="false" tool="1" flavor2="8">
-        <ccTool flags="0">
+        <ccTool flags="1">
         </ccTool>
       </item>
       <item path="src/svgdom/StreamWriter.cpp" ex="false" tool="1" flavor2="8">
-        <ccTool flags="0">
+        <ccTool flags="1">
         </ccTool>
       </item>
       <item path="src/svgdom/StyleStack.cpp" ex="false" tool="1" flavor2="8">
@@ -260,7 +272,7 @@
         </ccTool>
       </item>
       <item path="src/svgdom/Visitor.cpp" ex="false" tool="1" flavor2="8">
-        <ccTool flags="0">
+        <ccTool flags="1">
         </ccTool>
       </item>
       <item path="src/svgdom/dom.cpp" ex="false" tool="1" flavor2="8">
@@ -334,24 +346,32 @@
         <ccTool flags="0">
         </ccTool>
       </item>
+      <item path="tests/cloning/main.cpp" ex="false" tool="1" flavor2="8">
+        <ccTool flags="2">
+        </ccTool>
+      </item>
       <item path="tests/customElement/main.cpp" ex="false" tool="1" flavor2="8">
-        <ccTool flags="1">
+        <ccTool flags="2">
         </ccTool>
       </item>
       <item path="tests/editDomVisitor/main.cpp" ex="false" tool="1" flavor2="8">
-        <ccTool flags="1">
+        <ccTool flags="2">
         </ccTool>
       </item>
       <item path="tests/finder/main.cpp" ex="false" tool="1" flavor2="8">
-        <ccTool flags="1">
+        <ccTool flags="2">
+        </ccTool>
+      </item>
+      <item path="tests/performance/main.cpp" ex="false" tool="1" flavor2="8">
+        <ccTool flags="2">
         </ccTool>
       </item>
       <item path="tests/samples/main.cpp" ex="false" tool="1" flavor2="8">
-        <ccTool flags="1">
+        <ccTool flags="2">
         </ccTool>
       </item>
       <item path="tests/toString/main.cpp" ex="false" tool="1" flavor2="8">
-        <ccTool flags="1">
+        <ccTool flags="2">
         </ccTool>
       </item>
     </conf>
