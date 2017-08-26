@@ -58,3 +58,15 @@ std::unique_ptr<SvgElement> svgdom::load(std::string& s){
 
 	return ::load(doc);
 }
+
+std::unique_ptr<SvgElement> svgdom::load(const utki::Buf<std::uint8_t> buf){
+	return load(utki::wrapBuf(reinterpret_cast<const char*>(&*buf.begin()), buf.size()));
+}
+
+std::unique_ptr<SvgElement> svgdom::load(const utki::Buf<char> buf){
+	pugi::xml_document doc;
+
+	doc.load_string(utki::toString(buf).c_str());
+
+	return ::load(doc);
+}
