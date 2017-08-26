@@ -12,6 +12,8 @@ struct CustomElement : public svgdom::Element{
 
 class CustomVisitor : virtual public svgdom::ConstVisitor{
 public:
+	using svgdom::ConstVisitor::visit;
+	
 	virtual void visit(const CustomElement& e){
 		this->defaultVisit(e);
 	}

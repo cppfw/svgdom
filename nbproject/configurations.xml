@@ -229,7 +229,7 @@
       <makefileType>
         <makeTool>
           <buildCommandWorkingDir>.</buildCommandWorkingDir>
-          <buildCommand>make debug=true</buildCommand>
+          <buildCommand>make debug=true CXX=clang++</buildCommand>
           <cleanCommand>make clean</cleanCommand>
           <executablePath>tests/parse/tests</executablePath>
           <ccTool>

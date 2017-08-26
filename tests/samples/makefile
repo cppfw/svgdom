@@ -15,6 +15,7 @@ this_ldlibs += -lsvgdom -lpapki -lstdc++
 this_ldflags += -L$(d)../../src
 
 ifeq ($(os), linux)
+    this_cxxflags += -fPIC
     this_ldlibs +=
 else ifeq ($(os), macosx)
     this_cxxflags += -stdlib=libc++ #this is needed to be able to use c++11 std lib
