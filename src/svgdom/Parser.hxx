@@ -61,7 +61,7 @@ class Parser : public mikroxml::Parser{
 	
 	SvgElement* svg = nullptr;
 	Container root;
-	std::vector<Container*> parentStack = {{&root}};
+	std::vector<Container*> parentStack = {&this->root};
 	
 	void addElement(std::unique_ptr<Element> e);
 	void addElement(std::unique_ptr<Element> e, Container* c);
