@@ -425,8 +425,8 @@ Rgb StyleValue::getRgb() const{
 	return ret;
 }
 
-void StyleValue::setRgb(std::uint32_t r, std::uint32_t g, std::uint32_t b) {
-	this->color =  r | (g << 8) | (b << 16);
+void StyleValue::setRgb(std::uint8_t r, std::uint8_t g, std::uint8_t b) {
+	this->color =  std::uint32_t(r) | (std::uint32_t(g) << 8) | (std::uint32_t(b) << 16);
 }
 
 namespace{

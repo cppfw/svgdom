@@ -220,7 +220,7 @@ struct StyleValue{
 	 * If this style property represents a color then this method sets the
 	 * color from red, green and blue values.
 	 */
-	void setRgb(std::uint32_t r, std::uint32_t g, std::uint32_t b);
+	void setRgb(std::uint8_t r, std::uint8_t g, std::uint8_t b);
 };
 
 /**
