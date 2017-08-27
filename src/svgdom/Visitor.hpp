@@ -80,6 +80,15 @@ public:
 	 */
 	virtual void defaultVisit(Element& e){}
 	
+	/**
+	 * @brief Default visit method for container elements.
+	 * Default implementation of this method calls this->defaultVisit(e) and
+	 * then calls this->relayAccept(c);
+	 * @param e - element to visit.
+	 * @param c - 'Container' ancestor of the element to visit.
+	 */
+	virtual void defaultVisit(Element& e, Container& c);
+	
 	virtual ~Visitor()noexcept{}
 };
 
@@ -122,6 +131,15 @@ public:
 	 * @param e - SVG element to visit.
 	 */
 	virtual void defaultVisit(const Element& e){}
+	
+	/**
+	 * @brief Default visit method for container elements.
+	 * Default implementation of this method calls this->defaultVisit(e) and
+	 * then calls this->relayAccept(c);
+	 * @param e - element to visit.
+	 * @param c - 'Container' ancestor of the element to visit.
+	 */
+	virtual void defaultVisit(const Element& e, const Container& c);
 	
 	virtual ~ConstVisitor()noexcept{}
 };

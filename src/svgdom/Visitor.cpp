@@ -32,18 +32,15 @@ void Visitor::visit(PolygonElement& e) {
 }
 
 void Visitor::visit(GElement& e) {
-	this->defaultVisit(e);
-	this->relayAccept(e);
+	this->defaultVisit(e, e);
 }
 
 void Visitor::visit(SvgElement& e) {
-	this->defaultVisit(e);
-	this->relayAccept(e);
+	this->defaultVisit(e, e);
 }
 
 void Visitor::visit(SymbolElement& e) {
-	this->defaultVisit(e);
-	this->relayAccept(e);
+	this->defaultVisit(e, e);
 }
 
 void Visitor::visit(UseElement& e) {
@@ -51,8 +48,7 @@ void Visitor::visit(UseElement& e) {
 }
 
 void Visitor::visit(DefsElement& e) {
-	this->defaultVisit(e);
-	this->relayAccept(e);
+	this->defaultVisit(e, e);
 }
 
 void Visitor::visit(Gradient::StopElement& e) {
@@ -60,18 +56,15 @@ void Visitor::visit(Gradient::StopElement& e) {
 }
 
 void Visitor::visit(LinearGradientElement& e) {
-	this->defaultVisit(e);
-	this->relayAccept(e);
+	this->defaultVisit(e, e);
 }
 
 void Visitor::visit(RadialGradientElement& e) {
-	this->defaultVisit(e);
-	this->relayAccept(e);
+	this->defaultVisit(e, e);
 }
 
 void Visitor::visit(FilterElement& e){
-	this->defaultVisit(e);
-	this->relayAccept(e);
+	this->defaultVisit(e, e);
 }
 
 void Visitor::visit(FeGaussianBlurElement& e){
@@ -81,6 +74,12 @@ void Visitor::visit(FeGaussianBlurElement& e){
 void Visitor::visit(ImageElement& e){
 	this->defaultVisit(e);
 }
+
+void Visitor::defaultVisit(Element& e, Container& c) {
+	this->defaultVisit(e);
+	this->relayAccept(c);
+}
+
 
 void Visitor::relayAccept(Container& container){
 	auto oldParent = this->curParent_v;
@@ -123,18 +122,15 @@ void ConstVisitor::visit(const PolygonElement& e) {
 }
 
 void ConstVisitor::visit(const GElement& e) {
-	this->defaultVisit(e);
-	this->relayAccept(e);
+	this->defaultVisit(e, e);
 }
 
 void ConstVisitor::visit(const SvgElement& e) {
-	this->defaultVisit(e);
-	this->relayAccept(e);
+	this->defaultVisit(e, e);
 }
 
 void ConstVisitor::visit(const SymbolElement& e) {
-	this->defaultVisit(e);
-	this->relayAccept(e);
+	this->defaultVisit(e, e);
 }
 
 void ConstVisitor::visit(const UseElement& e) {
@@ -142,8 +138,7 @@ void ConstVisitor::visit(const UseElement& e) {
 }
 
 void ConstVisitor::visit(const DefsElement& e) {
-	this->defaultVisit(e);
-	this->relayAccept(e);
+	this->defaultVisit(e, e);
 }
 
 void ConstVisitor::visit(const Gradient::StopElement& e) {
@@ -151,18 +146,15 @@ void ConstVisitor::visit(const Gradient::StopElement& e) {
 }
 
 void ConstVisitor::visit(const LinearGradientElement& e) {
-	this->defaultVisit(e);
-	this->relayAccept(e);
+	this->defaultVisit(e, e);
 }
 
 void ConstVisitor::visit(const RadialGradientElement& e) {
-	this->defaultVisit(e);
-	this->relayAccept(e);
+	this->defaultVisit(e, e);
 }
 
 void ConstVisitor::visit(const FilterElement& e){
-	this->defaultVisit(e);
-	this->relayAccept(e);
+	this->defaultVisit(e ,e);
 }
 
 void ConstVisitor::visit(const FeGaussianBlurElement& e){
@@ -171,6 +163,11 @@ void ConstVisitor::visit(const FeGaussianBlurElement& e){
 
 void ConstVisitor::visit(const ImageElement& e){
 	this->defaultVisit(e);
+}
+
+void ConstVisitor::defaultVisit(const Element& e, const Container& c) {
+	this->defaultVisit(e);
+	this->relayAccept(c);
 }
 
 void ConstVisitor::relayAccept(const Container& container){

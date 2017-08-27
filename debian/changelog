@@ -1,3 +1,9 @@
+libsvgdom (0.3.1) unstable; urgency=medium
+
+  * intorduced Visitor::defaultVisit(Element, Container)
+
+ -- Ivan Gagis <igagis@gmail.com>  Sun, 27 Aug 2017 23:14:19 +0300
+
 libsvgdom (0.3.0) unstable; urgency=medium
 
   * switch to mikroxml instead of pugixml
