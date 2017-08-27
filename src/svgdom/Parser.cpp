@@ -313,10 +313,10 @@ void Parser::fillAspectRatioed(AspectRatioed& e) {
 }
 
 void Parser::addElement(std::unique_ptr<Element> e) {
-	this->addElement(nullptr, std::move(e));
+	this->addElement(std::move(e), nullptr);
 }
 
-void Parser::addElement(Container* c, std::unique_ptr<Element> e) {
+void Parser::addElement(std::unique_ptr<Element> e, Container* c) {
 	ASSERT(e)
 	ASSERT(this->parentStack.back())
 	this->parentStack.back()->children.push_back(std::move(e));
@@ -356,7 +356,8 @@ void Parser::parseDefsElement() {
 	this->fillTransformable(*ret);
 	this->fillStyleable(*ret);
 
-	this->addElement(ret.get(), std::move(ret));
+	auto c = ret.get();
+	this->addElement(std::move(ret), c);
 }
 
 void Parser::parseEllipseElement() {
@@ -393,7 +394,8 @@ void Parser::parseGElement() {
 	this->fillTransformable(*ret);
 	this->fillStyleable(*ret);
 
-	this->addElement(ret.get(), std::move(ret));
+	auto c = ret.get();
+	this->addElement(std::move(ret), c);
 }
 
 void Parser::parseGradientStopElement() {
@@ -458,7 +460,8 @@ void Parser::parseFilterElement() {
 		ret->primitiveUnits = svgdom::parseCoordinateUnits(*a);
 	}
 	
-	this->addElement(ret.get(), std::move(ret));
+	auto c = ret.get();
+	this->addElement(std::move(ret), c);
 }
 
 void Parser::fillFilterPrimitive(FilterPrimitive& p) {
@@ -518,7 +521,8 @@ void Parser::parseLinearGradientElement() {
 		ret->y2 = Length::parse(*a);
 	}
 
-	this->addElement(ret.get(), std::move(ret));
+	auto c = ret.get();
+	this->addElement(std::move(ret), c);
 }
 
 void Parser::parsePathElement() {
@@ -590,7 +594,8 @@ void Parser::parseRadialGradientElement() {
 		ret->fy = Length::parse(*a);
 	}
 
-	this->addElement(ret.get(), std::move(ret));
+	auto c = ret.get();
+	this->addElement(std::move(ret), c);
 }
 
 void Parser::parseRectElement() {
@@ -628,7 +633,8 @@ void Parser::parseSvgElement() {
 		this->svg = ret.get();
 	}
 	
-	this->addElement(ret.get(), std::move(ret));
+	auto c = ret.get();
+	this->addElement(std::move(ret), c);
 }
 
 void Parser::parseImageElement() {
@@ -661,7 +667,8 @@ void Parser::parseSymbolElement() {
 	this->fillViewBoxed(*ret);
 	this->fillAspectRatioed(*ret);
 
-	this->addElement(ret.get(), std::move(ret));
+	auto c = ret.get();
+	this->addElement(std::move(ret), c);
 }
 
 void Parser::parseUseElement() {
