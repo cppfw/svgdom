@@ -95,7 +95,7 @@
           <buildCommandWorkingDir>.</buildCommandWorkingDir>
           <buildCommand>make -j8</buildCommand>
           <cleanCommand>make clean</cleanCommand>
-          <executablePath>tests/editDomVisitor/tests</executablePath>
+          <executablePath>tests/finder/tests</executablePath>
           <ccTool flags="0">
             <standard>8</standard>
             <incDir>
@@ -229,7 +229,7 @@
       <makefileType>
         <makeTool>
           <buildCommandWorkingDir>.</buildCommandWorkingDir>
-          <buildCommand>make debug=true</buildCommand>
+          <buildCommand>make debug=true CXX=clang++</buildCommand>
           <cleanCommand>make clean</cleanCommand>
           <executablePath>tests/parse/tests</executablePath>
           <ccTool>

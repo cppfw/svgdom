@@ -16,7 +16,8 @@ namespace svgdom{
  * @brief Style property names enumeration.
  */
 enum class StyleProperty_e{
-	UNKNOWN,					//0
+	ENUM_FIRST,
+	UNKNOWN = ENUM_FIRST,		//0
 	FONT,
 	FONT_FAMILY,
 	FONT_SIZE,
@@ -77,7 +78,9 @@ enum class StyleProperty_e{
 	GLYPH_ORIENTATION_VERTICAL,
 	KERNING,
 	TEXT_ANCHOR,				//60
-	WRITING_MODE
+	WRITING_MODE,
+	
+	ENUM_SIZE
 };
 
 /**

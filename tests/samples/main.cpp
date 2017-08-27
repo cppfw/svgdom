@@ -22,6 +22,8 @@ int main(int argc, char** argv){
 	
 	auto dom = svgdom::load(papki::FSFile(filename));
 	
+//	TRACE_ALWAYS(<< "file read" << std::endl)
+	
 	ASSERT_ALWAYS(dom)
 	
 	auto str = dom->toString();

@@ -5,8 +5,8 @@ class Libsvgdom < Formula
   sha256 "$(sha256)"
 
   depends_on "prorab" => :build
-  depends_on "pugixml" => :build
   depends_on "pkg-config" => :build
+  depends_on "libmikroxml" => :build
   depends_on "libpapki"
   depends_on "libutki"
 

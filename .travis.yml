@@ -52,14 +52,14 @@ env:
   - PRORAB_GIT_USERNAME=igagis
   - PRORAB_GIT_ACCESS_TOKEN=$HOMEBREW_GITHUB_ACCESS_TOKEN
   - USE_ANDROID_NDK_VERSION=15c
-  - linuxDependencies="lintian debhelper prorab doxygen libutki-dev libpapki-dev libpugixml-dev"
+  - linuxDependencies="lintian debhelper prorab doxygen libutki-dev libpapki-dev libmikroxml-dev"
 
 
 before_install:
 - if [ "$BUILD_NAME" == "macosx" ]; then
     brew tap igagis/tap &&
     brew update > /dev/null &&
-    brew install prorab libutki libpapki pugixml;
+    brew install prorab libutki libpapki libmikroxml;
   fi
 - if [ "$BUILD_NAME" == "ios" ]; then
     brew tap igagis/tap &&

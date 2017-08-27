@@ -22,9 +22,9 @@
 		  <scope>compile</scope>
 	  </dependency>
 	  <dependency>
-		  <groupId>org.pugixml</groupId>
-		  <artifactId>pugixml</artifactId>
-		  <version>[1.8,)</version>
+		  <groupId>io.github.igagis</groupId>
+		  <artifactId>libmikroxml</artifactId>
+		  <version>[0.1.1,)</version>
 		  <type>aar</type>
 		  <scope>compile</scope>
 	  </dependency>

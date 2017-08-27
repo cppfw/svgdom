@@ -4,7 +4,7 @@
 #include <vector>
 #include <memory>
 
-#include <pugixml.hpp>
+#include <mikroxml/mikroxml.hpp>
 
 #include "elements/Element.hpp"
 #include "elements/Referencing.hpp"
@@ -19,63 +19,93 @@
 
 namespace svgdom{
 
-class Parser{
+class Parser : public mikroxml::Parser{
 	enum class XmlNamespace_e{
-		UNKNOWN,
+		ENUM_FIRST,
+		UNKNOWN = ENUM_FIRST,
 		SVG,
-		XLINK
+		XLINK,
+		
+		ENUM_SIZE
 	};
 	
 	std::vector<
 			std::map<std::string, XmlNamespace_e>
-		> namespaces;
+		> namespacesStack;
+	std::vector<
+			std::map<XmlNamespace_e, std::string>
+		> flippedNamespacesStack;
 	
-	std::vector<XmlNamespace_e> defaultNamespace;
+	std::vector<XmlNamespace_e> defaultNamespaceStack;
 	
 	
 	XmlNamespace_e findNamespace(const std::string& ns);
+	const std::string* findFlippedNamespace(XmlNamespace_e ns);
 	
 	struct NamespaceNamePair{
 		XmlNamespace_e ns;
 		std::string name;
 	};
 	
-	NamespaceNamePair getNamespace(const std::string& xmlAttributeName);
+	NamespaceNamePair getNamespace(const std::string& xmlName);
+	
+	const std::string* findAttribute(const std::string& name);
+	
+	const std::string* findAttributeOfNamespace(XmlNamespace_e ns, const std::string& name);
 
-	void fillElement(Element& e, const pugi::xml_node& n);
-	void fillReferencing(Referencing& e, const pugi::xml_node& n);
-	void fillRectangle(Rectangle& r, const pugi::xml_node& n);
-	void fillViewBoxed(ViewBoxed& v, const pugi::xml_node& n);
-	void fillAspectRatioed(AspectRatioed& e, const pugi::xml_node& n);
-	void fillContainer(Container& c, const pugi::xml_node& n);
-	void fillTransformable(Transformable& t, const pugi::xml_node& n);
-	void fillStyleable(Styleable& s, const pugi::xml_node& n);
-	void fillGradient(Gradient& g, const pugi::xml_node& n);
-	void fillShape(Shape& s, const pugi::xml_node& n);
-	void fillFilterPrimitive(FilterPrimitive& p, const pugi::xml_node& n);
-	void fillInputableFilterPrimitive(InputableFilterPrimitive& p, const pugi::xml_node& n);
+	void pushNamespaces();
+	void popNamespaces();
 	
-	std::unique_ptr<Gradient::StopElement> parseGradientStopElement(const pugi::xml_node& n);
-	std::unique_ptr<SvgElement> parseSvgElement(const pugi::xml_node& n);
-	std::unique_ptr<SymbolElement> parseSymbolElement(const pugi::xml_node& n);
-	std::unique_ptr<GElement> parseGElement(const pugi::xml_node& n);
-	std::unique_ptr<DefsElement> parseDefsElement(const pugi::xml_node& n);
-	std::unique_ptr<UseElement> parseUseElement(const pugi::xml_node& n);
-	std::unique_ptr<PathElement> parsePathElement(const pugi::xml_node& n);
-	std::unique_ptr<RectElement> parseRectElement(const pugi::xml_node& n);
-	std::unique_ptr<CircleElement> parseCircleElement(const pugi::xml_node& n);
-	std::unique_ptr<LineElement> parseLineElement(const pugi::xml_node& n);
-	std::unique_ptr<PolylineElement> parsePolylineElement(const pugi::xml_node& n);
-	std::unique_ptr<PolygonElement> parsePolygonElement(const pugi::xml_node& n);
-	std::unique_ptr<EllipseElement> parseEllipseElement(const pugi::xml_node& n);
-	std::unique_ptr<LinearGradientElement> parseLinearGradientElement(const pugi::xml_node& n);
-	std::unique_ptr<RadialGradientElement> parseRadialGradientElement(const pugi::xml_node& n);
-	std::unique_ptr<FilterElement> parseFilterElement(const pugi::xml_node& n);
-	std::unique_ptr<FeGaussianBlurElement> parseFeGaussianBlurElement(const pugi::xml_node& n);
-	std::unique_ptr<ImageElement> parseImageElement(const pugi::xml_node& n);
+	std::string element;
+	std::map<std::string, std::string> attributes;
 	
+	SvgElement* svg = nullptr;
+	Container root;
+	std::vector<Container*> parentStack = {&this->root};
+	
+	void addElement(std::unique_ptr<Element> e);
+	void addElement(std::unique_ptr<Element> e, Container* c);
+	
+	void onElementStart(const utki::Buf<char> name) override;
+	void onElementEnd(const utki::Buf<char> name) override;
+	void onAttributeParsed(const utki::Buf<char> name, const utki::Buf<char> value) override;
+	void onAttributesEnd(bool isEmptyElement) override;
+	void onContentParsed(const utki::Buf<char> str) override;
+
+	void fillElement(Element& e);
+	void fillReferencing(Referencing& e);
+	void fillRectangle(Rectangle& r);
+	void fillViewBoxed(ViewBoxed& v);
+	void fillAspectRatioed(AspectRatioed& e);
+	void fillTransformable(Transformable& t);
+	void fillStyleable(Styleable& s);
+	void fillGradient(Gradient& g);
+	void fillShape(Shape& s);
+	void fillFilterPrimitive(FilterPrimitive& p);
+	void fillInputableFilterPrimitive(InputableFilterPrimitive& p);
+	
+	void parseGradientStopElement();
+	void parseSvgElement();
+	void parseSymbolElement();
+	void parseGElement();
+	void parseDefsElement();
+	void parseUseElement();
+	void parsePathElement();
+	void parseRectElement();
+	void parseCircleElement();
+	void parseLineElement();
+	void parsePolylineElement();
+	void parsePolygonElement();
+	void parseEllipseElement();
+	void parseLinearGradientElement();
+	void parseRadialGradientElement();
+	void parseFilterElement();
+	void parseFeGaussianBlurElement();
+	void parseImageElement();
+	
+	void parseNode();
 public:
-	std::unique_ptr<svgdom::Element> parseNode(const pugi::xml_node& n);
+	std::unique_ptr<SvgElement> getDom();
 };
 
 }

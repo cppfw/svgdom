@@ -28,7 +28,7 @@ nuget{
 		packages : {
 			libutki/1.0.30;
 			libpapki/1.0.26;
-			pugixml/1.8.0;
+			libmikroxml/0.1.1;
 		};
 	}
 	files {

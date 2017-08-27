@@ -32,7 +32,7 @@ std::unique_ptr<SvgElement> load(std::istream& s);
  * @param s - input string to load SVG from.
  * @return unique pointer to the root of SVG document tree.
  */
-std::unique_ptr<SvgElement> load(std::string& s);
+std::unique_ptr<SvgElement> load(const std::string& s);
 
 /**
  * @brief Load SVG document from memory buffer.
