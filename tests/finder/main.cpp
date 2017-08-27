@@ -18,6 +18,7 @@ int main(int argc, char** argv){
 	
 	auto dom = svgdom::load(papki::FSFile("../samples/testdata/back.svg"));
 	ASSERT_ALWAYS(dom)
+	ASSERT_ALWAYS(dom->children.size() != 0)
 	
 	TRACE_ALWAYS(<< "SVG loaded in " << float(getTicks() - loadStart) / 1000.0f << " sec." << std::endl)
 	

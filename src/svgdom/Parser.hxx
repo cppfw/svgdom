@@ -64,7 +64,7 @@ class Parser : public mikroxml::Parser{
 	std::vector<Container*> parentStack = {&this->root};
 	
 	void addElement(std::unique_ptr<Element> e);
-	void addElement(std::unique_ptr<Element> e, Container* c);
+	void addElement(Container* c, std::unique_ptr<Element> e);
 	
 	void onElementStart(const utki::Buf<char> name) override;
 	void onElementEnd(const utki::Buf<char> name) override;
