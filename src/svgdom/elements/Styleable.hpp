@@ -117,6 +117,25 @@ enum class ColorInterpolation_e{
 	LINEAR_RGB
 };
 
+enum class Display_e{
+	INLINE,
+	BLOCK,
+	LIST_ITEM,
+	RUN_IN,
+	COMPACT,
+	MARKER,
+	TABLE,
+	INLINE_TABLE,
+	TABLE_ROW_GROUP,
+	TABLE_HEADER_GROUP,
+	TABLE_FOOTER_GROUP,
+	TABLE_ROW,
+	TABLE_COLUMN_GROUP,
+	TABLE_COLUMN,
+	TABLE_CELL,
+	TABLE_CAPTION,
+	NONE
+};
 
 struct StyleValue{
 	enum class Type_e{
@@ -180,6 +199,7 @@ struct StyleValue{
 		StrokeLineJoin_e strokeLineJoin;
 		FillRule_e fillRule;
 		ColorInterpolation_e colorInterpolationFilters;
+		Display_e display;
 	};
 
 	/**
@@ -205,6 +225,9 @@ struct StyleValue{
 
 	static StyleValue parseColorInterpolation(const std::string& str);
 	static std::string colorInterpolationToString(ColorInterpolation_e ci);
+	
+	static StyleValue parseDisplay(const std::string& str);
+	static std::string displayToString(Display_e d);
 
 	std::string colorInterpolationFiltersToString()const;
 

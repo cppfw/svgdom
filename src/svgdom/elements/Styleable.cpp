@@ -111,6 +111,9 @@ std::string Styleable::stylesToString() const {
 			case StyleProperty_e::FILTER:
 				s << "url(" << st.second.str << ")";
 				break;
+			case StyleProperty_e::DISPLAY:
+				s << StyleValue::displayToString(st.second.display);
+				break;
 		}
 	}
 	return s.str();
@@ -203,6 +206,9 @@ StyleValue Styleable::parseStylePropertyValue(StyleProperty_e type, const std::s
 			break;
 		case StyleProperty_e::FILTER:
 			v = StyleValue::parseUrl(str);
+			break;
+		case StyleProperty_e::DISPLAY:
+			v = StyleValue::parseDisplay(str);
 			break;
 	}
 	return v;
@@ -580,6 +586,59 @@ const std::map<std::string, std::uint32_t> colorNames = {
 	{"yellowgreen", 0x32cd9a}
 };
 }
+
+namespace{
+std::map<std::string, Display_e> stringToDisplayMap = {
+	{"inline", Display_e::INLINE},
+	{"block", Display_e::BLOCK},
+	{"list-item", Display_e::LIST_ITEM},
+	{"run-in", Display_e::RUN_IN},
+	{"compact", Display_e::COMPACT},
+	{"marker", Display_e::MARKER},
+	{"table", Display_e::TABLE},
+	{"inline-table", Display_e::INLINE_TABLE},
+	{"table-row-group", Display_e::TABLE_ROW_GROUP},
+	{"table-header-group", Display_e::TABLE_HEADER_GROUP},
+	{"table-footer-group", Display_e::TABLE_FOOTER_GROUP},
+	{"table-row", Display_e::TABLE_ROW},
+	{"table-column-group", Display_e::TABLE_COLUMN_GROUP},
+	{"table-column", Display_e::TABLE_COLUMN},
+	{"table-cell", Display_e::TABLE_CELL},
+	{"table-caption", Display_e::TABLE_CAPTION},
+	{"none", Display_e::NONE}
+};
+}
+
+namespace{
+auto displayToStringMap = utki::flipMap(stringToDisplayMap);
+}
+
+StyleValue StyleValue::parseDisplay(const std::string& str) {
+	StyleValue ret;
+	
+	//NOTE: "inherit" is already checked on upper level.
+	
+	auto i = stringToDisplayMap.find(str);
+	if(i == stringToDisplayMap.end()){
+		ret.display = Display_e::INLINE; // default value
+	}else{
+		ret.display = i->second;
+	}
+	
+	ret.type = StyleValue::Type_e::NORMAL;
+	
+	return ret;
+}
+
+std::string StyleValue::displayToString(Display_e d) {
+	auto i = displayToStringMap.find(d);
+	if(i == displayToStringMap.end()){
+		return displayToStringMap[Display_e::INLINE]; //default value
+	}
+	return i->second;
+}
+
+
 
 StyleValue StyleValue::parseColorInterpolation(const std::string& str) {
 	StyleValue ret;
