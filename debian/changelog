@@ -1,3 +1,9 @@
+libsvgdom (0.3.2) unstable; urgency=medium
+
+  * implemented 'display' style property
+
+ -- Ivan Gagis <igagis@gmail.com>  Mon, 11 Sep 2017 17:14:12 +0300
+
 libsvgdom (0.3.1) unstable; urgency=medium
 
   * intorduced Visitor::defaultVisit(Element, Container)
