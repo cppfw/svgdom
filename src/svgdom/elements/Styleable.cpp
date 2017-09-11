@@ -61,7 +61,7 @@ std::string Styleable::stylesToString() const {
 				s << st.second.paintToString();
 				break;
 			case StyleProperty_e::STROKE_WIDTH:
-				s << st.second.length;
+				s << st.second.strokeWidth;
 				break;
 			case StyleProperty_e::STROKE_LINECAP:
 				switch(st.second.strokeLineCap){
@@ -163,7 +163,7 @@ StyleValue Styleable::parseStylePropertyValue(StyleProperty_e type, const std::s
 //				TRACE(<< "paint read = " << std::hex << v.integer << std::endl)
 			break;
 		case StyleProperty_e::STROKE_WIDTH:
-			v.length = Length::parse(str);
+			v.strokeWidth = Length::parse(str);
 			v.type = StyleValue::Type_e::NORMAL;
 //				TRACE(<< "stroke-width read = " << v.length << std::endl)
 			break;
