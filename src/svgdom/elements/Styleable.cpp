@@ -10,6 +10,7 @@
 
 #include "../util.hxx"
 #include "Element.hpp"
+#include "../Exc.hpp"
 
 //some header defines OVERFLOW, undefine it
 #ifdef OVERFLOW
@@ -112,7 +113,10 @@ std::string Styleable::stylesToString() const {
 				s << "url(" << st.second.str << ")";
 				break;
 			case StyleProperty_e::DISPLAY:
-				s << StyleValue::displayToString(st.second.display);
+				s << st.second.displayToString();
+				break;
+			case StyleProperty_e::ENABLE_BACKGROUND:
+				s << st.second.enableBackgroundToString();
 				break;
 		}
 	}
@@ -209,6 +213,9 @@ StyleValue Styleable::parseStylePropertyValue(StyleProperty_e type, const std::s
 			break;
 		case StyleProperty_e::DISPLAY:
 			v = StyleValue::parseDisplay(str);
+			break;
+		case StyleProperty_e::ENABLE_BACKGROUND:
+			v = StyleValue::parseEnableBackground(str);
 			break;
 	}
 	return v;
@@ -630,8 +637,8 @@ StyleValue StyleValue::parseDisplay(const std::string& str) {
 	return ret;
 }
 
-std::string StyleValue::displayToString(Display_e d) {
-	auto i = displayToStringMap.find(d);
+std::string StyleValue::displayToString()const {
+	auto i = displayToStringMap.find(this->display);
 	if(i == displayToStringMap.end()){
 		return displayToStringMap[Display_e::INLINE]; //default value
 	}
@@ -658,12 +665,8 @@ StyleValue StyleValue::parseColorInterpolation(const std::string& str) {
 	return ret;
 }
 
-std::string StyleValue::colorInterpolationFiltersToString() const {
-	return colorInterpolationToString(this->colorInterpolationFilters);
-}
-
-
-std::string StyleValue::colorInterpolationToString(ColorInterpolation_e ci){
+namespace{
+std::string colorInterpolationToString(ColorInterpolation_e ci){
 	switch(ci){
 		case ColorInterpolation_e::AUTO:
 			return "auto";
@@ -676,8 +679,93 @@ std::string StyleValue::colorInterpolationToString(ColorInterpolation_e ci){
 			return "";
 	}
 }
+}
+
+std::string StyleValue::colorInterpolationFiltersToString() const {
+	return colorInterpolationToString(this->colorInterpolationFilters);
+}
+
+namespace{
+EnableBackground parseEnableBackgroundNewRect(const std::string& str){
+	EnableBackground ret;
+	
+	std::istringstream s(str);
+	skipTillCharInclusive(s, ' '); //skip 'new'
+
+	skipWhitespaces(s);
+	
+	if(s.eof()){
+		ret.width = -1; //indicate that rectangle is not specified
+		return ret;
+	}
+	
+	s >> ret.x;
+	if(s.fail()){
+		throw svgdom::Exc("malformed enable-background NEW string");
+	}
+	
+	s >> ret.y;
+	if(s.fail()){
+		throw svgdom::Exc("malformed enable-background NEW string");
+	}
+	
+	s >> ret.width;
+	if(s.fail()){
+		throw svgdom::Exc("malformed enable-background NEW string");
+	}
+	
+	s >> ret.height;
+	if(s.fail()){
+		throw svgdom::Exc("malformed enable-background NEW string");
+	}
+	
+	return ret;
+}
+}
+
+StyleValue StyleValue::parseEnableBackground(const std::string& str) {
+	StyleValue ret;
+	
+	std::string newStr = "new";
+	if(str.substr(0, newStr.length()) == "new"){
+		try{
+			ret.enableBackground = parseEnableBackgroundNewRect(str);
+			ret.enableBackground.value = EnableBackground_e::NEW;
+		}catch(svgdom::Exc& e){
+			ret.enableBackground.value = EnableBackground_e::ACCUMULATE; //default value
+		}
+	}else{
+		ret.enableBackground.value = EnableBackground_e::ACCUMULATE; //default value
+	}
+	
+	ret.type = StyleValue::Type_e::NORMAL;
+	
+	return ret;
+}
 
 
+std::string StyleValue::enableBackgroundToString() const {
+	switch(this->enableBackground.value){
+		default:
+		case EnableBackground_e::ACCUMULATE:
+			return "accumulate";
+		case EnableBackground_e::NEW:
+			{
+				std::stringstream ss;
+				
+				ss << "new";
+				
+				if(this->enableBackground.isRectSpecified()){
+					ss << " " << this->enableBackground.x;
+					ss << " " << this->enableBackground.y;
+					ss << " " << this->enableBackground.width;
+					ss << " " << this->enableBackground.height;
+				}
+				
+				return ss.str();
+			}
+	}
+}
 
 //'str' should have no leading and/or trailing white spaces.
 StyleValue StyleValue::parsePaint(const std::string& str){

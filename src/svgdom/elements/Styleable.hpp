@@ -137,6 +137,20 @@ enum class Display_e{
 	NONE
 };
 
+enum class EnableBackground_e{
+	ACCUMULATE,
+	NEW
+};
+
+struct EnableBackground{
+	EnableBackground_e value;
+	int x, y, width, height; //these only make sense when 'value' is NEW.
+	
+	bool isRectSpecified()const noexcept{
+		return this->width >= 0 && this->height >= 0;
+	}
+};
+
 struct StyleValue{
 	enum class Type_e{
 		/**
@@ -191,7 +205,7 @@ struct StyleValue{
 	}
 
 	union{
-		std::uint32_t color;
+		std::uint32_t color; //TODO: use Rgb struct
 		real opacity;
 		real strokeMiterlimit;
 		Length strokeWidth;
@@ -200,6 +214,7 @@ struct StyleValue{
 		FillRule_e fillRule;
 		ColorInterpolation_e colorInterpolationFilters;
 		Display_e display;
+		EnableBackground enableBackground;
 	};
 
 	/**
@@ -224,11 +239,13 @@ struct StyleValue{
 	std::string paintToString()const;
 
 	static StyleValue parseColorInterpolation(const std::string& str);
-	static std::string colorInterpolationToString(ColorInterpolation_e ci);
 	
 	static StyleValue parseDisplay(const std::string& str);
-	static std::string displayToString(Display_e d);
+	std::string displayToString()const;
 
+	static StyleValue parseEnableBackground(const std::string& str);
+	std::string enableBackgroundToString()const;
+	
 	std::string colorInterpolationFiltersToString()const;
 
 	static StyleValue parseUrl(const std::string& str);
