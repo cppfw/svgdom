@@ -114,6 +114,9 @@ struct FeCompositeElement :
 	enum class Operator_e{
 		OVER,
 		IN,
+#ifdef OUT //on Windows somebody defines OUT macro
+#	undef OUT
+#endif
 		OUT,
 		ATOP,
 		XOR,
