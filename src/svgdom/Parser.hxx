@@ -82,7 +82,7 @@ class Parser : public mikroxml::Parser{
 	void fillGradient(Gradient& g);
 	void fillShape(Shape& s);
 	void fillFilterPrimitive(FilterPrimitive& p);
-	void fillInputableFilterPrimitive(InputableFilterPrimitive& p);
+	void fillInputable(Inputable& p);
 	
 	void parseGradientStopElement();
 	void parseSvgElement();
@@ -101,6 +101,7 @@ class Parser : public mikroxml::Parser{
 	void parseRadialGradientElement();
 	void parseFilterElement();
 	void parseFeGaussianBlurElement();
+	void parseFeColorMatrixElement();
 	void parseImageElement();
 	
 	void parseNode();

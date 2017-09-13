@@ -20,6 +20,14 @@ void FeGaussianBlurElement::accept(ConstVisitor& visitor) const {
 	visitor.visit(*this);
 }
 
+void FeColorMatrixElement::accept(Visitor& visitor) {
+	visitor.visit(*this);
+}
+
+void FeColorMatrixElement::accept(ConstVisitor& visitor) const{
+	visitor.visit(*this);
+}
+
 std::array<real, 2> FeGaussianBlurElement::getStdDeviation() const noexcept{
 	if(!this->isStdDeviationSpecified()){
 		return {{0, 0}};

@@ -34,15 +34,18 @@ struct FilterPrimitive :
 	std::string result;
 };
 
-struct InputableFilterPrimitive : public FilterPrimitive{
+struct Inputable{
 	std::string in;
 };
 
-struct TwoInputableFilterPrimitive : public InputableFilterPrimitive{
+struct SecondInputable{
 	std::string in2;
 };
 
-struct FeGaussianBlurElement : public InputableFilterPrimitive{
+struct FeGaussianBlurElement :
+		public FilterPrimitive,
+		public Inputable
+{
 	std::array<real, 2> stdDeviation = {{-1, -1}};
 	
 	/**
@@ -64,6 +67,23 @@ struct FeGaussianBlurElement : public InputableFilterPrimitive{
 	}
 	
 	std::array<real, 2> getStdDeviation()const noexcept;
+	
+	void accept(Visitor& visitor)override;
+	void accept(ConstVisitor& visitor) const override;
+};
+
+struct FeColorMatrixElement :
+		public FilterPrimitive,
+		public Inputable
+{
+	enum class Type_e{
+		MATRIX,
+		SATURATE,
+		HUE_ROTATE,
+		LUMINANCE_TO_ALPHA
+	} type = Type_e::MATRIX;
+	
+	std::array<real, 20> values;
 	
 	void accept(Visitor& visitor)override;
 	void accept(ConstVisitor& visitor) const override;

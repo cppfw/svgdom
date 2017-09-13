@@ -1,6 +1,8 @@
 #include "Parser.hxx"
 #include "util.hxx"
 
+#include "Exc.hpp"
+
 #include <utki/debug.hpp>
 #include <utki/util.hpp>
 
@@ -121,6 +123,8 @@ void Parser::parseNode(){
 				this->parseFilterElement();
 			}else if(nsn.name == "feGaussianBlur"){
 				this->parseFeGaussianBlurElement();
+			}else if(nsn.name == "feColorMatrix"){
+				this->parseFeColorMatrixElement();
 			}else if(nsn.name == "image"){
 				this->parseImageElement();
 			}else{
@@ -474,9 +478,7 @@ void Parser::fillFilterPrimitive(FilterPrimitive& p) {
 	}
 }
 
-void Parser::fillInputableFilterPrimitive(InputableFilterPrimitive& p) {
-	this->fillFilterPrimitive(p);
-	
+void Parser::fillInputable(Inputable& p) {
 	if(auto a = this->findAttributeOfNamespace(XmlNamespace_e::SVG, "in")){
 		p.in = *a;
 	}
@@ -489,7 +491,8 @@ void Parser::parseFeGaussianBlurElement() {
 	
 	auto ret = utki::makeUnique<FeGaussianBlurElement>();
 	
-	this->fillInputableFilterPrimitive(*ret);
+	this->fillFilterPrimitive(*ret);
+	this->fillInputable(*ret);
 
 	if(auto a = this->findAttributeOfNamespace(XmlNamespace_e::SVG, "stdDeviation")){
 		ret->stdDeviation = parseNumberOptionalNumber(*a, {{-1, -1}});
@@ -498,6 +501,66 @@ void Parser::parseFeGaussianBlurElement() {
 	this->addElement(std::move(ret));
 }
 
+void Parser::parseFeColorMatrixElement() {
+	ASSERT(this->getNamespace(this->element).ns == XmlNamespace_e::SVG)
+	ASSERT(this->getNamespace(this->element).name == "feColorMatrix")
+	
+	auto ret = utki::makeUnique<FeColorMatrixElement>();
+	
+	this->fillFilterPrimitive(*ret);
+	this->fillInputable(*ret);
+	
+	if(auto a = this->findAttributeOfNamespace(XmlNamespace_e::SVG, "type")){
+		if(*a == "saturate"){
+			ret->type = FeColorMatrixElement::Type_e::SATURATE;
+		}else if(*a == "hueRotate"){
+			ret->type = FeColorMatrixElement::Type_e::HUE_ROTATE;
+		}else if(*a == "luminanceToAlpha"){
+			ret->type = FeColorMatrixElement::Type_e::LUMINANCE_TO_ALPHA;
+		}else{
+			ret->type = FeColorMatrixElement::Type_e::MATRIX; // default value
+		}
+	}
+	
+	if(auto a = this->findAttributeOfNamespace(XmlNamespace_e::SVG, "values")){
+		switch(ret->type){
+			default:
+				ASSERT(false) //should never get here, MATRIX should always be the default value
+				break;
+			case FeColorMatrixElement::Type_e::MATRIX:
+				//20 values expected
+				{
+					std::istringstream ss(*a);
+					
+					for(unsigned i = 0; i != 20; ++i){
+						ret->values[i] = readInReal(ss);
+						if(ss.fail()){
+							throw svgdom::Exc("malformed 'values' string of 'feColorMatrix' element");
+						}
+						skipWhitespacesAndOrComma(ss);
+					}
+				}
+				break;
+			case FeColorMatrixElement::Type_e::HUE_ROTATE:
+				//fall-through
+			case FeColorMatrixElement::Type_e::SATURATE:
+				//one value is expected
+				{
+					std::istringstream ss(*a);
+					ret->values[0] = readInReal(ss);
+					if(ss.fail()){
+						throw svgdom::Exc("malformed 'values' string of 'feColorMatrix' element");
+					}
+				}
+				break;
+			case FeColorMatrixElement::Type_e::LUMINANCE_TO_ALPHA:
+				//no values are expected
+				break;
+		}
+	}
+	
+	this->addElement(std::move(ret));
+}
 
 
 void Parser::parseLinearGradientElement() {

@@ -153,9 +153,7 @@ void StreamWriter::addFilterPrimitiveAttributes(const FilterPrimitive& e) {
 	}
 }
 
-void StreamWriter::addInputableFilterPrimitiveAttributes(const InputableFilterPrimitive& e) {
-	this->addFilterPrimitiveAttributes(e);
-	
+void StreamWriter::addInputableAttributes(const Inputable& e) {
 	if(e.in.length() != 0){
 		this->addAttribute("in", e.in);
 	}
@@ -408,10 +406,76 @@ void StreamWriter::visit(const FilterElement& e){
 void StreamWriter::visit(const FeGaussianBlurElement& e){
 	this->setName("feGaussianBlur");
 	
-	this->addInputableFilterPrimitiveAttributes(e);
+	this->addFilterPrimitiveAttributes(e);
+	this->addInputableAttributes(e);
 	
 	if(e.isStdDeviationSpecified()){
 		this->addAttribute("stdDeviation", numberOptionalNumberToString(e.stdDeviation, -1));
 	}
+	this->write();
+}
+
+void StreamWriter::visit(const FeColorMatrixElement& e){
+	this->setName("feColorMatrix");
+	
+	this->addFilterPrimitiveAttributes(e);
+	this->addInputableAttributes(e);
+	
+	{
+		std::string typeValue;
+		
+		//write type
+		switch(e.type){
+			default:
+			case FeColorMatrixElement::Type_e::MATRIX:
+				//default value is 'matrix', so omit type attribute.
+				break;
+			case FeColorMatrixElement::Type_e::HUE_ROTATE:
+				typeValue = "hueRotate";
+				break;
+			case FeColorMatrixElement::Type_e::SATURATE:
+				typeValue = "saturate";
+				break;
+			case FeColorMatrixElement::Type_e::LUMINANCE_TO_ALPHA:
+				typeValue = "luminanceToAlpha";
+				break;
+		}
+		if(typeValue.length() != 0){
+			this->addAttribute("type", typeValue);
+		}
+	}
+	
+	{
+		std::string valuesValue;
+		switch(e.type){
+			default:
+			case FeColorMatrixElement::Type_e::MATRIX:
+				//write 20 values
+				{
+					std::stringstream ss;
+					for(unsigned i = 0; i != e.values.size(); ++i){
+						if(i != 0){
+							ss << " ";
+						}
+						ss << e.values[i];
+					}
+					valuesValue = ss.str();
+				}
+				break;
+			case FeColorMatrixElement::Type_e::HUE_ROTATE:
+				//fall-through
+			case FeColorMatrixElement::Type_e::SATURATE:
+				//write 1 value
+				valuesValue = std::to_string(e.values[0]);
+				break;
+			case FeColorMatrixElement::Type_e::LUMINANCE_TO_ALPHA:
+				//'values' attribute can be omitted, so do nothing
+				break;
+		}
+		if(valuesValue.length() != 0){
+			this->addAttribute("values", valuesValue);
+		}
+	}
+	
 	this->write();
 }

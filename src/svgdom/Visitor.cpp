@@ -71,6 +71,10 @@ void Visitor::visit(FeGaussianBlurElement& e){
 	this->defaultVisit(e);
 }
 
+void Visitor::visit(FeColorMatrixElement& e){
+	this->defaultVisit(e);
+}
+
 void Visitor::visit(ImageElement& e){
 	this->defaultVisit(e);
 }
@@ -158,6 +162,10 @@ void ConstVisitor::visit(const FilterElement& e){
 }
 
 void ConstVisitor::visit(const FeGaussianBlurElement& e){
+	this->defaultVisit(e);
+}
+
+void ConstVisitor::visit(const FeColorMatrixElement& e){
 	this->defaultVisit(e);
 }
 
