@@ -144,7 +144,7 @@ enum class EnableBackground_e{
 
 struct EnableBackground{
 	EnableBackground_e value;
-	int x, y, width, height; //these only make sense when 'value' is NEW.
+	real x, y, width, height; //these only make sense when 'value' is NEW.
 	
 	bool isRectSpecified()const noexcept{
 		return this->width >= 0 && this->height >= 0;

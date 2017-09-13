@@ -699,22 +699,22 @@ EnableBackground parseEnableBackgroundNewRect(const std::string& str){
 		return ret;
 	}
 	
-	s >> ret.x;
+	ret.x = readInReal(s);
 	if(s.fail()){
 		throw svgdom::Exc("malformed enable-background NEW string");
 	}
 	
-	s >> ret.y;
+	ret.y = readInReal(s);
 	if(s.fail()){
 		throw svgdom::Exc("malformed enable-background NEW string");
 	}
 	
-	s >> ret.width;
+	ret.width = readInReal(s);
 	if(s.fail()){
 		throw svgdom::Exc("malformed enable-background NEW string");
 	}
 	
-	s >> ret.height;
+	ret.height = readInReal(s);
 	if(s.fail()){
 		throw svgdom::Exc("malformed enable-background NEW string");
 	}
