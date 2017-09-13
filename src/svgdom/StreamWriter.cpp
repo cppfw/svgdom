@@ -551,7 +551,9 @@ void StreamWriter::visit(const FeCompositeElement& e){
 				operatorValue = "arithmetic";
 				break;
 		}
-		this->addAttribute("operator", operatorValue);
+		if(operatorValue.length() != 0){
+			this->addAttribute("operator", operatorValue);
+		}
 	}
 	
 	if(e.k1 != real(0)){
