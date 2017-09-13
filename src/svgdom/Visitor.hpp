@@ -72,6 +72,7 @@ public:
 	virtual void visit(FilterElement& e);
 	virtual void visit(FeGaussianBlurElement& e);
 	virtual void visit(FeColorMatrixElement& e);
+	virtual void visit(FeBlendElement& e);
 	virtual void visit(ImageElement& e);
 	
 	/**
@@ -125,6 +126,7 @@ public:
 	virtual void visit(const FilterElement& e);
 	virtual void visit(const FeGaussianBlurElement& e);
 	virtual void visit(const FeColorMatrixElement& e);
+	virtual void visit(const FeBlendElement& e);
 	virtual void visit(const ImageElement& e);
 	
 	/**

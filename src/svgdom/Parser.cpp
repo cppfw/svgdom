@@ -125,6 +125,8 @@ void Parser::parseNode(){
 				this->parseFeGaussianBlurElement();
 			}else if(nsn.name == "feColorMatrix"){
 				this->parseFeColorMatrixElement();
+			}else if(nsn.name == "feBlend"){
+				this->parseFeBlendElement();
 			}else if(nsn.name == "image"){
 				this->parseImageElement();
 			}else{
@@ -484,6 +486,12 @@ void Parser::fillInputable(Inputable& p) {
 	}
 }
 
+void Parser::fillSecondInputable(SecondInputable& p) {
+	if(auto a = this->findAttributeOfNamespace(XmlNamespace_e::SVG, "in2")){
+		p.in2 = *a;
+	}
+}
+
 
 void Parser::parseFeGaussianBlurElement() {
 	ASSERT(this->getNamespace(this->element).ns == XmlNamespace_e::SVG)
@@ -556,6 +564,33 @@ void Parser::parseFeColorMatrixElement() {
 			case FeColorMatrixElement::Type_e::LUMINANCE_TO_ALPHA:
 				//no values are expected
 				break;
+		}
+	}
+	
+	this->addElement(std::move(ret));
+}
+
+void Parser::parseFeBlendElement() {
+	ASSERT(this->getNamespace(this->element).ns == XmlNamespace_e::SVG)
+	ASSERT(this->getNamespace(this->element).name == "feBlend")
+	
+	auto ret = utki::makeUnique<FeBlendElement>();
+	
+	this->fillFilterPrimitive(*ret);
+	this->fillInputable(*ret);
+	this->fillSecondInputable(*ret);
+	
+	if(auto a = this->findAttributeOfNamespace(XmlNamespace_e::SVG, "mode")){
+		if(*a == "normal"){
+			ret->mode = FeBlendElement::Mode_e::NORMAL;
+		}else if(*a == "multiply"){
+			ret->mode = FeBlendElement::Mode_e::MULTIPLY;
+		}else if(*a == "screen"){
+			ret->mode = FeBlendElement::Mode_e::SCREEN;
+		}else if(*a == "darken"){
+			ret->mode = FeBlendElement::Mode_e::DARKEN;
+		}else if(*a == "lighten"){
+			ret->mode = FeBlendElement::Mode_e::LIGHTEN;
 		}
 	}
 	

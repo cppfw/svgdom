@@ -75,6 +75,10 @@ void Visitor::visit(FeColorMatrixElement& e){
 	this->defaultVisit(e);
 }
 
+void Visitor::visit(FeBlendElement& e){
+	this->defaultVisit(e);
+}
+
 void Visitor::visit(ImageElement& e){
 	this->defaultVisit(e);
 }
@@ -166,6 +170,10 @@ void ConstVisitor::visit(const FeGaussianBlurElement& e){
 }
 
 void ConstVisitor::visit(const FeColorMatrixElement& e){
+	this->defaultVisit(e);
+}
+
+void ConstVisitor::visit(const FeBlendElement& e){
 	this->defaultVisit(e);
 }
 

@@ -24,7 +24,16 @@ void FeColorMatrixElement::accept(Visitor& visitor) {
 	visitor.visit(*this);
 }
 
+void FeBlendElement::accept(Visitor& visitor) {
+	visitor.visit(*this);
+}
+
+
 void FeColorMatrixElement::accept(ConstVisitor& visitor) const{
+	visitor.visit(*this);
+}
+
+void FeBlendElement::accept(ConstVisitor& visitor) const{
 	visitor.visit(*this);
 }
 

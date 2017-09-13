@@ -159,6 +159,13 @@ void StreamWriter::addInputableAttributes(const Inputable& e) {
 	}
 }
 
+void StreamWriter::addSecondInputableAttributes(const SecondInputable& e) {
+	if(e.in2.length() != 0){
+		this->addAttribute("in2", e.in2);
+	}
+}
+
+
 
 void StreamWriter::addShapeAttributes(const Shape& e) {
 	this->addElementAttributes(e);
@@ -475,6 +482,40 @@ void StreamWriter::visit(const FeColorMatrixElement& e){
 		if(valuesValue.length() != 0){
 			this->addAttribute("values", valuesValue);
 		}
+	}
+	
+	this->write();
+}
+
+
+void StreamWriter::visit(const FeBlendElement& e){
+	this->setName("feBlend");
+	
+	this->addFilterPrimitiveAttributes(e);
+	this->addInputableAttributes(e);
+	this->addSecondInputableAttributes(e);
+	
+	{
+		std::string modeValue;
+		switch(e.mode){
+			default:
+			case FeBlendElement::Mode_e::NORMAL:
+				//default value, can be omitted
+				break;
+			case FeBlendElement::Mode_e::MULTIPLY:
+				modeValue = "multiply";
+				break;
+			case FeBlendElement::Mode_e::SCREEN:
+				modeValue = "screen";
+				break;
+			case FeBlendElement::Mode_e::DARKEN:
+				modeValue = "darken";
+				break;
+			case FeBlendElement::Mode_e::LIGHTEN:
+				modeValue = "lighten";
+				break;
+		}
+		this->addAttribute("mode", modeValue);
 	}
 	
 	this->write();

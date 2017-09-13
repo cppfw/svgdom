@@ -33,6 +33,7 @@ protected:
 	void addGradientAttributes(const Gradient& e);
 	void addFilterPrimitiveAttributes(const FilterPrimitive& e);
 	void addInputableAttributes(const Inputable& e);
+	void addSecondInputableAttributes(const SecondInputable& e);
 	
 public:
 	StreamWriter(std::ostream& s) : s(s) {}
@@ -55,6 +56,7 @@ public:
 	void visit(const FilterElement& e) override;
 	void visit(const FeGaussianBlurElement& e) override;
 	void visit(const FeColorMatrixElement& e) override;
+	void visit(const FeBlendElement& e) override;
 	void visit(const ImageElement& e) override;
 
 };

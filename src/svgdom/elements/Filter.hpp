@@ -89,4 +89,21 @@ struct FeColorMatrixElement :
 	void accept(ConstVisitor& visitor) const override;
 };
 
+struct FeBlendElement :
+		public FilterPrimitive,
+		public Inputable,
+		public SecondInputable
+{
+	enum class Mode_e{
+		NORMAL,
+		MULTIPLY,
+		SCREEN,
+		DARKEN,
+		LIGHTEN
+	} mode = Mode_e::NORMAL;
+	
+	void accept(Visitor& visitor) override;
+	void accept(ConstVisitor& visitor) const override;
+};
+
 }
