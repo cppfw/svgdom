@@ -1,3 +1,9 @@
+libsvgdom (0.3.3) unstable; urgency=medium
+
+  * implemented support of feColorMatrix, feBlend, feComposite elements
+
+ -- Ivan Gagis <igagis@gmail.com>  Wed, 13 Sep 2017 16:31:22 +0300
+
 libsvgdom (0.3.2) unstable; urgency=medium
 
   * implemented 'display' style property
