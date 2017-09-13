@@ -520,3 +520,55 @@ void StreamWriter::visit(const FeBlendElement& e){
 	
 	this->write();
 }
+
+void StreamWriter::visit(const FeCompositeElement& e){
+	this->setName("feComposite");
+	
+	this->addFilterPrimitiveAttributes(e);
+	this->addInputableAttributes(e);
+	this->addSecondInputableAttributes(e);
+	
+	{
+		std::string operatorValue;
+		switch(e.operator_v){
+			default:
+			case FeCompositeElement::Operator_e::OVER:
+				//default value, can be omitted
+				break;
+			case FeCompositeElement::Operator_e::IN:
+				operatorValue = "in";
+				break;
+			case FeCompositeElement::Operator_e::OUT:
+				operatorValue = "out";
+				break;
+			case FeCompositeElement::Operator_e::ATOP:
+				operatorValue = "atop";
+				break;
+			case FeCompositeElement::Operator_e::XOR:
+				operatorValue = "xor";
+				break;
+			case FeCompositeElement::Operator_e::ARITHMETIC:
+				operatorValue = "arithmetic";
+				break;
+		}
+		this->addAttribute("operator", operatorValue);
+	}
+	
+	if(e.k1 != real(0)){
+		this->addAttribute("k1", std::to_string(e.k1));
+	}
+	
+	if(e.k2 != real(0)){
+		this->addAttribute("k2", std::to_string(e.k2));
+	}
+	
+	if(e.k3 != real(0)){
+		this->addAttribute("k3", std::to_string(e.k3));
+	}
+	
+	if(e.k4 != real(0)){
+		this->addAttribute("k4", std::to_string(e.k4));
+	}
+	
+	this->write();
+}

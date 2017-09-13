@@ -106,4 +106,24 @@ struct FeBlendElement :
 	void accept(ConstVisitor& visitor) const override;
 };
 
+struct FeCompositeElement :
+		public FilterPrimitive,
+		public Inputable,
+		public SecondInputable
+{
+	enum class Operator_e{
+		OVER,
+		IN,
+		OUT,
+		ATOP,
+		XOR,
+		ARITHMETIC
+	} operator_v = Operator_e::OVER;
+	
+	real k1, k2, k3, k4;
+	
+	void accept(Visitor& visitor) override;
+	void accept(ConstVisitor& visitor) const override;
+};
+
 }

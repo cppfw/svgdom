@@ -127,6 +127,8 @@ void Parser::parseNode(){
 				this->parseFeColorMatrixElement();
 			}else if(nsn.name == "feBlend"){
 				this->parseFeBlendElement();
+			}else if(nsn.name == "feComposite"){
+				this->parseFeCompositeElement();
 			}else if(nsn.name == "image"){
 				this->parseImageElement();
 			}else{
@@ -592,6 +594,51 @@ void Parser::parseFeBlendElement() {
 		}else if(*a == "lighten"){
 			ret->mode = FeBlendElement::Mode_e::LIGHTEN;
 		}
+	}
+	
+	this->addElement(std::move(ret));
+}
+
+void Parser::parseFeCompositeElement() {
+	ASSERT(this->getNamespace(this->element).ns == XmlNamespace_e::SVG)
+	ASSERT(this->getNamespace(this->element).name == "feComposite")
+	
+	auto ret = utki::makeUnique<FeCompositeElement>();
+	
+	this->fillFilterPrimitive(*ret);
+	this->fillInputable(*ret);
+	this->fillSecondInputable(*ret);
+	
+	if(auto a = this->findAttributeOfNamespace(XmlNamespace_e::SVG, "operator")){
+		if(*a == "over"){
+			ret->operator_v = FeCompositeElement::Operator_e::OVER;
+		}else if(*a == "in"){
+			ret->operator_v = FeCompositeElement::Operator_e::IN;
+		}else if(*a == "out"){
+			ret->operator_v = FeCompositeElement::Operator_e::OUT;
+		}else if(*a == "atop"){
+			ret->operator_v = FeCompositeElement::Operator_e::ATOP;
+		}else if(*a == "xor"){
+			ret->operator_v = FeCompositeElement::Operator_e::XOR;
+		}else if(*a == "arithmetic"){
+			ret->operator_v = FeCompositeElement::Operator_e::ARITHMETIC;
+		}
+	}
+	
+	if(auto a = this->findAttributeOfNamespace(XmlNamespace_e::SVG, "k1")){
+		ret->k1 = real(std::strtod(a->c_str(), nullptr));
+	}
+	
+	if(auto a = this->findAttributeOfNamespace(XmlNamespace_e::SVG, "k2")){
+		ret->k2 = real(std::strtod(a->c_str(), nullptr));
+	}
+	
+	if(auto a = this->findAttributeOfNamespace(XmlNamespace_e::SVG, "k3")){
+		ret->k3 = real(std::strtod(a->c_str(), nullptr));
+	}
+	
+	if(auto a = this->findAttributeOfNamespace(XmlNamespace_e::SVG, "k4")){
+		ret->k4 = real(std::strtod(a->c_str(), nullptr));
 	}
 	
 	this->addElement(std::move(ret));

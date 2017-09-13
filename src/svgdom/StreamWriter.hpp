@@ -57,6 +57,7 @@ public:
 	void visit(const FeGaussianBlurElement& e) override;
 	void visit(const FeColorMatrixElement& e) override;
 	void visit(const FeBlendElement& e) override;
+	void visit(const FeCompositeElement& e) override;
 	void visit(const ImageElement& e) override;
 
 };
