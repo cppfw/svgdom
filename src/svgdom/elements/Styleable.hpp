@@ -205,7 +205,7 @@ struct StyleValue{
 	}
 
 	union{
-		std::uint32_t color; //TODO: use Rgb struct
+		std::uint32_t color;
 		real opacity;
 		real strokeMiterlimit;
 		Length strokeWidth;
