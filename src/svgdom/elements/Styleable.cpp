@@ -4,6 +4,7 @@
 #include <iomanip>
 #include <cctype>
 #include <array>
+#include <cmath>
 
 #include <utki/debug.hpp>
 #include <utki/util.hpp>
@@ -767,6 +768,57 @@ std::string StyleValue::enableBackgroundToString() const {
 	}
 }
 
+namespace{
+std::uint32_t hslToRgb(real h, real s, real l){
+	real c = (real(1) - (std::abs(real(2) * l - real(1))) ) * s;
+	real x = c * (1 - (std::abs(std::fmod(h / real(60), real(2)) - 1)));
+	
+	real m = l - c / real(2);
+	
+	real r = 1, g = 1, b = 1;
+	if(h < real(60)){
+		r = c;
+		g = x;
+		b = 0;
+	}else if(h < real(120)){
+		r = x;
+		g = c;
+		b = 0;
+	}else if(h < real(180)){
+		r = 0;
+		g = c;
+		b = x;
+	}else if(h < real(240)){
+		r = 0;
+		g = x;
+		b = c;
+	}else if(h < real(300)){
+		r = x;
+		g = 0;
+		b = c;
+	}else if(h < real(360)){
+		r = c;
+		g = 0;
+		b = x;
+	}
+	
+	r += m;
+	g += m;
+	b += m;
+	r *= 255;
+	g *= 255;
+	b *= 255;
+	
+	std::uint32_t ret = 0;
+	
+	ret |= std::uint32_t(r);
+	ret |= (std::uint32_t(g) << 8);
+	ret |= (std::uint32_t(b) << 16);
+	
+	return ret;
+}
+}
+
 //'str' should have no leading and/or trailing white spaces.
 StyleValue StyleValue::parsePaint(const std::string& str){
 	StyleValue ret;
@@ -860,6 +912,41 @@ StyleValue StyleValue::parsePaint(const std::string& str){
 			
 			if(s.get() == ')'){
 				ret.color = r | (g << 8) | (b << 16);
+				ret.type = StyleValue::Type_e::NORMAL;
+			}
+			return ret;
+		}
+	}
+	
+	//check if hsl() notation
+	{
+		const std::string hsl = "hsl(";
+		if(hsl == str.substr(0, hsl.length())){
+			std::istringstream ss(str);
+			
+			std::string tmpStr;
+			
+			ss >> std::setw(int(hsl.length())) >> tmpStr >> std::setw(0);
+			ASSERT(tmpStr == hsl)
+			
+			std::uint32_t h, s, l;
+			
+			skipWhitespaces(ss);
+			ss >> h;
+			skipWhitespacesAndOrComma(ss);
+			ss >> s;
+			if(ss.get() != '%'){
+				return ret;
+			}
+			skipWhitespacesAndOrComma(ss);
+			ss >> l;
+			if(ss.get() != '%'){
+				return ret;
+			}
+			skipWhitespaces(ss);
+			
+			if(ss.get() == ')'){
+				ret.color = hslToRgb(real(h), real(s) / real(100), real(l) / real(100));
 				ret.type = StyleValue::Type_e::NORMAL;
 			}
 			return ret;
