@@ -74,7 +74,15 @@ class Parser : public mikroxml::Parser{
 
 	void fillElement(Element& e);
 	void fillReferencing(Referencing& e);
-	void fillRectangle(Rectangle& r);
+	void fillRectangle(
+			Rectangle& r,
+			const Rectangle& defaultValues = Rectangle(
+					Length::make(0, Length::Unit_e::PERCENT),
+					Length::make(0, Length::Unit_e::PERCENT),
+					Length::make(100, Length::Unit_e::PERCENT),
+					Length::make(100, Length::Unit_e::PERCENT)
+				)
+		);
 	void fillViewBoxed(ViewBoxed& v);
 	void fillAspectRatioed(AspectRatioed& e);
 	void fillTransformable(Transformable& t);
