@@ -45,6 +45,10 @@ struct Length{
 	}
 	
 	real toPx(real dpi)const noexcept;
+	
+	bool operator!=(const Length& l)const{
+		return this->value != l.value || (this->unit != l.unit && this->value != real(0));
+	}
 };
 
 }

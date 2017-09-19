@@ -101,20 +101,20 @@ void StreamWriter::addAspectRatioedAttributes(const AspectRatioed& e) {
 	}
 }
 
-void StreamWriter::addRectangleAttributes(const Rectangle& e) {
-	if(e.x.value != 0){
+void StreamWriter::addRectangleAttributes(const Rectangle& e, const Rectangle& defaultValues) {
+	if(e.isXSpecified() && e.x != defaultValues.x){
 		this->addAttribute("x", e.x);
 	}
 	
-	if(e.y.value != 0){
+	if(e.isYSpecified() && e.y != defaultValues.y){
 		this->addAttribute("y", e.y);
 	}
 	
-	if(e.width.value != 100 || e.width.unit != Length::Unit_e::PERCENT){ //if width is not 100% (default value)
+	if(e.isWidthSpecified() && e.width != defaultValues.width){
 		this->addAttribute("width", e.width);
 	}
 	
-	if(e.height.value != 100 || e.height.unit != Length::Unit_e::PERCENT){ //if height is not 100% (default value)
+	if(e.isHeightSpecified() && e.height != defaultValues.height){
 		this->addAttribute("height", e.height);
 	}
 }
@@ -205,7 +205,15 @@ void StreamWriter::visit(const ImageElement& e){
 	this->addElementAttributes(e);
 	this->addStyleableAttributes(e);
 	this->addTransformableAttributes(e);
-	this->addRectangleAttributes(e);
+	this->addRectangleAttributes(
+			e,
+			Rectangle(
+					Length::make(0, Length::Unit_e::NUMBER),
+					Length::make(0, Length::Unit_e::NUMBER),
+					Length::make(0, Length::Unit_e::NUMBER),
+					Length::make(0, Length::Unit_e::NUMBER)
+				)
+		);
 	this->addReferencingAttributes(e);
 	this->addAspectRatioedAttributes(e);
 	this->write();
@@ -396,7 +404,15 @@ void StreamWriter::visit(const FilterElement& e){
 	this->setName("filter");
 	this->addElementAttributes(e);
 	this->addStyleableAttributes(e);
-	this->addRectangleAttributes(e);
+	this->addRectangleAttributes(
+			e,
+			Rectangle(
+				Length::make(-10, Length::Unit_e::PERCENT),
+				Length::make(-10, Length::Unit_e::PERCENT),
+				Length::make(120, Length::Unit_e::PERCENT),
+				Length::make(120, Length::Unit_e::PERCENT)
+			)
+		);
 	this->addReferencingAttributes(e);
 	
 	if(e.filterUnits != CoordinateUnits_e::UNKNOWN && e.filterUnits != CoordinateUnits_e::OBJECT_BOUNDING_BOX){

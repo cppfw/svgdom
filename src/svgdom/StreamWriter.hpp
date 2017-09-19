@@ -27,7 +27,15 @@ protected:
 	void addStyleableAttributes(const Styleable& e);
 	void addViewBoxedAttributes(const ViewBoxed& e);
 	void addAspectRatioedAttributes(const AspectRatioed& e);
-	void addRectangleAttributes(const Rectangle& e);
+	void addRectangleAttributes(
+			const Rectangle& e,
+			const Rectangle& defaultValues = Rectangle(
+					Length::make(0, Length::Unit_e::PERCENT),
+					Length::make(0, Length::Unit_e::PERCENT),
+					Length::make(100, Length::Unit_e::PERCENT),
+					Length::make(100, Length::Unit_e::PERCENT)
+				)
+		);
 	void addShapeAttributes(const Shape& e);
 	void addReferencingAttributes(const Referencing& e);
 	void addGradientAttributes(const Gradient& e);
