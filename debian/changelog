@@ -1,3 +1,9 @@
+libsvgdom (0.3.7) unstable; urgency=medium
+
+  * adding SvgElement::getDimensions() function
+
+ -- Ivan Gagis <igagis@gmail.com>  Fri, 15 Dec 2017 13:35:21 +0200
+
 libsvgdom (0.3.6) unstable; urgency=medium
 
   * rectangle default values corrected
