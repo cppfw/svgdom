@@ -5,21 +5,30 @@
 
 using namespace svgdom;
 
+std::array<real, 2> SvgElement::getDimensions(real dpi) const noexcept{
+	real w = this->width.toPx(dpi);
+	real h = this->height.toPx(dpi);
+
+	if(w <= 0 && this->viewBox[2] > 0){
+		w = this->viewBox[2];
+	}
+	
+	if(h <= 0 && this->viewBox[3] > 0){
+		h = this->viewBox[3];
+	}
+	
+	return {{w, h}};
+}
 
 
 real SvgElement::aspectRatio(real dpi)const{
-	real w = this->width.toPx(dpi);
-	real h = this->height.toPx(dpi);
+	auto wh = this->getDimensions(dpi);
 	
-	if(w <= 0 || h <= 0){
-		if(this->viewBox[2] <= 0 || this->viewBox[3] <= 0){
-			return 0;
-		}else{
-			return this->viewBox[2] / this->viewBox[3];
-		}
+	if(wh[0] <= 0 || wh[1] <= 0){
+		return 0;
 	}
 	
-	return w / h;
+	return wh[0] / wh[1];
 }
 
 void GElement::accept(Visitor& visitor){

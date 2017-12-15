@@ -62,6 +62,15 @@ struct SvgElement :
 	 * @return 0 if any of height or weight is specified in percent.
 	 */
 	real aspectRatio(real dpi)const;
+	
+	/**
+	 * @brief Get natural dimensions in pixels.
+	 * If any of the dimensions cannot be converted to pixels, e.g. because specified in percentage,
+	 * then this dimensions will be returned as zero.
+	 * @param dpi - dots per inch to use when converting lengths to pixels.
+	 * @return Width and height.
+	 */
+	std::array<real, 2> getDimensions(real dpi)const noexcept;
 };
 
 struct SymbolElement :
