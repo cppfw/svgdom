@@ -1,3 +1,9 @@
+libsvgdom (0.3.8) unstable; urgency=medium
+
+  * added <mask> element and mask prorperty
+
+ -- Ivan Gagis <igagis@gmail.com>  Tue, 19 Dec 2017 15:27:15 +0200
+
 libsvgdom (0.3.7) unstable; urgency=medium
 
   * adding SvgElement::getDimensions() function
