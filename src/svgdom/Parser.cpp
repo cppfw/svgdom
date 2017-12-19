@@ -131,6 +131,8 @@ void Parser::parseNode(){
 				this->parseFeCompositeElement();
 			}else if(nsn.name == "image"){
 				this->parseImageElement();
+			}else if(nsn.name == "mask"){
+				this->parseMaskElement();
 			}else{
 				break;
 			}
@@ -366,6 +368,28 @@ void Parser::parseDefsElement() {
 	this->fillTransformable(*ret);
 	this->fillStyleable(*ret);
 
+	auto c = ret.get();
+	this->addElement(std::move(ret), c);
+}
+
+void Parser::parseMaskElement() {
+	ASSERT(this->getNamespace(this->element).ns == XmlNamespace_e::SVG)
+	ASSERT(this->getNamespace(this->element).name == "mask")
+
+	auto ret = utki::makeUnique<MaskElement>();
+
+	this->fillElement(*ret);
+	this->fillRectangle(*ret);
+	this->fillStyleable(*ret);
+
+	if(auto a = this->findAttributeOfNamespace(XmlNamespace_e::SVG, "maskUnits")){
+		ret->maskUnits = parseCoordinateUnits(*a);
+	}
+	
+	if(auto a = this->findAttributeOfNamespace(XmlNamespace_e::SVG, "maskContentUnits")){
+		ret->maskContentUnits = parseCoordinateUnits(*a);
+	}
+	
 	auto c = ret.get();
 	this->addElement(std::move(ret), c);
 }

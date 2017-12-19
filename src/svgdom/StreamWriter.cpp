@@ -391,6 +391,23 @@ void StreamWriter::visit(const DefsElement& e) {
 	this->write(&e);
 }
 
+void StreamWriter::visit(const MaskElement& e) {
+	this->setName("mask");
+	this->addElementAttributes(e);
+	this->addRectangleAttributes(e);
+	this->addStyleableAttributes(e);
+	
+	if(e.maskUnits != CoordinateUnits_e::OBJECT_BOUNDING_BOX && e.maskUnits != CoordinateUnits_e::UNKNOWN){
+		this->addAttribute("maskUnits", coordinateUnitsToString(e.maskUnits));
+	}
+	
+	if(e.maskContentUnits != CoordinateUnits_e::USER_SPACE_ON_USE && e.maskContentUnits != CoordinateUnits_e::UNKNOWN){
+		this->addAttribute("maskContentUnits", coordinateUnitsToString(e.maskContentUnits));
+	}
+	
+	this->write(&e);
+}
+
 void StreamWriter::visit(const SymbolElement& e) {
 	this->setName("symbol");
 	this->addElementAttributes(e);

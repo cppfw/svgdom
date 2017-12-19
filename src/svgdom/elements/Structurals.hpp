@@ -7,6 +7,7 @@
 #include "Rectangle.hpp"
 #include "ViewBoxed.hpp"
 #include "AspectRatioed.hpp"
+#include "CoordinateUnits.hpp"
 
 namespace svgdom{
 
@@ -84,5 +85,18 @@ struct SymbolElement :
 	void accept(ConstVisitor& visitor) const override;
 };
 
+
+struct MaskElement :
+		public Element,
+		public Container,
+		public Rectangle,
+		public Styleable
+{
+	CoordinateUnits_e maskUnits;
+	CoordinateUnits_e maskContentUnits;
+	
+	void accept(Visitor& visitor)override;
+	void accept(ConstVisitor& visitor) const override;
+};
 
 }

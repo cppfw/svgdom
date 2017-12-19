@@ -75,6 +75,7 @@ public:
 	virtual void visit(FeBlendElement& e);
 	virtual void visit(FeCompositeElement& e);
 	virtual void visit(ImageElement& e);
+	virtual void visit(MaskElement& e);
 	
 	/**
 	 * @brief Default visit method.
@@ -130,6 +131,7 @@ public:
 	virtual void visit(const FeBlendElement& e);
 	virtual void visit(const FeCompositeElement& e);
 	virtual void visit(const ImageElement& e);
+	virtual void visit(const MaskElement& e);
 	
 	/**
 	 * @brief Default visit method.

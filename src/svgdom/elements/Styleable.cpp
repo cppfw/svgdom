@@ -110,6 +110,7 @@ std::string Styleable::stylesToString() const {
 						break;
 				}
 				break;
+			case StyleProperty_e::MASK:
 			case StyleProperty_e::FILTER:
 				s << "url(" << st.second.str << ")";
 				break;
@@ -209,6 +210,7 @@ StyleValue Styleable::parseStylePropertyValue(StyleProperty_e type, const std::s
 				TRACE(<< "unknown fill-rule value:" << str << std::endl)
 			}
 			break;
+		case StyleProperty_e::MASK:
 		case StyleProperty_e::FILTER:
 			v = StyleValue::parseUrl(str);
 			break;

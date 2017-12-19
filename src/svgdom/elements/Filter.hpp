@@ -7,7 +7,7 @@
 #include "Rectangle.hpp"
 #include "Referencing.hpp"
 #include "Container.hpp"
-#include "../CoordinateUnits.hpp"
+#include "CoordinateUnits.hpp"
 
 namespace svgdom{
 struct FilterElement :

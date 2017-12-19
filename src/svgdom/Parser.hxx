@@ -114,6 +114,7 @@ class Parser : public mikroxml::Parser{
 	void parseFeBlendElement();
 	void parseFeCompositeElement();
 	void parseImageElement();
+	void parseMaskElement();
 	
 	void parseNode();
 public:

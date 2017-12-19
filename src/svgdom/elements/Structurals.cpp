@@ -70,3 +70,11 @@ void UseElement::accept(Visitor& visitor){
 void UseElement::accept(ConstVisitor& visitor) const {
 	visitor.visit(*this);
 }
+
+void MaskElement::accept(Visitor& visitor){
+	visitor.visit(*this);
+}
+
+void MaskElement::accept(ConstVisitor& visitor) const {
+	visitor.visit(*this);
+}

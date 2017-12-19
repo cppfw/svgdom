@@ -5,7 +5,7 @@
 #include "Referencing.hpp"
 #include "Transformable.hpp"
 #include "Styleable.hpp"
-#include "../CoordinateUnits.hpp"
+#include "CoordinateUnits.hpp"
 
 namespace svgdom{
 

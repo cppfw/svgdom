@@ -67,6 +67,7 @@ public:
 	void visit(const FeBlendElement& e) override;
 	void visit(const FeCompositeElement& e) override;
 	void visit(const ImageElement& e) override;
+	void visit(const MaskElement& e) override;
 
 };
 
