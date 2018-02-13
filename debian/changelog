@@ -1,3 +1,9 @@
+libsvgdom (0.3.9) unstable; urgency=medium
+
+  * use 300x150 dimensions by default
+
+ -- Ivan Gagis <igagis@gmail.com>  Tue, 13 Feb 2018 15:49:05 +0200
+
 libsvgdom (0.3.8) unstable; urgency=medium
 
   * added <mask> element and mask prorperty

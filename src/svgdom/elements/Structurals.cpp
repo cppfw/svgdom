@@ -9,12 +9,20 @@ std::array<real, 2> SvgElement::getDimensions(real dpi) const noexcept{
 	real w = this->width.toPx(dpi);
 	real h = this->height.toPx(dpi);
 
-	if(w <= 0 && this->viewBox[2] > 0){
-		w = this->viewBox[2];
+	if(w <= 0){
+		if(this->viewBox[2] > 0){
+			w = this->viewBox[2];
+		}else{
+			w = 300;
+		}
 	}
 	
-	if(h <= 0 && this->viewBox[3] > 0){
-		h = this->viewBox[3];
+	if(h <= 0){
+		if(this->viewBox[3] > 0){
+			h = this->viewBox[3];
+		}else{
+			h = 150;
+		}
 	}
 	
 	return {{w, h}};
