@@ -76,7 +76,7 @@ before_install:
 
     brew install --force openssl &&
     
-    sudo gem install cocoapods &&
+    sudo gem install cocoapods --pre &&
     pod repo add --silent igagis https://$MYCI_GIT_USERNAME:$MYCI_GIT_ACCESS_TOKEN@github.com/igagis/cocoapods-repo.git &&
     pod install --project-directory=ios;
   fi

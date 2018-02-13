@@ -1,3 +1,9 @@
+libsvgdom (0.3.11) unstable; urgency=medium
+
+  * use cocoapods pre-release
+
+ -- Ivan Gagis <igagis@gmail.com>  Tue, 13 Feb 2018 20:58:24 +0200
+
 libsvgdom (0.3.10) unstable; urgency=medium
 
   * trying to fix cocapods deployment
