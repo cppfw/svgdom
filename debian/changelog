@@ -1,3 +1,9 @@
+libsvgdom (0.3.13) unstable; urgency=medium
+
+  * cocoapods deploy fix
+
+ -- Ivan Gagis <igagis@gmail.com>  Tue, 13 Feb 2018 23:18:41 +0200
+
 libsvgdom (0.3.12) unstable; urgency=medium
 
   * cocoapods deploy fix
