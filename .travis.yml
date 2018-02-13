@@ -58,7 +58,7 @@ env:
 before_install:
 - if [ "$BUILD_NAME" == "macosx" ]; then
     rvm install ruby-2.3.3 &&
-    rvm use ruby-2.3.3 &&
+    rvm --default use ruby-2.3.3 &&
     
     brew update > /dev/null &&
     brew tap igagis/tap &&
@@ -76,7 +76,7 @@ before_install:
 
     brew install --force openssl &&
     
-    sudo gem install cocoapods --pre &&
+    sudo gem install cocoapods &&
     pod repo add --silent igagis https://$MYCI_GIT_USERNAME:$MYCI_GIT_ACCESS_TOKEN@github.com/igagis/cocoapods-repo.git &&
     pod install --project-directory=ios;
   fi
