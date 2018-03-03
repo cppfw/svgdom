@@ -137,6 +137,12 @@ enum class Display_e{
 	NONE
 };
 
+enum class Visibility_e{
+	VISIBLE,
+	HIDDEN,
+	COLLAPSE
+};
+
 enum class EnableBackground_e{
 	ACCUMULATE,
 	NEW
@@ -215,6 +221,7 @@ struct StyleValue{
 		ColorInterpolation_e colorInterpolationFilters;
 		Display_e display;
 		EnableBackground enableBackground;
+		Visibility_e visibility;
 	};
 
 	/**
@@ -243,6 +250,9 @@ struct StyleValue{
 	static StyleValue parseDisplay(const std::string& str);
 	std::string displayToString()const;
 
+	static StyleValue parseVisibility(const std::string& str);
+	std::string visibilityToString()const;
+	
 	static StyleValue parseEnableBackground(const std::string& str);
 	std::string enableBackgroundToString()const;
 	

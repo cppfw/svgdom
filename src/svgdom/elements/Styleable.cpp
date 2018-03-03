@@ -120,6 +120,9 @@ std::string Styleable::stylesToString() const {
 			case StyleProperty_e::ENABLE_BACKGROUND:
 				s << st.second.enableBackgroundToString();
 				break;
+			case StyleProperty_e::VISIBILITY:
+				s << st.second.visibilityToString();
+				break;
 		}
 	}
 	return s.str();
@@ -219,6 +222,9 @@ StyleValue Styleable::parseStylePropertyValue(StyleProperty_e type, const std::s
 			break;
 		case StyleProperty_e::ENABLE_BACKGROUND:
 			v = StyleValue::parseEnableBackground(str);
+			break;
+		case StyleProperty_e::VISIBILITY:
+			v = StyleValue::parseVisibility(str);
 			break;
 	}
 	return v;
@@ -648,6 +654,42 @@ std::string StyleValue::displayToString()const {
 	return i->second;
 }
 
+namespace{
+std::map<std::string, Visibility_e> stringToVisibilityMap = {
+	{"visible", Visibility_e::VISIBLE},
+	{"hidden", Visibility_e::HIDDEN},
+	{"collapse", Visibility_e::COLLAPSE}
+};
+}
+
+namespace{
+auto visibilityToStringMap = utki::flipMap(stringToVisibilityMap);
+}
+
+StyleValue StyleValue::parseVisibility(const std::string& str){
+	StyleValue ret;
+	
+	//NOTE: "inherit" is already checked on upper level.
+	
+	auto i = stringToVisibilityMap.find(str);
+	if(i == stringToVisibilityMap.end()){
+		ret.visibility = Visibility_e::VISIBLE; // default value
+	}else{
+		ret.visibility = i->second;
+	}
+	
+	ret.type = StyleValue::Type_e::NORMAL;
+	
+	return ret;
+}
+
+std::string StyleValue::visibilityToString() const {
+	auto i = visibilityToStringMap.find(this->visibility);
+	if(i == visibilityToStringMap.end()){
+		return visibilityToStringMap[Visibility_e::VISIBLE]; //default value
+	}
+	return i->second;
+}
 
 
 StyleValue StyleValue::parseColorInterpolation(const std::string& str) {
