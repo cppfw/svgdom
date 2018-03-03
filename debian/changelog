@@ -1,3 +1,9 @@
+libsvgdom (0.3.15) unstable; urgency=medium
+
+  * added 'visibility' style property
+
+ -- Ivan Gagis <igagis@gmail.com>  Sat, 03 Mar 2018 15:07:34 +0200
+
 libsvgdom (0.3.14) unstable; urgency=medium
 
   * cocoapods deploy fix
