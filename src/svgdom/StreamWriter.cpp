@@ -134,7 +134,7 @@ void StreamWriter::addGradientAttributes(const Gradient& e) {
 		this->addAttribute("spreadMethod", e.spreadMethodToString());
 	}
 	
-	if(e.units != CoordinateUnits_e::UNKNOWN && e.units != CoordinateUnits_e::OBJECT_BOUNDING_BOX){
+	if(e.units != CoordinateUnits_e::UNKNOWN){
 		this->addAttribute("gradientUnits", coordinateUnitsToString(e.units));
 	}
 	

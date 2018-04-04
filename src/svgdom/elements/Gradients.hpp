@@ -26,11 +26,7 @@ struct Gradient :
 		REPEAT
 	} spreadMethod = SpreadMethod_e::DEFAULT;
 	
-	CoordinateUnits_e units = CoordinateUnits_e::OBJECT_BOUNDING_BOX;
-	
-	bool isBoundingBoxUnits()const noexcept{
-		return this->units == CoordinateUnits_e::OBJECT_BOUNDING_BOX;
-	}
+	CoordinateUnits_e units = CoordinateUnits_e::UNKNOWN;
 	
 	struct StopElement :
 			public Element,
