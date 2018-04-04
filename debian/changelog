@@ -1,3 +1,9 @@
+libsvgdom (0.3.16) unstable; urgency=medium
+
+  * corrected rect element default values
+
+ -- Ivan Gagis <igagis@gmail.com>  Wed, 04 Apr 2018 17:40:30 +0300
+
 libsvgdom (0.3.15) unstable; urgency=medium
 
   * added 'visibility' style property
