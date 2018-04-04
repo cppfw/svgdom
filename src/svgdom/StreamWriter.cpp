@@ -245,7 +245,7 @@ void StreamWriter::visit(const LineElement& e) {
 void StreamWriter::visit(const RectElement& e) {
 	this->setName("rect");
 	this->addShapeAttributes(e);
-	this->addRectangleAttributes(e);
+	this->addRectangleAttributes(e, RectElement::rectangleDefaultValues);
 	
 	if(e.rx.unit != Length::Unit_e::UNKNOWN){
 		this->addAttribute("rx", e.rx);

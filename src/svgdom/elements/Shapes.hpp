@@ -90,6 +90,7 @@ struct RectElement :
 	void accept(Visitor& visitor)override;
 	void accept(ConstVisitor& visitor) const override;
 
+	static Rectangle rectangleDefaultValues;
 };
 
 struct CircleElement : public Shape{

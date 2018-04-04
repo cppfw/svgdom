@@ -10,6 +10,14 @@
 
 using namespace svgdom;
 
+
+Rectangle RectElement::rectangleDefaultValues = Rectangle(
+		Length::make(0, Length::Unit_e::NUMBER),
+		Length::make(0, Length::Unit_e::NUMBER),
+		Length::make(-1, Length::Unit_e::UNKNOWN),
+		Length::make(-1, Length::Unit_e::UNKNOWN)
+	);
+
 void PathElement::accept(Visitor& visitor){
 	visitor.visit(*this);
 }

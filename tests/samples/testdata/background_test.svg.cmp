@@ -1,4 +1,4 @@
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="1000px" height="1000px">
-	<rect style="fill:#fcfdfb"/>
+	<rect style="fill:#fcfdfb" width="100%" height="100%"/>
 	<rect style="fill:#95d495" x="93" y="98.5" width="814" height="803"/>
 </svg>

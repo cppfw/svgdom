@@ -784,7 +784,7 @@ void Parser::parseRectElement() {
 	auto ret = utki::makeUnique<RectElement>();
 
 	this->fillShape(*ret);
-	this->fillRectangle(*ret);
+	this->fillRectangle(*ret, RectElement::rectangleDefaultValues);
 
 	if(auto a = this->findAttributeOfNamespace(XmlNamespace_e::SVG, "rx")){
 		ret->rx = Length::parse(*a);
