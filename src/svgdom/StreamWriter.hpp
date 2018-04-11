@@ -42,6 +42,7 @@ protected:
 	void addFilterPrimitiveAttributes(const FilterPrimitive& e);
 	void addInputableAttributes(const Inputable& e);
 	void addSecondInputableAttributes(const SecondInputable& e);
+	void addTextPositioningAttributes(const TextPositioning& e);
 	
 public:
 	StreamWriter(std::ostream& s) : s(s) {}
@@ -68,6 +69,7 @@ public:
 	void visit(const FeCompositeElement& e) override;
 	void visit(const ImageElement& e) override;
 	void visit(const MaskElement& e) override;
+	void visit(const TextElement& e) override;
 
 };
 

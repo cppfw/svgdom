@@ -5,6 +5,7 @@
 #include "elements/Gradients.hpp"
 #include "elements/Filter.hpp"
 #include "elements/ImageElement.hpp"
+#include "elements/TextElement.hpp"
 
 namespace svgdom{
 /**
@@ -76,6 +77,7 @@ public:
 	virtual void visit(FeCompositeElement& e);
 	virtual void visit(ImageElement& e);
 	virtual void visit(MaskElement& e);
+	virtual void visit(TextElement& e);
 	
 	/**
 	 * @brief Default visit method.
@@ -132,6 +134,7 @@ public:
 	virtual void visit(const FeCompositeElement& e);
 	virtual void visit(const ImageElement& e);
 	virtual void visit(const MaskElement& e);
+	virtual void visit(const TextElement& e);
 	
 	/**
 	 * @brief Default visit method.

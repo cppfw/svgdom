@@ -133,6 +133,8 @@ void Parser::parseNode(){
 				this->parseImageElement();
 			}else if(nsn.name == "mask"){
 				this->parseMaskElement();
+			}else if(nsn.name == "text"){
+				this->parseTextElement();
 			}else{
 				break;
 			}
@@ -270,10 +272,6 @@ void Parser::fillShape(Shape& s) {
 void Parser::fillStyleable(Styleable& s) {
 	ASSERT(s.styles.size() == 0)
 
-//	if(auto a = this->findAttributeOfNamespace(XmlNamespace_e::SVG, "style")){
-//		s.styles = Styleable::parse(*a);
-//	}
-
 	for(auto& a : this->attributes){
 		auto nsn = this->getNamespace(a.first);
 		switch (nsn.ns) {
@@ -293,16 +291,6 @@ void Parser::fillStyleable(Styleable& s) {
 				break;
 		}
 	}
-	
-//	for(auto type = StyleProperty_e::UNKNOWN; type != StyleProperty_e::ENUM_SIZE; type = StyleProperty_e(unsigned(type) + 1)){
-//		auto name = Styleable::propertyToString(type);
-//		if(name.length() == 0){
-//			continue;
-//		}
-//		if(auto a = this->findAttributeOfNamespace(XmlNamespace_e::SVG, name)){
-//			s.styles[type] = Styleable::parseStylePropertyValue(type, *a);
-//		}
-//	}
 }
 
 void Parser::fillTransformable(Transformable& t) {
@@ -316,6 +304,10 @@ void Parser::fillViewBoxed(ViewBoxed& v) {
 	if(auto a = this->findAttributeOfNamespace(XmlNamespace_e::SVG, "viewBox")){
 		v.viewBox = SvgElement::parseViewbox(*a);
 	}
+}
+
+void Parser::fillTextPositioning(TextPositioning& p) {
+	//TODO: parse missing attributes
 }
 
 void Parser::fillAspectRatioed(AspectRatioed& e) {
@@ -393,6 +385,24 @@ void Parser::parseMaskElement() {
 	auto c = ret.get();
 	this->addElement(std::move(ret), c);
 }
+
+void Parser::parseTextElement() {
+	ASSERT(this->getNamespace(this->element).ns == XmlNamespace_e::SVG)
+	ASSERT(this->getNamespace(this->element).name == "text")
+
+	auto ret = utki::makeUnique<TextElement>();
+
+	this->fillElement(*ret);
+	this->fillStyleable(*ret);
+	this->fillTransformable(*ret);
+	this->fillTextPositioning(*ret);
+	
+	//TODO: parse missing text element attributes
+	
+	auto c = ret.get();
+	this->addElement(std::move(ret), c);
+}
+
 
 void Parser::parseEllipseElement() {
 	ASSERT(this->getNamespace(this->element).ns == XmlNamespace_e::SVG)

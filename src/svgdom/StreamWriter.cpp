@@ -165,6 +165,9 @@ void StreamWriter::addSecondInputableAttributes(const SecondInputable& e) {
 	}
 }
 
+void StreamWriter::addTextPositioningAttributes(const TextPositioning& e) {
+	//TODO: add missing attributes
+}
 
 
 void StreamWriter::addShapeAttributes(const Shape& e) {
@@ -404,6 +407,18 @@ void StreamWriter::visit(const MaskElement& e) {
 	if(e.maskContentUnits != CoordinateUnits_e::USER_SPACE_ON_USE && e.maskContentUnits != CoordinateUnits_e::UNKNOWN){
 		this->addAttribute("maskContentUnits", coordinateUnitsToString(e.maskContentUnits));
 	}
+	
+	this->write(&e);
+}
+
+void StreamWriter::visit(const TextElement& e){
+	this->setName("text");
+	this->addElementAttributes(e);
+	this->addTransformableAttributes(e);
+	this->addStyleableAttributes(e);
+	this->addTextPositioningAttributes(e);
+	
+	//TODO: add text element attributes
 	
 	this->write(&e);
 }

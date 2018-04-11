@@ -16,6 +16,7 @@
 #include "elements/Structurals.hpp"
 #include "elements/Filter.hpp"
 #include "elements/ImageElement.hpp"
+#include "elements/TextElement.hpp"
 
 namespace svgdom{
 
@@ -92,6 +93,7 @@ class Parser : public mikroxml::Parser{
 	void fillFilterPrimitive(FilterPrimitive& p);
 	void fillInputable(Inputable& p);
 	void fillSecondInputable(SecondInputable& p);
+	void fillTextPositioning(TextPositioning& p);
 	
 	void parseGradientStopElement();
 	void parseSvgElement();
@@ -115,6 +117,7 @@ class Parser : public mikroxml::Parser{
 	void parseFeCompositeElement();
 	void parseImageElement();
 	void parseMaskElement();
+	void parseTextElement();
 	
 	void parseNode();
 public:

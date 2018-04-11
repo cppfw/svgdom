@@ -55,6 +55,10 @@ void Visitor::visit(MaskElement& e) {
 	this->defaultVisit(e, e);
 }
 
+void Visitor::visit(TextElement& e){
+	this->defaultVisit(e, e);
+}
+
 void Visitor::visit(Gradient::StopElement& e) {
 	this->defaultVisit(e);
 }
@@ -158,6 +162,10 @@ void ConstVisitor::visit(const DefsElement& e) {
 }
 
 void ConstVisitor::visit(const MaskElement& e) {
+	this->defaultVisit(e, e);
+}
+
+void ConstVisitor::visit(const TextElement& e){
 	this->defaultVisit(e, e);
 }
 
