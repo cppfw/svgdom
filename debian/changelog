@@ -1,3 +1,9 @@
+libsvgdom (0.3.19) unstable; urgency=medium
+
+  * rebuilding against latest binary dependencies
+
+ -- Ivan Gagis <igagis@gmail.com>  Thu, 27 Sep 2018 23:06:58 +0300
+
 libsvgdom (0.3.18) unstable; urgency=medium
 
   * text element added
