@@ -9,16 +9,16 @@ using namespace svgdom;
 
 std::string Transformable::transformationsToString() const {
 	std::stringstream s;
-	
+
 	bool isFirst = true;
-	
+
 	for(auto& t : this->transformations){
 		if(isFirst){
 			isFirst = false;
 		}else{
 			s << " ";
 		}
-		
+
 		switch(t.type){
 			default:
 				ASSERT(false)
@@ -55,23 +55,27 @@ std::string Transformable::transformationsToString() const {
 				break;
 		}
 	}
-	
+
 	return s.str();
 }
 
 
 decltype(Transformable::transformations) Transformable::parse(const std::string& str){
 	std::istringstream s(str);
-	
+
 	s >> std::skipws;
-	
+
+	skipWhitespaces(s);
+
 	decltype(Transformable::transformations) ret;
-	
+
 	while(!s.eof()){
 		std::string transform = readTillCharOrWhitespace(s, '(');
-		
+
+//		TRACE(<< "transform = " << transform << std::endl)
+
 		Transformation t;
-		
+
 		if(transform == "matrix"){
 			t.type = Transformation::Type_e::MATRIX;
 		}else if(transform == "translate"){
@@ -87,11 +91,16 @@ decltype(Transformable::transformations) Transformable::parse(const std::string&
 		}else{
 			return ret;//unknown transformation, stop parsing
 		}
-		
+
+		skipWhitespaces(s);
+
 		if(s.get() != '('){
-			return ret;//expected (
+//			TRACE(<< "error: expected '('" << std::endl)
+			return ret; //expected (
 		}
-		
+
+		skipWhitespaces(s);
+
 		switch(t.type){
 			default:
 				ASSERT(false)
@@ -130,14 +139,17 @@ decltype(Transformable::transformations) Transformable::parse(const std::string&
 			case Transformation::Type_e::TRANSLATE:
 				t.x = readInReal(s);
 				if(s.fail()){
+//					TRACE(<< "failed to read in x translation" << std::endl)
 					return ret;
 				}
 				skipWhitespacesAndOrComma(s);
 				t.y = readInReal(s);
 				if(s.fail()){
+//					TRACE(<< "failed to read in y translation" << std::endl)
 					s.clear();
 					t.y = 0;
 				}
+//				TRACE(<< "translation read: x,y = " << t.x << ", " << t.y << std::endl)
 				break;
 			case Transformation::Type_e::SCALE:
 				t.x = readInReal(s);
@@ -178,15 +190,17 @@ decltype(Transformable::transformations) Transformable::parse(const std::string&
 				}
 				break;
 		}
-		
+
+		skipWhitespaces(s);
+
 		if(s.get() != ')'){
 			return ret;//expected )
 		}
-		
+
 		ret.push_back(t);
-		
+
 		skipWhitespacesAndOrComma(s);
 	}
-	
+
 	return ret;
 }
