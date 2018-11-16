@@ -1,3 +1,9 @@
+libsvgdom (0.3.21) unstable; urgency=medium
+
+  * transformations parsing now allows whitespaces and new lines
+
+ -- Ivan Gagis <igagis@gmail.com>  Fri, 16 Nov 2018 14:55:38 +0200
+
 libsvgdom (0.3.20) unstable; urgency=medium
 
   * disabling cygwin build
