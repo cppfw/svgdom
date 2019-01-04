@@ -9,13 +9,9 @@ this_soname := $(shell cat $(prorab_this_dir)soname.txt)
 this_srcs := $(call prorab-src-dir,.)
 
 
-this_cxxflags := 
-
 ifeq ($(debug),true)
     this_cxxflags += -DDEBUG
 endif
-
-
 
 
 this_cxxflags += -Wall #enable all warnings
@@ -36,15 +32,9 @@ this_ldlibs += -lpapki -lmikroxml -lstdc++ -lm
 
 ifeq ($(prorab_os),linux)
     this_cxxflags += -fPIC # Since we are building shared library, we need Position-Independend Code
-    this_ldlibs +=
 else ifeq ($(prorab_os),windows)
-    this_cxxflags += -I/usr/include -I/usr/local/include
-    this_ldflags += -L/usr/lib -L/usr/local/lib
-    this_ldlibs +=
 else ifeq ($(prorab_os),macosx)
     this_cxxflags += -stdlib=libc++ #this is needed to be able to use c++11 std lib
-    this_cxxflags +=
-    this_ldlibs +=
 endif
 
 
