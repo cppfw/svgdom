@@ -1,3 +1,9 @@
+libsvgdom (0.3.22) unstable; urgency=medium
+
+  * deploying to msys2
+
+ -- Ivan Gagis <igagis@gmail.com>  Sat, 05 Jan 2019 13:20:08 +0200
+
 libsvgdom (0.3.21) unstable; urgency=medium
 
   * transformations parsing now allows whitespaces and new lines
