@@ -1,3 +1,9 @@
+libsvgdom (0.3.24) unstable; urgency=medium
+
+  * deploy to bionic
+
+ -- Ivan Gagis <igagis@gmail.com>  Tue, 16 Apr 2019 02:31:49 +0300
+
 libsvgdom (0.3.23) unstable; urgency=medium
 
   * deploy to bionic
