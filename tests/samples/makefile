@@ -3,7 +3,7 @@ include prorab.mk
 this_name := parsesvg
 
 this_cxxflags += -Wall
-this_cxxflags += -Wno-format #no warnings about format
+this_cxxflags += -Werror
 this_cxxflags += -DDEBUG
 this_cxxflags += -fstrict-aliasing #strict aliasing!!!
 this_cxxflags += -std=c++11
