@@ -31,5 +31,5 @@ include_directories( build/ndkLibs/include/ )
 
 target_link_libraries(
         ${name}
-        android log mikroxml unikod papki
+        android log mikroxml papki
     )
