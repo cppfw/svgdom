@@ -1,3 +1,9 @@
+libsvgdom (0.3.25) unstable; urgency=medium
+
+  * parse path arc parameters in more flexible way
+
+ -- Ivan Gagis <igagis@gmail.com>  Thu, 05 Sep 2019 23:28:23 +0300
+
 libsvgdom (0.3.24) unstable; urgency=medium
 
   * deploy to bionic
