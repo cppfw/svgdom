@@ -264,21 +264,21 @@ decltype(PathElement::path) PathElement::parse(const std::string& str){
 				}
 				skipWhitespacesAndOrComma(s);
 				{
-					unsigned f;
+					char f;
 					s >> f;
 					if(s.fail()){
 						return ret;
 					}
-					step.flags.largeArc = (f != 0);
+					step.flags.largeArc = (f != '0');
 				}
 				skipWhitespacesAndOrComma(s);
 				{
-					unsigned f;
+					char f;
 					s >> f;
 					if(s.fail()){
 						return ret;
 					}
-					step.flags.sweep = (f != 0);
+					step.flags.sweep = (f != '0');
 				}
 				skipWhitespacesAndOrComma(s);
 				step.x = readInReal(s);
