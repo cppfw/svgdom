@@ -1,0 +1,11 @@
+source 'https://github.com/igagis/cocoapods-repo.git'
+
+project 'svgdom/svgdom%.xcodeproj'
+
+platform :ios, '8.0'
+
+target "svgdom" do
+	pod 'utki', '>= 1.1.30'
+	pod 'papki', '>= 1.0.3'
+	pod 'mikroxml', '>=0.1.1'
+end
