@@ -1,6 +1,6 @@
 source 'https://github.com/igagis/cocoapods-repo.git'
 
-project 'svgdom/svgdom%.xcodeproj'
+project 'svgdom/svgdom.xcodeproj'
 
 platform :ios, '8.0'
 
