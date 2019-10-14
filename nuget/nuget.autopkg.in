@@ -2,7 +2,12 @@ configurations {
 	UserPlatformToolset {
 		// Needed because autopackage lacks VS2015+ support
 		key = "PlatformToolset";
-		choices: "v140,v141";
+		choices: "v140,v141,v142";
+	};
+
+	RuntimeLibrary {
+		key = "RuntimeLibrary"; // This is the key you can find in .vcxproj file
+		choices: "MultiThreaded,MultiThreadedDebug,MultiThreadedDLL,MultiThreadedDebugDLL"; // these choices must be valid values for .vcxproj file
 	};
 }
 
@@ -38,36 +43,62 @@ nuget{
 			"..\src\svgdom\**\*.hpp"
 		};
 
+		//==== v140 tools ====
+
 		[x86,v140,release] {
 			lib: ..\msvs_solution\v140_Release\libsvgdom.lib;
 		}
-
 		[x86,v140,debug] {
 			lib: ..\msvs_solution\v140_Debug\libsvgdom.lib;
 		}
-
 		[x64,v140,release] {
 			lib: ..\msvs_solution\x64\v140_Release\libsvgdom.lib;
 		}
-
 		[x64,v140,debug] {
 			lib: ..\msvs_solution\x64\v140_Debug\libsvgdom.lib;
 		}
-		
+
+		//==== v141 tools ====
+
 		[x86,v141,release] {
 			lib: ..\msvs_solution\v141_Release\libsvgdom.lib;
 		}
-
 		[x86,v141,debug] {
 			lib: ..\msvs_solution\v141_Debug\libsvgdom.lib;
 		}
-
 		[x64,v141,release] {
 			lib: ..\msvs_solution\x64\v141_Release\libsvgdom.lib;
 		}
-
 		[x64,v141,debug] {
 			lib: ..\msvs_solution\x64\v141_Debug\libsvgdom.lib;
 		}
+
+		//==== v142 tools ====
+
+		[x86,v142,release,MultiThreaded] {
+			lib: ..\msvs_solution\v142_Release_MT\libsvgdom.lib;
+		}
+		[x86,v142,debug,MultiThreadedDebug] {
+			lib: ..\msvs_solution\v142_Debug_MT\libsvgdom.lib;
+		}
+		[x64,v142,release,MultiThreaded] {
+			lib: ..\msvs_solution\x64\v142_Release_MT\libsvgdom.lib;
+		}
+		[x64,v142,debug,MultiThreadedDebug] {
+			lib: ..\msvs_solution\x64\v142_Debug_MT\libsvgdom.lib;
+		}
+		[x86,v142,release,MultiThreadedDLL] {
+			lib: ..\msvs_solution\v142_Release_MD\libsvgdom.lib;
+		}
+		[x86,v142,debug,MultiThreadedDebugDLL] {
+			lib: ..\msvs_solution\v142_Debug_MD\libsvgdom.lib;
+		}
+		[x64,v142,release,MultiThreadedDLL] {
+			lib: ..\msvs_solution\x64\v142_Release_MD\libsvgdom.lib;
+		}
+		[x64,v142,debug,MultiThreadedDebugDLL] {
+			lib: ..\msvs_solution\x64\v142_Debug_MD\libsvgdom.lib;
+		}
+
 	}
 }
