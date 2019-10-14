@@ -776,7 +776,7 @@ StyleValue StyleValue::parseEnableBackground(const std::string& str) {
 		try{
 			ret.enableBackground = parseEnableBackgroundNewRect(str);
 			ret.enableBackground.value = EnableBackground_e::NEW;
-		}catch(svgdom::Exc& e){
+		}catch(svgdom::Exc&){
 			ret.enableBackground.value = EnableBackground_e::ACCUMULATE; //default value
 		}
 	}else{
