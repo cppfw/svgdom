@@ -1,3 +1,9 @@
+libsvgdom (0.3.26) unstable; urgency=medium
+
+  * binarry cocoapod, v142 msvs tools
+
+ -- Ivan Gagis <igagis@gmail.com>  Mon, 14 Oct 2019 19:58:15 +0300
+
 libsvgdom (0.3.25) unstable; urgency=medium
 
   * parse path arc parameters in more flexible way
