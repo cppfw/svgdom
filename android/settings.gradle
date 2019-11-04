@@ -1,1 +1,1 @@
-include ':app', ':libsvgdom'
+include ':app', ':svgdom'

@@ -46,9 +46,9 @@ repositories {
     }
 }
 dependencies {
-    implementation 'io.github.igagis:libutki:+'
-    implementation 'io.github.igagis:libpapki:+'
-    implementation 'io.github.igagis:libmikroxml:+'
+    implementation 'io.github.igagis:utki:+'
+    implementation 'io.github.igagis:papki:+'
+    implementation 'io.github.igagis:mikroxml:+'
 }
 
 
