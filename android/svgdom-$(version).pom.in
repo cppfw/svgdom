@@ -24,7 +24,7 @@
 	  <dependency>
 		  <groupId>io.github.igagis</groupId>
 		  <artifactId>mikroxml</artifactId>
-		  <version>[0.1.1,)</version>
+		  <version>[0.1.14,)</version>
 		  <type>aar</type>
 		  <scope>compile</scope>
 	  </dependency>
