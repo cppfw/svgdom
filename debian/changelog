@@ -1,3 +1,9 @@
+libsvgdom (0.3.29) unstable; urgency=medium
+
+  * debian buster
+
+ -- Ivan Gagis <igagis@gmail.com>  Fri, 29 Nov 2019 00:53:08 +0200
+
 libsvgdom (0.3.28) unstable; urgency=medium
 
   * android dependency version update
