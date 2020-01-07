@@ -2,7 +2,7 @@
 
 #include <utki/config.hpp>
 
-#include <papki/File.hpp>
+#include <papki/file.hpp>
 
 #include "elements/Structurals.hpp"
 #include "StreamWriter.hpp"
@@ -39,13 +39,13 @@ std::unique_ptr<SvgElement> load(const std::string& s);
  * @param buf - input buffer to load SVG from.
  * @return unique pointer to the root of SVG document tree.
  */
-std::unique_ptr<SvgElement> load(const utki::Buf<char> buf);
+std::unique_ptr<SvgElement> load(const utki::span<char> buf);
 
 /**
  * @brief Load SVG document from memory buffer.
  * @param buf - input buffer to load SVG from.
  * @return unique pointer to the root of SVG document tree.
  */
-std::unique_ptr<SvgElement> load(const utki::Buf<std::uint8_t> buf);
+std::unique_ptr<SvgElement> load(const utki::span<std::uint8_t> buf);
 
 }

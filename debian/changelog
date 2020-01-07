@@ -1,3 +1,9 @@
+libsvgdom (0.3.30) unstable; urgency=medium
+
+  * relink to latest papki
+
+ -- Ivan Gagis <igagis@gmail.com>  Tue, 07 Jan 2020 21:35:15 +0200
+
 libsvgdom (0.3.29) unstable; urgency=medium
 
   * debian buster
