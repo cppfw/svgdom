@@ -1,3 +1,9 @@
+libsvgdom (0.3.31) unstable; urgency=medium
+
+  * debian/buster i386 packages
+
+ -- Ivan Gagis <igagis@gmail.com>  Tue, 21 Jan 2020 16:02:28 +0200
+
 libsvgdom (0.3.30) unstable; urgency=medium
 
   * relink to latest papki
