@@ -20,6 +20,13 @@
             "type": "shell",
             "command": "make clean",
             "problemMatcher": []
+        },
+        {
+            "label": "test_debug",
+            "type": "shell",
+            "command": "make test debug=true",
+            "problemMatcher": [],
+            "dependsOn": "build_debug"
         }
     ]
 }
