@@ -7,7 +7,6 @@
 #include "elements/Structurals.hpp"
 #include "StreamWriter.hpp"
 
-
 namespace svgdom{
 
 /**
@@ -16,7 +15,7 @@ namespace svgdom{
  * @param f - file interface to load SVG from.
  * @return unique pointer to the root of SVG document tree.
  */
-std::unique_ptr<SvgElement> load(const papki::File& f);
+std::unique_ptr<SvgElement> load(const papki::file& f);
 
 /**
  * @brief Load SVG document.

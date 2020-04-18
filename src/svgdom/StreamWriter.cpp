@@ -3,7 +3,6 @@
 #include <utki/util.hpp>
 
 #include "util.hxx"
-#include "Exc.hpp"
 
 using namespace svgdom;
 

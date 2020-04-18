@@ -1,4 +1,4 @@
-#include "Finder.hpp"
+#include "finder.hpp"
 
 #include <utki/debug.hpp>
 
@@ -9,13 +9,13 @@ using namespace svgdom;
 namespace{
 class CacheCreator : virtual public svgdom::ConstVisitor{
 public:
-	std::map<std::string, Finder::ElementInfo> cache;
+	std::map<std::string, finder::ElementInfo> cache;
 	
 	StyleStack styleStack;
 	
 	void addToCache(const svgdom::Element& e){
 		if(e.id.length() != 0){
-			this->cache.insert(std::make_pair(e.id, Finder::ElementInfo(e, this->styleStack)));
+			this->cache.insert(std::make_pair(e.id, finder::ElementInfo(e, this->styleStack)));
 		}
 	}
 	
@@ -55,8 +55,6 @@ public:
 		this->visitContainer(e, e, e);
 	}
 	
-	
-	
 	void visit(const svgdom::PolylineElement& e) override{
 		this->visitElement(e, e);
 	}
@@ -90,11 +88,10 @@ public:
 	void visit(const ImageElement& e) override{
 		this->visitElement(e, e);
 	}
-
 };
 }
 
-Finder::Finder(const svgdom::Element& root) :
+finder::finder(const svgdom::Element& root) :
 		cache([&root](){
 			CacheCreator visitor;
 	
@@ -104,7 +101,7 @@ Finder::Finder(const svgdom::Element& root) :
 		}())
 {}
 
-const Finder::ElementInfo* Finder::findById(const std::string& id)const{
+const finder::ElementInfo* finder::find_by_id(const std::string& id)const{
 	if(id.length() == 0){
 		return nullptr;
 	}

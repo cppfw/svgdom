@@ -1,6 +1,6 @@
 #include "../../src/svgdom/dom.hpp"
 #include "../../src/svgdom/Visitor.hpp"
-#include "../../src/svgdom/Cloner.hpp"
+#include "../../src/svgdom/cloner.hpp"
 
 #include <utki/debug.hpp>
 

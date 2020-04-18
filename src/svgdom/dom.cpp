@@ -1,21 +1,18 @@
 #include "dom.hpp"
 #include "config.hpp"
-#include "Exc.hpp"
 #include "util.hxx"
 
 #include "Parser.hxx"
 
 using namespace svgdom;
 
-
-
-std::unique_ptr<SvgElement> svgdom::load(const papki::File& f){
+std::unique_ptr<SvgElement> svgdom::load(const papki::file& f){
 	Parser parser;
 	
 	{
 		papki::File::Guard fileGuard(f);
 
-		std::array<std::uint8_t, 4096> buf; //4k
+		std::array<std::uint8_t, 4096> buf; // 4k
 
 		while(true){
 			auto res = f.read(utki::make_span(buf));

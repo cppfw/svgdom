@@ -11,9 +11,10 @@
 
 #include "../util.hxx"
 #include "Element.hpp"
-#include "../Exc.hpp"
+#include "../malformed_svg_error.hpp"
 
-//some header defines OVERFLOW, undefine it
+// TODO: remove when deprecated stuff is removed.
+// some header defines OVERFLOW, undefine it
 #ifdef OVERFLOW
 #	undef OVERFLOW
 #endif
@@ -735,33 +736,33 @@ EnableBackground parseEnableBackgroundNewRect(const std::string& str){
 	EnableBackground ret;
 	
 	std::istringstream s(str);
-	skipTillCharInclusive(s, ' '); //skip 'new'
+	skipTillCharInclusive(s, ' '); // skip 'new'
 
 	skipWhitespaces(s);
 	
 	if(s.eof()){
-		ret.width = -1; //indicate that rectangle is not specified
+		ret.width = -1; // indicate that rectangle is not specified
 		return ret;
 	}
 	
 	ret.x = readInReal(s);
 	if(s.fail()){
-		throw svgdom::Exc("malformed enable-background NEW string");
+		throw malformed_svg_error("malformed 'enable-background NEW' string");
 	}
 	
 	ret.y = readInReal(s);
 	if(s.fail()){
-		throw svgdom::Exc("malformed enable-background NEW string");
+		throw malformed_svg_error("malformed 'enable-background NEW' string");
 	}
 	
 	ret.width = readInReal(s);
 	if(s.fail()){
-		throw svgdom::Exc("malformed enable-background NEW string");
+		throw malformed_svg_error("malformed enable-background NEW string");
 	}
 	
 	ret.height = readInReal(s);
 	if(s.fail()){
-		throw svgdom::Exc("malformed enable-background NEW string");
+		throw malformed_svg_error("malformed enable-background NEW string");
 	}
 	
 	return ret;
@@ -776,18 +777,17 @@ StyleValue StyleValue::parseEnableBackground(const std::string& str) {
 		try{
 			ret.enableBackground = parseEnableBackgroundNewRect(str);
 			ret.enableBackground.value = EnableBackground_e::NEW;
-		}catch(svgdom::Exc&){
-			ret.enableBackground.value = EnableBackground_e::ACCUMULATE; //default value
+		}catch(malformed_svg_error&){
+			ret.enableBackground.value = EnableBackground_e::ACCUMULATE; // default value
 		}
 	}else{
-		ret.enableBackground.value = EnableBackground_e::ACCUMULATE; //default value
+		ret.enableBackground.value = EnableBackground_e::ACCUMULATE; // default value
 	}
 	
 	ret.type = StyleValue::Type_e::NORMAL;
 	
 	return ret;
 }
-
 
 std::string StyleValue::enableBackgroundToString() const {
 	switch(this->enableBackground.value){

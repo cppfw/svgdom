@@ -1,10 +1,10 @@
 #include "Parser.hxx"
 #include "util.hxx"
 
-#include "Exc.hpp"
-
 #include <utki/debug.hpp>
 #include <utki/util.hpp>
+
+#include "malformed_svg_error.hpp"
 
 using namespace svgdom;
 
@@ -579,36 +579,36 @@ void Parser::parseFeColorMatrixElement() {
 	if(auto a = this->findAttributeOfNamespace(XmlNamespace_e::SVG, "values")){
 		switch(ret->type){
 			default:
-				ASSERT(false) //should never get here, MATRIX should always be the default value
+				ASSERT(false) // should never get here, MATRIX should always be the default value
 				break;
 			case FeColorMatrixElement::Type_e::MATRIX:
-				//20 values expected
+				// 20 values expected
 				{
 					std::istringstream ss(*a);
 					
 					for(unsigned i = 0; i != 20; ++i){
 						ret->values[i] = readInReal(ss);
 						if(ss.fail()){
-							throw svgdom::Exc("malformed 'values' string of 'feColorMatrix' element");
+							throw malformed_svg_error("malformed 'values' string of 'feColorMatrix' element");
 						}
 						skipWhitespacesAndOrComma(ss);
 					}
 				}
 				break;
 			case FeColorMatrixElement::Type_e::HUE_ROTATE:
-				//fall-through
+				// fall-through
 			case FeColorMatrixElement::Type_e::SATURATE:
-				//one value is expected
+				// one value is expected
 				{
 					std::istringstream ss(*a);
 					ret->values[0] = readInReal(ss);
 					if(ss.fail()){
-						throw svgdom::Exc("malformed 'values' string of 'feColorMatrix' element");
+						throw malformed_svg_error("malformed 'values' string of 'feColorMatrix' element");
 					}
 				}
 				break;
 			case FeColorMatrixElement::Type_e::LUMINANCE_TO_ALPHA:
-				//no values are expected
+				// no values are expected
 				break;
 		}
 	}
