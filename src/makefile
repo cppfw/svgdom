@@ -25,7 +25,7 @@ this_cxxflags += -fno-operator-names # do not treat 'and', 'bitand','bitor','com
 this_cxxflags += -Werror # treat warnings as errors
 this_cxxflags += -Wfatal-errors # stop on first error encountered
 this_cxxflags += -fstrict-aliasing # in order to comply with the c++ standard more strictly
-this_cxxflags += -std=c++11
+this_cxxflags += -std=c++14
 this_cxxflags += -g
 
 this_ldlibs += -lpapki -lmikroxml -lstdc++ -lm

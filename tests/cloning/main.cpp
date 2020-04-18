@@ -5,9 +5,9 @@
 #include <utki/debug.hpp>
 
 int main(int argc, char** argv){
-	std::unique_ptr<svgdom::SvgElement> domOriginal = utki::makeUnique<svgdom::SvgElement>();
+	std::unique_ptr<svgdom::SvgElement> domOriginal = std::make_unique<svgdom::SvgElement>();
 	
-	std::unique_ptr<svgdom::PathElement> path = utki::makeUnique<svgdom::PathElement>();
+	std::unique_ptr<svgdom::PathElement> path = std::make_unique<svgdom::PathElement>();
 
 	svgdom::PathElement::Step step;
 

@@ -18,12 +18,12 @@ std::unique_ptr<SvgElement> svgdom::load(const papki::File& f){
 		std::array<std::uint8_t, 4096> buf; //4k
 
 		while(true){
-			auto res = f.read(utki::wrapBuf(buf));
+			auto res = f.read(utki::make_span(buf));
 			ASSERT_ALWAYS(res <= buf.size())
 			if(res == 0){
 				break;
 			}
-			parser.feed(utki::wrapBuf(&*buf.begin(), res));
+			parser.feed(utki::make_span(&*buf.begin(), res));
 		}
 		parser.end();
 	}
@@ -44,7 +44,7 @@ std::unique_ptr<SvgElement> svgdom::load(std::istream& s){
 			}
 			buf.push_back(c);
 		}
-		parser.feed(utki::wrapBuf(buf));
+		parser.feed(utki::make_span(buf));
 	}
 	parser.end();
 	
@@ -52,14 +52,14 @@ std::unique_ptr<SvgElement> svgdom::load(std::istream& s){
 }
 
 std::unique_ptr<SvgElement> svgdom::load(const std::string& s){
-	return load(utki::wrapBuf(s.c_str(), s.length()));
+	return load(utki::make_span(s.c_str(), s.length()));
 }
 
-std::unique_ptr<SvgElement> svgdom::load(const utki::Buf<std::uint8_t> buf){
-	return load(utki::wrapBuf(reinterpret_cast<const char*>(&*buf.begin()), buf.size()));
+std::unique_ptr<SvgElement> svgdom::load(const utki::span<std::uint8_t> buf){
+	return load(utki::make_span(reinterpret_cast<const char*>(&*buf.begin()), buf.size()));
 }
 
-std::unique_ptr<SvgElement> svgdom::load(const utki::Buf<char> buf){
+std::unique_ptr<SvgElement> svgdom::load(const utki::span<char> buf){
 	Parser parser;
 
 	parser.feed(buf);

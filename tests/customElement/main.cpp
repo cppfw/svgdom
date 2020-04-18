@@ -51,7 +51,7 @@ public:
 };
 
 int main(int argc, char** argv){
-	auto dom = utki::makeUnique<svgdom::SvgElement>();
+	auto dom = std::make_unique<svgdom::SvgElement>();
 
 	svgdom::PathElement path;
 
@@ -77,9 +77,9 @@ int main(int argc, char** argv){
 	step.y = 0;
 	path.path.push_back(step);
 
-	dom->children.push_back(utki::makeUnique<svgdom::PathElement>(path));
+	dom->children.push_back(std::make_unique<svgdom::PathElement>(path));
 
-	dom->children.push_back(utki::makeUnique<CustomElement>());
+	dom->children.push_back(std::make_unique<CustomElement>());
 	
 	std::stringstream ss;
 	CustomStreamWriter writer(ss);

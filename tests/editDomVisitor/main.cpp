@@ -42,7 +42,7 @@ public:
 };
 
 int main(int argc, char** argv){
-	auto dom = utki::makeUnique<svgdom::SvgElement>();
+	auto dom = std::make_unique<svgdom::SvgElement>();
 
 	svgdom::PathElement path;
 
@@ -58,13 +58,13 @@ int main(int argc, char** argv){
 	step.y = 300;
 	path.path.push_back(step);
 
-	dom->children.push_back(utki::makeUnique<svgdom::PathElement>(path));
+	dom->children.push_back(std::make_unique<svgdom::PathElement>(path));
 
-	dom->children.push_back(utki::makeUnique<svgdom::LineElement>());
+	dom->children.push_back(std::make_unique<svgdom::LineElement>());
 	
 	{
-		auto g = utki::makeUnique<svgdom::GElement>();
-		g->children.push_back(utki::makeUnique<svgdom::LineElement>());
+		auto g = std::make_unique<svgdom::GElement>();
+		g->children.push_back(std::make_unique<svgdom::LineElement>());
 		
 		dom->children.push_back(std::move(g));
 	}

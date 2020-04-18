@@ -333,7 +333,7 @@ void Parser::parseCircleElement() {
 	ASSERT(this->getNamespace(this->element).ns == XmlNamespace_e::SVG)
 	ASSERT(this->getNamespace(this->element).name == "circle")
 
-	auto ret = utki::makeUnique<CircleElement>();
+	auto ret = std::make_unique<CircleElement>();
 
 	this->fillShape(*ret);
 
@@ -354,7 +354,7 @@ void Parser::parseDefsElement() {
 	ASSERT(this->getNamespace(this->element).ns == XmlNamespace_e::SVG)
 	ASSERT(this->getNamespace(this->element).name == "defs")
 
-	auto ret = utki::makeUnique<DefsElement>();
+	auto ret = std::make_unique<DefsElement>();
 
 	this->fillElement(*ret);
 	this->fillTransformable(*ret);
@@ -368,7 +368,7 @@ void Parser::parseMaskElement() {
 	ASSERT(this->getNamespace(this->element).ns == XmlNamespace_e::SVG)
 	ASSERT(this->getNamespace(this->element).name == "mask")
 
-	auto ret = utki::makeUnique<MaskElement>();
+	auto ret = std::make_unique<MaskElement>();
 
 	this->fillElement(*ret);
 	this->fillRectangle(*ret);
@@ -390,7 +390,7 @@ void Parser::parseTextElement() {
 	ASSERT(this->getNamespace(this->element).ns == XmlNamespace_e::SVG)
 	ASSERT(this->getNamespace(this->element).name == "text")
 
-	auto ret = utki::makeUnique<TextElement>();
+	auto ret = std::make_unique<TextElement>();
 
 	this->fillElement(*ret);
 	this->fillStyleable(*ret);
@@ -408,7 +408,7 @@ void Parser::parseEllipseElement() {
 	ASSERT(this->getNamespace(this->element).ns == XmlNamespace_e::SVG)
 	ASSERT(this->getNamespace(this->element).name == "ellipse")
 
-	auto ret = utki::makeUnique<EllipseElement>();
+	auto ret = std::make_unique<EllipseElement>();
 
 	this->fillShape(*ret);
 
@@ -432,7 +432,7 @@ void Parser::parseGElement() {
 	ASSERT(this->getNamespace(this->element).ns == XmlNamespace_e::SVG)
 	ASSERT(this->getNamespace(this->element).name == "g")
 
-	auto ret = utki::makeUnique<GElement>();
+	auto ret = std::make_unique<GElement>();
 
 	this->fillElement(*ret);
 	this->fillTransformable(*ret);
@@ -446,7 +446,7 @@ void Parser::parseGradientStopElement() {
 	ASSERT(this->getNamespace(this->element).ns == XmlNamespace_e::SVG)
 	ASSERT(this->getNamespace(this->element).name == "stop")
 
-	auto ret = utki::makeUnique<Gradient::StopElement>();
+	auto ret = std::make_unique<Gradient::StopElement>();
 	
 	this->fillStyleable(*ret);
 	
@@ -465,7 +465,7 @@ void Parser::parseLineElement() {
 	ASSERT(this->getNamespace(this->element).ns == XmlNamespace_e::SVG)
 	ASSERT(this->getNamespace(this->element).name == "line")
 
-	auto ret = utki::makeUnique<LineElement>();
+	auto ret = std::make_unique<LineElement>();
 
 	this->fillShape(*ret);
 	
@@ -490,7 +490,7 @@ void Parser::parseFilterElement() {
 	ASSERT(this->getNamespace(this->element).ns == XmlNamespace_e::SVG)
 	ASSERT(this->getNamespace(this->element).name == "filter")
 	
-	auto ret = utki::makeUnique<FilterElement>();
+	auto ret = std::make_unique<FilterElement>();
 	
 	this->fillElement(*ret);
 	this->fillStyleable(*ret);
@@ -543,7 +543,7 @@ void Parser::parseFeGaussianBlurElement() {
 	ASSERT(this->getNamespace(this->element).ns == XmlNamespace_e::SVG)
 	ASSERT(this->getNamespace(this->element).name == "feGaussianBlur")
 	
-	auto ret = utki::makeUnique<FeGaussianBlurElement>();
+	auto ret = std::make_unique<FeGaussianBlurElement>();
 	
 	this->fillFilterPrimitive(*ret);
 	this->fillInputable(*ret);
@@ -559,7 +559,7 @@ void Parser::parseFeColorMatrixElement() {
 	ASSERT(this->getNamespace(this->element).ns == XmlNamespace_e::SVG)
 	ASSERT(this->getNamespace(this->element).name == "feColorMatrix")
 	
-	auto ret = utki::makeUnique<FeColorMatrixElement>();
+	auto ret = std::make_unique<FeColorMatrixElement>();
 	
 	this->fillFilterPrimitive(*ret);
 	this->fillInputable(*ret);
@@ -620,7 +620,7 @@ void Parser::parseFeBlendElement() {
 	ASSERT(this->getNamespace(this->element).ns == XmlNamespace_e::SVG)
 	ASSERT(this->getNamespace(this->element).name == "feBlend")
 	
-	auto ret = utki::makeUnique<FeBlendElement>();
+	auto ret = std::make_unique<FeBlendElement>();
 	
 	this->fillFilterPrimitive(*ret);
 	this->fillInputable(*ret);
@@ -647,7 +647,7 @@ void Parser::parseFeCompositeElement() {
 	ASSERT(this->getNamespace(this->element).ns == XmlNamespace_e::SVG)
 	ASSERT(this->getNamespace(this->element).name == "feComposite")
 	
-	auto ret = utki::makeUnique<FeCompositeElement>();
+	auto ret = std::make_unique<FeCompositeElement>();
 	
 	this->fillFilterPrimitive(*ret);
 	this->fillInputable(*ret);
@@ -693,7 +693,7 @@ void Parser::parseLinearGradientElement() {
 	ASSERT(this->getNamespace(this->element).ns == XmlNamespace_e::SVG)
 	ASSERT(this->getNamespace(this->element).name == "linearGradient")
 
-	auto ret = utki::makeUnique<LinearGradientElement>();
+	auto ret = std::make_unique<LinearGradientElement>();
 
 	this->fillGradient(*ret);
 
@@ -718,7 +718,7 @@ void Parser::parsePathElement() {
 	ASSERT(this->getNamespace(this->element).ns == XmlNamespace_e::SVG)
 	ASSERT(this->getNamespace(this->element).name == "path")
 
-	auto ret = utki::makeUnique<PathElement>();
+	auto ret = std::make_unique<PathElement>();
 
 	this->fillShape(*ret);
 
@@ -733,7 +733,7 @@ void Parser::parsePolygonElement() {
 	ASSERT(this->getNamespace(this->element).ns == XmlNamespace_e::SVG)
 	ASSERT(this->getNamespace(this->element).name == "polygon")
 
-	auto ret = utki::makeUnique<PolygonElement>();
+	auto ret = std::make_unique<PolygonElement>();
 
 	this->fillShape(*ret);
 
@@ -748,7 +748,7 @@ void Parser::parsePolylineElement() {
 	ASSERT(this->getNamespace(this->element).ns == XmlNamespace_e::SVG)
 	ASSERT(this->getNamespace(this->element).name == "polyline")
 
-	auto ret = utki::makeUnique<PolylineElement>();
+	auto ret = std::make_unique<PolylineElement>();
 
 	this->fillShape(*ret);
 
@@ -763,7 +763,7 @@ void Parser::parseRadialGradientElement() {
 	ASSERT(this->getNamespace(this->element).ns == XmlNamespace_e::SVG)
 	ASSERT(this->getNamespace(this->element).name == "radialGradient")
 
-	auto ret = utki::makeUnique<RadialGradientElement>();
+	auto ret = std::make_unique<RadialGradientElement>();
 
 	this->fillGradient(*ret);
 
@@ -791,7 +791,7 @@ void Parser::parseRectElement() {
 	ASSERT(this->getNamespace(this->element).ns == XmlNamespace_e::SVG)
 	ASSERT(this->getNamespace(this->element).name == "rect")
 
-	auto ret = utki::makeUnique<RectElement>();
+	auto ret = std::make_unique<RectElement>();
 
 	this->fillShape(*ret);
 	this->fillRectangle(*ret, RectElement::rectangleDefaultValues);
@@ -810,7 +810,7 @@ void Parser::parseSvgElement() {
 	ASSERT(this->getNamespace(this->element).ns == XmlNamespace_e::SVG)
 	ASSERT(this->getNamespace(this->element).name == "svg")
 
-	auto ret = utki::makeUnique<SvgElement>();
+	auto ret = std::make_unique<SvgElement>();
 
 	this->fillElement(*ret);
 	this->fillStyleable(*ret);
@@ -830,7 +830,7 @@ void Parser::parseImageElement() {
 	ASSERT(this->getNamespace(this->element).ns == XmlNamespace_e::SVG)
 	ASSERT(this->getNamespace(this->element).name == "image")
 
-	auto ret = utki::makeUnique<ImageElement>();
+	auto ret = std::make_unique<ImageElement>();
 
 	this->fillElement(*ret);
 	this->fillStyleable(*ret);
@@ -849,7 +849,7 @@ void Parser::parseSymbolElement() {
 
 	//		TRACE(<< "parseSymbolElement():" << std::endl)
 
-	auto ret = utki::makeUnique<SymbolElement>();
+	auto ret = std::make_unique<SymbolElement>();
 
 	this->fillElement(*ret);
 	this->fillStyleable(*ret);
@@ -864,7 +864,7 @@ void Parser::parseUseElement() {
 	ASSERT(this->getNamespace(this->element).ns == XmlNamespace_e::SVG)
 	ASSERT(this->getNamespace(this->element).name == "use")
 
-	auto ret = utki::makeUnique<UseElement>();
+	auto ret = std::make_unique<UseElement>();
 
 	this->fillElement(*ret);
 	this->fillTransformable(*ret);
@@ -875,21 +875,21 @@ void Parser::parseUseElement() {
 	this->addElement(std::move(ret));
 }
 
-void Parser::onElementStart(const utki::Buf<char> name) {
-	this->element = utki::toString(name);
+void Parser::on_element_start(const utki::span<char> name) {
+	this->element = utki::to_string(name);
 }
 
-void Parser::onElementEnd(const utki::Buf<char> name) {
+void Parser::on_element_end(const utki::span<char> name) {
 	this->popNamespaces();
 	this->parentStack.pop_back();
 }
 
-void Parser::onAttributeParsed(const utki::Buf<char> name, const utki::Buf<char> value) {
+void Parser::on_attribute_parsed(const utki::span<char> name, const utki::span<char> value) {
 	ASSERT(this->element.length() != 0)
-	this->attributes[utki::toString(name)] = utki::toString(value);
+	this->attributes[utki::to_string(name)] = utki::to_string(value);
 }
 
-void Parser::onAttributesEnd(bool isEmptyElement) {
+void Parser::on_attributes_end(bool is_empty_element) {
 //	TRACE(<< "this->element = " << this->element << std::endl)
 	ASSERT(this->parentStack.size() != 0)//there should always be at least root added as parent
 //	TRACE(<< "this->parentStack.size() = " << this->parentStack.size() << std::endl)
@@ -903,8 +903,8 @@ void Parser::onAttributesEnd(bool isEmptyElement) {
 	this->element.clear();
 }
 
-void Parser::onContentParsed(const utki::Buf<char> str) {
-	//do nothing for now
+void Parser::on_content_parsed(const utki::span<char> str) {
+	// do nothing for now
 }
 
 std::unique_ptr<SvgElement> Parser::getDom() {

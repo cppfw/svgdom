@@ -12,8 +12,7 @@ class ConstVisitor;
 /**
  * @brief Base class for all SVG document elements.
  */
-struct Element : public utki::Unique
-{
+struct Element{
 	std::string id;
 	
 	std::string toString()const;
@@ -29,6 +28,8 @@ struct Element : public utki::Unique
 	 * @param visitor - constant visitor to accept.
 	 */
 	virtual void accept(ConstVisitor& visitor) const = 0;
+
+	virtual ~Element()noexcept{}
 };
 
 }

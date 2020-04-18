@@ -20,7 +20,7 @@
 
 namespace svgdom{
 
-class Parser : public mikroxml::Parser{
+class Parser : public mikroxml::parser{
 	enum class XmlNamespace_e{
 		ENUM_FIRST,
 		UNKNOWN = ENUM_FIRST,
@@ -67,11 +67,11 @@ class Parser : public mikroxml::Parser{
 	void addElement(std::unique_ptr<Element> e);
 	void addElement(std::unique_ptr<Element> e, Container* c);
 	
-	void onElementStart(const utki::Buf<char> name) override;
-	void onElementEnd(const utki::Buf<char> name) override;
-	void onAttributeParsed(const utki::Buf<char> name, const utki::Buf<char> value) override;
-	void onAttributesEnd(bool isEmptyElement) override;
-	void onContentParsed(const utki::Buf<char> str) override;
+	void on_element_start(const utki::span<char> name) override;
+	void on_element_end(const utki::span<char> name) override;
+	void on_attribute_parsed(const utki::span<char> name, const utki::span<char> value) override;
+	void on_attributes_end(bool is_empty_element) override;
+	void on_content_parsed(const utki::span<char> str) override;
 
 	void fillElement(Element& e);
 	void fillReferencing(Referencing& e);

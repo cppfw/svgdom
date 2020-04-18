@@ -6,7 +6,7 @@ this_cxxflags += -Wall
 this_cxxflags += -Werror
 this_cxxflags += -DDEBUG
 this_cxxflags += -fstrict-aliasing # strict aliasing!!!
-this_cxxflags += -std=c++11
+this_cxxflags += -std=c++14
 this_cxxflags += -g
 
 this_srcs += main.cpp
