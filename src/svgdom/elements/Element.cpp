@@ -5,7 +5,7 @@
 
 #include "Container.hpp"
 #include "../Visitor.hpp"
-#include "../StreamWriter.hpp"
+#include "../stream_writer.hpp"
 
 using namespace svgdom;
 

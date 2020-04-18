@@ -1,4 +1,4 @@
-#include "StreamWriter.hpp"
+#include "stream_writer.hpp"
 
 #include <utki/util.hpp>
 
@@ -6,28 +6,28 @@
 
 using namespace svgdom;
 
-void StreamWriter::setName(const std::string& name) {
+void StreamWriter::set_name(const std::string& name) {
 	this->name = name;
 }
 
-void StreamWriter::addAttribute(const std::string& name, const std::string& value) {
+void StreamWriter::add_attribute(const std::string& name, const std::string& value) {
 	this->attributes.push_back(std::make_pair(name, value));
 }
 
-void StreamWriter::addAttribute(const std::string& name, const Length& value){
+void StreamWriter::add_attribute(const std::string& name, const Length& value){
 	std::stringstream ss;
 	ss << value;
-	this->addAttribute(name, ss.str());
+	this->add_attribute(name, ss.str());
 }
 
-void StreamWriter::addAttribute(const std::string& name, real value){
+void StreamWriter::add_attribute(const std::string& name, real value){
 	std::stringstream ss;
 	ss << value;
-	this->addAttribute(name, ss.str());
+	this->add_attribute(name, ss.str());
 }
 
 void StreamWriter::write(const Container* children) {
-	auto ind = indentStr();
+	auto ind = indent_str();
 
 	auto tag = std::move(this->name);
 	
@@ -50,7 +50,7 @@ void StreamWriter::write(const Container* children) {
 	this->s << std::endl;
 }
 
-std::string StreamWriter::indentStr() {
+std::string StreamWriter::indent_str() {
 	std::string ind;
 
 	std::stringstream ss;
@@ -70,117 +70,117 @@ void StreamWriter::childrenToStream(const Container& e) {
 	}
 }
 
-void StreamWriter::addElementAttributes(const Element& e) {
+void StreamWriter::add_element_attributes(const Element& e) {
 	if(e.id.length() != 0){
-		this->addAttribute("id", e.id);
+		this->add_attribute("id", e.id);
 	}
 }
 
-void StreamWriter::addTransformableAttributes(const Transformable& e) {
+void StreamWriter::add_transformable_attributes(const Transformable& e) {
 	if(e.transformations.size() != 0){
-		this->addAttribute("transform", e.transformationsToString());
+		this->add_attribute("transform", e.transformationsToString());
 	}
 }
 
-void StreamWriter::addStyleableAttributes(const Styleable& e) {
+void StreamWriter::add_styleable_attributes(const Styleable& e) {
 	if(e.styles.size() != 0){
-		this->addAttribute("style", e.stylesToString());
+		this->add_attribute("style", e.stylesToString());
 	}
 }
 
-void StreamWriter::addViewBoxedAttributes(const ViewBoxed& e) {
+void StreamWriter::add_view_boxed_attributes(const ViewBoxed& e) {
 	if (e.isViewBoxSpecified()) {
-		this->addAttribute("viewBox", e.viewBoxToString());
+		this->add_attribute("viewBox", e.viewBoxToString());
 	}
 }
 
-void StreamWriter::addAspectRatioedAttributes(const AspectRatioed& e) {
+void StreamWriter::add_aspect_ratioed_attributes(const AspectRatioed& e) {
 	if (e.preserveAspectRatio.preserve != AspectRatioed::PreserveAspectRatio_e::NONE || e.preserveAspectRatio.defer || e.preserveAspectRatio.slice) {
-		this->addAttribute("preserveAspectRatio", e.preserveAspectRatioToString());
+		this->add_attribute("preserveAspectRatio", e.preserveAspectRatioToString());
 	}
 }
 
-void StreamWriter::addRectangleAttributes(const Rectangle& e, const Rectangle& defaultValues) {
+void StreamWriter::add_rectangle_attributes(const Rectangle& e, const Rectangle& defaultValues) {
 	if(e.isXSpecified() && e.x != defaultValues.x){
-		this->addAttribute("x", e.x);
+		this->add_attribute("x", e.x);
 	}
 	
 	if(e.isYSpecified() && e.y != defaultValues.y){
-		this->addAttribute("y", e.y);
+		this->add_attribute("y", e.y);
 	}
 	
 	if(e.isWidthSpecified() && e.width != defaultValues.width){
-		this->addAttribute("width", e.width);
+		this->add_attribute("width", e.width);
 	}
 	
 	if(e.isHeightSpecified() && e.height != defaultValues.height){
-		this->addAttribute("height", e.height);
+		this->add_attribute("height", e.height);
 	}
 }
 
-void StreamWriter::addReferencingAttributes(const Referencing& e) {
+void StreamWriter::add_referencing_attributes(const Referencing& e) {
 	if(e.iri.length() != 0){
-		this->addAttribute("xlink:href", e.iri);
+		this->add_attribute("xlink:href", e.iri);
 	}
 }
 
-void StreamWriter::addGradientAttributes(const Gradient& e) {
-	this->addElementAttributes(e);
-	this->addReferencingAttributes(e);
-	this->addStyleableAttributes(e);
+void StreamWriter::add_gradient_attributes(const Gradient& e) {
+	this->add_element_attributes(e);
+	this->add_referencing_attributes(e);
+	this->add_styleable_attributes(e);
 	
 	if(e.spreadMethod != Gradient::SpreadMethod_e::DEFAULT){
-		this->addAttribute("spreadMethod", e.spreadMethodToString());
+		this->add_attribute("spreadMethod", e.spreadMethodToString());
 	}
 	
 	if(e.units != CoordinateUnits_e::UNKNOWN){
-		this->addAttribute("gradientUnits", coordinateUnitsToString(e.units));
+		this->add_attribute("gradientUnits", coordinateUnitsToString(e.units));
 	}
 	
 	if(e.transformations.size() != 0){
-		this->addAttribute("gradientTransform", e.transformationsToString());
+		this->add_attribute("gradientTransform", e.transformationsToString());
 	}
 }
 
-void StreamWriter::addFilterPrimitiveAttributes(const FilterPrimitive& e) {
-	this->addElementAttributes(e);
-	this->addStyleableAttributes(e);
-	this->addRectangleAttributes(e);
+void StreamWriter::add_filter_primitive_attributes(const FilterPrimitive& e) {
+	this->add_element_attributes(e);
+	this->add_styleable_attributes(e);
+	this->add_rectangle_attributes(e);
 	
 	if(e.result.length() != 0){
-		this->addAttribute("result", e.result);
+		this->add_attribute("result", e.result);
 	}
 }
 
-void StreamWriter::addInputableAttributes(const Inputable& e) {
+void StreamWriter::add_inputable_attributes(const Inputable& e) {
 	if(e.in.length() != 0){
-		this->addAttribute("in", e.in);
+		this->add_attribute("in", e.in);
 	}
 }
 
-void StreamWriter::addSecondInputableAttributes(const SecondInputable& e) {
+void StreamWriter::add_second_inputable_attributes(const SecondInputable& e) {
 	if(e.in2.length() != 0){
-		this->addAttribute("in2", e.in2);
+		this->add_attribute("in2", e.in2);
 	}
 }
 
-void StreamWriter::addTextPositioningAttributes(const TextPositioning& e) {
+void StreamWriter::add_text_positioning_attributes(const TextPositioning& e) {
 	//TODO: add missing attributes
 }
 
 
-void StreamWriter::addShapeAttributes(const Shape& e) {
-	this->addElementAttributes(e);
-	this->addTransformableAttributes(e);
-	this->addStyleableAttributes(e);
+void StreamWriter::add_shape_attributes(const Shape& e) {
+	this->add_element_attributes(e);
+	this->add_transformable_attributes(e);
+	this->add_styleable_attributes(e);
 }
 
 
 void StreamWriter::visit(const GElement& e) {
 	this->setName("g");
-	this->addElementAttributes(e);
-	this->addTransformableAttributes(e);
-	this->addStyleableAttributes(e);
+	this->add_element_attributes(e);
+	this->add_transformable_attributes(e);
+	this->add_styleable_attributes(e);
 	this->write(&e);
 }
 
@@ -188,26 +188,26 @@ void StreamWriter::visit(const SvgElement& e) {
 	this->setName("svg");
 	
 	if(this->indent == 0){//if outermost "svg" element
-		this->addAttribute("xmlns", "http://www.w3.org/2000/svg");
-		this->addAttribute("xmlns:xlink", "http://www.w3.org/1999/xlink");
-		this->addAttribute("version", "1.1");
+		this->add_attribute("xmlns", "http://www.w3.org/2000/svg");
+		this->add_attribute("xmlns:xlink", "http://www.w3.org/1999/xlink");
+		this->add_attribute("version", "1.1");
 	}
 	
-	this->addElementAttributes(e);
-	this->addStyleableAttributes(e);
-	this->addRectangleAttributes(e);
-	this->addViewBoxedAttributes(e);
-	this->addAspectRatioedAttributes(e);
+	this->add_element_attributes(e);
+	this->add_styleable_attributes(e);
+	this->add_rectangle_attributes(e);
+	this->add_view_boxed_attributes(e);
+	this->add_aspect_ratioed_attributes(e);
 	this->write(&e);
 }
 
 void StreamWriter::visit(const ImageElement& e){
 	this->setName("image");
 	
-	this->addElementAttributes(e);
-	this->addStyleableAttributes(e);
-	this->addTransformableAttributes(e);
-	this->addRectangleAttributes(
+	this->add_element_attributes(e);
+	this->add_styleable_attributes(e);
+	this->add_transformable_attributes(e);
+	this->add_rectangle_attributes(
 			e,
 			Rectangle(
 					Length::make(0, Length::Unit_e::NUMBER),
@@ -216,29 +216,29 @@ void StreamWriter::visit(const ImageElement& e){
 					Length::make(0, Length::Unit_e::NUMBER)
 				)
 		);
-	this->addReferencingAttributes(e);
-	this->addAspectRatioedAttributes(e);
+	this->add_referencing_attributes(e);
+	this->add_aspect_ratioed_attributes(e);
 	this->write();
 }
 
 void StreamWriter::visit(const LineElement& e) {
 	this->setName("line");
-	this->addShapeAttributes(e);
+	this->add_shape_attributes(e);
 	
 	if(e.x1.unit != Length::Unit_e::UNKNOWN){
-		this->addAttribute("x1", e.x1);
+		this->add_attribute("x1", e.x1);
 	}
 	
 	if(e.y1.unit != Length::Unit_e::UNKNOWN){
-		this->addAttribute("y1", e.y1);
+		this->add_attribute("y1", e.y1);
 	}
 	
 	if(e.x2.unit != Length::Unit_e::UNKNOWN){
-		this->addAttribute("x2", e.x2);
+		this->add_attribute("x2", e.x2);
 	}
 	
 	if(e.y2.unit != Length::Unit_e::UNKNOWN){
-		this->addAttribute("y2", e.y2);
+		this->add_attribute("y2", e.y2);
 	}
 	
 	this->write();
@@ -246,15 +246,15 @@ void StreamWriter::visit(const LineElement& e) {
 
 void StreamWriter::visit(const RectElement& e) {
 	this->setName("rect");
-	this->addShapeAttributes(e);
-	this->addRectangleAttributes(e, RectElement::rectangleDefaultValues);
+	this->add_shape_attributes(e);
+	this->add_rectangle_attributes(e, RectElement::rectangleDefaultValues);
 	
 	if(e.rx.unit != Length::Unit_e::UNKNOWN){
-		this->addAttribute("rx", e.rx);
+		this->add_attribute("rx", e.rx);
 	}
 	
 	if(e.ry.unit != Length::Unit_e::UNKNOWN){
-		this->addAttribute("ry", e.ry);
+		this->add_attribute("ry", e.ry);
 	}
 	
 	this->write();
@@ -262,22 +262,22 @@ void StreamWriter::visit(const RectElement& e) {
 
 void StreamWriter::visit(const EllipseElement& e) {
 	this->setName("ellipse");
-	this->addShapeAttributes(e);
+	this->add_shape_attributes(e);
 	
 	if(e.cx.unit != Length::Unit_e::UNKNOWN){
-		this->addAttribute("cx", e.cx);
+		this->add_attribute("cx", e.cx);
 	}
 	
 	if(e.cy.unit != Length::Unit_e::UNKNOWN){
-		this->addAttribute("cy", e.cy);
+		this->add_attribute("cy", e.cy);
 	}
 	
 	if(e.rx.unit != Length::Unit_e::UNKNOWN){
-		this->addAttribute("rx", e.rx);
+		this->add_attribute("rx", e.rx);
 	}
 	
 	if(e.ry.unit != Length::Unit_e::UNKNOWN){
-		this->addAttribute("ry", e.ry);
+		this->add_attribute("ry", e.ry);
 	}
 	
 	this->write();
@@ -285,126 +285,126 @@ void StreamWriter::visit(const EllipseElement& e) {
 
 void StreamWriter::visit(const PolygonElement& e) {
 	this->setName("polygon");
-	this->addShapeAttributes(e);
+	this->add_shape_attributes(e);
 	if(e.points.size() != 0){
-		this->addAttribute("points", e.pointsToString());
+		this->add_attribute("points", e.pointsToString());
 	}
 	this->write();
 }
 
 void StreamWriter::visit(const PolylineElement& e) {
 	this->setName("polyline");
-	this->addShapeAttributes(e);
+	this->add_shape_attributes(e);
 	if(e.points.size() != 0){
-		this->addAttribute("points", e.pointsToString());
+		this->add_attribute("points", e.pointsToString());
 	}
 	this->write();
 }
 
 void StreamWriter::visit(const CircleElement& e) {
 	this->setName("circle");
-	this->addShapeAttributes(e);
+	this->add_shape_attributes(e);
 	
 	if(e.cx.unit != Length::Unit_e::UNKNOWN){
-		this->addAttribute("cx", e.cx);
+		this->add_attribute("cx", e.cx);
 	}
 	
 	if(e.cy.unit != Length::Unit_e::UNKNOWN){
-		this->addAttribute("cy", e.cy);
+		this->add_attribute("cy", e.cy);
 	}
 	
 	if(e.r.unit != Length::Unit_e::UNKNOWN){
-		this->addAttribute("r", e.r);
+		this->add_attribute("r", e.r);
 	}
 	this->write();
 }
 
 void StreamWriter::visit(const PathElement& e){
 	this->setName("path");
-	this->addShapeAttributes(e);
+	this->add_shape_attributes(e);
 	if(e.path.size() != 0){
-		this->addAttribute("d", e.pathToString());
+		this->add_attribute("d", e.pathToString());
 	}
 	this->write();
 }
 
 void StreamWriter::visit(const UseElement& e) {
 	this->setName("use");
-	this->addElementAttributes(e);
-	this->addTransformableAttributes(e);
-	this->addStyleableAttributes(e);
-	this->addRectangleAttributes(e);
-	this->addReferencingAttributes(e);
+	this->add_element_attributes(e);
+	this->add_transformable_attributes(e);
+	this->add_styleable_attributes(e);
+	this->add_rectangle_attributes(e);
+	this->add_referencing_attributes(e);
 	this->write();
 }
 
 void StreamWriter::visit(const Gradient::StopElement& e) {
 	this->setName("stop");
-	this->addAttribute("offset", e.offset);
-	this->addElementAttributes(e);
-	this->addStyleableAttributes(e);
+	this->add_attribute("offset", e.offset);
+	this->add_element_attributes(e);
+	this->add_styleable_attributes(e);
 	this->write();
 }
 
 void StreamWriter::visit(const RadialGradientElement& e) {
 	this->setName("radialGradient");
-	this->addGradientAttributes(e);
+	this->add_gradient_attributes(e);
 	if(e.cx.unit != Length::Unit_e::PERCENT || e.cx.value != 50){
-		this->addAttribute("cx", e.cx);
+		this->add_attribute("cx", e.cx);
 	}
 	if(e.cy.unit != Length::Unit_e::PERCENT || e.cy.value != 50){
-		this->addAttribute("cy", e.cy);
+		this->add_attribute("cy", e.cy);
 	}
 	if(e.r.unit != Length::Unit_e::PERCENT || e.r.value != 50){
-		this->addAttribute("r", e.r);
+		this->add_attribute("r", e.r);
 	}
 	if(e.fx.unit != Length::Unit_e::UNKNOWN){
-		this->addAttribute("fx", e.fx);
+		this->add_attribute("fx", e.fx);
 	}
 	if(e.fy.unit != Length::Unit_e::UNKNOWN){
-		this->addAttribute("fy", e.fy);
+		this->add_attribute("fy", e.fy);
 	}
 	this->write(&e);
 }
 
 void StreamWriter::visit(const LinearGradientElement& e) {
 	this->setName("linearGradient");
-	this->addGradientAttributes(e);
+	this->add_gradient_attributes(e);
 	if(e.x1.unit != Length::Unit_e::PERCENT || e.x1.value != 0){
-		this->addAttribute("x1", e.x1);
+		this->add_attribute("x1", e.x1);
 	}
 	if(e.y1.unit != Length::Unit_e::PERCENT || e.y1.value != 0){
-		this->addAttribute("y1", e.y1);
+		this->add_attribute("y1", e.y1);
 	}
 	if(e.x2.unit != Length::Unit_e::PERCENT || e.x2.value != 100){
-		this->addAttribute("x2", e.x2);
+		this->add_attribute("x2", e.x2);
 	}
 	if(e.y2.unit != Length::Unit_e::PERCENT || e.y2.value != 0){
-		this->addAttribute("y2", e.y2);
+		this->add_attribute("y2", e.y2);
 	}
 	this->write(&e);
 }
 
 void StreamWriter::visit(const DefsElement& e) {
 	this->setName("defs");
-	this->addElementAttributes(e);
-	this->addTransformableAttributes(e);
-	this->addStyleableAttributes(e);
+	this->add_element_attributes(e);
+	this->add_transformable_attributes(e);
+	this->add_styleable_attributes(e);
 	this->write(&e);
 }
 
 void StreamWriter::visit(const MaskElement& e) {
 	this->setName("mask");
-	this->addElementAttributes(e);
-	this->addRectangleAttributes(e);
-	this->addStyleableAttributes(e);
+	this->add_element_attributes(e);
+	this->add_rectangle_attributes(e);
+	this->add_styleable_attributes(e);
 	
 	if(e.maskUnits != CoordinateUnits_e::OBJECT_BOUNDING_BOX && e.maskUnits != CoordinateUnits_e::UNKNOWN){
-		this->addAttribute("maskUnits", coordinateUnitsToString(e.maskUnits));
+		this->add_attribute("maskUnits", coordinateUnitsToString(e.maskUnits));
 	}
 	
 	if(e.maskContentUnits != CoordinateUnits_e::USER_SPACE_ON_USE && e.maskContentUnits != CoordinateUnits_e::UNKNOWN){
-		this->addAttribute("maskContentUnits", coordinateUnitsToString(e.maskContentUnits));
+		this->add_attribute("maskContentUnits", coordinateUnitsToString(e.maskContentUnits));
 	}
 	
 	this->write(&e);
@@ -412,10 +412,10 @@ void StreamWriter::visit(const MaskElement& e) {
 
 void StreamWriter::visit(const TextElement& e){
 	this->setName("text");
-	this->addElementAttributes(e);
-	this->addTransformableAttributes(e);
-	this->addStyleableAttributes(e);
-	this->addTextPositioningAttributes(e);
+	this->add_element_attributes(e);
+	this->add_transformable_attributes(e);
+	this->add_styleable_attributes(e);
+	this->add_text_positioning_attributes(e);
 	
 	//TODO: add text element attributes
 	
@@ -424,18 +424,18 @@ void StreamWriter::visit(const TextElement& e){
 
 void StreamWriter::visit(const SymbolElement& e) {
 	this->setName("symbol");
-	this->addElementAttributes(e);
-	this->addStyleableAttributes(e);
-	this->addViewBoxedAttributes(e);
-	this->addAspectRatioedAttributes(e);
+	this->add_element_attributes(e);
+	this->add_styleable_attributes(e);
+	this->add_view_boxed_attributes(e);
+	this->add_aspect_ratioed_attributes(e);
 	this->write(&e);
 }
 
 void StreamWriter::visit(const FilterElement& e){
 	this->setName("filter");
-	this->addElementAttributes(e);
-	this->addStyleableAttributes(e);
-	this->addRectangleAttributes(
+	this->add_element_attributes(e);
+	this->add_styleable_attributes(e);
+	this->add_rectangle_attributes(
 			e,
 			Rectangle(
 				Length::make(-10, Length::Unit_e::PERCENT),
@@ -444,14 +444,14 @@ void StreamWriter::visit(const FilterElement& e){
 				Length::make(120, Length::Unit_e::PERCENT)
 			)
 		);
-	this->addReferencingAttributes(e);
+	this->add_referencing_attributes(e);
 	
 	if(e.filterUnits != CoordinateUnits_e::UNKNOWN && e.filterUnits != CoordinateUnits_e::OBJECT_BOUNDING_BOX){
-		this->addAttribute("filterUnits", coordinateUnitsToString(e.filterUnits));
+		this->add_attribute("filterUnits", coordinateUnitsToString(e.filterUnits));
 	}
 
 	if(e.primitiveUnits != CoordinateUnits_e::UNKNOWN && e.primitiveUnits != CoordinateUnits_e::USER_SPACE_ON_USE){
-		this->addAttribute("primitiveUnits", coordinateUnitsToString(e.primitiveUnits));
+		this->add_attribute("primitiveUnits", coordinateUnitsToString(e.primitiveUnits));
 	}
 	
 	this->write(&e);
@@ -460,11 +460,11 @@ void StreamWriter::visit(const FilterElement& e){
 void StreamWriter::visit(const FeGaussianBlurElement& e){
 	this->setName("feGaussianBlur");
 	
-	this->addFilterPrimitiveAttributes(e);
-	this->addInputableAttributes(e);
+	this->add_filter_primitive_attributes(e);
+	this->add_inputable_attributes(e);
 	
 	if(e.isStdDeviationSpecified()){
-		this->addAttribute("stdDeviation", numberOptionalNumberToString(e.stdDeviation, -1));
+		this->add_attribute("stdDeviation", numberOptionalNumberToString(e.stdDeviation, -1));
 	}
 	this->write();
 }
@@ -472,8 +472,8 @@ void StreamWriter::visit(const FeGaussianBlurElement& e){
 void StreamWriter::visit(const FeColorMatrixElement& e){
 	this->setName("feColorMatrix");
 	
-	this->addFilterPrimitiveAttributes(e);
-	this->addInputableAttributes(e);
+	this->add_filter_primitive_attributes(e);
+	this->add_inputable_attributes(e);
 	
 	{
 		std::string typeValue;
@@ -495,7 +495,7 @@ void StreamWriter::visit(const FeColorMatrixElement& e){
 				break;
 		}
 		if(typeValue.length() != 0){
-			this->addAttribute("type", typeValue);
+			this->add_attribute("type", typeValue);
 		}
 	}
 	
@@ -527,7 +527,7 @@ void StreamWriter::visit(const FeColorMatrixElement& e){
 				break;
 		}
 		if(valuesValue.length() != 0){
-			this->addAttribute("values", valuesValue);
+			this->add_attribute("values", valuesValue);
 		}
 	}
 	
@@ -538,9 +538,9 @@ void StreamWriter::visit(const FeColorMatrixElement& e){
 void StreamWriter::visit(const FeBlendElement& e){
 	this->setName("feBlend");
 	
-	this->addFilterPrimitiveAttributes(e);
-	this->addInputableAttributes(e);
-	this->addSecondInputableAttributes(e);
+	this->add_filter_primitive_attributes(e);
+	this->add_inputable_attributes(e);
+	this->add_second_inputable_attributes(e);
 	
 	{
 		std::string modeValue;
@@ -562,7 +562,7 @@ void StreamWriter::visit(const FeBlendElement& e){
 				modeValue = "lighten";
 				break;
 		}
-		this->addAttribute("mode", modeValue);
+		this->add_attribute("mode", modeValue);
 	}
 	
 	this->write();
@@ -571,9 +571,9 @@ void StreamWriter::visit(const FeBlendElement& e){
 void StreamWriter::visit(const FeCompositeElement& e){
 	this->setName("feComposite");
 	
-	this->addFilterPrimitiveAttributes(e);
-	this->addInputableAttributes(e);
-	this->addSecondInputableAttributes(e);
+	this->add_filter_primitive_attributes(e);
+	this->add_inputable_attributes(e);
+	this->add_second_inputable_attributes(e);
 	
 	{
 		std::string operatorValue;
@@ -599,24 +599,24 @@ void StreamWriter::visit(const FeCompositeElement& e){
 				break;
 		}
 		if(operatorValue.length() != 0){
-			this->addAttribute("operator", operatorValue);
+			this->add_attribute("operator", operatorValue);
 		}
 	}
 	
 	if(e.k1 != real(0)){
-		this->addAttribute("k1", std::to_string(e.k1));
+		this->add_attribute("k1", std::to_string(e.k1));
 	}
 	
 	if(e.k2 != real(0)){
-		this->addAttribute("k2", std::to_string(e.k2));
+		this->add_attribute("k2", std::to_string(e.k2));
 	}
 	
 	if(e.k3 != real(0)){
-		this->addAttribute("k3", std::to_string(e.k3));
+		this->add_attribute("k3", std::to_string(e.k3));
 	}
 	
 	if(e.k4 != real(0)){
-		this->addAttribute("k4", std::to_string(e.k4));
+		this->add_attribute("k4", std::to_string(e.k4));
 	}
 	
 	this->write();
