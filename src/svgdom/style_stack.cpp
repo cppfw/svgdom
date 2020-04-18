@@ -1,11 +1,10 @@
-#include "StyleStack.hpp"
+#include "style_stack.hpp"
 
 #include <utki/debug.hpp>
 
 using namespace svgdom;
 
-
-const svgdom::StyleValue* StyleStack::getStyleProperty(svgdom::StyleProperty_e p)const{
+const svgdom::StyleValue* style_stack::get_style_property(svgdom::StyleProperty_e p)const{
 	bool explicitInherit = false;
 
 	for (auto i = this->stack.rbegin(); i != this->stack.rend(); ++i) {
@@ -27,12 +26,12 @@ const svgdom::StyleValue* StyleStack::getStyleProperty(svgdom::StyleProperty_e p
 	return nullptr;
 }
 
-StyleStack::Push::Push(StyleStack& ss, const svgdom::Styleable& s) :
+style_stack::push::push(style_stack& ss, const svgdom::Styleable& s) :
 		ss(ss)
 {
 	this->ss.stack.push_back(&s);
 }
 
-StyleStack::Push::~Push()noexcept{
+style_stack::push::~push()noexcept{
 	this->ss.stack.pop_back();
 }

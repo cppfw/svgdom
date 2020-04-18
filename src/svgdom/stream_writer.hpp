@@ -170,6 +170,7 @@ public:
 	void visit(const TextElement& e) override;
 };
 
+// TODO: deprecated, remove.
 typedef stream_writer StreamWriter;
 
 }

@@ -4,7 +4,7 @@
 
 #include "elements/Element.hpp"
 
-#include "StyleStack.hpp"
+#include "style_stack.hpp"
 
 namespace svgdom{
 

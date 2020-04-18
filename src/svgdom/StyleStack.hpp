@@ -1,21 +1,6 @@
 #pragma once
 
-#include <vector>
+// TODO: remove whole file.
+#warning "StyleStack.hpp is deprecated, use style_stack.hpp instead."
 
-#include "elements/Styleable.hpp"
-
-namespace svgdom{
-class StyleStack{
-public:
-	std::vector<const svgdom::Styleable*> stack;
-	
-	const svgdom::StyleValue* getStyleProperty(svgdom::StyleProperty_e p)const;
-	
-	class Push{
-		StyleStack& ss;
-	public:
-		Push(StyleStack& ss, const svgdom::Styleable& s);
-		~Push()noexcept;
-	};
-};
-}
+#include "style_stack.hpp"
