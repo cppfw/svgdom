@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../Length.hpp"
+#include "../length.hpp"
 
 namespace svgdom{
 

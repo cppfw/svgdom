@@ -3,9 +3,9 @@
 #include <map>
 
 #include "../config.hpp"
-#include "../Length.hpp"
+#include "../length.hpp"
 
-//math.h defines OVERFLOW, undefine it
+// math.h defines OVERFLOW, undefine it
 #ifdef OVERFLOW
 #	undef OVERFLOW
 #endif
