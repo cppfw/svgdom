@@ -38,7 +38,7 @@ protected:
 		);
 	void add_shape_attributes(const Shape& e);
 	void add_referencing_attributes(const Referencing& e);
-	void add_gradient_attributes(const Gradient& e);
+	void add_gradient_attributes(const gradient& e);
 	void add_filter_primitive_attributes(const FilterPrimitive& e);
 	void add_inputable_attributes(const Inputable& e);
 	void add_second_inputable_attributes(const SecondInputable& e);
@@ -119,7 +119,7 @@ protected:
 	}
 
 	// TODO: deprecated, remove.
-	void addGradientAttributes(const Gradient& e){
+	void addGradientAttributes(const gradient& e){
 		this->add_gradient_attributes(e);
 	}
 
@@ -151,7 +151,7 @@ public:
 	void visit(const DefsElement& e) override;
 	void visit(const LinearGradientElement& e) override;
 	void visit(const RadialGradientElement& e) override;
-	void visit(const Gradient::StopElement& e) override;
+	void visit(const gradient::stop_element& e) override;
 	void visit(const UseElement& e) override;
 	void visit(const PathElement& e) override;
 	void visit(const CircleElement& e) override;

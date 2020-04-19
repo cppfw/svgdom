@@ -67,8 +67,8 @@ void cloner::visit(const UseElement& e) {
     this->cur_parent->children.push_back(std::move(clone));
 }
 
-void cloner::visit(const Gradient::StopElement& e) {
-	auto clone = std::make_unique<Gradient::StopElement>(e);
+void cloner::visit(const gradient::stop_element& e) {
+	auto clone = std::make_unique<gradient::stop_element>(e);
     this->cur_parent->children.push_back(std::move(clone));
 }
 

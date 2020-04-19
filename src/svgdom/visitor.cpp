@@ -58,7 +58,7 @@ void visitor::visit(TextElement& e){
 	this->defaultVisit(e, e);
 }
 
-void visitor::visit(Gradient::StopElement& e) {
+void visitor::visit(gradient::stop_element& e) {
 	this->defaultVisit(e);
 }
 
@@ -167,7 +167,7 @@ void const_visitor::visit(const TextElement& e){
 	this->defaultVisit(e, e);
 }
 
-void const_visitor::visit(const Gradient::StopElement& e) {
+void const_visitor::visit(const gradient::stop_element& e) {
 	this->defaultVisit(e);
 }
 

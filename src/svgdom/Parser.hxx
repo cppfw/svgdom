@@ -11,7 +11,7 @@
 #include "elements/Rectangle.hpp"
 #include "elements/ViewBoxed.hpp"
 #include "elements/Transformable.hpp"
-#include "elements/Gradients.hpp"
+#include "elements/gradients.hpp"
 #include "elements/Shapes.hpp"
 #include "elements/Structurals.hpp"
 #include "elements/Filter.hpp"

@@ -64,7 +64,7 @@ public:
 	void visit(const svgdom::UseElement& e) override{
 		this->visitElement(e, e);
 	}
-	void visit(const svgdom::Gradient::StopElement& e) override{
+	void visit(const svgdom::gradient::stop_element& e) override{
 		this->visitElement(e, e);
 	}
 	void visit(const svgdom::PathElement& e) override{

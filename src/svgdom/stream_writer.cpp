@@ -124,12 +124,12 @@ void StreamWriter::add_referencing_attributes(const Referencing& e) {
 	}
 }
 
-void StreamWriter::add_gradient_attributes(const Gradient& e) {
+void StreamWriter::add_gradient_attributes(const gradient& e) {
 	this->add_element_attributes(e);
 	this->add_referencing_attributes(e);
 	this->add_styleable_attributes(e);
 	
-	if(e.spreadMethod != Gradient::SpreadMethod_e::DEFAULT){
+	if(e.spreadMethod != gradient::spread_method_kind::default_kind){
 		this->add_attribute("spreadMethod", e.spreadMethodToString());
 	}
 	
@@ -338,7 +338,7 @@ void StreamWriter::visit(const UseElement& e) {
 	this->write();
 }
 
-void StreamWriter::visit(const Gradient::StopElement& e) {
+void StreamWriter::visit(const gradient::stop_element& e) {
 	this->setName("stop");
 	this->add_attribute("offset", e.offset);
 	this->add_element_attributes(e);

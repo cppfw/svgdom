@@ -2,7 +2,7 @@
 
 #include "elements/Structurals.hpp"
 #include "elements/Shapes.hpp"
-#include "elements/Gradients.hpp"
+#include "elements/gradients.hpp"
 #include "elements/Filter.hpp"
 #include "elements/ImageElement.hpp"
 #include "elements/TextElement.hpp"
@@ -77,7 +77,7 @@ public:
 	virtual void visit(SymbolElement& e);
 	virtual void visit(UseElement& e);
 	virtual void visit(DefsElement& e);
-	virtual void visit(Gradient::StopElement& e);
+	virtual void visit(gradient::stop_element& e);
 	virtual void visit(LinearGradientElement& e);
 	virtual void visit(RadialGradientElement& e);
 	virtual void visit(FilterElement& e);
@@ -149,7 +149,7 @@ public:
 	virtual void visit(const SymbolElement& e);
 	virtual void visit(const UseElement& e);
 	virtual void visit(const DefsElement& e);
-	virtual void visit(const Gradient::StopElement& e);
+	virtual void visit(const gradient::stop_element& e);
 	virtual void visit(const LinearGradientElement& e);
 	virtual void visit(const RadialGradientElement& e);
 	virtual void visit(const FilterElement& e);

@@ -14,15 +14,15 @@ const std::string DXlinkNamespace = "http://www.w3.org/1999/xlink";
 }
 
 namespace{
-Gradient::SpreadMethod_e gradientStringToSpreadMethod(const std::string& str) {
+gradient::spread_method_kind gradientStringToSpreadMethod(const std::string& str) {
 	if(str == "pad"){
-		return Gradient::SpreadMethod_e::PAD;
+		return gradient::spread_method_kind::pad;
 	}else if(str == "reflect"){
-		return Gradient::SpreadMethod_e::REFLECT;
+		return gradient::spread_method_kind::reflect;
 	}else if(str == "repeat"){
-		return Gradient::SpreadMethod_e::REPEAT;
+		return gradient::spread_method_kind::repeat;
 	}
-	return Gradient::SpreadMethod_e::DEFAULT;
+	return gradient::spread_method_kind::default_kind;
 }
 }
 
@@ -220,7 +220,7 @@ void Parser::fillElement(Element& e) {
 	}
 }
 
-void Parser::fillGradient(Gradient& g) {
+void Parser::fillGradient(gradient& g) {
 	this->fillElement(g);
 	this->fillReferencing(g);
 	this->fillStyleable(g);
@@ -446,7 +446,7 @@ void Parser::parseGradientStopElement() {
 	ASSERT(this->getNamespace(this->element).ns == XmlNamespace_e::SVG)
 	ASSERT(this->getNamespace(this->element).name == "stop")
 
-	auto ret = std::make_unique<Gradient::StopElement>();
+	auto ret = std::make_unique<gradient::stop_element>();
 	
 	this->fillStyleable(*ret);
 	
