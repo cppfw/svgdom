@@ -1,5 +1,5 @@
 #include "../../src/svgdom/dom.hpp"
-#include "../../src/svgdom/Finder.hpp"
+#include "../../src/svgdom/finder.hpp"
 
 #include <chrono>
 

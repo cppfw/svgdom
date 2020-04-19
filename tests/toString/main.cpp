@@ -1,5 +1,5 @@
 #include "../../src/svgdom/dom.hpp"
-#include "../../src/svgdom/Visitor.hpp"
+#include "../../src/svgdom/visitor.hpp"
 
 #include <utki/debug.hpp>
 
