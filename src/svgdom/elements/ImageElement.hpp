@@ -5,7 +5,7 @@
 #include "Transformable.hpp"
 #include "Rectangle.hpp"
 #include "Referencing.hpp"
-#include "AspectRatioed.hpp"
+#include "aspect_ratioed.hpp"
 
 namespace svgdom{
 struct ImageElement :

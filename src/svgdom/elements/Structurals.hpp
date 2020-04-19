@@ -6,7 +6,7 @@
 #include "Referencing.hpp"
 #include "Rectangle.hpp"
 #include "ViewBoxed.hpp"
-#include "AspectRatioed.hpp"
+#include "aspect_ratioed.hpp"
 #include "CoordinateUnits.hpp"
 
 namespace svgdom{

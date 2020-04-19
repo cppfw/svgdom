@@ -312,7 +312,7 @@ void Parser::fillTextPositioning(TextPositioning& p) {
 
 void Parser::fillAspectRatioed(AspectRatioed& e) {
 	if(auto a = this->findAttributeOfNamespace(XmlNamespace_e::SVG, "preserveAspectRatio")){
-		e.parseAndFillPreserveAspectRatio(*a);
+		e.preserve_aspect_ratio.parse(*a);
 	}
 }
 
