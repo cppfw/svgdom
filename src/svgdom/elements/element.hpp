@@ -2,8 +2,6 @@
 
 #include <ostream>
 
-#include <utki/Unique.hpp>
-
 namespace svgdom{
 
 class visitor;
@@ -12,10 +10,15 @@ class const_visitor;
 /**
  * @brief Base class for all SVG document elements.
  */
-struct Element{
+struct element{
 	std::string id;
 	
-	std::string toString()const;
+	std::string to_string()const;
+
+	// TODO: deprecated, remove.
+	std::string toString()const{
+		return this->to_string();
+	}
 	
 	/**
 	 * @brief Accept method for visitor pattern.
@@ -29,7 +32,10 @@ struct Element{
 	 */
 	virtual void accept(const_visitor& v) const = 0;
 
-	virtual ~Element()noexcept{}
+	virtual ~element()noexcept{}
 };
+
+// TODO: deprecated, remove.
+typedef element Element;
 
 }

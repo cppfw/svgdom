@@ -1,4 +1,4 @@
-#include "Element.hpp"
+#include "element.hpp"
 
 #include <ostream>
 #include <sstream>
@@ -9,7 +9,7 @@
 
 using namespace svgdom;
 
-std::string Element::toString() const{
+std::string Element::to_string() const{
 	std::stringstream s;
 	
 	StreamWriter visitor(s);

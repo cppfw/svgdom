@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Element.hpp"
+#include "element.hpp"
 #include "Styleable.hpp"
 #include "Transformable.hpp"
 #include "Rectangle.hpp"

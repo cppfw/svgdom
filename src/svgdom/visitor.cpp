@@ -94,12 +94,12 @@ void visitor::visit(ImageElement& e){
 	this->defaultVisit(e);
 }
 
-void visitor::default_visit(Element& e, Container& c) {
+void visitor::default_visit(Element& e, container& c) {
 	this->default_visit(e);
 	this->relay_accept(c);
 }
 
-void visitor::relay_accept(Container& c){
+void visitor::relay_accept(container& c){
 	auto oldParent = this->curParent_v;
 	auto oldIter = this->curIter_v;
 	this->curParent_v = &c;
@@ -203,12 +203,12 @@ void const_visitor::visit(const ImageElement& e){
 	this->defaultVisit(e);
 }
 
-void const_visitor::default_visit(const Element& e, const Container& c) {
+void const_visitor::default_visit(const Element& e, const container& c) {
 	this->default_visit(e);
 	this->relay_accept(c);
 }
 
-void const_visitor::relay_accept(const Container& c){
+void const_visitor::relay_accept(const container& c){
 	for(auto& e : c.children){
 		e->accept(*this);
 	}

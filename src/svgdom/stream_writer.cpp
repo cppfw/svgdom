@@ -26,7 +26,7 @@ void StreamWriter::add_attribute(const std::string& name, real value){
 	this->add_attribute(name, ss.str());
 }
 
-void StreamWriter::write(const Container* children) {
+void StreamWriter::write(const container* children) {
 	auto ind = indent_str();
 
 	auto tag = std::move(this->name);
@@ -60,7 +60,7 @@ std::string StreamWriter::indent_str() {
 	return ss.str();
 }
 
-void StreamWriter::childrenToStream(const Container& e) {
+void StreamWriter::childrenToStream(const container& e) {
 	++this->indent;
 	utki::ScopeExit scopeExit([this]() {
 		--this->indent;

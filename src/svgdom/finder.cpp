@@ -19,7 +19,7 @@ public:
 		}
 	}
 	
-	void visitContainer(const svgdom::Element& e, const svgdom::Container& c, const svgdom::Styleable& s){
+	void visitContainer(const svgdom::Element& e, const svgdom::container& c, const svgdom::Styleable& s){
 		StyleStack::Push push(this->styleStack, s);
 		this->addToCache(e);
 		this->relayAccept(c);

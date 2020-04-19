@@ -18,13 +18,13 @@ namespace svgdom{
  */
 class visitor{
 private:
-	Container* curParent_v = nullptr;
-	decltype(Container::children)::iterator curIter_v;
+	container* curParent_v = nullptr;
+	decltype(container::children)::iterator curIter_v;
 	
 protected:
 	/**
-	 * @brief Get current Container whose children are being visited.
-	 * @return Pointer to current traversed Container.
+	 * @brief Get current container whose children are being visited.
+	 * @return Pointer to current traversed container.
 	 * @return nullptr if root SVG element is being visited.
 	 */
 	decltype(curParent_v) cur_parent()const{
@@ -38,18 +38,18 @@ protected:
 	
 	/**
 	 * @brief Get iterator if current visited child element.
-	 * Returns iterator into the parent Container of the currently visited child element.
+	 * Returns iterator into the parent container of the currently visited child element.
 	 * Note, that removing the visited element from its parent during the element is visited will
 	 * lead to undefined behavior. Instead, one should store the iterators until the whole SVG tree
 	 * traversing is completed and only then perform elements removal if needed.
 	 * @return Iterator of currently visited child element.
 	 */
-	decltype(Container::children)::iterator cur_iter()const{
+	decltype(container::children)::iterator cur_iter()const{
 		return this->curIter_v;
 	}
 
 	// TODO: deprecated, remove.
-	decltype(Container::children)::iterator curIter()const{
+	decltype(container::children)::iterator curIter()const{
 		return this->cur_iter();
 	}
 	
@@ -57,10 +57,10 @@ protected:
 	 * @brief Relay accept to children.
 	 * @param container - container to whose children the 'accept' should be relayed.
 	 */
-	void relay_accept(Container& c);
+	void relay_accept(container& c);
 
 	// TODO: deprecated, remove.
-	void relayAccept(Container& c){
+	void relayAccept(container& c){
 		this->relay_accept(c);
 	}
 	
@@ -108,10 +108,10 @@ public:
 	 * @param e - element to visit.
 	 * @param c - 'container' ancestor of the element to visit.
 	 */
-	virtual void default_visit(Element& e, Container& c);
+	virtual void default_visit(Element& e, container& c);
 
 	// TODO: deprecated, remove.
-	virtual void defaultVisit(Element& e, Container& c){
+	virtual void defaultVisit(Element& e, container& c){
 		this->default_visit(e, c);
 	}
 	
@@ -129,10 +129,10 @@ protected:
 	 * @brief Relay accept to children.
 	 * @param container - container to whose children the 'accept' should be relayed.
 	 */
-	void relay_accept(const Container& c);
+	void relay_accept(const container& c);
 
 	// TODO: deprecated, remove.
-	void relayAccept(const Container& c){
+	void relayAccept(const container& c){
 		this->relay_accept(c);
 	}
 	
@@ -180,10 +180,10 @@ public:
 	 * @param e - element to visit.
 	 * @param c - 'container' ancestor of the element to visit.
 	 */
-	virtual void default_visit(const Element& e, const Container& c);
+	virtual void default_visit(const Element& e, const container& c);
 
 	// TODO: deprecated, remove.
-	virtual void defaultVisit(const Element& e, const Container& c){
+	virtual void defaultVisit(const Element& e, const container& c){
 		this->default_visit(e, c);
 	}
 	

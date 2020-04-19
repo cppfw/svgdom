@@ -10,7 +10,7 @@
 #include <utki/util.hpp>
 
 #include "../util.hxx"
-#include "Element.hpp"
+#include "element.hpp"
 #include "../malformed_svg_error.hpp"
 
 // TODO: remove when deprecated stuff is removed.

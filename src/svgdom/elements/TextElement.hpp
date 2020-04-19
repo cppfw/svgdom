@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Element.hpp"
+#include "element.hpp"
 #include "container.hpp"
 #include "Styleable.hpp"
 #include "Transformable.hpp"
@@ -14,7 +14,7 @@ public:
 
 class TextElement :
 		public Element,
-		public Container,
+		public container,
 		public Styleable,
 		public Transformable,
 		public TextPositioning

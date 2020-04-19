@@ -2,7 +2,7 @@
 
 #include "Transformable.hpp"
 #include "Styleable.hpp"
-#include "Element.hpp"
+#include "element.hpp"
 #include "Rectangle.hpp"
 
 namespace svgdom{

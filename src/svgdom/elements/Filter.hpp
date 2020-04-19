@@ -2,7 +2,7 @@
 
 #include <array>
 
-#include "Element.hpp"
+#include "element.hpp"
 #include "Styleable.hpp"
 #include "Rectangle.hpp"
 #include "Referencing.hpp"
@@ -15,7 +15,7 @@ struct FilterElement :
 		public Styleable,
 		public Rectangle,
 		public Referencing,
-		public Container
+		public container
 {
 	coordinate_units filterUnits = coordinate_units::object_bounding_box;
 	coordinate_units primitiveUnits = coordinate_units::user_space_on_use;

@@ -1,8 +1,9 @@
 #pragma once
 
 #include <list>
+#include <memory>
 
-#include "Element.hpp"
+#include "element.hpp"
 
 namespace svgdom{
 
@@ -10,7 +11,7 @@ namespace svgdom{
  * @brief An element which can have child elements.
  */
 struct container{
-	std::list<std::unique_ptr<Element>> children;
+	std::list<std::unique_ptr<element>> children;
 	
 	container() = default;
 	

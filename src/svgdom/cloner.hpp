@@ -8,10 +8,10 @@ namespace svgdom{
  * A visitor which allows cloning of Elements (and their children).
  */
 class cloner : virtual public svgdom::ConstVisitor{
-	svgdom::Container root;
-	svgdom::Container* cur_parent = &root;
+	svgdom::container root;
+	svgdom::container* cur_parent = &root;
 
-	void clone_children(const svgdom::Container& e, svgdom::Container& clone); 
+	void clone_children(const svgdom::container& e, svgdom::container& clone); 
 	
 public:
 	/**

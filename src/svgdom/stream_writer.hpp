@@ -6,7 +6,7 @@ namespace svgdom{
 
 class stream_writer : virtual public ConstVisitor{
 private:
-	void childrenToStream(const Container& e);
+	void childrenToStream(const container& e);
 	
 	std::string name;
 	std::vector<std::pair<std::string, std::string>> attributes;
@@ -20,7 +20,7 @@ protected:
 	void add_attribute(const std::string& name, const std::string& value);
 	void add_attribute(const std::string& name, const length& value);
 	void add_attribute(const std::string& name, real value);
-	void write(const Container* children = nullptr);
+	void write(const container* children = nullptr);
 	
 	void add_element_attributes(const Element& e);
 	void add_transformable_attributes(const Transformable& e);

@@ -320,7 +320,7 @@ void Parser::addElement(std::unique_ptr<Element> e) {
 	this->addElement(std::move(e), nullptr);
 }
 
-void Parser::addElement(std::unique_ptr<Element> e, Container* c) {
+void Parser::addElement(std::unique_ptr<Element> e, container* c) {
 	ASSERT(e)
 	ASSERT(this->parentStack.back())
 	this->parentStack.back()->children.push_back(std::move(e));

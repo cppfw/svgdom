@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Element.hpp"
+#include "element.hpp"
 #include "container.hpp"
 #include "Referencing.hpp"
 #include "Transformable.hpp"
@@ -14,7 +14,7 @@ namespace svgdom{
  */
 struct Gradient :
 		public Element,
-		public Container,
+		public container,
 		public Referencing,
 		public Transformable,
 		public Styleable
