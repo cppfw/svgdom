@@ -5,7 +5,7 @@
 #include "element.hpp"
 #include "Styleable.hpp"
 #include "rectangle.hpp"
-#include "Referencing.hpp"
+#include "referencing.hpp"
 #include "container.hpp"
 #include "coordinate_units.hpp"
 
@@ -14,7 +14,7 @@ struct FilterElement :
 		public Element,
 		public Styleable,
 		public rectangle,
-		public Referencing,
+		public referencing,
 		public container
 {
 	coordinate_units filterUnits = coordinate_units::object_bounding_box;

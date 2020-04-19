@@ -253,7 +253,7 @@ void Parser::fillRectangle(rectangle& r, const rectangle& defaultValues) {
 	}
 }
 
-void Parser::fillReferencing(Referencing& e) {
+void Parser::fillReferencing(referencing& e) {
 	auto a = this->findAttributeOfNamespace(XmlNamespace_e::XLINK, "href");
 	if(!a){
 		a = this->findAttributeOfNamespace(XmlNamespace_e::SVG, "href");//in some SVG documents the svg namespace is used instead of xlink, though this is against SVG spec we allow to do so.

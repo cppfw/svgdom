@@ -7,7 +7,7 @@ namespace svgdom{
 /**
  * @brief an element which can reference another element.
  */
-struct Referencing{
+struct referencing{
 	/**
 	 * @brief IRI reference.
 	 * This variable holds the IRI string.
@@ -19,7 +19,15 @@ struct Referencing{
 	 * @return ID of the locally referenced element.
 	 * @return Empty string if this Referencing does not refer to any element or the reference is not local IRI.
 	 */
-	std::string getLocalIdFromIri()const;
+	std::string get_local_id_from_iri()const;
+
+	// TODO: deprecated, remove.
+	std::string getLocalIdFromIri()const{
+		return this->get_local_id_from_iri();
+	}
 };
+
+// TODO: derprecated, remove.
+typedef referencing Referencing;
 
 }

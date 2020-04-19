@@ -7,7 +7,7 @@
 #include <mikroxml/mikroxml.hpp>
 
 #include "elements/element.hpp"
-#include "elements/Referencing.hpp"
+#include "elements/referencing.hpp"
 #include "elements/rectangle.hpp"
 #include "elements/ViewBoxed.hpp"
 #include "elements/Transformable.hpp"

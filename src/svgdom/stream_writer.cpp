@@ -118,7 +118,7 @@ void StreamWriter::add_rectangle_attributes(const rectangle& e, const rectangle&
 	}
 }
 
-void StreamWriter::add_referencing_attributes(const Referencing& e) {
+void StreamWriter::add_referencing_attributes(const referencing& e) {
 	if(e.iri.length() != 0){
 		this->add_attribute("xlink:href", e.iri);
 	}

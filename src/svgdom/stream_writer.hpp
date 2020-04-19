@@ -37,7 +37,7 @@ protected:
 				)
 		);
 	void add_shape_attributes(const Shape& e);
-	void add_referencing_attributes(const Referencing& e);
+	void add_referencing_attributes(const referencing& e);
 	void add_gradient_attributes(const gradient& e);
 	void add_filter_primitive_attributes(const FilterPrimitive& e);
 	void add_inputable_attributes(const Inputable& e);
@@ -114,7 +114,7 @@ protected:
 	}
 
 	// TODO: deprecated, remove.
-	void addReferencingAttributes(const Referencing& e){
+	void addReferencingAttributes(const referencing& e){
 		this->add_referencing_attributes(e);
 	}
 

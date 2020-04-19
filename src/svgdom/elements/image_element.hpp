@@ -4,7 +4,7 @@
 #include "Styleable.hpp"
 #include "Transformable.hpp"
 #include "rectangle.hpp"
-#include "Referencing.hpp"
+#include "referencing.hpp"
 #include "aspect_ratioed.hpp"
 
 namespace svgdom{
@@ -13,7 +13,7 @@ struct image_element :
 		public Styleable,
 		public Transformable,
 		public rectangle,
-		public Referencing,
+		public referencing,
 		public aspect_ratioed
 {
 	void accept(visitor& v) override;

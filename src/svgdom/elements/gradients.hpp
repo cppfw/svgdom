@@ -2,7 +2,7 @@
 
 #include "element.hpp"
 #include "container.hpp"
-#include "Referencing.hpp"
+#include "referencing.hpp"
 #include "Transformable.hpp"
 #include "Styleable.hpp"
 #include "coordinate_units.hpp"
@@ -15,7 +15,7 @@ namespace svgdom{
 struct gradient :
 		public element,
 		public container,
-		public Referencing,
+		public referencing,
 		public Transformable,
 		public Styleable
 {

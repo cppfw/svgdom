@@ -3,7 +3,7 @@
 #include "container.hpp"
 #include "Transformable.hpp"
 #include "Styleable.hpp"
-#include "Referencing.hpp"
+#include "referencing.hpp"
 #include "rectangle.hpp"
 #include "ViewBoxed.hpp"
 #include "aspect_ratioed.hpp"
@@ -34,7 +34,7 @@ struct DefsElement :
 struct UseElement :
 		public Element,
 		public Transformable,
-		public Referencing,
+		public referencing,
 		public rectangle,
 		public Styleable
 {
