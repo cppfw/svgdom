@@ -4,7 +4,7 @@
 #include <array>
 
 #include "config.hpp"
-#include "elements/CoordinateUnits.hpp"
+#include "elements/coordinate_units.hpp"
 
 namespace svgdom{
 

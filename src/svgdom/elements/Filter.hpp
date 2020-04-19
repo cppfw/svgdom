@@ -7,7 +7,7 @@
 #include "Rectangle.hpp"
 #include "Referencing.hpp"
 #include "container.hpp"
-#include "CoordinateUnits.hpp"
+#include "coordinate_units.hpp"
 
 namespace svgdom{
 struct FilterElement :
@@ -17,8 +17,8 @@ struct FilterElement :
 		public Referencing,
 		public Container
 {
-	CoordinateUnits_e filterUnits = CoordinateUnits_e::OBJECT_BOUNDING_BOX;
-	CoordinateUnits_e primitiveUnits = CoordinateUnits_e::USER_SPACE_ON_USE;
+	coordinate_units filterUnits = coordinate_units::object_bounding_box;
+	coordinate_units primitiveUnits = coordinate_units::user_space_on_use;
 	
 	//NOTE: filterRes attribute is dropped, it seems deprecated.
 	

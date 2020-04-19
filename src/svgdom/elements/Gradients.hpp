@@ -5,7 +5,7 @@
 #include "Referencing.hpp"
 #include "Transformable.hpp"
 #include "Styleable.hpp"
-#include "CoordinateUnits.hpp"
+#include "coordinate_units.hpp"
 
 namespace svgdom{
 
@@ -26,7 +26,7 @@ struct Gradient :
 		REPEAT
 	} spreadMethod = SpreadMethod_e::DEFAULT;
 	
-	CoordinateUnits_e units = CoordinateUnits_e::UNKNOWN;
+	coordinate_units units = coordinate_units::unknown;
 	
 	struct StopElement :
 			public Element,

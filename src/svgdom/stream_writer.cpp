@@ -133,7 +133,7 @@ void StreamWriter::add_gradient_attributes(const Gradient& e) {
 		this->add_attribute("spreadMethod", e.spreadMethodToString());
 	}
 	
-	if(e.units != CoordinateUnits_e::UNKNOWN){
+	if(e.units != coordinate_units::unknown){
 		this->add_attribute("gradientUnits", coordinateUnitsToString(e.units));
 	}
 	
@@ -399,11 +399,11 @@ void StreamWriter::visit(const MaskElement& e) {
 	this->add_rectangle_attributes(e);
 	this->add_styleable_attributes(e);
 	
-	if(e.maskUnits != CoordinateUnits_e::OBJECT_BOUNDING_BOX && e.maskUnits != CoordinateUnits_e::UNKNOWN){
+	if(e.maskUnits != coordinate_units::object_bounding_box && e.maskUnits != coordinate_units::unknown){
 		this->add_attribute("maskUnits", coordinateUnitsToString(e.maskUnits));
 	}
 	
-	if(e.maskContentUnits != CoordinateUnits_e::USER_SPACE_ON_USE && e.maskContentUnits != CoordinateUnits_e::UNKNOWN){
+	if(e.maskContentUnits != coordinate_units::user_space_on_use && e.maskContentUnits != coordinate_units::unknown){
 		this->add_attribute("maskContentUnits", coordinateUnitsToString(e.maskContentUnits));
 	}
 	
@@ -446,11 +446,11 @@ void StreamWriter::visit(const FilterElement& e){
 		);
 	this->add_referencing_attributes(e);
 	
-	if(e.filterUnits != CoordinateUnits_e::UNKNOWN && e.filterUnits != CoordinateUnits_e::OBJECT_BOUNDING_BOX){
+	if(e.filterUnits != coordinate_units::unknown && e.filterUnits != coordinate_units::object_bounding_box){
 		this->add_attribute("filterUnits", coordinateUnitsToString(e.filterUnits));
 	}
 
-	if(e.primitiveUnits != CoordinateUnits_e::UNKNOWN && e.primitiveUnits != CoordinateUnits_e::USER_SPACE_ON_USE){
+	if(e.primitiveUnits != coordinate_units::unknown && e.primitiveUnits != coordinate_units::user_space_on_use){
 		this->add_attribute("primitiveUnits", coordinateUnitsToString(e.primitiveUnits));
 	}
 	

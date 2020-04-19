@@ -1,9 +1,6 @@
 #pragma once
 
-namespace svgdom{
-enum class CoordinateUnits_e{
-	UNKNOWN,
-	USER_SPACE_ON_USE,
-	OBJECT_BOUNDING_BOX
-};
-}
+// TODO: remove whole file.
+#warning "CoordinateUnits.hpp is DEPRECATED, use coordinate_units.hpp instead"
+
+#include "coordinate_units.hpp"

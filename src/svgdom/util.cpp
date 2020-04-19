@@ -176,23 +176,23 @@ std::string svgdom::iriToLocalId(const std::string& iri){
 }
 
 
-CoordinateUnits_e svgdom::parseCoordinateUnits(const std::string& s){
+coordinate_units svgdom::parseCoordinateUnits(const std::string& s){
 	if(s == "userSpaceOnUse"){
-		return CoordinateUnits_e::USER_SPACE_ON_USE;
+		return coordinate_units::user_space_on_use;
 	}else if(s == "objectBoundingBox"){
-		return CoordinateUnits_e::OBJECT_BOUNDING_BOX;
+		return coordinate_units::object_bounding_box;
 	}
-	return CoordinateUnits_e::UNKNOWN;
+	return coordinate_units::unknown;
 }
 
 
-std::string svgdom::coordinateUnitsToString(CoordinateUnits_e u){
+std::string svgdom::coordinateUnitsToString(coordinate_units u){
 	switch(u){
 		default:
 			return std::string();
-		case CoordinateUnits_e::OBJECT_BOUNDING_BOX:
+		case coordinate_units::object_bounding_box:
 			return "objectBoundingBox";
-		case CoordinateUnits_e::USER_SPACE_ON_USE:
+		case coordinate_units::user_space_on_use:
 			return "userSpaceOnUse";
 	}
 }
