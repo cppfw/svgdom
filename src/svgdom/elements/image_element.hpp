@@ -3,7 +3,7 @@
 #include "element.hpp"
 #include "Styleable.hpp"
 #include "Transformable.hpp"
-#include "Rectangle.hpp"
+#include "rectangle.hpp"
 #include "Referencing.hpp"
 #include "aspect_ratioed.hpp"
 
@@ -12,7 +12,7 @@ struct image_element :
 		public element,
 		public Styleable,
 		public Transformable,
-		public Rectangle,
+		public rectangle,
 		public Referencing,
 		public aspect_ratioed
 {

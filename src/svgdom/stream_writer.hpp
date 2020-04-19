@@ -28,8 +28,8 @@ protected:
 	void add_view_boxed_attributes(const ViewBoxed& e);
 	void add_aspect_ratioed_attributes(const aspect_ratioed& e);
 	void add_rectangle_attributes(
-			const Rectangle& e,
-			const Rectangle& default_values = Rectangle(
+			const rectangle& e,
+			const rectangle& default_values = rectangle(
 					length::make(0, length::Unit_e::PERCENT),
 					length::make(0, length::Unit_e::PERCENT),
 					length::make(100, length::Unit_e::PERCENT),
@@ -96,8 +96,8 @@ protected:
 
 	// TODO: deprecaed, remove.
 	void addRectangleAttributes(
-			const Rectangle& e,
-			const Rectangle& defaultValues = Rectangle(
+			const rectangle& e,
+			const rectangle& defaultValues = rectangle(
 					length::make(0, length::Unit_e::PERCENT),
 					length::make(0, length::Unit_e::PERCENT),
 					length::make(100, length::Unit_e::PERCENT),

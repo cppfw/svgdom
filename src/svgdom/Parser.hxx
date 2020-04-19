@@ -8,7 +8,7 @@
 
 #include "elements/element.hpp"
 #include "elements/Referencing.hpp"
-#include "elements/Rectangle.hpp"
+#include "elements/rectangle.hpp"
 #include "elements/ViewBoxed.hpp"
 #include "elements/Transformable.hpp"
 #include "elements/gradients.hpp"

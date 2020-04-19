@@ -4,7 +4,7 @@
 #include "Transformable.hpp"
 #include "Styleable.hpp"
 #include "Referencing.hpp"
-#include "Rectangle.hpp"
+#include "rectangle.hpp"
 #include "ViewBoxed.hpp"
 #include "aspect_ratioed.hpp"
 #include "coordinate_units.hpp"
@@ -35,7 +35,7 @@ struct UseElement :
 		public Element,
 		public Transformable,
 		public Referencing,
-		public Rectangle,
+		public rectangle,
 		public Styleable
 {
 	void accept(visitor& v)override;
@@ -45,7 +45,7 @@ struct UseElement :
 struct SvgElement :
 		public Element,
 		public container,
-		public Rectangle,
+		public rectangle,
 		public ViewBoxed,
 		public aspect_ratioed,
 		public Styleable
@@ -85,7 +85,7 @@ struct SymbolElement :
 struct MaskElement :
 		public Element,
 		public container,
-		public Rectangle,
+		public rectangle,
 		public Styleable
 {
 	coordinate_units maskUnits;

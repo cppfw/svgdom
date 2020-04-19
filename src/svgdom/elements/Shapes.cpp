@@ -11,11 +11,11 @@
 using namespace svgdom;
 
 
-Rectangle RectElement::rectangleDefaultValues = Rectangle(
+rectangle RectElement::rectangleDefaultValues = rectangle(
 		Length::make(0, length_unit::NUMBER),
 		Length::make(0, length_unit::NUMBER),
-		Length::make(0, length_unit::UNKNOWN),
-		Length::make(0, length_unit::UNKNOWN)
+		Length::make(0, length_unit::unknown),
+		Length::make(0, length_unit::unknown)
 	);
 
 void PathElement::accept(visitor& v){

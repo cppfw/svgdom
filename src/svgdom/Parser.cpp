@@ -236,7 +236,7 @@ void Parser::fillGradient(gradient& g) {
 	}
 }
 
-void Parser::fillRectangle(Rectangle& r, const Rectangle& defaultValues) {
+void Parser::fillRectangle(rectangle& r, const rectangle& defaultValues) {
 	r = defaultValues;
 	
 	if(auto a = this->findAttributeOfNamespace(XmlNamespace_e::SVG, "x")){
@@ -496,7 +496,7 @@ void Parser::parseFilterElement() {
 	this->fillStyleable(*ret);
 	this->fillRectangle(
 			*ret,
-			Rectangle(
+			rectangle(
 					Length::make(-10, length_unit::PERCENT),
 					Length::make(-10, length_unit::PERCENT),
 					Length::make(120, length_unit::PERCENT),

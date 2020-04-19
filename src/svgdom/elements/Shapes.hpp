@@ -3,7 +3,7 @@
 #include "Transformable.hpp"
 #include "Styleable.hpp"
 #include "element.hpp"
-#include "Rectangle.hpp"
+#include "rectangle.hpp"
 
 namespace svgdom{
 
@@ -82,21 +82,21 @@ struct PathElement : public Shape{
 
 struct RectElement :
 		public Shape,
-		public Rectangle
+		public rectangle
 {
-	Length rx = Length::make(0, length_unit::UNKNOWN);
-	Length ry = Length::make(0, length_unit::UNKNOWN);
+	Length rx = Length::make(0, length_unit::unknown);
+	Length ry = Length::make(0, length_unit::unknown);
 	
 	void accept(visitor& v)override;
 	void accept(const_visitor& v) const override;
 
-	static Rectangle rectangleDefaultValues;
+	static rectangle rectangleDefaultValues;
 };
 
 struct CircleElement : public Shape{
-	Length cx = Length::make(0, length_unit::UNKNOWN);
-	Length cy = Length::make(0, length_unit::UNKNOWN);
-	Length r = Length::make(0, length_unit::UNKNOWN);
+	Length cx = Length::make(0, length_unit::unknown);
+	Length cy = Length::make(0, length_unit::unknown);
+	Length r = Length::make(0, length_unit::unknown);
 	
 	void accept(visitor& v)override;
 	void accept(const_visitor& v) const override;
@@ -104,10 +104,10 @@ struct CircleElement : public Shape{
 };
 
 struct EllipseElement : public Shape{
-	Length cx = Length::make(0, length_unit::UNKNOWN);
-	Length cy = Length::make(0, length_unit::UNKNOWN);
-	Length rx = Length::make(0, length_unit::UNKNOWN);
-	Length ry = Length::make(0, length_unit::UNKNOWN);
+	Length cx = Length::make(0, length_unit::unknown);
+	Length cy = Length::make(0, length_unit::unknown);
+	Length rx = Length::make(0, length_unit::unknown);
+	Length ry = Length::make(0, length_unit::unknown);
 	
 	void accept(visitor& v)override;
 	void accept(const_visitor& v) const override;
@@ -115,10 +115,10 @@ struct EllipseElement : public Shape{
 };
 
 struct LineElement : public Shape{
-	Length x1 = Length::make(0, length_unit::UNKNOWN);
-	Length y1 = Length::make(0, length_unit::UNKNOWN);
-	Length x2 = Length::make(0, length_unit::UNKNOWN);
-	Length y2 = Length::make(0, length_unit::UNKNOWN);
+	Length x1 = Length::make(0, length_unit::unknown);
+	Length y1 = Length::make(0, length_unit::unknown);
+	Length x2 = Length::make(0, length_unit::unknown);
+	Length y2 = Length::make(0, length_unit::unknown);
 	
 	void accept(visitor& v)override;
 	void accept(const_visitor& v) const override;

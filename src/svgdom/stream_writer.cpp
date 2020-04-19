@@ -100,7 +100,7 @@ void StreamWriter::add_aspect_ratioed_attributes(const aspect_ratioed& e) {
 	}
 }
 
-void StreamWriter::add_rectangle_attributes(const Rectangle& e, const Rectangle& defaultValues) {
+void StreamWriter::add_rectangle_attributes(const rectangle& e, const rectangle& defaultValues) {
 	if(e.isXSpecified() && e.x != defaultValues.x){
 		this->add_attribute("x", e.x);
 	}
@@ -209,7 +209,7 @@ void StreamWriter::visit(const image_element& e){
 	this->add_transformable_attributes(e);
 	this->add_rectangle_attributes(
 			e,
-			Rectangle(
+			rectangle(
 					Length::make(0, length_unit::NUMBER),
 					Length::make(0, length_unit::NUMBER),
 					Length::make(0, length_unit::NUMBER),
@@ -225,19 +225,19 @@ void StreamWriter::visit(const LineElement& e) {
 	this->setName("line");
 	this->add_shape_attributes(e);
 	
-	if(e.x1.unit != length_unit::UNKNOWN){
+	if(e.x1.unit != length_unit::unknown){
 		this->add_attribute("x1", e.x1);
 	}
 	
-	if(e.y1.unit != length_unit::UNKNOWN){
+	if(e.y1.unit != length_unit::unknown){
 		this->add_attribute("y1", e.y1);
 	}
 	
-	if(e.x2.unit != length_unit::UNKNOWN){
+	if(e.x2.unit != length_unit::unknown){
 		this->add_attribute("x2", e.x2);
 	}
 	
-	if(e.y2.unit != length_unit::UNKNOWN){
+	if(e.y2.unit != length_unit::unknown){
 		this->add_attribute("y2", e.y2);
 	}
 	
@@ -249,11 +249,11 @@ void StreamWriter::visit(const RectElement& e) {
 	this->add_shape_attributes(e);
 	this->add_rectangle_attributes(e, RectElement::rectangleDefaultValues);
 	
-	if(e.rx.unit != length_unit::UNKNOWN){
+	if(e.rx.unit != length_unit::unknown){
 		this->add_attribute("rx", e.rx);
 	}
 	
-	if(e.ry.unit != length_unit::UNKNOWN){
+	if(e.ry.unit != length_unit::unknown){
 		this->add_attribute("ry", e.ry);
 	}
 	
@@ -264,19 +264,19 @@ void StreamWriter::visit(const EllipseElement& e) {
 	this->setName("ellipse");
 	this->add_shape_attributes(e);
 	
-	if(e.cx.unit != length_unit::UNKNOWN){
+	if(e.cx.unit != length_unit::unknown){
 		this->add_attribute("cx", e.cx);
 	}
 	
-	if(e.cy.unit != length_unit::UNKNOWN){
+	if(e.cy.unit != length_unit::unknown){
 		this->add_attribute("cy", e.cy);
 	}
 	
-	if(e.rx.unit != length_unit::UNKNOWN){
+	if(e.rx.unit != length_unit::unknown){
 		this->add_attribute("rx", e.rx);
 	}
 	
-	if(e.ry.unit != length_unit::UNKNOWN){
+	if(e.ry.unit != length_unit::unknown){
 		this->add_attribute("ry", e.ry);
 	}
 	
@@ -305,15 +305,15 @@ void StreamWriter::visit(const CircleElement& e) {
 	this->setName("circle");
 	this->add_shape_attributes(e);
 	
-	if(e.cx.unit != length_unit::UNKNOWN){
+	if(e.cx.unit != length_unit::unknown){
 		this->add_attribute("cx", e.cx);
 	}
 	
-	if(e.cy.unit != length_unit::UNKNOWN){
+	if(e.cy.unit != length_unit::unknown){
 		this->add_attribute("cy", e.cy);
 	}
 	
-	if(e.r.unit != length_unit::UNKNOWN){
+	if(e.r.unit != length_unit::unknown){
 		this->add_attribute("r", e.r);
 	}
 	this->write();
@@ -358,10 +358,10 @@ void StreamWriter::visit(const radial_gradient_element& e) {
 	if(e.r.unit != length_unit::PERCENT || e.r.value != 50){
 		this->add_attribute("r", e.r);
 	}
-	if(e.fx.unit != length_unit::UNKNOWN){
+	if(e.fx.unit != length_unit::unknown){
 		this->add_attribute("fx", e.fx);
 	}
-	if(e.fy.unit != length_unit::UNKNOWN){
+	if(e.fy.unit != length_unit::unknown){
 		this->add_attribute("fy", e.fy);
 	}
 	this->write(&e);
@@ -437,7 +437,7 @@ void StreamWriter::visit(const FilterElement& e){
 	this->add_styleable_attributes(e);
 	this->add_rectangle_attributes(
 			e,
-			Rectangle(
+			rectangle(
 				Length::make(-10, length_unit::PERCENT),
 				Length::make(-10, length_unit::PERCENT),
 				Length::make(120, length_unit::PERCENT),

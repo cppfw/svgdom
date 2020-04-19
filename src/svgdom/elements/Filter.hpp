@@ -4,7 +4,7 @@
 
 #include "element.hpp"
 #include "Styleable.hpp"
-#include "Rectangle.hpp"
+#include "rectangle.hpp"
 #include "Referencing.hpp"
 #include "container.hpp"
 #include "coordinate_units.hpp"
@@ -13,7 +13,7 @@ namespace svgdom{
 struct FilterElement :
 		public Element,
 		public Styleable,
-		public Rectangle,
+		public rectangle,
 		public Referencing,
 		public container
 {
@@ -28,7 +28,7 @@ struct FilterElement :
 
 struct FilterPrimitive :
 		public Element,
-		public Rectangle,
+		public rectangle,
 		public Styleable
 {
 	std::string result;
