@@ -17,8 +17,8 @@ struct GElement :
 		public Transformable,
 		public Styleable
 {
-	void accept(Visitor& visitor)override;
-	void accept(ConstVisitor& visitor) const override;
+	void accept(visitor& v)override;
+	void accept(const_visitor& v) const override;
 };
 
 struct DefsElement :
@@ -27,10 +27,9 @@ struct DefsElement :
 		public Transformable,
 		public Styleable
 {
-	void accept(Visitor& visitor)override;
-	void accept(ConstVisitor& visitor) const override;
+	void accept(visitor& v)override;
+	void accept(const_visitor& v) const override;
 };
-
 
 struct UseElement :
 		public Element,
@@ -39,11 +38,9 @@ struct UseElement :
 		public Rectangle,
 		public Styleable
 {
-	void accept(Visitor& visitor)override;
-	void accept(ConstVisitor& visitor) const override;
+	void accept(visitor& v)override;
+	void accept(const_visitor& v) const override;
 };
-
-
 
 struct SvgElement :
 		public Element,
@@ -53,8 +50,8 @@ struct SvgElement :
 		public AspectRatioed,
 		public Styleable
 {
-	void accept(Visitor& visitor)override;
-	void accept(ConstVisitor& visitor) const override;
+	void accept(visitor& v)override;
+	void accept(const_visitor& v) const override;
 	
 	/**
 	 * @brief Get aspect ratio of the element.
@@ -81,10 +78,9 @@ struct SymbolElement :
 		public AspectRatioed,
 		public Styleable
 {
-	void accept(Visitor& visitor)override;
-	void accept(ConstVisitor& visitor) const override;
+	void accept(visitor& v)override;
+	void accept(const_visitor& v) const override;
 };
-
 
 struct MaskElement :
 		public Element,
@@ -95,8 +91,8 @@ struct MaskElement :
 	CoordinateUnits_e maskUnits;
 	CoordinateUnits_e maskContentUnits;
 	
-	void accept(Visitor& visitor)override;
-	void accept(ConstVisitor& visitor) const override;
+	void accept(visitor& v)override;
+	void accept(const_visitor& v) const override;
 };
 
 }

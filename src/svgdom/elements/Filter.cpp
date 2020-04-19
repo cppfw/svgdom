@@ -1,10 +1,9 @@
 #include "Filter.hpp"
-#include "../Visitor.hpp"
-
+#include "../visitor.hpp"
 
 using namespace svgdom;
 
-void FilterElement::accept(Visitor& visitor){
+void FilterElement::accept(visitor& visitor){
 	visitor.visit(*this);
 }
 
@@ -12,7 +11,7 @@ void FilterElement::accept(ConstVisitor& visitor) const {
 	visitor.visit(*this);
 }
 
-void FeGaussianBlurElement::accept(Visitor& visitor){
+void FeGaussianBlurElement::accept(visitor& visitor){
 	visitor.visit(*this);
 }
 
@@ -20,15 +19,15 @@ void FeGaussianBlurElement::accept(ConstVisitor& visitor) const {
 	visitor.visit(*this);
 }
 
-void FeColorMatrixElement::accept(Visitor& visitor) {
+void FeColorMatrixElement::accept(visitor& visitor) {
 	visitor.visit(*this);
 }
 
-void FeBlendElement::accept(Visitor& visitor) {
+void FeBlendElement::accept(visitor& visitor) {
 	visitor.visit(*this);
 }
 
-void FeCompositeElement::accept(Visitor& visitor) {
+void FeCompositeElement::accept(visitor& visitor) {
 	visitor.visit(*this);
 }
 

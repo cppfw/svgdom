@@ -76,8 +76,8 @@ struct PathElement : public Shape{
 	
 	static decltype(path) parse(const std::string& str);
 	
-	void accept(Visitor& visitor)override;
-	void accept(ConstVisitor& visitor) const override;
+	void accept(visitor& v)override;
+	void accept(const_visitor& v) const override;
 };
 
 struct RectElement :
@@ -87,8 +87,8 @@ struct RectElement :
 	Length rx = Length::make(0, Length::Unit_e::UNKNOWN);
 	Length ry = Length::make(0, Length::Unit_e::UNKNOWN);
 	
-	void accept(Visitor& visitor)override;
-	void accept(ConstVisitor& visitor) const override;
+	void accept(visitor& v)override;
+	void accept(const_visitor& v) const override;
 
 	static Rectangle rectangleDefaultValues;
 };
@@ -98,8 +98,8 @@ struct CircleElement : public Shape{
 	Length cy = Length::make(0, Length::Unit_e::UNKNOWN);
 	Length r = Length::make(0, Length::Unit_e::UNKNOWN);
 	
-	void accept(Visitor& visitor)override;
-	void accept(ConstVisitor& visitor) const override;
+	void accept(visitor& v)override;
+	void accept(const_visitor& v) const override;
 
 };
 
@@ -109,8 +109,8 @@ struct EllipseElement : public Shape{
 	Length rx = Length::make(0, Length::Unit_e::UNKNOWN);
 	Length ry = Length::make(0, Length::Unit_e::UNKNOWN);
 	
-	void accept(Visitor& visitor)override;
-	void accept(ConstVisitor& visitor) const override;
+	void accept(visitor& v)override;
+	void accept(const_visitor& v) const override;
 
 };
 
@@ -120,8 +120,8 @@ struct LineElement : public Shape{
 	Length x2 = Length::make(0, Length::Unit_e::UNKNOWN);
 	Length y2 = Length::make(0, Length::Unit_e::UNKNOWN);
 	
-	void accept(Visitor& visitor)override;
-	void accept(ConstVisitor& visitor) const override;
+	void accept(visitor& v)override;
+	void accept(const_visitor& v) const override;
 
 };
 
@@ -133,16 +133,15 @@ struct PolylineShape : public Shape{
 	static decltype(points) parse(const std::string& str);
 };
 
-
 struct PolylineElement : public PolylineShape{
-	void accept(Visitor& visitor)override;
-	void accept(ConstVisitor& visitor) const override;
+	void accept(visitor& v)override;
+	void accept(const_visitor& v) const override;
 
 };
 
 struct PolygonElement : public PolylineShape{
-	void accept(Visitor& visitor)override;
-	void accept(ConstVisitor& visitor) const override;
+	void accept(visitor& v)override;
+	void accept(const_visitor& v) const override;
 
 };
 

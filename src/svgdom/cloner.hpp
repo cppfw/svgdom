@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Visitor.hpp"
+#include "visitor.hpp"
 
 namespace svgdom{
 /**

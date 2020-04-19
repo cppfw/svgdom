@@ -6,7 +6,7 @@
 #include <utki/debug.hpp>
 
 #include "../util.hxx"
-#include "../Visitor.hpp"
+#include "../visitor.hpp"
 
 using namespace svgdom;
 
@@ -18,60 +18,60 @@ Rectangle RectElement::rectangleDefaultValues = Rectangle(
 		Length::make(0, Length::Unit_e::UNKNOWN)
 	);
 
-void PathElement::accept(Visitor& visitor){
-	visitor.visit(*this);
+void PathElement::accept(visitor& v){
+	v.visit(*this);
 }
 
-void PathElement::accept(ConstVisitor& visitor) const{
-	visitor.visit(*this);
+void PathElement::accept(ConstVisitor& v) const{
+	v.visit(*this);
 }
 
-void RectElement::accept(Visitor& visitor){
-	visitor.visit(*this);
+void RectElement::accept(visitor& v){
+	v.visit(*this);
 }
 
-void RectElement::accept(ConstVisitor& visitor) const {
-	visitor.visit(*this);
+void RectElement::accept(ConstVisitor& v) const {
+	v.visit(*this);
 }
 
-void CircleElement::accept(Visitor& visitor){
-	visitor.visit(*this);
+void CircleElement::accept(visitor& v){
+	v.visit(*this);
 }
 
-void CircleElement::accept(ConstVisitor& visitor) const {
-	visitor.visit(*this);
+void CircleElement::accept(ConstVisitor& v) const {
+	v.visit(*this);
 }
 
-void EllipseElement::accept(Visitor& visitor){
-	visitor.visit(*this);
+void EllipseElement::accept(visitor& v){
+	v.visit(*this);
 }
 
-void EllipseElement::accept(ConstVisitor& visitor) const {
-	visitor.visit(*this);
+void EllipseElement::accept(ConstVisitor& v) const {
+	v.visit(*this);
 }
 
-void LineElement::accept(Visitor& visitor){
-	visitor.visit(*this);
+void LineElement::accept(visitor& v){
+	v.visit(*this);
 }
 
-void LineElement::accept(ConstVisitor& visitor) const {
-	visitor.visit(*this);
+void LineElement::accept(ConstVisitor& v) const {
+	v.visit(*this);
 }
 
-void PolygonElement::accept(Visitor& visistor){
-	visistor.visit(*this);
+void PolygonElement::accept(visitor& v){
+	v.visit(*this);
 }
 
-void PolygonElement::accept(ConstVisitor& visistor) const {
-	visistor.visit(*this);
+void PolygonElement::accept(ConstVisitor& v) const {
+	v.visit(*this);
 }
 
-void PolylineElement::accept(Visitor& visitor){
-	visitor.visit(*this);
+void PolylineElement::accept(visitor& v){
+	v.visit(*this);
 }
 
-void PolylineElement::accept(ConstVisitor& visitor) const {
-	visitor.visit(*this);
+void PolylineElement::accept(ConstVisitor& v) const {
+	v.visit(*this);
 }
 
 std::string PolylineShape::pointsToString() const {

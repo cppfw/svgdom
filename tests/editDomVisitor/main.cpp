@@ -1,12 +1,12 @@
 #include "../../src/svgdom/dom.hpp"
 #include "../../src/svgdom/StreamWriter.hpp"
+#include "../../src/svgdom/Visitor.hpp"
 
 #include <utki/debug.hpp>
 
-
-//Visitor to remove all Line elements
+// visitor to remove all 'line' elements
 class EditingVisitor : public svgdom::Visitor{
-	std::vector<std::pair<svgdom::Container*, T_ChildIter>> elementsToRemove;
+	std::vector<std::pair<svgdom::Container*, decltype(svgdom::Container::children)::iterator>> elementsToRemove;
 	
 	void addToRemove(){
 		if(!this->curParent()){

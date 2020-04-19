@@ -3,12 +3,12 @@
 #include <utki/debug.hpp>
 
 #include "../util.hxx"
-#include "../Visitor.hpp"
+#include "../visitor.hpp"
 
 using namespace svgdom;
 
 
-void RadialGradientElement::accept(Visitor& visitor){
+void RadialGradientElement::accept(visitor& visitor){
 	visitor.visit(*this);
 }
 
@@ -16,7 +16,7 @@ void RadialGradientElement::accept(ConstVisitor& visitor) const {
 	visitor.visit(*this);
 }
 
-void LinearGradientElement::accept(Visitor& visitor){
+void LinearGradientElement::accept(visitor& visitor){
 	visitor.visit(*this);
 }
 
@@ -24,7 +24,7 @@ void LinearGradientElement::accept(ConstVisitor& visitor) const {
 	visitor.visit(*this);
 }
 
-void Gradient::StopElement::accept(Visitor& visitor){
+void Gradient::StopElement::accept(visitor& visitor){
 	visitor.visit(*this);
 }
 

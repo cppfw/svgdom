@@ -1,13 +1,13 @@
 #include "ImageElement.hpp"
 
-#include "../Visitor.hpp"
+#include "../visitor.hpp"
 
 using namespace svgdom;
 
-void ImageElement::accept(Visitor& visitor) {
-	visitor.visit(*this);
+void ImageElement::accept(visitor& v) {
+	v.visit(*this);
 }
 
-void ImageElement::accept(ConstVisitor& visitor) const{
-	visitor.visit(*this);
+void ImageElement::accept(ConstVisitor& v) const{
+	v.visit(*this);
 }

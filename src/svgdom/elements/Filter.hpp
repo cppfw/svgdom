@@ -22,8 +22,8 @@ struct FilterElement :
 	
 	//NOTE: filterRes attribute is dropped, it seems deprecated.
 	
-	void accept(Visitor& visitor)override;
-	void accept(ConstVisitor& visitor) const override;
+	void accept(visitor& v)override;
+	void accept(const_visitor& v) const override;
 };
 
 struct FilterPrimitive :
@@ -68,8 +68,8 @@ struct FeGaussianBlurElement :
 	
 	std::array<real, 2> getStdDeviation()const noexcept;
 	
-	void accept(Visitor& visitor)override;
-	void accept(ConstVisitor& visitor) const override;
+	void accept(visitor& v)override;
+	void accept(const_visitor& v) const override;
 };
 
 struct FeColorMatrixElement :
@@ -85,8 +85,8 @@ struct FeColorMatrixElement :
 	
 	std::array<real, 20> values;
 	
-	void accept(Visitor& visitor)override;
-	void accept(ConstVisitor& visitor) const override;
+	void accept(visitor& v)override;
+	void accept(const_visitor& v) const override;
 };
 
 struct FeBlendElement :
@@ -102,8 +102,8 @@ struct FeBlendElement :
 		LIGHTEN
 	} mode = Mode_e::NORMAL;
 	
-	void accept(Visitor& visitor) override;
-	void accept(ConstVisitor& visitor) const override;
+	void accept(visitor& v) override;
+	void accept(const_visitor& v) const override;
 };
 
 struct FeCompositeElement :
@@ -125,8 +125,8 @@ struct FeCompositeElement :
 	
 	real k1, k2, k3, k4;
 	
-	void accept(Visitor& visitor) override;
-	void accept(ConstVisitor& visitor) const override;
+	void accept(visitor& v) override;
+	void accept(const_visitor& v) const override;
 };
 
 }

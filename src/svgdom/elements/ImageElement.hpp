@@ -16,7 +16,7 @@ struct ImageElement :
 		public Referencing,
 		public AspectRatioed
 {
-	void accept(Visitor& visitor) override;
-	void accept(ConstVisitor& visitor) const override;
+	void accept(visitor& v) override;
+	void accept(const_visitor& v) const override;
 };
 }

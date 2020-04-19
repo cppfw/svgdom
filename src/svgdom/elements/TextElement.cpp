@@ -1,13 +1,13 @@
 #include "TextElement.hpp"
 
-#include "../Visitor.hpp"
+#include "../visitor.hpp"
 
 using namespace svgdom;
 
-void TextElement::accept(Visitor& visitor) {
-	visitor.visit(*this);
+void TextElement::accept(visitor& v) {
+	v.visit(*this);
 }
 
-void TextElement::accept(ConstVisitor& visitor) const{
-	visitor.visit(*this);
+void TextElement::accept(ConstVisitor& v) const{
+	v.visit(*this);
 }

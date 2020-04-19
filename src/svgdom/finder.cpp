@@ -2,7 +2,7 @@
 
 #include <utki/debug.hpp>
 
-#include "Visitor.hpp"
+#include "visitor.hpp"
 
 using namespace svgdom;
 

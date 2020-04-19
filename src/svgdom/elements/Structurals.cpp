@@ -1,7 +1,7 @@
 #include "Structurals.hpp"
 
 #include "../util.hxx"
-#include "../Visitor.hpp"
+#include "../visitor.hpp"
 
 using namespace svgdom;
 
@@ -39,50 +39,50 @@ real SvgElement::aspectRatio(real dpi)const{
 	return wh[0] / wh[1];
 }
 
-void GElement::accept(Visitor& visitor){
-	visitor.visit(*this);
+void GElement::accept(visitor& v){
+	v.visit(*this);
 }
 
-void GElement::accept(ConstVisitor& visitor) const{
-	visitor.visit(*this);
+void GElement::accept(ConstVisitor& v) const{
+	v.visit(*this);
 }
 
-void SvgElement::accept(Visitor& visitor){
-	visitor.visit(*this);
+void SvgElement::accept(visitor& v){
+	v.visit(*this);
 }
 
-void SvgElement::accept(ConstVisitor& visitor) const{
-	visitor.visit(*this);
+void SvgElement::accept(ConstVisitor& v) const{
+	v.visit(*this);
 }
 
-void SymbolElement::accept(Visitor& visitor){
-	visitor.visit(*this);
+void SymbolElement::accept(visitor& v){
+	v.visit(*this);
 }
 
-void SymbolElement::accept(ConstVisitor& visitor) const {
-	visitor.visit(*this);
+void SymbolElement::accept(ConstVisitor& v) const {
+	v.visit(*this);
 }
 
-void DefsElement::accept(Visitor& visitor){
-	visitor.visit(*this);
+void DefsElement::accept(visitor& v){
+	v.visit(*this);
 }
 
-void DefsElement::accept(ConstVisitor& visitor) const{
-	visitor.visit(*this);
+void DefsElement::accept(ConstVisitor& v) const{
+	v.visit(*this);
 }
 
-void UseElement::accept(Visitor& visitor){
-	visitor.visit(*this);
+void UseElement::accept(visitor& v){
+	v.visit(*this);
 }
 
-void UseElement::accept(ConstVisitor& visitor) const {
-	visitor.visit(*this);
+void UseElement::accept(ConstVisitor& v) const {
+	v.visit(*this);
 }
 
-void MaskElement::accept(Visitor& visitor){
-	visitor.visit(*this);
+void MaskElement::accept(visitor& v){
+	v.visit(*this);
 }
 
-void MaskElement::accept(ConstVisitor& visitor) const {
-	visitor.visit(*this);
+void MaskElement::accept(ConstVisitor& v) const {
+	v.visit(*this);
 }

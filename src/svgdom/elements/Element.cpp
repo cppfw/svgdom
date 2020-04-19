@@ -4,12 +4,10 @@
 #include <sstream>
 
 #include "Container.hpp"
-#include "../Visitor.hpp"
+#include "../visitor.hpp"
 #include "../stream_writer.hpp"
 
 using namespace svgdom;
-
-
 
 std::string Element::toString() const{
 	std::stringstream s;

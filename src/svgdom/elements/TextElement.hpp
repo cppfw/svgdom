@@ -22,8 +22,8 @@ class TextElement :
 public:
 	//TODO: attributes lengthAdjust, textLength are not implemented yet.
 	
-	void accept(Visitor& visitor) override;
-	void accept(ConstVisitor& visitor) const override;
+	void accept(visitor& v) override;
+	void accept(const_visitor& v) const override;
 };
 
 }
