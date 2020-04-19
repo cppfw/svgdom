@@ -31,7 +31,7 @@ aspect_ratioed::aspect_ratio_preservation stringToPreserveAspectRatio(const std:
 }
 }
 
-void decltype(aspect_ratioed::preserve_aspect_ratio)::parse(const std::string& str){
+void aspect_ratioed::aspect_ratio_preservation_value::parse(const std::string& str){
 	std::istringstream s(str);
 	
 	s >> std::skipws;
@@ -68,7 +68,7 @@ void decltype(aspect_ratioed::preserve_aspect_ratio)::parse(const std::string& s
 	}
 }
 
-std::string decltype(aspect_ratioed::preserve_aspect_ratio)::to_string()const{
+std::string aspect_ratioed::aspect_ratio_preservation_value::to_string()const{
 	std::stringstream s;
 	if (this->defer) {
 		s << "defer ";

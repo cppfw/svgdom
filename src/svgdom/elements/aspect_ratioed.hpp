@@ -30,7 +30,7 @@ struct aspect_ratioed{
 	// TODO: deprecaed, remove.
 	typedef aspect_ratio_preservation PreserveAspectRatio_e;
 
-	struct {
+	struct aspect_ratio_preservation_value{
 		aspect_ratio_preservation preserve = aspect_ratio_preservation::none;
 		bool defer = false;
 		bool slice = false;
