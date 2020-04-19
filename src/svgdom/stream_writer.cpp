@@ -94,8 +94,8 @@ void StreamWriter::add_view_boxed_attributes(const ViewBoxed& e) {
 	}
 }
 
-void StreamWriter::add_aspect_ratioed_attributes(const AspectRatioed& e) {
-	if (e.preserveAspectRatio.preserve != AspectRatioed::PreserveAspectRatio_e::NONE || e.preserveAspectRatio.defer || e.preserveAspectRatio.slice) {
+void StreamWriter::add_aspect_ratioed_attributes(const aspect_ratioed& e) {
+	if (e.preserveAspectRatio.preserve != aspect_ratioed::PreserveAspectRatio_e::NONE || e.preserveAspectRatio.defer || e.preserveAspectRatio.slice) {
 		this->add_attribute("preserveAspectRatio", e.preserve_aspect_ratio.to_string());
 	}
 }
@@ -201,7 +201,7 @@ void StreamWriter::visit(const SvgElement& e) {
 	this->write(&e);
 }
 
-void StreamWriter::visit(const ImageElement& e){
+void StreamWriter::visit(const image_element& e){
 	this->setName("image");
 	
 	this->add_element_attributes(e);

@@ -7,7 +7,7 @@
 using namespace svgdom;
 
 namespace{
-class CacheCreator : virtual public svgdom::ConstVisitor{
+class CacheCreator : virtual public svgdom::const_visitor{
 public:
 	std::map<std::string, finder::ElementInfo> cache;
 	
@@ -85,7 +85,7 @@ public:
 	void visit(const svgdom::FeGaussianBlurElement& e) override{
 		this->visitElement(e, e);
 	}
-	void visit(const ImageElement& e) override{
+	void visit(const image_element& e) override{
 		this->visitElement(e, e);
 	}
 };

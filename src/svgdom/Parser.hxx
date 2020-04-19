@@ -15,7 +15,7 @@
 #include "elements/Shapes.hpp"
 #include "elements/Structurals.hpp"
 #include "elements/Filter.hpp"
-#include "elements/ImageElement.hpp"
+#include "elements/image_element.hpp"
 #include "elements/TextElement.hpp"
 
 namespace svgdom{

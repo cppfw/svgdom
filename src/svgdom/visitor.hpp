@@ -4,7 +4,7 @@
 #include "elements/Shapes.hpp"
 #include "elements/gradients.hpp"
 #include "elements/Filter.hpp"
-#include "elements/ImageElement.hpp"
+#include "elements/image_element.hpp"
 #include "elements/TextElement.hpp"
 
 namespace svgdom{
@@ -85,7 +85,7 @@ public:
 	virtual void visit(FeColorMatrixElement& e);
 	virtual void visit(FeBlendElement& e);
 	virtual void visit(FeCompositeElement& e);
-	virtual void visit(ImageElement& e);
+	virtual void visit(image_element& e);
 	virtual void visit(MaskElement& e);
 	virtual void visit(TextElement& e);
 	
@@ -157,7 +157,7 @@ public:
 	virtual void visit(const FeColorMatrixElement& e);
 	virtual void visit(const FeBlendElement& e);
 	virtual void visit(const FeCompositeElement& e);
-	virtual void visit(const ImageElement& e);
+	virtual void visit(const image_element& e);
 	virtual void visit(const MaskElement& e);
 	virtual void visit(const TextElement& e);
 	

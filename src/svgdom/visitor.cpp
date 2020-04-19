@@ -90,7 +90,7 @@ void visitor::visit(FeCompositeElement& e){
 	this->defaultVisit(e);
 }
 
-void visitor::visit(ImageElement& e){
+void visitor::visit(image_element& e){
 	this->defaultVisit(e);
 }
 
@@ -199,7 +199,7 @@ void const_visitor::visit(const FeCompositeElement& e){
 	this->defaultVisit(e);
 }
 
-void const_visitor::visit(const ImageElement& e){
+void const_visitor::visit(const image_element& e){
 	this->defaultVisit(e);
 }
 

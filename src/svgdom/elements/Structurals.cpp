@@ -43,7 +43,7 @@ void GElement::accept(visitor& v){
 	v.visit(*this);
 }
 
-void GElement::accept(ConstVisitor& v) const{
+void GElement::accept(const_visitor& v) const{
 	v.visit(*this);
 }
 
@@ -51,7 +51,7 @@ void SvgElement::accept(visitor& v){
 	v.visit(*this);
 }
 
-void SvgElement::accept(ConstVisitor& v) const{
+void SvgElement::accept(const_visitor& v) const{
 	v.visit(*this);
 }
 
@@ -59,7 +59,7 @@ void SymbolElement::accept(visitor& v){
 	v.visit(*this);
 }
 
-void SymbolElement::accept(ConstVisitor& v) const {
+void SymbolElement::accept(const_visitor& v) const {
 	v.visit(*this);
 }
 
@@ -67,7 +67,7 @@ void DefsElement::accept(visitor& v){
 	v.visit(*this);
 }
 
-void DefsElement::accept(ConstVisitor& v) const{
+void DefsElement::accept(const_visitor& v) const{
 	v.visit(*this);
 }
 
@@ -75,7 +75,7 @@ void UseElement::accept(visitor& v){
 	v.visit(*this);
 }
 
-void UseElement::accept(ConstVisitor& v) const {
+void UseElement::accept(const_visitor& v) const {
 	v.visit(*this);
 }
 
@@ -83,6 +83,6 @@ void MaskElement::accept(visitor& v){
 	v.visit(*this);
 }
 
-void MaskElement::accept(ConstVisitor& v) const {
+void MaskElement::accept(const_visitor& v) const {
 	v.visit(*this);
 }

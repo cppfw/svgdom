@@ -7,7 +7,7 @@ void FilterElement::accept(visitor& visitor){
 	visitor.visit(*this);
 }
 
-void FilterElement::accept(ConstVisitor& visitor) const {
+void FilterElement::accept(const_visitor& visitor) const {
 	visitor.visit(*this);
 }
 
@@ -15,7 +15,7 @@ void FeGaussianBlurElement::accept(visitor& visitor){
 	visitor.visit(*this);
 }
 
-void FeGaussianBlurElement::accept(ConstVisitor& visitor) const {
+void FeGaussianBlurElement::accept(const_visitor& visitor) const {
 	visitor.visit(*this);
 }
 
@@ -31,15 +31,15 @@ void FeCompositeElement::accept(visitor& visitor) {
 	visitor.visit(*this);
 }
 
-void FeColorMatrixElement::accept(ConstVisitor& visitor) const{
+void FeColorMatrixElement::accept(const_visitor& visitor) const{
 	visitor.visit(*this);
 }
 
-void FeBlendElement::accept(ConstVisitor& visitor) const{
+void FeBlendElement::accept(const_visitor& visitor) const{
 	visitor.visit(*this);
 }
 
-void FeCompositeElement::accept(ConstVisitor& visitor) const{
+void FeCompositeElement::accept(const_visitor& visitor) const{
 	visitor.visit(*this);
 }
 

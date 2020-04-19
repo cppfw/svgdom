@@ -310,7 +310,7 @@ void Parser::fillTextPositioning(TextPositioning& p) {
 	//TODO: parse missing attributes
 }
 
-void Parser::fillAspectRatioed(AspectRatioed& e) {
+void Parser::fillAspectRatioed(aspect_ratioed& e) {
 	if(auto a = this->findAttributeOfNamespace(XmlNamespace_e::SVG, "preserveAspectRatio")){
 		e.preserve_aspect_ratio.parse(*a);
 	}
@@ -830,7 +830,7 @@ void Parser::parseImageElement() {
 	ASSERT(this->getNamespace(this->element).ns == XmlNamespace_e::SVG)
 	ASSERT(this->getNamespace(this->element).name == "image")
 
-	auto ret = std::make_unique<ImageElement>();
+	auto ret = std::make_unique<image_element>();
 
 	this->fillElement(*ret);
 	this->fillStyleable(*ret);

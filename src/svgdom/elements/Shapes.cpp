@@ -22,7 +22,7 @@ void PathElement::accept(visitor& v){
 	v.visit(*this);
 }
 
-void PathElement::accept(ConstVisitor& v) const{
+void PathElement::accept(const_visitor& v) const{
 	v.visit(*this);
 }
 
@@ -30,7 +30,7 @@ void RectElement::accept(visitor& v){
 	v.visit(*this);
 }
 
-void RectElement::accept(ConstVisitor& v) const {
+void RectElement::accept(const_visitor& v) const {
 	v.visit(*this);
 }
 
@@ -38,7 +38,7 @@ void CircleElement::accept(visitor& v){
 	v.visit(*this);
 }
 
-void CircleElement::accept(ConstVisitor& v) const {
+void CircleElement::accept(const_visitor& v) const {
 	v.visit(*this);
 }
 
@@ -46,7 +46,7 @@ void EllipseElement::accept(visitor& v){
 	v.visit(*this);
 }
 
-void EllipseElement::accept(ConstVisitor& v) const {
+void EllipseElement::accept(const_visitor& v) const {
 	v.visit(*this);
 }
 
@@ -54,7 +54,7 @@ void LineElement::accept(visitor& v){
 	v.visit(*this);
 }
 
-void LineElement::accept(ConstVisitor& v) const {
+void LineElement::accept(const_visitor& v) const {
 	v.visit(*this);
 }
 
@@ -62,7 +62,7 @@ void PolygonElement::accept(visitor& v){
 	v.visit(*this);
 }
 
-void PolygonElement::accept(ConstVisitor& v) const {
+void PolygonElement::accept(const_visitor& v) const {
 	v.visit(*this);
 }
 
@@ -70,7 +70,7 @@ void PolylineElement::accept(visitor& v){
 	v.visit(*this);
 }
 
-void PolylineElement::accept(ConstVisitor& v) const {
+void PolylineElement::accept(const_visitor& v) const {
 	v.visit(*this);
 }
 

@@ -102,7 +102,7 @@ void cloner::visit(const FeGaussianBlurElement& e) {
     this->cur_parent->children.push_back(std::move(clone));
 }
 
-void cloner::visit(const ImageElement& e) {
-	auto clone = std::make_unique<ImageElement>(e);
+void cloner::visit(const image_element& e) {
+	auto clone = std::make_unique<image_element>(e);
     this->cur_parent->children.push_back(std::move(clone));
 }

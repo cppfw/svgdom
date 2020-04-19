@@ -1,22 +1,6 @@
 #pragma once
 
-#include "element.hpp"
-#include "Styleable.hpp"
-#include "Transformable.hpp"
-#include "Rectangle.hpp"
-#include "Referencing.hpp"
-#include "aspect_ratioed.hpp"
+// TODO: remove whole file.
+#warning "ImageElement.hpp is DEPRECATED, use image_element.hpp instead."
 
-namespace svgdom{
-struct ImageElement :
-		public Element,
-		public Styleable,
-		public Transformable,
-		public Rectangle,
-		public Referencing,
-		public AspectRatioed
-{
-	void accept(visitor& v) override;
-	void accept(const_visitor& v) const override;
-};
-}
+#include "image_element.hpp"

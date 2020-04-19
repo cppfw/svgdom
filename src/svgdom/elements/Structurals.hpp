@@ -47,7 +47,7 @@ struct SvgElement :
 		public container,
 		public Rectangle,
 		public ViewBoxed,
-		public AspectRatioed,
+		public aspect_ratioed,
 		public Styleable
 {
 	void accept(visitor& v)override;
@@ -75,7 +75,7 @@ struct SymbolElement :
 		public Element,
 		public container,
 		public ViewBoxed,
-		public AspectRatioed,
+		public aspect_ratioed,
 		public Styleable
 {
 	void accept(visitor& v)override;

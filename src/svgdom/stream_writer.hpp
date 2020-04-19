@@ -4,7 +4,7 @@
 
 namespace svgdom{
 
-class stream_writer : virtual public ConstVisitor{
+class stream_writer : virtual public const_visitor{
 private:
 	void childrenToStream(const container& e);
 	
@@ -26,7 +26,7 @@ protected:
 	void add_transformable_attributes(const Transformable& e);
 	void add_styleable_attributes(const Styleable& e);
 	void add_view_boxed_attributes(const ViewBoxed& e);
-	void add_aspect_ratioed_attributes(const AspectRatioed& e);
+	void add_aspect_ratioed_attributes(const aspect_ratioed& e);
 	void add_rectangle_attributes(
 			const Rectangle& e,
 			const Rectangle& default_values = Rectangle(
@@ -90,7 +90,7 @@ protected:
 	}
 
 	// TODO: deprecated, remove.
-	void addAspectRatioedAttributes(const AspectRatioed& e){
+	void addAspectRatioedAttributes(const aspect_ratioed& e){
 		this->add_aspect_ratioed_attributes(e);
 	}
 
@@ -165,7 +165,7 @@ public:
 	void visit(const FeColorMatrixElement& e) override;
 	void visit(const FeBlendElement& e) override;
 	void visit(const FeCompositeElement& e) override;
-	void visit(const ImageElement& e) override;
+	void visit(const image_element& e) override;
 	void visit(const MaskElement& e) override;
 	void visit(const TextElement& e) override;
 };

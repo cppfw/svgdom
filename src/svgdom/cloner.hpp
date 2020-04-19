@@ -7,7 +7,7 @@ namespace svgdom{
  * @brief clone visitor.
  * A visitor which allows cloning of Elements (and their children).
  */
-class cloner : virtual public svgdom::ConstVisitor{
+class cloner : virtual public svgdom::const_visitor{
 	svgdom::container root;
 	svgdom::container* cur_parent = &root;
 
@@ -52,7 +52,7 @@ public:
 	void visit(const svgdom::radial_gradient_element& e) override;
 	void visit(const svgdom::FilterElement& e) override;
 	void visit(const svgdom::FeGaussianBlurElement& e) override;
-	void visit(const svgdom::ImageElement& e) override;
+	void visit(const svgdom::image_element& e) override;
 };
 
 // TODO: DEPRECATED, remove.

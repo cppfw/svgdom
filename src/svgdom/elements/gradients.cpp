@@ -11,7 +11,7 @@ void radial_gradient_element::accept(visitor& v){
 	v.visit(*this);
 }
 
-void radial_gradient_element::accept(ConstVisitor& v) const {
+void radial_gradient_element::accept(const_visitor& v) const {
 	v.visit(*this);
 }
 
@@ -19,7 +19,7 @@ void linear_gradient_element::accept(visitor& v){
 	v.visit(*this);
 }
 
-void linear_gradient_element::accept(ConstVisitor& v) const {
+void linear_gradient_element::accept(const_visitor& v) const {
 	v.visit(*this);
 }
 
@@ -27,7 +27,7 @@ void gradient::stop_element::accept(visitor& v){
 	v.visit(*this);
 }
 
-void gradient::stop_element::accept(ConstVisitor& v) const {
+void gradient::stop_element::accept(const_visitor& v) const {
 	v.visit(*this);
 }
 

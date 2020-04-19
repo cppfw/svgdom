@@ -8,6 +8,6 @@ void TextElement::accept(visitor& v) {
 	v.visit(*this);
 }
 
-void TextElement::accept(ConstVisitor& v) const{
+void TextElement::accept(const_visitor& v) const{
 	v.visit(*this);
 }
