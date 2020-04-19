@@ -43,26 +43,24 @@ struct Gradient :
 };
 
 struct LinearGradientElement : public Gradient{
-	Length x1 = Length::make(0, Length::Unit_e::UNKNOWN);
-	Length y1 = Length::make(0, Length::Unit_e::UNKNOWN);
-	Length x2 = Length::make(100, Length::Unit_e::UNKNOWN);
-	Length y2 = Length::make(0, Length::Unit_e::UNKNOWN);
+	length x1 = length::make(0, length_unit::unknown);
+	length y1 = length::make(0, length_unit::unknown);
+	length x2 = length::make(100, length_unit::unknown);
+	length y2 = length::make(0, length_unit::unknown);
 	
 	void accept(visitor& v)override;
 	void accept(const_visitor& v) const override;
-
 };
 
 struct RadialGradientElement : public Gradient{
-	Length cx = Length::make(50, Length::Unit_e::UNKNOWN);
-	Length cy = Length::make(50, Length::Unit_e::UNKNOWN);
-	Length r = Length::make(50, Length::Unit_e::UNKNOWN);
-	Length fx = Length::make(50, Length::Unit_e::UNKNOWN);
-	Length fy = Length::make(50, Length::Unit_e::UNKNOWN);
+	Length cx = Length::make(50, length_unit::UNKNOWN);
+	Length cy = Length::make(50, length_unit::UNKNOWN);
+	Length r = Length::make(50, length_unit::UNKNOWN);
+	Length fx = Length::make(50, length_unit::UNKNOWN);
+	Length fy = Length::make(50, length_unit::UNKNOWN);
 	
 	void accept(visitor& v)override;
 	void accept(const_visitor& v) const override;
-
 };
 
 }

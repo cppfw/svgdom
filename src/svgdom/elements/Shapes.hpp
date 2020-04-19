@@ -84,8 +84,8 @@ struct RectElement :
 		public Shape,
 		public Rectangle
 {
-	Length rx = Length::make(0, Length::Unit_e::UNKNOWN);
-	Length ry = Length::make(0, Length::Unit_e::UNKNOWN);
+	Length rx = Length::make(0, length_unit::UNKNOWN);
+	Length ry = Length::make(0, length_unit::UNKNOWN);
 	
 	void accept(visitor& v)override;
 	void accept(const_visitor& v) const override;
@@ -94,9 +94,9 @@ struct RectElement :
 };
 
 struct CircleElement : public Shape{
-	Length cx = Length::make(0, Length::Unit_e::UNKNOWN);
-	Length cy = Length::make(0, Length::Unit_e::UNKNOWN);
-	Length r = Length::make(0, Length::Unit_e::UNKNOWN);
+	Length cx = Length::make(0, length_unit::UNKNOWN);
+	Length cy = Length::make(0, length_unit::UNKNOWN);
+	Length r = Length::make(0, length_unit::UNKNOWN);
 	
 	void accept(visitor& v)override;
 	void accept(const_visitor& v) const override;
@@ -104,10 +104,10 @@ struct CircleElement : public Shape{
 };
 
 struct EllipseElement : public Shape{
-	Length cx = Length::make(0, Length::Unit_e::UNKNOWN);
-	Length cy = Length::make(0, Length::Unit_e::UNKNOWN);
-	Length rx = Length::make(0, Length::Unit_e::UNKNOWN);
-	Length ry = Length::make(0, Length::Unit_e::UNKNOWN);
+	Length cx = Length::make(0, length_unit::UNKNOWN);
+	Length cy = Length::make(0, length_unit::UNKNOWN);
+	Length rx = Length::make(0, length_unit::UNKNOWN);
+	Length ry = Length::make(0, length_unit::UNKNOWN);
 	
 	void accept(visitor& v)override;
 	void accept(const_visitor& v) const override;
@@ -115,10 +115,10 @@ struct EllipseElement : public Shape{
 };
 
 struct LineElement : public Shape{
-	Length x1 = Length::make(0, Length::Unit_e::UNKNOWN);
-	Length y1 = Length::make(0, Length::Unit_e::UNKNOWN);
-	Length x2 = Length::make(0, Length::Unit_e::UNKNOWN);
-	Length y2 = Length::make(0, Length::Unit_e::UNKNOWN);
+	Length x1 = Length::make(0, length_unit::UNKNOWN);
+	Length y1 = Length::make(0, length_unit::UNKNOWN);
+	Length x2 = Length::make(0, length_unit::UNKNOWN);
+	Length y2 = Length::make(0, length_unit::UNKNOWN);
 	
 	void accept(visitor& v)override;
 	void accept(const_visitor& v) const override;
