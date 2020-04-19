@@ -42,10 +42,10 @@ public:
 	void visit(const svgdom::SvgElement& e) override{
 		this->visitContainer(e, e, e);
 	}
-	void visit(const svgdom::RadialGradientElement& e) override{
+	void visit(const svgdom::radial_gradient_element& e) override{
 		this->visitContainer(e, e, e);
 	}
-	void visit(const svgdom::LinearGradientElement& e) override{
+	void visit(const svgdom::linear_gradient_element& e) override{
 		this->visitContainer(e, e, e);
 	}
 	void visit(const svgdom::DefsElement& e) override{

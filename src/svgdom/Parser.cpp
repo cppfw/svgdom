@@ -693,7 +693,7 @@ void Parser::parseLinearGradientElement() {
 	ASSERT(this->getNamespace(this->element).ns == XmlNamespace_e::SVG)
 	ASSERT(this->getNamespace(this->element).name == "linearGradient")
 
-	auto ret = std::make_unique<LinearGradientElement>();
+	auto ret = std::make_unique<linear_gradient_element>();
 
 	this->fillGradient(*ret);
 
@@ -763,7 +763,7 @@ void Parser::parseRadialGradientElement() {
 	ASSERT(this->getNamespace(this->element).ns == XmlNamespace_e::SVG)
 	ASSERT(this->getNamespace(this->element).name == "radialGradient")
 
-	auto ret = std::make_unique<RadialGradientElement>();
+	auto ret = std::make_unique<radial_gradient_element>();
 
 	this->fillGradient(*ret);
 

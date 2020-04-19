@@ -27,14 +27,14 @@ void cloner::visit(const SvgElement& e) {
 	this->cur_parent->children.push_back(std::move(clone));
 }
 
-void cloner::visit(const RadialGradientElement& e) {
-	auto clone = std::make_unique<RadialGradientElement>(e);
+void cloner::visit(const radial_gradient_element& e) {
+	auto clone = std::make_unique<radial_gradient_element>(e);
 	this->clone_children(e, *clone); 
 	this->cur_parent->children.push_back(std::move(clone));
 }
 
-void cloner::visit(const LinearGradientElement& e) {
-	auto clone = std::make_unique<LinearGradientElement>(e);
+void cloner::visit(const linear_gradient_element& e) {
+	auto clone = std::make_unique<linear_gradient_element>(e);
 	this->clone_children(e, *clone); 
 	this->cur_parent->children.push_back(std::move(clone));
 }

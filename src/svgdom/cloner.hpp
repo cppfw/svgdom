@@ -48,8 +48,8 @@ public:
 	void visit(const svgdom::UseElement& e) override;
 	void visit(const svgdom::DefsElement& e) override;
 	void visit(const svgdom::gradient::stop_element& e) override;
-	void visit(const svgdom::LinearGradientElement& e) override;
-	void visit(const svgdom::RadialGradientElement& e) override;
+	void visit(const svgdom::linear_gradient_element& e) override;
+	void visit(const svgdom::radial_gradient_element& e) override;
 	void visit(const svgdom::FilterElement& e) override;
 	void visit(const svgdom::FeGaussianBlurElement& e) override;
 	void visit(const svgdom::ImageElement& e) override;

@@ -78,8 +78,8 @@ public:
 	virtual void visit(UseElement& e);
 	virtual void visit(DefsElement& e);
 	virtual void visit(gradient::stop_element& e);
-	virtual void visit(LinearGradientElement& e);
-	virtual void visit(RadialGradientElement& e);
+	virtual void visit(linear_gradient_element& e);
+	virtual void visit(radial_gradient_element& e);
 	virtual void visit(FilterElement& e);
 	virtual void visit(FeGaussianBlurElement& e);
 	virtual void visit(FeColorMatrixElement& e);
@@ -150,8 +150,8 @@ public:
 	virtual void visit(const UseElement& e);
 	virtual void visit(const DefsElement& e);
 	virtual void visit(const gradient::stop_element& e);
-	virtual void visit(const LinearGradientElement& e);
-	virtual void visit(const RadialGradientElement& e);
+	virtual void visit(const linear_gradient_element& e);
+	virtual void visit(const radial_gradient_element& e);
 	virtual void visit(const FilterElement& e);
 	virtual void visit(const FeGaussianBlurElement& e);
 	virtual void visit(const FeColorMatrixElement& e);

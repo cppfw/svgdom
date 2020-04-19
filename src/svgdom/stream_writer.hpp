@@ -149,8 +149,8 @@ public:
 	void visit(const SvgElement& e) override;
 	void visit(const SymbolElement& e) override;
 	void visit(const DefsElement& e) override;
-	void visit(const LinearGradientElement& e) override;
-	void visit(const RadialGradientElement& e) override;
+	void visit(const linear_gradient_element& e) override;
+	void visit(const radial_gradient_element& e) override;
 	void visit(const gradient::stop_element& e) override;
 	void visit(const UseElement& e) override;
 	void visit(const PathElement& e) override;

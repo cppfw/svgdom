@@ -62,11 +62,11 @@ void visitor::visit(gradient::stop_element& e) {
 	this->defaultVisit(e);
 }
 
-void visitor::visit(LinearGradientElement& e) {
+void visitor::visit(linear_gradient_element& e) {
 	this->defaultVisit(e, e);
 }
 
-void visitor::visit(RadialGradientElement& e) {
+void visitor::visit(radial_gradient_element& e) {
 	this->defaultVisit(e, e);
 }
 
@@ -171,11 +171,11 @@ void const_visitor::visit(const gradient::stop_element& e) {
 	this->defaultVisit(e);
 }
 
-void const_visitor::visit(const LinearGradientElement& e) {
+void const_visitor::visit(const linear_gradient_element& e) {
 	this->defaultVisit(e, e);
 }
 
-void const_visitor::visit(const RadialGradientElement& e) {
+void const_visitor::visit(const radial_gradient_element& e) {
 	this->defaultVisit(e, e);
 }
 

@@ -346,7 +346,7 @@ void StreamWriter::visit(const gradient::stop_element& e) {
 	this->write();
 }
 
-void StreamWriter::visit(const RadialGradientElement& e) {
+void StreamWriter::visit(const radial_gradient_element& e) {
 	this->setName("radialGradient");
 	this->add_gradient_attributes(e);
 	if(e.cx.unit != length_unit::PERCENT || e.cx.value != 50){
@@ -367,7 +367,7 @@ void StreamWriter::visit(const RadialGradientElement& e) {
 	this->write(&e);
 }
 
-void StreamWriter::visit(const LinearGradientElement& e) {
+void StreamWriter::visit(const linear_gradient_element& e) {
 	this->setName("linearGradient");
 	this->add_gradient_attributes(e);
 	if(e.x1.unit != length_unit::PERCENT || e.x1.value != 0){
