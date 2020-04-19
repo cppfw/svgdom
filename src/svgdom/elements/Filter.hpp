@@ -6,7 +6,7 @@
 #include "Styleable.hpp"
 #include "Rectangle.hpp"
 #include "Referencing.hpp"
-#include "Container.hpp"
+#include "container.hpp"
 #include "CoordinateUnits.hpp"
 
 namespace svgdom{

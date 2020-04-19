@@ -9,10 +9,10 @@ namespace svgdom{
 /**
  * @brief An element which can have child elements.
  */
-struct Container{
+struct container{
 	std::list<std::unique_ptr<Element>> children;
 	
-	Container(){}
+	container() = default;
 	
 	/**
 	 * @brief Copy constructor.
@@ -20,7 +20,10 @@ struct Container{
 	 * one needs to clone every child by hand.
 	 * @param orig - object to copy.
 	 */
-	Container(const Container& orig){}
+	container(const container& orig){}
 };
+
+// TODO: deprecated, remove.
+typedef container Container;
 
 }
