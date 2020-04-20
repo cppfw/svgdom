@@ -13,7 +13,7 @@ public:
 };
 
 class TextElement :
-		public Element,
+		public element,
 		public container,
 		public Styleable,
 		public Transformable,

@@ -214,7 +214,7 @@ struct StyleValue{
 		std::uint32_t color;
 		real opacity;
 		real strokeMiterlimit;
-		Length strokeWidth;
+		length strokeWidth;
 		StrokeLineCap_e strokeLineCap;
 		StrokeLineJoin_e strokeLineJoin;
 		FillRule_e fillRule;

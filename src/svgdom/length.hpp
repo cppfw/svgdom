@@ -47,7 +47,17 @@ struct length{
 	
 	static length parse(const std::string& str);
 	
-	static length make(real value, length_unit unit = length_unit::number)noexcept;
+	length() = default;
+
+	constexpr length(real value, length_unit unit = length_unit::number) :
+			value(value),
+			unit(unit)
+	{}
+
+	//TODO: deprecated, remove.
+	static constexpr length make(real value, length_unit unit = length_unit::number)noexcept{
+		return length(value, unit);
+	}
 	
 	bool is_valid()const noexcept{
 		return this->unit != length_unit::unknown;
@@ -84,4 +94,4 @@ typedef length Length;
 
 }
 
-std::ostream& operator<<(std::ostream& s, const svgdom::Length& l);
+std::ostream& operator<<(std::ostream& s, const svgdom::length& l);

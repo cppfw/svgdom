@@ -12,7 +12,7 @@
 #include "elements/ViewBoxed.hpp"
 #include "elements/Transformable.hpp"
 #include "elements/gradients.hpp"
-#include "elements/Shapes.hpp"
+#include "elements/shapes.hpp"
 #include "elements/Structurals.hpp"
 #include "elements/Filter.hpp"
 #include "elements/image_element.hpp"
@@ -57,7 +57,7 @@ class Parser : public mikroxml::parser{
 	void pushNamespaces();
 	void popNamespaces();
 	
-	std::string element;
+	std::string cur_element;
 	std::map<std::string, std::string> attributes;
 	
 	SvgElement* svg = nullptr;

@@ -8,14 +8,14 @@ namespace svgdom{
  * @brief A rectangular element.
  */
 struct rectangle{
-	length x = length::make(0, length_unit::unknown);
-	length y = length::make(0, length_unit::unknown);
-	length width = length::make(100, length_unit::unknown);
-	length height = length::make(100, length_unit::unknown);
+	length x = length(0, length_unit::unknown);
+	length y = length(0, length_unit::unknown);
+	length width = length(100, length_unit::unknown);
+	length height = length(100, length_unit::unknown);
 	
 	rectangle(){}
 	
-	rectangle(length x, length y, length width, length height) :
+	constexpr rectangle(length x, length y, length width, length height) :
 			x(x), y(y), width(width), height(height)
 	{}
 	

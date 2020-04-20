@@ -14,7 +14,7 @@ void StreamWriter::add_attribute(const std::string& name, const std::string& val
 	this->attributes.push_back(std::make_pair(name, value));
 }
 
-void StreamWriter::add_attribute(const std::string& name, const Length& value){
+void StreamWriter::add_attribute(const std::string& name, const length& value){
 	std::stringstream ss;
 	ss << value;
 	this->add_attribute(name, ss.str());
@@ -70,7 +70,7 @@ void StreamWriter::childrenToStream(const container& e) {
 	}
 }
 
-void StreamWriter::add_element_attributes(const Element& e) {
+void StreamWriter::add_element_attributes(const element& e) {
 	if(e.id.length() != 0){
 		this->add_attribute("id", e.id);
 	}
@@ -169,7 +169,7 @@ void StreamWriter::add_text_positioning_attributes(const TextPositioning& e) {
 }
 
 
-void StreamWriter::add_shape_attributes(const Shape& e) {
+void StreamWriter::add_shape_attributes(const shape& e) {
 	this->add_element_attributes(e);
 	this->add_transformable_attributes(e);
 	this->add_styleable_attributes(e);
@@ -210,10 +210,10 @@ void StreamWriter::visit(const image_element& e){
 	this->add_rectangle_attributes(
 			e,
 			rectangle(
-					Length::make(0, length_unit::NUMBER),
-					Length::make(0, length_unit::NUMBER),
-					Length::make(0, length_unit::NUMBER),
-					Length::make(0, length_unit::NUMBER)
+					length(0, length_unit::NUMBER),
+					length(0, length_unit::NUMBER),
+					length(0, length_unit::NUMBER),
+					length(0, length_unit::NUMBER)
 				)
 		);
 	this->add_referencing_attributes(e);
@@ -221,7 +221,7 @@ void StreamWriter::visit(const image_element& e){
 	this->write();
 }
 
-void StreamWriter::visit(const LineElement& e) {
+void StreamWriter::visit(const line_element& e) {
 	this->setName("line");
 	this->add_shape_attributes(e);
 	
@@ -244,10 +244,10 @@ void StreamWriter::visit(const LineElement& e) {
 	this->write();
 }
 
-void StreamWriter::visit(const RectElement& e) {
+void StreamWriter::visit(const rect_element& e) {
 	this->setName("rect");
 	this->add_shape_attributes(e);
-	this->add_rectangle_attributes(e, RectElement::rectangleDefaultValues);
+	this->add_rectangle_attributes(e, rect_element::rectangle_default_values());
 	
 	if(e.rx.unit != length_unit::unknown){
 		this->add_attribute("rx", e.rx);
@@ -260,7 +260,7 @@ void StreamWriter::visit(const RectElement& e) {
 	this->write();
 }
 
-void StreamWriter::visit(const EllipseElement& e) {
+void StreamWriter::visit(const ellipse_element& e) {
 	this->setName("ellipse");
 	this->add_shape_attributes(e);
 	
@@ -283,7 +283,7 @@ void StreamWriter::visit(const EllipseElement& e) {
 	this->write();
 }
 
-void StreamWriter::visit(const PolygonElement& e) {
+void StreamWriter::visit(const polygon_element& e) {
 	this->setName("polygon");
 	this->add_shape_attributes(e);
 	if(e.points.size() != 0){
@@ -292,7 +292,7 @@ void StreamWriter::visit(const PolygonElement& e) {
 	this->write();
 }
 
-void StreamWriter::visit(const PolylineElement& e) {
+void StreamWriter::visit(const polyline_element& e) {
 	this->setName("polyline");
 	this->add_shape_attributes(e);
 	if(e.points.size() != 0){
@@ -301,7 +301,7 @@ void StreamWriter::visit(const PolylineElement& e) {
 	this->write();
 }
 
-void StreamWriter::visit(const CircleElement& e) {
+void StreamWriter::visit(const circle_element& e) {
 	this->setName("circle");
 	this->add_shape_attributes(e);
 	
@@ -319,7 +319,7 @@ void StreamWriter::visit(const CircleElement& e) {
 	this->write();
 }
 
-void StreamWriter::visit(const PathElement& e){
+void StreamWriter::visit(const path_element& e){
 	this->setName("path");
 	this->add_shape_attributes(e);
 	if(e.path.size() != 0){
@@ -438,10 +438,10 @@ void StreamWriter::visit(const FilterElement& e){
 	this->add_rectangle_attributes(
 			e,
 			rectangle(
-				Length::make(-10, length_unit::PERCENT),
-				Length::make(-10, length_unit::PERCENT),
-				Length::make(120, length_unit::PERCENT),
-				Length::make(120, length_unit::PERCENT)
+				length(-10, length_unit::PERCENT),
+				length(-10, length_unit::PERCENT),
+				length(120, length_unit::PERCENT),
+				length(120, length_unit::PERCENT)
 			)
 		);
 	this->add_referencing_attributes(e);

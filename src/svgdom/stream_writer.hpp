@@ -22,7 +22,7 @@ protected:
 	void add_attribute(const std::string& name, real value);
 	void write(const container* children = nullptr);
 	
-	void add_element_attributes(const Element& e);
+	void add_element_attributes(const element& e);
 	void add_transformable_attributes(const Transformable& e);
 	void add_styleable_attributes(const Styleable& e);
 	void add_view_boxed_attributes(const ViewBoxed& e);
@@ -30,13 +30,13 @@ protected:
 	void add_rectangle_attributes(
 			const rectangle& e,
 			const rectangle& default_values = rectangle(
-					length::make(0, length::Unit_e::PERCENT),
-					length::make(0, length::Unit_e::PERCENT),
-					length::make(100, length::Unit_e::PERCENT),
-					length::make(100, length::Unit_e::PERCENT)
+					length(0, length::Unit_e::PERCENT),
+					length(0, length::Unit_e::PERCENT),
+					length(100, length::Unit_e::PERCENT),
+					length(100, length::Unit_e::PERCENT)
 				)
 		);
-	void add_shape_attributes(const Shape& e);
+	void add_shape_attributes(const shape& e);
 	void add_referencing_attributes(const referencing& e);
 	void add_gradient_attributes(const gradient& e);
 	void add_filter_primitive_attributes(const FilterPrimitive& e);
@@ -70,7 +70,7 @@ protected:
 	}
 
 	// TODO: deprecatged, remove.
-	void addElementAttributes(const Element& e){
+	void addElementAttributes(const element& e){
 		this->add_element_attributes(e);
 	}
 
@@ -98,10 +98,10 @@ protected:
 	void addRectangleAttributes(
 			const rectangle& e,
 			const rectangle& defaultValues = rectangle(
-					length::make(0, length::Unit_e::PERCENT),
-					length::make(0, length::Unit_e::PERCENT),
-					length::make(100, length::Unit_e::PERCENT),
-					length::make(100, length::Unit_e::PERCENT)
+					length(0, length::Unit_e::PERCENT),
+					length(0, length::Unit_e::PERCENT),
+					length(100, length::Unit_e::PERCENT),
+					length(100, length::Unit_e::PERCENT)
 				)
 		)
 	{
@@ -109,7 +109,7 @@ protected:
 	}
 
 	// TODO: deprecated, remove.
-	void addShapeAttributes(const Shape& e){
+	void addShapeAttributes(const shape& e){
 		this->add_shape_attributes(e);
 	}
 
@@ -153,13 +153,13 @@ public:
 	void visit(const radial_gradient_element& e) override;
 	void visit(const gradient::stop_element& e) override;
 	void visit(const UseElement& e) override;
-	void visit(const PathElement& e) override;
-	void visit(const CircleElement& e) override;
-	void visit(const PolylineElement& e) override;
-	void visit(const PolygonElement& e) override;
-	void visit(const EllipseElement& e) override;
-	void visit(const RectElement& e) override;
-	void visit(const LineElement& e) override;
+	void visit(const path_element& e) override;
+	void visit(const circle_element& e) override;
+	void visit(const polyline_element& e) override;
+	void visit(const polygon_element& e) override;
+	void visit(const ellipse_element& e) override;
+	void visit(const rect_element& e) override;
+	void visit(const line_element& e) override;
 	void visit(const FilterElement& e) override;
 	void visit(const FeGaussianBlurElement& e) override;
 	void visit(const FeColorMatrixElement& e) override;

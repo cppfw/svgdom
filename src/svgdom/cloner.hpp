@@ -16,7 +16,7 @@ class cloner : virtual public svgdom::const_visitor{
 public:
 	/**
 	* @brief Clone root element as T.
-	* @return std::unique<T> where T is Element type of root.
+	* @return std::unique<T> where T is element type of root.
 	*/
 	template <class T> std::unique_ptr<T> get_clone_as() {
 		if (root.children.size() != 1) {
@@ -35,13 +35,13 @@ public:
 		return this->get_clone_as<T>();
 	}
 	
-	void visit(const svgdom::PathElement& e) override;
-	void visit(const svgdom::RectElement& e) override;
-	void visit(const svgdom::CircleElement& e) override;
-	void visit(const svgdom::EllipseElement& e) override;
-	void visit(const svgdom::LineElement& e) override;
-	void visit(const svgdom::PolylineElement& e) override;
-	void visit(const svgdom::PolygonElement& e) override;
+	void visit(const svgdom::path_element& e) override;
+	void visit(const svgdom::rect_element& e) override;
+	void visit(const svgdom::circle_element& e) override;
+	void visit(const svgdom::ellipse_element& e) override;
+	void visit(const svgdom::line_element& e) override;
+	void visit(const svgdom::polyline_element& e) override;
+	void visit(const svgdom::polygon_element& e) override;
 	void visit(const svgdom::GElement& e) override;
 	void visit(const svgdom::SvgElement& e) override;
 	void visit(const svgdom::SymbolElement& e) override;

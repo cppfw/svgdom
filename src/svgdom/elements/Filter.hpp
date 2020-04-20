@@ -11,7 +11,7 @@
 
 namespace svgdom{
 struct FilterElement :
-		public Element,
+		public element,
 		public Styleable,
 		public rectangle,
 		public referencing,
@@ -27,7 +27,7 @@ struct FilterElement :
 };
 
 struct FilterPrimitive :
-		public Element,
+		public element,
 		public rectangle,
 		public Styleable
 {

@@ -60,21 +60,21 @@ struct gradient :
 };
 
 struct linear_gradient_element : public gradient{
-	length x1 = length::make(0, length_unit::unknown);
-	length y1 = length::make(0, length_unit::unknown);
-	length x2 = length::make(100, length_unit::unknown);
-	length y2 = length::make(0, length_unit::unknown);
+	length x1 = length(0, length_unit::unknown);
+	length y1 = length(0, length_unit::unknown);
+	length x2 = length(100, length_unit::unknown);
+	length y2 = length(0, length_unit::unknown);
 	
 	void accept(visitor& v)override;
 	void accept(const_visitor& v) const override;
 };
 
 struct radial_gradient_element : public gradient{
-	length cx = length::make(50, length_unit::unknown);
-	length cy = length::make(50, length_unit::unknown);
-	length r = length::make(50, length_unit::unknown);
-	length fx = length::make(50, length_unit::unknown);
-	length fy = length::make(50, length_unit::unknown);
+	length cx = length(50, length_unit::unknown);
+	length cy = length(50, length_unit::unknown);
+	length r = length(50, length_unit::unknown);
+	length fx = length(50, length_unit::unknown);
+	length fy = length(50, length_unit::unknown);
 	
 	void accept(visitor& v)override;
 	void accept(const_visitor& v) const override;

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "elements/Structurals.hpp"
-#include "elements/Shapes.hpp"
+#include "elements/shapes.hpp"
 #include "elements/gradients.hpp"
 #include "elements/Filter.hpp"
 #include "elements/image_element.hpp"
@@ -12,7 +12,7 @@ namespace svgdom{
  * @brief Visitor interface.
  * A visitor interface which allows traversing of the SVG element tree.
  * It utilizes the 'visitor' pattern.
- * Each Element-based class can override the 'accept' method which will call
+ * Each element-based class can override the 'accept' method which will call
  * corresponding 'visit' method from visitor. And user can override visitor's methods
  * to implement their own operation to perform on each SVG element.
  */
@@ -65,13 +65,13 @@ protected:
 	}
 	
 public:
-	virtual void visit(PathElement& e);
-	virtual void visit(RectElement& e);
-	virtual void visit(CircleElement& e);
-	virtual void visit(EllipseElement& e);
-	virtual void visit(LineElement& e);
-	virtual void visit(PolylineElement& e);
-	virtual void visit(PolygonElement& e);
+	virtual void visit(path_element& e);
+	virtual void visit(rect_element& e);
+	virtual void visit(circle_element& e);
+	virtual void visit(ellipse_element& e);
+	virtual void visit(line_element& e);
+	virtual void visit(polyline_element& e);
+	virtual void visit(polygon_element& e);
 	virtual void visit(GElement& e);
 	virtual void visit(SvgElement& e);
 	virtual void visit(SymbolElement& e);
@@ -94,12 +94,12 @@ public:
 	 * This method is called by all the visit methods by default.
 	 * @param e - SVG element to visit.
 	 */
-	virtual void default_visit(Element& e){
+	virtual void default_visit(element& e){
 		this->defaultVisit(e);
 	}
 
 	// TODO: deprecated, remove.
-	virtual void defaultVisit(Element& e){}
+	virtual void defaultVisit(element& e){}
 	
 	/**
 	 * @brief Default visit method for container elements.
@@ -108,10 +108,10 @@ public:
 	 * @param e - element to visit.
 	 * @param c - 'container' ancestor of the element to visit.
 	 */
-	virtual void default_visit(Element& e, container& c);
+	virtual void default_visit(element& e, container& c);
 
 	// TODO: deprecated, remove.
-	virtual void defaultVisit(Element& e, container& c){
+	virtual void defaultVisit(element& e, container& c){
 		this->default_visit(e, c);
 	}
 	
@@ -137,13 +137,13 @@ protected:
 	}
 	
 public:
-	virtual void visit(const PathElement& e);
-	virtual void visit(const RectElement& e);
-	virtual void visit(const CircleElement& e);
-	virtual void visit(const EllipseElement& e);
-	virtual void visit(const LineElement& e);
-	virtual void visit(const PolylineElement& e);
-	virtual void visit(const PolygonElement& e);
+	virtual void visit(const path_element& e);
+	virtual void visit(const rect_element& e);
+	virtual void visit(const circle_element& e);
+	virtual void visit(const ellipse_element& e);
+	virtual void visit(const line_element& e);
+	virtual void visit(const polyline_element& e);
+	virtual void visit(const polygon_element& e);
 	virtual void visit(const GElement& e);
 	virtual void visit(const SvgElement& e);
 	virtual void visit(const SymbolElement& e);
@@ -166,12 +166,12 @@ public:
 	 * This method is called by all the visit methods by default.
 	 * @param e - SVG element to visit.
 	 */
-	virtual void default_visit(const Element& e){
+	virtual void default_visit(const element& e){
 		this->defaultVisit(e);
 	}
 
 	// TODO: deprecated, remove.
-	virtual void defaultVisit(const Element& e){}
+	virtual void defaultVisit(const element& e){}
 	
 	/**
 	 * @brief Default visit method for container elements.
@@ -180,10 +180,10 @@ public:
 	 * @param e - element to visit.
 	 * @param c - 'container' ancestor of the element to visit.
 	 */
-	virtual void default_visit(const Element& e, const container& c);
+	virtual void default_visit(const element& e, const container& c);
 
 	// TODO: deprecated, remove.
-	virtual void defaultVisit(const Element& e, const container& c){
+	virtual void defaultVisit(const element& e, const container& c){
 		this->default_visit(e, c);
 	}
 	

@@ -13,23 +13,23 @@ public:
 	
 	StyleStack styleStack;
 	
-	void addToCache(const svgdom::Element& e){
+	void addToCache(const svgdom::element& e){
 		if(e.id.length() != 0){
 			this->cache.insert(std::make_pair(e.id, finder::ElementInfo(e, this->styleStack)));
 		}
 	}
 	
-	void visitContainer(const svgdom::Element& e, const svgdom::container& c, const svgdom::Styleable& s){
+	void visitContainer(const svgdom::element& e, const svgdom::container& c, const svgdom::Styleable& s){
 		StyleStack::Push push(this->styleStack, s);
 		this->addToCache(e);
 		this->relayAccept(c);
 	}
-	void visitElement(const svgdom::Element& e, const svgdom::Styleable& s){
+	void visitElement(const svgdom::element& e, const svgdom::Styleable& s){
 		StyleStack::Push push(this->styleStack, s);
 		this->addToCache(e);
 	}
 	
-	void defaultVisit(const svgdom::Element& e) override{
+	void defaultVisit(const svgdom::element& e) override{
 		this->addToCache(e);
 	}
 	
@@ -55,10 +55,10 @@ public:
 		this->visitContainer(e, e, e);
 	}
 	
-	void visit(const svgdom::PolylineElement& e) override{
+	void visit(const svgdom::polyline_element& e) override{
 		this->visitElement(e, e);
 	}
-	void visit(const svgdom::CircleElement& e) override{
+	void visit(const svgdom::circle_element& e) override{
 		this->visitElement(e, e);
 	}
 	void visit(const svgdom::UseElement& e) override{
@@ -67,19 +67,19 @@ public:
 	void visit(const svgdom::gradient::stop_element& e) override{
 		this->visitElement(e, e);
 	}
-	void visit(const svgdom::PathElement& e) override{
+	void visit(const svgdom::path_element& e) override{
 		this->visitElement(e, e);
 	}
-	void visit(const svgdom::RectElement& e) override{
+	void visit(const svgdom::rect_element& e) override{
 		this->visitElement(e, e);
 	}
-	void visit(const svgdom::LineElement& e) override{
+	void visit(const svgdom::line_element& e) override{
 		this->visitElement(e, e);
 	}
-	void visit(const svgdom::EllipseElement& e) override{
+	void visit(const svgdom::ellipse_element& e) override{
 		this->visitElement(e, e);
 	}
-	void visit(const svgdom::PolygonElement& e) override{
+	void visit(const svgdom::polygon_element& e) override{
 		this->visitElement(e, e);
 	}	
 	void visit(const svgdom::FeGaussianBlurElement& e) override{
@@ -91,7 +91,7 @@ public:
 };
 }
 
-finder::finder(const svgdom::Element& root) :
+finder::finder(const svgdom::element& root) :
 		cache([&root](){
 			CacheCreator visitor;
 	

@@ -2,31 +2,31 @@
 
 using namespace svgdom;
 
-void visitor::visit(PathElement& e) {
+void visitor::visit(path_element& e) {
 	this->defaultVisit(e);
 }
 
-void visitor::visit(RectElement& e) {
+void visitor::visit(rect_element& e) {
 	this->defaultVisit(e);
 }
 
-void visitor::visit(CircleElement& e) {
+void visitor::visit(circle_element& e) {
 	this->defaultVisit(e);
 }
 
-void visitor::visit(EllipseElement& e) {
+void visitor::visit(ellipse_element& e) {
 	this->defaultVisit(e);
 }
 
-void visitor::visit(LineElement& e) {
+void visitor::visit(line_element& e) {
 	this->defaultVisit(e);
 }
 
-void visitor::visit(PolylineElement& e) {
+void visitor::visit(polyline_element& e) {
 	this->defaultVisit(e);
 }
 
-void visitor::visit(PolygonElement& e) {
+void visitor::visit(polygon_element& e) {
 	this->defaultVisit(e);
 }
 
@@ -94,7 +94,7 @@ void visitor::visit(image_element& e){
 	this->defaultVisit(e);
 }
 
-void visitor::default_visit(Element& e, container& c) {
+void visitor::default_visit(element& e, container& c) {
 	this->default_visit(e);
 	this->relay_accept(c);
 }
@@ -111,31 +111,31 @@ void visitor::relay_accept(container& c){
 	this->curParent_v = oldParent;
 }
 
-void const_visitor::visit(const PathElement& e) {
+void const_visitor::visit(const path_element& e) {
 	this->defaultVisit(e);
 }
 
-void const_visitor::visit(const RectElement& e) {
+void const_visitor::visit(const rect_element& e) {
 	this->defaultVisit(e);
 }
 
-void const_visitor::visit(const CircleElement& e) {
+void const_visitor::visit(const circle_element& e) {
 	this->defaultVisit(e);
 }
 
-void const_visitor::visit(const EllipseElement& e) {
+void const_visitor::visit(const ellipse_element& e) {
 	this->defaultVisit(e);
 }
 
-void const_visitor::visit(const LineElement& e) {
+void const_visitor::visit(const line_element& e) {
 	this->defaultVisit(e);
 }
 
-void const_visitor::visit(const PolylineElement& e) {
+void const_visitor::visit(const polyline_element& e) {
 	this->defaultVisit(e);
 }
 
-void const_visitor::visit(const PolygonElement& e) {
+void const_visitor::visit(const polygon_element& e) {
 	this->defaultVisit(e);
 }
 
@@ -203,7 +203,7 @@ void const_visitor::visit(const image_element& e){
 	this->defaultVisit(e);
 }
 
-void const_visitor::default_visit(const Element& e, const container& c) {
+void const_visitor::default_visit(const element& e, const container& c) {
 	this->default_visit(e);
 	this->relay_accept(c);
 }

@@ -11,13 +11,13 @@ namespace svgdom{
 class finder{
 public:
 	
-	finder(const svgdom::Element& root);
+	finder(const svgdom::element& root);
 	
 	struct element_info{
-		const svgdom::Element& e;
+		const svgdom::element& e;
 		const StyleStack ss;
 		
-		element_info(const svgdom::Element& e, StyleStack ss) : e(e), ss(ss){}
+		element_info(const svgdom::element& e, StyleStack ss) : e(e), ss(ss){}
 	};
 
 	// TODO: DEPRECATED, remove.

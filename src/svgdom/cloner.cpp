@@ -52,13 +52,13 @@ void cloner::visit(const FilterElement& e) {
 }
 
 
-void cloner::visit(const PolylineElement& e) {
-	auto clone = std::make_unique<PolylineElement>(e);
+void cloner::visit(const polyline_element& e) {
+	auto clone = std::make_unique<polyline_element>(e);
 	this->cur_parent->children.push_back(std::move(clone));
 }
 
-void cloner::visit(const CircleElement& e) {
-	auto clone = std::make_unique<CircleElement>(e);
+void cloner::visit(const circle_element& e) {
+	auto clone = std::make_unique<circle_element>(e);
     this->cur_parent->children.push_back(std::move(clone));
 }
 
@@ -72,28 +72,28 @@ void cloner::visit(const gradient::stop_element& e) {
     this->cur_parent->children.push_back(std::move(clone));
 }
 
-void cloner::visit(const PathElement& e) {
-	auto clone = std::make_unique<PathElement>(e);
+void cloner::visit(const path_element& e) {
+	auto clone = std::make_unique<path_element>(e);
     this->cur_parent->children.push_back(std::move(clone));
 }
 
-void cloner::visit(const RectElement& e) {
-	auto clone = std::make_unique<RectElement>(e);
+void cloner::visit(const rect_element& e) {
+	auto clone = std::make_unique<rect_element>(e);
     this->cur_parent->children.push_back(std::move(clone));
 }
 
-void cloner::visit(const LineElement& e) {
-	auto clone = std::make_unique<LineElement>(e);
+void cloner::visit(const line_element& e) {
+	auto clone = std::make_unique<line_element>(e);
     this->cur_parent->children.push_back(std::move(clone));
 }
 
-void cloner::visit(const EllipseElement& e) {
-	auto clone = std::make_unique<EllipseElement>(e);
+void cloner::visit(const ellipse_element& e) {
+	auto clone = std::make_unique<ellipse_element>(e);
     this->cur_parent->children.push_back(std::move(clone));
 }
 
-void cloner::visit(const PolygonElement& e) {
-	auto clone = std::make_unique<PolygonElement>(e);
+void cloner::visit(const polygon_element& e) {
+	auto clone = std::make_unique<polygon_element>(e);
     this->cur_parent->children.push_back(std::move(clone));
 }
 

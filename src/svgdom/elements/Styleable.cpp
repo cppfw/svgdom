@@ -173,7 +173,7 @@ StyleValue Styleable::parseStylePropertyValue(StyleProperty_e type, const std::s
 //				TRACE(<< "paint read = " << std::hex << v.integer << std::endl)
 			break;
 		case StyleProperty_e::STROKE_WIDTH:
-			v.strokeWidth = Length::parse(str);
+			v.strokeWidth = length::parse(str);
 			v.type = StyleValue::Type_e::NORMAL;
 //				TRACE(<< "stroke-width read = " << v.length << std::endl)
 			break;

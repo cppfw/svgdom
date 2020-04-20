@@ -8,15 +8,6 @@
 
 using namespace svgdom;
 
-length length::make(real value, Unit_e unit) noexcept {
-	length ret;
-	
-	ret.unit = unit;
-	ret.value = value;
-	
-	return ret;
-}
-
 length length::parse(const std::string& str) {
 	length ret;
 
