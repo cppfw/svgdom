@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Transformable.hpp"
-#include "Styleable.hpp"
+#include "styleable.hpp"
 #include "element.hpp"
 #include "rectangle.hpp"
 
@@ -13,7 +13,7 @@ namespace svgdom{
 struct shape :
 		public element,
 		public Transformable,
-		public Styleable
+		public styleable
 {};
 
 // TODO: deprecated, remove.

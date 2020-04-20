@@ -4,7 +4,7 @@
 #include "container.hpp"
 #include "referencing.hpp"
 #include "Transformable.hpp"
-#include "Styleable.hpp"
+#include "styleable.hpp"
 #include "coordinate_units.hpp"
 
 namespace svgdom{
@@ -17,7 +17,7 @@ struct gradient :
 		public container,
 		public referencing,
 		public Transformable,
-		public Styleable
+		public styleable
 {
 	enum class spread_method_kind{
 		default_kind,
@@ -40,7 +40,7 @@ struct gradient :
 	
 	struct stop_element :
 			public element,
-			public Styleable
+			public styleable
 	{
 		real offset;
 		

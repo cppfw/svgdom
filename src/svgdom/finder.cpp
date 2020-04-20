@@ -19,12 +19,12 @@ public:
 		}
 	}
 	
-	void visitContainer(const svgdom::element& e, const svgdom::container& c, const svgdom::Styleable& s){
+	void visitContainer(const svgdom::element& e, const svgdom::container& c, const svgdom::styleable& s){
 		StyleStack::Push push(this->styleStack, s);
 		this->addToCache(e);
 		this->relayAccept(c);
 	}
-	void visitElement(const svgdom::element& e, const svgdom::Styleable& s){
+	void visitElement(const svgdom::element& e, const svgdom::styleable& s){
 		StyleStack::Push push(this->styleStack, s);
 		this->addToCache(e);
 	}

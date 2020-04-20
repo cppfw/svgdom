@@ -24,7 +24,7 @@ protected:
 	
 	void add_element_attributes(const element& e);
 	void add_transformable_attributes(const Transformable& e);
-	void add_styleable_attributes(const Styleable& e);
+	void add_styleable_attributes(const styleable& e);
 	void add_view_boxed_attributes(const ViewBoxed& e);
 	void add_aspect_ratioed_attributes(const aspect_ratioed& e);
 	void add_rectangle_attributes(
@@ -80,7 +80,7 @@ protected:
 	}
 
 	// TODO: deprecated, remove.
-	void addStyleableAttributes(const Styleable& e){
+	void addStyleableAttributes(const styleable& e){
 		this->add_styleable_attributes(e);
 	}
 

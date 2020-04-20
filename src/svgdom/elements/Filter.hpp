@@ -3,7 +3,7 @@
 #include <array>
 
 #include "element.hpp"
-#include "Styleable.hpp"
+#include "styleable.hpp"
 #include "rectangle.hpp"
 #include "referencing.hpp"
 #include "container.hpp"
@@ -12,7 +12,7 @@
 namespace svgdom{
 struct FilterElement :
 		public element,
-		public Styleable,
+		public styleable,
 		public rectangle,
 		public referencing,
 		public container
@@ -29,7 +29,7 @@ struct FilterElement :
 struct FilterPrimitive :
 		public element,
 		public rectangle,
-		public Styleable
+		public styleable
 {
 	std::string result;
 };

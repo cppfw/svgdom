@@ -82,7 +82,7 @@ void StreamWriter::add_transformable_attributes(const Transformable& e) {
 	}
 }
 
-void StreamWriter::add_styleable_attributes(const Styleable& e) {
+void StreamWriter::add_styleable_attributes(const styleable& e) {
 	if(e.styles.size() != 0){
 		this->add_attribute("style", e.stylesToString());
 	}

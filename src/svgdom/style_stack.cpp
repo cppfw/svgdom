@@ -4,19 +4,19 @@
 
 using namespace svgdom;
 
-const svgdom::StyleValue* style_stack::get_style_property(svgdom::StyleProperty_e p)const{
+const svgdom::style_value* style_stack::get_style_property(svgdom::style_property p)const{
 	bool explicitInherit = false;
 
 	for (auto i = this->stack.rbegin(); i != this->stack.rend(); ++i) {
 		ASSERT(*i)
 		auto v = (*i)->findStyleProperty(p);
 		if (!v) {
-			if (!explicitInherit && !svgdom::Styleable::isStylePropertyInherited(p)) {
+			if (!explicitInherit && !svgdom::styleable::is_inherited(p)) {
 				return nullptr;
 			}
 			continue;
 		}
-		if (v->type == svgdom::StyleValue::Type_e::INHERIT) {
+		if (v->type == svgdom::style_value::Type_e::INHERIT) {
 			explicitInherit = true;
 			continue;
 		}
@@ -26,7 +26,7 @@ const svgdom::StyleValue* style_stack::get_style_property(svgdom::StyleProperty_
 	return nullptr;
 }
 
-style_stack::push::push(style_stack& ss, const svgdom::Styleable& s) :
+style_stack::push::push(style_stack& ss, const svgdom::styleable& s) :
 		ss(ss)
 {
 	this->ss.stack.push_back(&s);

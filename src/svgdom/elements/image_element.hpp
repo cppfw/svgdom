@@ -1,7 +1,7 @@
 #pragma once
 
 #include "element.hpp"
-#include "Styleable.hpp"
+#include "styleable.hpp"
 #include "Transformable.hpp"
 #include "rectangle.hpp"
 #include "referencing.hpp"
@@ -10,7 +10,7 @@
 namespace svgdom{
 struct image_element :
 		public element,
-		public Styleable,
+		public styleable,
 		public Transformable,
 		public rectangle,
 		public referencing,

@@ -12,7 +12,7 @@ std::unique_ptr<svg_element> svgdom::load(const papki::file& f){
 	{
 		papki::File::Guard fileGuard(f);
 
-		std::array<std::uint8_t, 4096> buf; // 4k
+		std::array<uint8_t, 4096> buf; // 4k
 
 		while(true){
 			auto res = f.read(utki::make_span(buf));
@@ -52,7 +52,7 @@ std::unique_ptr<svg_element> svgdom::load(const std::string& s){
 	return load(utki::make_span(s.c_str(), s.length()));
 }
 
-std::unique_ptr<svg_element> svgdom::load(const utki::span<std::uint8_t> buf){
+std::unique_ptr<svg_element> svgdom::load(const utki::span<uint8_t> buf){
 	return load(utki::make_span(reinterpret_cast<const char*>(&*buf.begin()), buf.size()));
 }
 

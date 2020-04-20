@@ -2,7 +2,7 @@
 
 #include "element.hpp"
 #include "container.hpp"
-#include "Styleable.hpp"
+#include "styleable.hpp"
 #include "Transformable.hpp"
 
 namespace svgdom{
@@ -15,7 +15,7 @@ public:
 class TextElement :
 		public element,
 		public container,
-		public Styleable,
+		public styleable,
 		public Transformable,
 		public TextPositioning
 {

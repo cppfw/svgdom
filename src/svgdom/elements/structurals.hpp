@@ -2,7 +2,7 @@
 
 #include "container.hpp"
 #include "Transformable.hpp"
-#include "Styleable.hpp"
+#include "styleable.hpp"
 #include "referencing.hpp"
 #include "rectangle.hpp"
 #include "ViewBoxed.hpp"
@@ -15,7 +15,7 @@ struct g_element :
 		public element,
 		public container,
 		public Transformable,
-		public Styleable
+		public styleable
 {
 	void accept(visitor& v)override;
 	void accept(const_visitor& v) const override;
@@ -28,7 +28,7 @@ struct defs_element :
 		public element,
 		public container,
 		public Transformable,
-		public Styleable
+		public styleable
 {
 	void accept(visitor& v)override;
 	void accept(const_visitor& v) const override;
@@ -42,7 +42,7 @@ struct use_element :
 		public Transformable,
 		public referencing,
 		public rectangle,
-		public Styleable
+		public styleable
 {
 	void accept(visitor& v)override;
 	void accept(const_visitor& v) const override;
@@ -57,7 +57,7 @@ struct svg_element :
 		public rectangle,
 		public ViewBoxed,
 		public aspect_ratioed,
-		public Styleable
+		public styleable
 {
 	void accept(visitor& v)override;
 	void accept(const_visitor& v) const override;
@@ -98,7 +98,7 @@ struct symbol_element :
 		public container,
 		public ViewBoxed,
 		public aspect_ratioed,
-		public Styleable
+		public styleable
 {
 	void accept(visitor& v)override;
 	void accept(const_visitor& v) const override;
@@ -111,7 +111,7 @@ struct mask_element :
 		public element,
 		public container,
 		public rectangle,
-		public Styleable
+		public styleable
 {
 	coordinate_units mask_units;
 

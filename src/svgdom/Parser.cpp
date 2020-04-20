@@ -269,7 +269,7 @@ void Parser::fillShape(shape& s) {
 	this->fillTransformable(s);
 }
 
-void Parser::fillStyleable(Styleable& s) {
+void Parser::fillStyleable(styleable& s) {
 	ASSERT(s.styles.size() == 0)
 
 	for(auto& a : this->attributes){
@@ -277,13 +277,13 @@ void Parser::fillStyleable(Styleable& s) {
 		switch (nsn.ns) {
 			case XmlNamespace_e::SVG:
 				if (nsn.name == "style") {
-					s.styles = Styleable::parse(a.second);
+					s.styles = styleable::parse(a.second);
 					break;
 				}
 				{
-					StyleProperty_e type = Styleable::stringToProperty(nsn.name);
-					if (type != StyleProperty_e::UNKNOWN) {
-						s.styles[type] = Styleable::parseStylePropertyValue(type, a.second);
+					style_property type = styleable::stringToProperty(nsn.name);
+					if (type != style_property::UNKNOWN) {
+						s.styles[type] = styleable::parseStylePropertyValue(type, a.second);
 					}
 				}
 				break;
