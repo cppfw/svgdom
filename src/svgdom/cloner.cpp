@@ -9,8 +9,8 @@ void cloner::clone_children(const container& e, container& clone){
 	this->cur_parent = oldParent;
 }
 
-void cloner::visit(const GElement& e) {
-	auto clone = std::make_unique<GElement>(e);
+void cloner::visit(const g_element& e) {
+	auto clone = std::make_unique<g_element>(e);
 	this->clone_children(e, *clone);
 	this->cur_parent->children.push_back(std::move(clone));
 }
@@ -39,8 +39,8 @@ void cloner::visit(const linear_gradient_element& e) {
 	this->cur_parent->children.push_back(std::move(clone));
 }
 
-void cloner::visit(const DefsElement& e) {
-	auto clone = std::make_unique<DefsElement>(e);
+void cloner::visit(const defs_element& e) {
+	auto clone = std::make_unique<defs_element>(e);
 	this->clone_children(e, *clone); 
 	this->cur_parent->children.push_back(std::move(clone));
 }
@@ -62,8 +62,8 @@ void cloner::visit(const circle_element& e) {
     this->cur_parent->children.push_back(std::move(clone));
 }
 
-void cloner::visit(const UseElement& e) {
-	auto clone = std::make_unique<UseElement>(e);
+void cloner::visit(const use_element& e) {
+	auto clone = std::make_unique<use_element>(e);
     this->cur_parent->children.push_back(std::move(clone));
 }
 

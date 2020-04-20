@@ -13,7 +13,7 @@
 #include "elements/Transformable.hpp"
 #include "elements/gradients.hpp"
 #include "elements/shapes.hpp"
-#include "elements/Structurals.hpp"
+#include "elements/structurals.hpp"
 #include "elements/Filter.hpp"
 #include "elements/image_element.hpp"
 #include "elements/TextElement.hpp"

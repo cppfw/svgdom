@@ -1,6 +1,6 @@
 #pragma once
 
-#include "elements/Structurals.hpp"
+#include "elements/structurals.hpp"
 #include "elements/shapes.hpp"
 #include "elements/gradients.hpp"
 #include "elements/Filter.hpp"
@@ -72,11 +72,11 @@ public:
 	virtual void visit(line_element& e);
 	virtual void visit(polyline_element& e);
 	virtual void visit(polygon_element& e);
-	virtual void visit(GElement& e);
+	virtual void visit(g_element& e);
 	virtual void visit(SvgElement& e);
 	virtual void visit(SymbolElement& e);
-	virtual void visit(UseElement& e);
-	virtual void visit(DefsElement& e);
+	virtual void visit(use_element& e);
+	virtual void visit(defs_element& e);
 	virtual void visit(gradient::stop_element& e);
 	virtual void visit(linear_gradient_element& e);
 	virtual void visit(radial_gradient_element& e);
@@ -144,11 +144,11 @@ public:
 	virtual void visit(const line_element& e);
 	virtual void visit(const polyline_element& e);
 	virtual void visit(const polygon_element& e);
-	virtual void visit(const GElement& e);
+	virtual void visit(const g_element& e);
 	virtual void visit(const SvgElement& e);
 	virtual void visit(const SymbolElement& e);
-	virtual void visit(const UseElement& e);
-	virtual void visit(const DefsElement& e);
+	virtual void visit(const use_element& e);
+	virtual void visit(const defs_element& e);
 	virtual void visit(const gradient::stop_element& e);
 	virtual void visit(const linear_gradient_element& e);
 	virtual void visit(const radial_gradient_element& e);

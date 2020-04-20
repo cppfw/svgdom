@@ -30,7 +30,7 @@ void visitor::visit(polygon_element& e) {
 	this->defaultVisit(e);
 }
 
-void visitor::visit(GElement& e) {
+void visitor::visit(g_element& e) {
 	this->defaultVisit(e, e);
 }
 
@@ -42,11 +42,11 @@ void visitor::visit(SymbolElement& e) {
 	this->defaultVisit(e, e);
 }
 
-void visitor::visit(UseElement& e) {
+void visitor::visit(use_element& e) {
 	this->defaultVisit(e);
 }
 
-void visitor::visit(DefsElement& e) {
+void visitor::visit(defs_element& e) {
 	this->defaultVisit(e, e);
 }
 
@@ -139,7 +139,7 @@ void const_visitor::visit(const polygon_element& e) {
 	this->defaultVisit(e);
 }
 
-void const_visitor::visit(const GElement& e) {
+void const_visitor::visit(const g_element& e) {
 	this->defaultVisit(e, e);
 }
 
@@ -151,11 +151,11 @@ void const_visitor::visit(const SymbolElement& e) {
 	this->defaultVisit(e, e);
 }
 
-void const_visitor::visit(const UseElement& e) {
+void const_visitor::visit(const use_element& e) {
 	this->defaultVisit(e);
 }
 
-void const_visitor::visit(const DefsElement& e) {
+void const_visitor::visit(const defs_element& e) {
 	this->defaultVisit(e, e);
 }
 

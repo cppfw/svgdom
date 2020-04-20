@@ -1,4 +1,4 @@
-#include "Structurals.hpp"
+#include "structurals.hpp"
 
 #include "../util.hxx"
 #include "../visitor.hpp"
@@ -39,11 +39,11 @@ real SvgElement::aspectRatio(real dpi)const{
 	return wh[0] / wh[1];
 }
 
-void GElement::accept(visitor& v){
+void g_element::accept(visitor& v){
 	v.visit(*this);
 }
 
-void GElement::accept(const_visitor& v) const{
+void g_element::accept(const_visitor& v) const{
 	v.visit(*this);
 }
 
@@ -63,19 +63,19 @@ void SymbolElement::accept(const_visitor& v) const {
 	v.visit(*this);
 }
 
-void DefsElement::accept(visitor& v){
+void defs_element::accept(visitor& v){
 	v.visit(*this);
 }
 
-void DefsElement::accept(const_visitor& v) const{
+void defs_element::accept(const_visitor& v) const{
 	v.visit(*this);
 }
 
-void UseElement::accept(visitor& v){
+void use_element::accept(visitor& v){
 	v.visit(*this);
 }
 
-void UseElement::accept(const_visitor& v) const {
+void use_element::accept(const_visitor& v) const {
 	v.visit(*this);
 }
 

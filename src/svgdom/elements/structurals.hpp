@@ -11,7 +11,7 @@
 
 namespace svgdom{
 
-struct GElement :
+struct g_element :
 		public element,
 		public container,
 		public Transformable,
@@ -21,7 +21,10 @@ struct GElement :
 	void accept(const_visitor& v) const override;
 };
 
-struct DefsElement :
+// TODO: deprecated, remove.
+typedef g_element GElement;
+
+struct defs_element :
 		public element,
 		public container,
 		public Transformable,
@@ -31,7 +34,10 @@ struct DefsElement :
 	void accept(const_visitor& v) const override;
 };
 
-struct UseElement :
+// TODO: deprecated, remove.
+typedef defs_element DefsElement;
+
+struct use_element :
 		public element,
 		public Transformable,
 		public referencing,
@@ -41,6 +47,9 @@ struct UseElement :
 	void accept(visitor& v)override;
 	void accept(const_visitor& v) const override;
 };
+
+// TODO: deprecated, remove.
+typedef use_element UseElement;
 
 struct SvgElement :
 		public element,

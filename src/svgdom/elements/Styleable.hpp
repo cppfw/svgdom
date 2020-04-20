@@ -5,6 +5,7 @@
 #include "../config.hpp"
 #include "../length.hpp"
 
+// TODO: remove this when deprecated stuff is removed.
 // math.h defines OVERFLOW, undefine it
 #ifdef OVERFLOW
 #	undef OVERFLOW
@@ -16,8 +17,7 @@ namespace svgdom{
  * @brief Style property names enumeration.
  */
 enum class StyleProperty_e{
-	ENUM_FIRST,
-	UNKNOWN = ENUM_FIRST,		//0
+	UNKNOWN,					//0
 	FONT,
 	FONT_FAMILY,
 	FONT_SIZE,

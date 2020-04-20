@@ -4,7 +4,7 @@
 
 #include <papki/file.hpp>
 
-#include "elements/Structurals.hpp"
+#include "elements/structurals.hpp"
 #include "stream_writer.hpp"
 
 namespace svgdom{

@@ -176,7 +176,7 @@ void StreamWriter::add_shape_attributes(const shape& e) {
 }
 
 
-void StreamWriter::visit(const GElement& e) {
+void StreamWriter::visit(const g_element& e) {
 	this->setName("g");
 	this->add_element_attributes(e);
 	this->add_transformable_attributes(e);
@@ -328,7 +328,7 @@ void StreamWriter::visit(const path_element& e){
 	this->write();
 }
 
-void StreamWriter::visit(const UseElement& e) {
+void StreamWriter::visit(const use_element& e) {
 	this->setName("use");
 	this->add_element_attributes(e);
 	this->add_transformable_attributes(e);
@@ -385,7 +385,7 @@ void StreamWriter::visit(const linear_gradient_element& e) {
 	this->write(&e);
 }
 
-void StreamWriter::visit(const DefsElement& e) {
+void StreamWriter::visit(const defs_element& e) {
 	this->setName("defs");
 	this->add_element_attributes(e);
 	this->add_transformable_attributes(e);

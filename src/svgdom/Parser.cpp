@@ -354,7 +354,7 @@ void Parser::parseDefsElement() {
 	ASSERT(this->getNamespace(this->cur_element).ns == XmlNamespace_e::SVG)
 	ASSERT(this->getNamespace(this->cur_element).name == "defs")
 
-	auto ret = std::make_unique<DefsElement>();
+	auto ret = std::make_unique<defs_element>();
 
 	this->fillElement(*ret);
 	this->fillTransformable(*ret);
@@ -432,7 +432,7 @@ void Parser::parseGElement() {
 	ASSERT(this->getNamespace(this->cur_element).ns == XmlNamespace_e::SVG)
 	ASSERT(this->getNamespace(this->cur_element).name == "g")
 
-	auto ret = std::make_unique<GElement>();
+	auto ret = std::make_unique<g_element>();
 
 	this->fillElement(*ret);
 	this->fillTransformable(*ret);
@@ -864,7 +864,7 @@ void Parser::parseUseElement() {
 	ASSERT(this->getNamespace(this->cur_element).ns == XmlNamespace_e::SVG)
 	ASSERT(this->getNamespace(this->cur_element).name == "use")
 
-	auto ret = std::make_unique<UseElement>();
+	auto ret = std::make_unique<use_element>();
 
 	this->fillElement(*ret);
 	this->fillTransformable(*ret);

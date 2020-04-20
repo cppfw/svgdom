@@ -33,7 +33,7 @@ public:
 		this->addToCache(e);
 	}
 	
-	void visit(const svgdom::GElement& e) override{
+	void visit(const svgdom::g_element& e) override{
 		this->visitContainer(e, e, e);
 	}
 	void visit(const svgdom::SymbolElement& e) override{
@@ -48,7 +48,7 @@ public:
 	void visit(const svgdom::linear_gradient_element& e) override{
 		this->visitContainer(e, e, e);
 	}
-	void visit(const svgdom::DefsElement& e) override{
+	void visit(const svgdom::defs_element& e) override{
 		this->visitContainer(e, e, e);
 	}
 	void visit(const svgdom::FilterElement& e) override{
@@ -61,7 +61,7 @@ public:
 	void visit(const svgdom::circle_element& e) override{
 		this->visitElement(e, e);
 	}
-	void visit(const svgdom::UseElement& e) override{
+	void visit(const svgdom::use_element& e) override{
 		this->visitElement(e, e);
 	}
 	void visit(const svgdom::gradient::stop_element& e) override{
