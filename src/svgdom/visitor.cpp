@@ -34,11 +34,11 @@ void visitor::visit(g_element& e) {
 	this->defaultVisit(e, e);
 }
 
-void visitor::visit(SvgElement& e) {
+void visitor::visit(svg_element& e) {
 	this->defaultVisit(e, e);
 }
 
-void visitor::visit(SymbolElement& e) {
+void visitor::visit(symbol_element& e) {
 	this->defaultVisit(e, e);
 }
 
@@ -50,7 +50,7 @@ void visitor::visit(defs_element& e) {
 	this->defaultVisit(e, e);
 }
 
-void visitor::visit(MaskElement& e) {
+void visitor::visit(mask_element& e) {
 	this->defaultVisit(e, e);
 }
 
@@ -143,11 +143,11 @@ void const_visitor::visit(const g_element& e) {
 	this->defaultVisit(e, e);
 }
 
-void const_visitor::visit(const SvgElement& e) {
+void const_visitor::visit(const svg_element& e) {
 	this->defaultVisit(e, e);
 }
 
-void const_visitor::visit(const SymbolElement& e) {
+void const_visitor::visit(const symbol_element& e) {
 	this->defaultVisit(e, e);
 }
 
@@ -159,7 +159,7 @@ void const_visitor::visit(const defs_element& e) {
 	this->defaultVisit(e, e);
 }
 
-void const_visitor::visit(const MaskElement& e) {
+void const_visitor::visit(const mask_element& e) {
 	this->defaultVisit(e, e);
 }
 

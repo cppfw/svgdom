@@ -51,7 +51,7 @@ struct use_element :
 // TODO: deprecated, remove.
 typedef use_element UseElement;
 
-struct SvgElement :
+struct svg_element :
 		public element,
 		public container,
 		public rectangle,
@@ -68,7 +68,12 @@ struct SvgElement :
 	 * @return aspect ratio of the element.
 	 * @return 0 if any of height or weight is specified in percent.
 	 */
-	real aspectRatio(real dpi)const;
+	real aspect_ratio(real dpi)const;
+
+	// TODO: deprecated, remove.
+	real aspectRatio(real dpi)const{
+		return this->aspect_ratio(dpi);
+	}
 	
 	/**
 	 * @brief Get natural dimensions in pixels.
@@ -77,10 +82,18 @@ struct SvgElement :
 	 * @param dpi - dots per inch to use when converting lengths to pixels.
 	 * @return Width and height.
 	 */
-	std::array<real, 2> getDimensions(real dpi)const noexcept;
+	std::array<real, 2> get_dimensions(real dpi)const noexcept;
+
+	// TODO: deprecated, remove.
+	std::array<real, 2> getDimensions(real dpi)const noexcept{
+		return this->get_dimensions(dpi);
+	}
 };
 
-struct SymbolElement :
+// TODO: deprecated, remove.
+typedef svg_element SvgElement;
+
+struct symbol_element :
 		public element,
 		public container,
 		public ViewBoxed,
@@ -91,17 +104,30 @@ struct SymbolElement :
 	void accept(const_visitor& v) const override;
 };
 
-struct MaskElement :
+// TODO: deprecated, remove.
+typedef symbol_element SymbolElement;
+
+struct mask_element :
 		public element,
 		public container,
 		public rectangle,
 		public Styleable
 {
-	coordinate_units maskUnits;
-	coordinate_units maskContentUnits;
+	coordinate_units mask_units;
+
+	// TODO: deprecated, remove.
+	coordinate_units& maskUnits = mask_units;
+
+	coordinate_units mask_content_units;
+
+	// TODO: deprecated, remove.
+	coordinate_units& maskContentUnits = mask_content_units;
 	
 	void accept(visitor& v)override;
 	void accept(const_visitor& v) const override;
 };
+
+// TODO: deprecated, remove.
+typedef mask_element MaskElement;
 
 }

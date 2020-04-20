@@ -36,10 +36,10 @@ public:
 	void visit(const svgdom::g_element& e) override{
 		this->visitContainer(e, e, e);
 	}
-	void visit(const svgdom::SymbolElement& e) override{
+	void visit(const svgdom::symbol_element& e) override{
 		this->visitContainer(e, e, e);
 	}
-	void visit(const svgdom::SvgElement& e) override{
+	void visit(const svgdom::svg_element& e) override{
 		this->visitContainer(e, e, e);
 	}
 	void visit(const svgdom::radial_gradient_element& e) override{

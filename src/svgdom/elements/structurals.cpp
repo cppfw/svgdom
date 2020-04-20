@@ -5,7 +5,7 @@
 
 using namespace svgdom;
 
-std::array<real, 2> SvgElement::getDimensions(real dpi) const noexcept{
+std::array<real, 2> svg_element::get_dimensions(real dpi) const noexcept{
 	real w = this->width.toPx(dpi);
 	real h = this->height.toPx(dpi);
 
@@ -29,7 +29,7 @@ std::array<real, 2> SvgElement::getDimensions(real dpi) const noexcept{
 }
 
 
-real SvgElement::aspectRatio(real dpi)const{
+real svg_element::aspect_ratio(real dpi)const{
 	auto wh = this->getDimensions(dpi);
 	
 	if(wh[0] <= 0 || wh[1] <= 0){
@@ -47,19 +47,19 @@ void g_element::accept(const_visitor& v) const{
 	v.visit(*this);
 }
 
-void SvgElement::accept(visitor& v){
+void svg_element::accept(visitor& v){
 	v.visit(*this);
 }
 
-void SvgElement::accept(const_visitor& v) const{
+void svg_element::accept(const_visitor& v) const{
 	v.visit(*this);
 }
 
-void SymbolElement::accept(visitor& v){
+void symbol_element::accept(visitor& v){
 	v.visit(*this);
 }
 
-void SymbolElement::accept(const_visitor& v) const {
+void symbol_element::accept(const_visitor& v) const {
 	v.visit(*this);
 }
 
@@ -79,10 +79,10 @@ void use_element::accept(const_visitor& v) const {
 	v.visit(*this);
 }
 
-void MaskElement::accept(visitor& v){
+void mask_element::accept(visitor& v){
 	v.visit(*this);
 }
 
-void MaskElement::accept(const_visitor& v) const {
+void mask_element::accept(const_visitor& v) const {
 	v.visit(*this);
 }

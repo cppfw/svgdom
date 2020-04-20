@@ -6,7 +6,7 @@
 
 using namespace svgdom;
 
-std::unique_ptr<SvgElement> svgdom::load(const papki::file& f){
+std::unique_ptr<svg_element> svgdom::load(const papki::file& f){
 	Parser parser;
 	
 	{
@@ -28,7 +28,7 @@ std::unique_ptr<SvgElement> svgdom::load(const papki::file& f){
 	return parser.getDom();
 }
 
-std::unique_ptr<SvgElement> svgdom::load(std::istream& s){
+std::unique_ptr<svg_element> svgdom::load(std::istream& s){
 	Parser parser;
 	
 	while(!s.eof()){
@@ -48,15 +48,15 @@ std::unique_ptr<SvgElement> svgdom::load(std::istream& s){
 	return parser.getDom();
 }
 
-std::unique_ptr<SvgElement> svgdom::load(const std::string& s){
+std::unique_ptr<svg_element> svgdom::load(const std::string& s){
 	return load(utki::make_span(s.c_str(), s.length()));
 }
 
-std::unique_ptr<SvgElement> svgdom::load(const utki::span<std::uint8_t> buf){
+std::unique_ptr<svg_element> svgdom::load(const utki::span<std::uint8_t> buf){
 	return load(utki::make_span(reinterpret_cast<const char*>(&*buf.begin()), buf.size()));
 }
 
-std::unique_ptr<SvgElement> svgdom::load(const utki::span<char> buf){
+std::unique_ptr<svg_element> svgdom::load(const utki::span<char> buf){
 	Parser parser;
 
 	parser.feed(buf);

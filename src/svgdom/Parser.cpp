@@ -302,7 +302,7 @@ void Parser::fillTransformable(Transformable& t) {
 
 void Parser::fillViewBoxed(ViewBoxed& v) {
 	if(auto a = this->findAttributeOfNamespace(XmlNamespace_e::SVG, "viewBox")){
-		v.viewBox = SvgElement::parseViewbox(*a);
+		v.viewBox = svg_element::parseViewbox(*a);
 	}
 }
 
@@ -368,18 +368,18 @@ void Parser::parseMaskElement() {
 	ASSERT(this->getNamespace(this->cur_element).ns == XmlNamespace_e::SVG)
 	ASSERT(this->getNamespace(this->cur_element).name == "mask")
 
-	auto ret = std::make_unique<MaskElement>();
+	auto ret = std::make_unique<mask_element>();
 
 	this->fillElement(*ret);
 	this->fillRectangle(*ret);
 	this->fillStyleable(*ret);
 
 	if(auto a = this->findAttributeOfNamespace(XmlNamespace_e::SVG, "maskUnits")){
-		ret->maskUnits = parseCoordinateUnits(*a);
+		ret->mask_units = parseCoordinateUnits(*a);
 	}
 	
 	if(auto a = this->findAttributeOfNamespace(XmlNamespace_e::SVG, "maskContentUnits")){
-		ret->maskContentUnits = parseCoordinateUnits(*a);
+		ret->mask_content_units = parseCoordinateUnits(*a);
 	}
 	
 	auto c = ret.get();
@@ -810,7 +810,7 @@ void Parser::parseSvgElement() {
 	ASSERT(this->getNamespace(this->cur_element).ns == XmlNamespace_e::SVG)
 	ASSERT(this->getNamespace(this->cur_element).name == "svg")
 
-	auto ret = std::make_unique<SvgElement>();
+	auto ret = std::make_unique<svg_element>();
 
 	this->fillElement(*ret);
 	this->fillStyleable(*ret);
@@ -849,7 +849,7 @@ void Parser::parseSymbolElement() {
 
 	//		TRACE(<< "parseSymbolElement():" << std::endl)
 
-	auto ret = std::make_unique<SymbolElement>();
+	auto ret = std::make_unique<symbol_element>();
 
 	this->fillElement(*ret);
 	this->fillStyleable(*ret);
@@ -907,7 +907,7 @@ void Parser::on_content_parsed(const utki::span<char> str) {
 	// do nothing for now
 }
 
-std::unique_ptr<SvgElement> Parser::getDom() {
+std::unique_ptr<svg_element> Parser::getDom() {
 	if(!this->svg){
 		return nullptr;
 	}
@@ -915,5 +915,5 @@ std::unique_ptr<SvgElement> Parser::getDom() {
 	
 	this->root.children.front().release();
 	this->root.children.clear();
-	return std::unique_ptr<SvgElement>(this->svg);
+	return std::unique_ptr<svg_element>(this->svg);
 }

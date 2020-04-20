@@ -15,7 +15,7 @@ namespace svgdom{
  * @param f - file interface to load SVG from.
  * @return unique pointer to the root of SVG document tree.
  */
-std::unique_ptr<SvgElement> load(const papki::file& f);
+std::unique_ptr<svg_element> load(const papki::file& f);
 
 /**
  * @brief Load SVG document.
@@ -23,7 +23,7 @@ std::unique_ptr<SvgElement> load(const papki::file& f);
  * @param s - input stream to load SVG from.
  * @return unique pointer to the root of SVG document tree.
  */
-std::unique_ptr<SvgElement> load(std::istream& s);
+std::unique_ptr<svg_element> load(std::istream& s);
 
 /**
  * @brief Load SVG document.
@@ -31,20 +31,20 @@ std::unique_ptr<SvgElement> load(std::istream& s);
  * @param s - input string to load SVG from.
  * @return unique pointer to the root of SVG document tree.
  */
-std::unique_ptr<SvgElement> load(const std::string& s);
+std::unique_ptr<svg_element> load(const std::string& s);
 
 /**
  * @brief Load SVG document from memory buffer.
  * @param buf - input buffer to load SVG from.
  * @return unique pointer to the root of SVG document tree.
  */
-std::unique_ptr<SvgElement> load(const utki::span<char> buf);
+std::unique_ptr<svg_element> load(const utki::span<char> buf);
 
 /**
  * @brief Load SVG document from memory buffer.
  * @param buf - input buffer to load SVG from.
  * @return unique pointer to the root of SVG document tree.
  */
-std::unique_ptr<SvgElement> load(const utki::span<std::uint8_t> buf);
+std::unique_ptr<svg_element> load(const utki::span<std::uint8_t> buf);
 
 }

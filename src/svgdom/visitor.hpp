@@ -73,8 +73,8 @@ public:
 	virtual void visit(polyline_element& e);
 	virtual void visit(polygon_element& e);
 	virtual void visit(g_element& e);
-	virtual void visit(SvgElement& e);
-	virtual void visit(SymbolElement& e);
+	virtual void visit(svg_element& e);
+	virtual void visit(symbol_element& e);
 	virtual void visit(use_element& e);
 	virtual void visit(defs_element& e);
 	virtual void visit(gradient::stop_element& e);
@@ -86,7 +86,7 @@ public:
 	virtual void visit(FeBlendElement& e);
 	virtual void visit(FeCompositeElement& e);
 	virtual void visit(image_element& e);
-	virtual void visit(MaskElement& e);
+	virtual void visit(mask_element& e);
 	virtual void visit(TextElement& e);
 	
 	/**
@@ -145,8 +145,8 @@ public:
 	virtual void visit(const polyline_element& e);
 	virtual void visit(const polygon_element& e);
 	virtual void visit(const g_element& e);
-	virtual void visit(const SvgElement& e);
-	virtual void visit(const SymbolElement& e);
+	virtual void visit(const svg_element& e);
+	virtual void visit(const symbol_element& e);
 	virtual void visit(const use_element& e);
 	virtual void visit(const defs_element& e);
 	virtual void visit(const gradient::stop_element& e);
@@ -158,7 +158,7 @@ public:
 	virtual void visit(const FeBlendElement& e);
 	virtual void visit(const FeCompositeElement& e);
 	virtual void visit(const image_element& e);
-	virtual void visit(const MaskElement& e);
+	virtual void visit(const mask_element& e);
 	virtual void visit(const TextElement& e);
 	
 	/**

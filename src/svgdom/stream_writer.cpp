@@ -184,7 +184,7 @@ void StreamWriter::visit(const g_element& e) {
 	this->write(&e);
 }
 
-void StreamWriter::visit(const SvgElement& e) {
+void StreamWriter::visit(const svg_element& e) {
 	this->setName("svg");
 	
 	if(this->indent == 0){//if outermost "svg" element
@@ -393,18 +393,18 @@ void StreamWriter::visit(const defs_element& e) {
 	this->write(&e);
 }
 
-void StreamWriter::visit(const MaskElement& e) {
+void StreamWriter::visit(const mask_element& e) {
 	this->setName("mask");
 	this->add_element_attributes(e);
 	this->add_rectangle_attributes(e);
 	this->add_styleable_attributes(e);
 	
-	if(e.maskUnits != coordinate_units::object_bounding_box && e.maskUnits != coordinate_units::unknown){
-		this->add_attribute("maskUnits", coordinateUnitsToString(e.maskUnits));
+	if(e.mask_units != coordinate_units::object_bounding_box && e.mask_units != coordinate_units::unknown){
+		this->add_attribute("maskUnits", coordinateUnitsToString(e.mask_units));
 	}
 	
-	if(e.maskContentUnits != coordinate_units::user_space_on_use && e.maskContentUnits != coordinate_units::unknown){
-		this->add_attribute("maskContentUnits", coordinateUnitsToString(e.maskContentUnits));
+	if(e.mask_content_units != coordinate_units::user_space_on_use && e.mask_content_units != coordinate_units::unknown){
+		this->add_attribute("maskContentUnits", coordinateUnitsToString(e.mask_content_units));
 	}
 	
 	this->write(&e);
@@ -422,7 +422,7 @@ void StreamWriter::visit(const TextElement& e){
 	this->write(&e);
 }
 
-void StreamWriter::visit(const SymbolElement& e) {
+void StreamWriter::visit(const symbol_element& e) {
 	this->setName("symbol");
 	this->add_element_attributes(e);
 	this->add_styleable_attributes(e);

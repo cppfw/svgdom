@@ -15,14 +15,14 @@ void cloner::visit(const g_element& e) {
 	this->cur_parent->children.push_back(std::move(clone));
 }
 
-void cloner::visit(const SymbolElement& e) {
-	auto clone = std::make_unique<SymbolElement>(e);
+void cloner::visit(const symbol_element& e) {
+	auto clone = std::make_unique<symbol_element>(e);
 	this->clone_children(e, *clone); 
 	this->cur_parent->children.push_back(std::move(clone));
 }
 
-void cloner::visit(const SvgElement& e) {
-	auto clone = std::make_unique<SvgElement>(e);
+void cloner::visit(const svg_element& e) {
+	auto clone = std::make_unique<svg_element>(e);
 	this->clone_children(e, *clone); 
 	this->cur_parent->children.push_back(std::move(clone));
 }

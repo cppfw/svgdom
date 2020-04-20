@@ -43,8 +43,8 @@ public:
 	void visit(const svgdom::polyline_element& e) override;
 	void visit(const svgdom::polygon_element& e) override;
 	void visit(const svgdom::g_element& e) override;
-	void visit(const svgdom::SvgElement& e) override;
-	void visit(const svgdom::SymbolElement& e) override;
+	void visit(const svgdom::svg_element& e) override;
+	void visit(const svgdom::symbol_element& e) override;
 	void visit(const svgdom::use_element& e) override;
 	void visit(const svgdom::defs_element& e) override;
 	void visit(const svgdom::gradient::stop_element& e) override;

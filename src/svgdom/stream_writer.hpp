@@ -146,8 +146,8 @@ public:
 	stream_writer(std::ostream& s) : s(s) {}
 	
 	void visit(const g_element& e) override;
-	void visit(const SvgElement& e) override;
-	void visit(const SymbolElement& e) override;
+	void visit(const svg_element& e) override;
+	void visit(const symbol_element& e) override;
 	void visit(const defs_element& e) override;
 	void visit(const linear_gradient_element& e) override;
 	void visit(const radial_gradient_element& e) override;
@@ -166,7 +166,7 @@ public:
 	void visit(const FeBlendElement& e) override;
 	void visit(const FeCompositeElement& e) override;
 	void visit(const image_element& e) override;
-	void visit(const MaskElement& e) override;
+	void visit(const mask_element& e) override;
 	void visit(const TextElement& e) override;
 };
 
