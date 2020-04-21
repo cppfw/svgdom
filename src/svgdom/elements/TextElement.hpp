@@ -1,29 +1,6 @@
 #pragma once
 
-#include "element.hpp"
-#include "container.hpp"
-#include "styleable.hpp"
-#include "Transformable.hpp"
+// TODO: remove whole file.
+#warning "TextElement.hpp is DEPRECATED, use text_element.hpp instead."
 
-namespace svgdom{
-
-class TextPositioning{
-public:
-	//TODO: attributes x, y, dx, dy, rotate are not implemented yet.
-};
-
-class TextElement :
-		public element,
-		public container,
-		public styleable,
-		public Transformable,
-		public TextPositioning
-{
-public:
-	//TODO: attributes lengthAdjust, textLength are not implemented yet.
-	
-	void accept(visitor& v) override;
-	void accept(const_visitor& v) const override;
-};
-
-}
+#include "text_element.hpp"
