@@ -2,7 +2,7 @@
 
 #include "element.hpp"
 #include "styleable.hpp"
-#include "Transformable.hpp"
+#include "transformable.hpp"
 #include "rectangle.hpp"
 #include "referencing.hpp"
 #include "aspect_ratioed.hpp"

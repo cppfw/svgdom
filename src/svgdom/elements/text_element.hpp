@@ -3,7 +3,7 @@
 #include "element.hpp"
 #include "container.hpp"
 #include "styleable.hpp"
-#include "Transformable.hpp"
+#include "transformable.hpp"
 
 namespace svgdom{
 

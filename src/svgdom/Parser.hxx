@@ -10,7 +10,7 @@
 #include "elements/referencing.hpp"
 #include "elements/rectangle.hpp"
 #include "elements/ViewBoxed.hpp"
-#include "elements/Transformable.hpp"
+#include "elements/transformable.hpp"
 #include "elements/gradients.hpp"
 #include "elements/shapes.hpp"
 #include "elements/structurals.hpp"

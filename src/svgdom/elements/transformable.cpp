@@ -1,4 +1,4 @@
-#include "Transformable.hpp"
+#include "transformable.hpp"
 
 #include <utki/debug.hpp>
 
@@ -7,7 +7,7 @@
 using namespace svgdom;
 
 
-std::string Transformable::transformationsToString() const {
+std::string Transformable::transformations_to_string() const {
 	std::stringstream s;
 
 	bool isFirst = true;

@@ -3,7 +3,7 @@
 #include "element.hpp"
 #include "container.hpp"
 #include "referencing.hpp"
-#include "Transformable.hpp"
+#include "transformable.hpp"
 #include "styleable.hpp"
 #include "coordinate_units.hpp"
 
