@@ -1,4 +1,4 @@
-#include "ViewBoxed.hpp"
+#include "view_boxed.hpp"
 
 #include <utki/debug.hpp>
 
@@ -6,12 +6,12 @@
 
 using namespace svgdom;
 
-decltype(ViewBoxed::viewBox) ViewBoxed::parseViewbox(const std::string& str) {
+decltype(view_boxed::view_box) view_boxed::parse_view_box(const std::string& str){
 	std::istringstream s(str);
 	
 	s >> std::skipws;
 	
-	decltype(ViewBoxed::viewBox) ret;
+	decltype(view_boxed::view_box) ret;
 	
 	for(unsigned i = 0; i != ret.size(); ++i){
 		ret[i] = readInReal(s);
@@ -23,10 +23,10 @@ decltype(ViewBoxed::viewBox) ViewBoxed::parseViewbox(const std::string& str) {
 	return ret;
 }
 
-std::string ViewBoxed::viewBoxToString() const {
+std::string view_boxed::view_box_to_string()const{
 	std::stringstream s;
 	bool isFirst = true;
-	for (auto i = this->viewBox.begin(); i != this->viewBox.end(); ++i) {
+	for (auto i = this->view_box.begin(); i != this->view_box.end(); ++i) {
 		if (isFirst) {
 			isFirst = false;
 		}

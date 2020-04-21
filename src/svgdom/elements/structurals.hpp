@@ -5,7 +5,7 @@
 #include "styleable.hpp"
 #include "referencing.hpp"
 #include "rectangle.hpp"
-#include "ViewBoxed.hpp"
+#include "view_boxed.hpp"
 #include "aspect_ratioed.hpp"
 #include "coordinate_units.hpp"
 
