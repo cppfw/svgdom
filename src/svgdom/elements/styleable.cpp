@@ -604,23 +604,23 @@ const std::map<std::string, std::uint32_t> colorNames = {
 
 namespace{
 std::map<std::string, display> stringToDisplayMap = {
-	{"inline", display::INLINE},
-	{"block", display::BLOCK},
-	{"list-item", display::LIST_ITEM},
-	{"run-in", display::RUN_IN},
-	{"compact", display::COMPACT},
-	{"marker", display::MARKER},
-	{"table", display::TABLE},
-	{"inline-table", display::INLINE_TABLE},
-	{"table-row-group", display::TABLE_ROW_GROUP},
-	{"table-header-group", display::TABLE_HEADER_GROUP},
-	{"table-footer-group", display::TABLE_FOOTER_GROUP},
-	{"table-row", display::TABLE_ROW},
-	{"table-column-group", display::TABLE_COLUMN_GROUP},
-	{"table-column", display::TABLE_COLUMN},
-	{"table-cell", display::TABLE_CELL},
-	{"table-caption", display::TABLE_CAPTION},
-	{"none", display::NONE}
+	{"inline", svgdom::display::inline_},
+	{"block", svgdom::display::block},
+	{"list-item", svgdom::display::list_item},
+	{"run-in", svgdom::display::run_in},
+	{"compact", svgdom::display::compact},
+	{"marker", svgdom::display::marker},
+	{"table", svgdom::display::table},
+	{"inline-table", svgdom::display::inline_table},
+	{"table-row-group", svgdom::display::table_row_group},
+	{"table-header-group", svgdom::display::table_header_group},
+	{"table-footer-group", svgdom::display::table_footer_group},
+	{"table-row", svgdom::display::table_row},
+	{"table-column-group", svgdom::display::table_column_group},
+	{"table-column", svgdom::display::table_column},
+	{"table-cell", svgdom::display::table_cell},
+	{"table-caption", svgdom::display::table_caption},
+	{"none", svgdom::display::none}
 };
 }
 
@@ -631,16 +631,16 @@ auto displayToStringMap = utki::flipMap(stringToDisplayMap);
 style_value style_value::parse_display(const std::string& str) {
 	style_value ret;
 	
-	//NOTE: "inherit" is already checked on upper level.
+	// NOTE: "inherit" is already checked on upper level.
 	
 	auto i = stringToDisplayMap.find(str);
 	if(i == stringToDisplayMap.end()){
-		ret.display = display::INLINE; // default value
+		ret.display = svgdom::display::inline_; // default value
 	}else{
 		ret.display = i->second;
 	}
 	
-	ret.type = style_value::Type_e::NORMAL;
+	ret.type = style_value_type::normal;
 	
 	return ret;
 }
@@ -648,7 +648,7 @@ style_value style_value::parse_display(const std::string& str) {
 std::string style_value::display_to_string()const{
 	auto i = displayToStringMap.find(this->display);
 	if(i == displayToStringMap.end()){
-		return displayToStringMap[display::INLINE]; //default value
+		return displayToStringMap[svgdom::display::inline_]; // default value
 	}
 	return i->second;
 }
