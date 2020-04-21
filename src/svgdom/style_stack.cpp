@@ -16,7 +16,7 @@ const svgdom::style_value* style_stack::get_style_property(svgdom::style_propert
 			}
 			continue;
 		}
-		if (v->type == svgdom::style_value::Type_e::INHERIT) {
+		if (v->type == svgdom::style_value_type::INHERIT) {
 			explicitInherit = true;
 			continue;
 		}
