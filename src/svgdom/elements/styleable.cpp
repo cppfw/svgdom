@@ -668,11 +668,11 @@ auto visibilityToStringMap = utki::flipMap(stringToVisibilityMap);
 style_value style_value::parse_visibility(const std::string& str){
 	style_value ret;
 	
-	//NOTE: "inherit" is already checked on upper level.
+	// NOTE: "inherit" is already checked on upper level.
 	
 	auto i = stringToVisibilityMap.find(str);
 	if(i == stringToVisibilityMap.end()){
-		ret.visibility = visibility::VISIBLE; // default value
+		ret.visibility = svgdom::visibility::visible; // default value
 	}else{
 		ret.visibility = i->second;
 	}
@@ -685,7 +685,7 @@ style_value style_value::parse_visibility(const std::string& str){
 std::string style_value::visibility_to_string()const{
 	auto i = visibilityToStringMap.find(this->visibility);
 	if(i == visibilityToStringMap.end()){
-		return visibilityToStringMap[visibility::VISIBLE]; //default value
+		return visibilityToStringMap[svgdom::visibility::visible]; // default value
 	}
 	return i->second;
 }
