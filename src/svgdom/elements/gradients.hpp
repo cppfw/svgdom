@@ -9,6 +9,17 @@
 
 namespace svgdom{
 
+enum class gradient_spread_method{
+	default_,
+	DEFAULT = default_, // TODO: deprecated, remove.
+	pad,
+	PAD = pad, // TODO: deprecated, remove.
+	reflect,
+	REFLECT = reflect, // TODO: deprecated, remove.
+	repeat,
+	REPEAT = repeat // TODO: deprecated, remove.
+};
+
 /**
  * @brief Common base for gradient elements.
  */
@@ -19,22 +30,13 @@ struct gradient :
 		public Transformable,
 		public styleable
 {
-	enum class spread_method_kind{
-		default_kind,
-		DEFAULT = default_kind, // TODO: deprecated, remove.
-		pad,
-		PAD = pad, // TODO: deprecated, remove.
-		reflect,
-		REFLECT = reflect, // TODO: deprecated, remove.
-		repeat,
-		REPEAT = repeat // TODO: deprecated, remove.
-	} spread_method = spread_method_kind::default_kind;
+	gradient_spread_method spread_method = gradient_spread_method::default_;
 
 	// TODO: deprecated, remove.
-	spread_method_kind& spreadMethod = spread_method;
+	gradient_spread_method& spreadMethod = spread_method;
 
 	// TODO: deprecated, remove.
-	typedef spread_method_kind SpreadMethod_e;
+	typedef gradient_spread_method SpreadMethod_e;
 	
 	coordinate_units units = coordinate_units::unknown;
 	

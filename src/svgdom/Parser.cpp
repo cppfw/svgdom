@@ -14,15 +14,15 @@ const std::string DXlinkNamespace = "http://www.w3.org/1999/xlink";
 }
 
 namespace{
-gradient::spread_method_kind gradientStringToSpreadMethod(const std::string& str) {
+gradient_spread_method gradientStringToSpreadMethod(const std::string& str) {
 	if(str == "pad"){
-		return gradient::spread_method_kind::pad;
+		return gradient_spread_method::pad;
 	}else if(str == "reflect"){
-		return gradient::spread_method_kind::reflect;
+		return gradient_spread_method::reflect;
 	}else if(str == "repeat"){
-		return gradient::spread_method_kind::repeat;
+		return gradient_spread_method::repeat;
 	}
-	return gradient::spread_method_kind::default_kind;
+	return gradient_spread_method::default_;
 }
 }
 

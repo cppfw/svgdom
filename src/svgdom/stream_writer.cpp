@@ -129,7 +129,7 @@ void StreamWriter::add_gradient_attributes(const gradient& e) {
 	this->add_referencing_attributes(e);
 	this->add_styleable_attributes(e);
 	
-	if(e.spreadMethod != gradient::spread_method_kind::default_kind){
+	if(e.spreadMethod != gradient_spread_method::default_){
 		this->add_attribute("spreadMethod", e.spreadMethodToString());
 	}
 	
