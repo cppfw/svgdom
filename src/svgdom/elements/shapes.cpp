@@ -94,7 +94,7 @@ decltype(path_element::path) path_element::parse(const std::string& str){
 	
 	skipWhitespaces(s);
 	
-	step_type curType = step_type::unknown;
+	step::type curType = step::type::unknown;
 	
 	while(!s.eof()){
 		ASSERT(!std::isspace(s.peek()))//spaces should be skept
@@ -103,28 +103,28 @@ decltype(path_element::path) path_element::parse(const std::string& str){
 		
 		{
 			auto t = step::char_to_type(s.peek());
-			if(t != step_type::unknown){
+			if(t != step::type::unknown){
 				curType = t;
 				s.get();
-			}else if(curType == step_type::unknown){
-				curType = step_type::move_abs;
-			}else if(curType == step_type::move_abs){
-				curType = step_type::line_abs;
-			}else if(curType == step_type::move_rel){
-				curType = step_type::line_rel;
+			}else if(curType == step::type::unknown){
+				curType = step::type::move_abs;
+			}else if(curType == step::type::move_abs){
+				curType = step::type::line_abs;
+			}else if(curType == step::type::move_rel){
+				curType = step::type::line_rel;
 			}
 		}
 		
 		skipWhitespaces(s);
 		
 		step cur_step;
-		cur_step.type = curType;
+		cur_step.type_ = curType;
 		
-		switch(cur_step.type){
-			case step_type::move_abs:
-			case step_type::move_rel:
-			case step_type::line_abs:
-			case step_type::line_rel:
+		switch(cur_step.type_){
+			case step::type::move_abs:
+			case step::type::move_rel:
+			case step::type::line_abs:
+			case step::type::line_rel:
 				cur_step.x = readInReal(s);
 				if(s.fail()){
 					return ret;
@@ -137,24 +137,24 @@ decltype(path_element::path) path_element::parse(const std::string& str){
 				}
 //				TRACE(<< "cur_step.y = " << cur_step.y << std::endl)
 				break;
-			case step_type::close:
+			case step::type::close:
 				break;
-			case step_type::horizontal_line_abs:
-			case step_type::horizontal_line_rel:
+			case step::type::horizontal_line_abs:
+			case step::type::horizontal_line_rel:
 				cur_step.x = readInReal(s);
 				if(s.fail()){
 					return ret;
 				}
 				break;
-			case step_type::vertical_line_abs:
-			case step_type::vertical_line_rel:
+			case step::type::vertical_line_abs:
+			case step::type::vertical_line_rel:
 				cur_step.y = readInReal(s);
 				if(s.fail()){
 					return ret;
 				}
 				break;
-			case step_type::cubic_abs:
-			case step_type::cubic_rel:
+			case step::type::cubic_abs:
+			case step::type::cubic_rel:
 				cur_step.x1 = readInReal(s);
 				if(s.fail()){
 					return ret;
@@ -185,8 +185,8 @@ decltype(path_element::path) path_element::parse(const std::string& str){
 					return ret;
 				}
 				break;
-			case step_type::cubic_smooth_abs:
-			case step_type::cubic_smooth_rel:
+			case step::type::cubic_smooth_abs:
+			case step::type::cubic_smooth_rel:
 				cur_step.x2 = readInReal(s);
 				if(s.fail()){
 					return ret;
@@ -207,8 +207,8 @@ decltype(path_element::path) path_element::parse(const std::string& str){
 					return ret;
 				}
 				break;
-			case step_type::quadratic_abs:
-			case step_type::quadratic_rel:
+			case step::type::quadratic_abs:
+			case step::type::quadratic_rel:
 				cur_step.x1 = readInReal(s);
 				if(s.fail()){
 					return ret;
@@ -229,8 +229,8 @@ decltype(path_element::path) path_element::parse(const std::string& str){
 					return ret;
 				}
 				break;
-			case step_type::quadratic_smooth_abs:
-			case step_type::quadratic_smooth_rel:
+			case step::type::quadratic_smooth_abs:
+			case step::type::quadratic_smooth_rel:
 				cur_step.x = readInReal(s);
 				if(s.fail()){
 					return ret;
@@ -241,8 +241,8 @@ decltype(path_element::path) path_element::parse(const std::string& str){
 					return ret;
 				}
 				break;
-			case step_type::arc_abs:
-			case step_type::arc_rel:
+			case step::type::arc_abs:
+			case step::type::arc_rel:
 				cur_step.rx = readInReal(s);
 				if(s.fail()){
 					return ret;
@@ -302,12 +302,12 @@ decltype(path_element::path) path_element::parse(const std::string& str){
 std::string path_element::path_to_string() const {
 	std::stringstream s;
 	
-	step_type curType = step_type::unknown;
+	step::type curType = step::type::unknown;
 
 	bool first = true;
 	
 	for(auto& cur_step : this->path){
-		if(curType == cur_step.type){
+		if(curType == cur_step.type_){
 			s << " ";
 		}else{
 			if (first) {
@@ -316,31 +316,31 @@ std::string path_element::path_to_string() const {
 				s << " ";
 			}
 			
-			s << step::type_to_char(cur_step.type);
-			curType = cur_step.type;
+			s << step::type_to_char(cur_step.type_);
+			curType = cur_step.type_;
 		}
 		
-		switch(cur_step.type){
-			case step_type::move_abs:
-			case step_type::move_rel:
-			case step_type::line_abs:
-			case step_type::line_rel:
+		switch(cur_step.type_){
+			case step::type::move_abs:
+			case step::type::move_rel:
+			case step::type::line_abs:
+			case step::type::line_rel:
 				s << cur_step.x;
 				s << ",";
 				s << cur_step.y;
 				break;
-			case step_type::close:
+			case step::type::close:
 				break;
-			case step_type::horizontal_line_abs:
-			case step_type::horizontal_line_rel:
+			case step::type::horizontal_line_abs:
+			case step::type::horizontal_line_rel:
 				s << cur_step.x;
 				break;
-			case step_type::vertical_line_abs:
-			case step_type::vertical_line_rel:
+			case step::type::vertical_line_abs:
+			case step::type::vertical_line_rel:
 				s << cur_step.y;
 				break;
-			case step_type::cubic_abs:
-			case step_type::cubic_rel:
+			case step::type::cubic_abs:
+			case step::type::cubic_rel:
 				s << cur_step.x1;
 				s << ",";
 				s << cur_step.y1;
@@ -353,8 +353,8 @@ std::string path_element::path_to_string() const {
 				s << ",";
 				s << cur_step.y;
 				break;
-			case step_type::cubic_smooth_abs:
-			case step_type::cubic_smooth_rel:
+			case step::type::cubic_smooth_abs:
+			case step::type::cubic_smooth_rel:
 				s << cur_step.x2;
 				s << ",";
 				s << cur_step.y2;
@@ -363,8 +363,8 @@ std::string path_element::path_to_string() const {
 				s << ",";
 				s << cur_step.y;
 				break;
-			case step_type::quadratic_abs:
-			case step_type::quadratic_rel:
+			case step::type::quadratic_abs:
+			case step::type::quadratic_rel:
 				s << cur_step.x1;
 				s << ",";
 				s << cur_step.y1;
@@ -373,14 +373,14 @@ std::string path_element::path_to_string() const {
 				s << ",";
 				s << cur_step.y;
 				break;
-			case step_type::quadratic_smooth_abs:
-			case step_type::quadratic_smooth_rel:
+			case step::type::quadratic_smooth_abs:
+			case step::type::quadratic_smooth_rel:
 				s << cur_step.x;
 				s << ",";
 				s << cur_step.y;
 				break;
-			case step_type::arc_abs:
-			case step_type::arc_rel:
+			case step::type::arc_abs:
+			case step::type::arc_rel:
 				s << cur_step.rx;
 				s << ",";
 				s << cur_step.ry;
@@ -404,45 +404,45 @@ std::string path_element::path_to_string() const {
 }
 
 
-char path_element::step::type_to_char(step_type t){
+char path_element::step::type_to_char(step::type t){
 	switch(t){
-		case step_type::move_abs:
+		case step::type::move_abs:
 			return 'M';
-		case step_type::move_rel:
+		case step::type::move_rel:
 			return 'm';
-		case step_type::line_abs:
+		case step::type::line_abs:
 			return 'L';
-		case step_type::line_rel:
+		case step::type::line_rel:
 			return 'l';
-		case step_type::close:
+		case step::type::close:
 			return 'z';
-		case step_type::horizontal_line_abs:
+		case step::type::horizontal_line_abs:
 			return 'H';
-		case step_type::horizontal_line_rel:
+		case step::type::horizontal_line_rel:
 			return 'h';
-		case step_type::vertical_line_abs:
+		case step::type::vertical_line_abs:
 			return 'V';
-		case step_type::vertical_line_rel:
+		case step::type::vertical_line_rel:
 			return 'v';
-		case step_type::cubic_abs:
+		case step::type::cubic_abs:
 			return 'C';
-		case step_type::cubic_rel:
+		case step::type::cubic_rel:
 			return 'c';
-		case step_type::cubic_smooth_abs:
+		case step::type::cubic_smooth_abs:
 			return 'S';
-		case step_type::cubic_smooth_rel:
+		case step::type::cubic_smooth_rel:
 			return 's';
-		case step_type::quadratic_abs:
+		case step::type::quadratic_abs:
 			return 'Q';
-		case step_type::quadratic_rel:
+		case step::type::quadratic_rel:
 			return 'q';
-		case step_type::quadratic_smooth_abs:
+		case step::type::quadratic_smooth_abs:
 			return 'T';
-		case step_type::quadratic_smooth_rel:
+		case step::type::quadratic_smooth_rel:
 			return 't';
-		case step_type::arc_abs:
+		case step::type::arc_abs:
 			return 'A';
-		case step_type::arc_rel:
+		case step::type::arc_rel:
 			return 'a';
 		default:
 			ASSERT(false)
@@ -450,49 +450,49 @@ char path_element::step::type_to_char(step_type t){
 	}
 }
 
-path_element::step_type path_element::step::char_to_type(char c){
+path_element::step::type path_element::step::char_to_type(char c){
 	switch(c){
 		case 'M':
-			return step_type::move_abs;
+			return step::type::move_abs;
 		case 'm':
-			return step_type::move_rel;
+			return step::type::move_rel;
 		case 'z':
 		case 'Z':
-			return step_type::close;
+			return step::type::close;
 		case 'L':
-			return step_type::line_abs;
+			return step::type::line_abs;
 		case 'l':
-			return step_type::line_rel;
+			return step::type::line_rel;
 		case 'H':
-			return step_type::horizontal_line_abs;
+			return step::type::horizontal_line_abs;
 		case 'h':
-			return step_type::horizontal_line_rel;
+			return step::type::horizontal_line_rel;
 		case 'V':
-			return step_type::vertical_line_abs;
+			return step::type::vertical_line_abs;
 		case 'v':
-			return step_type::vertical_line_rel;
+			return step::type::vertical_line_rel;
 		case 'C':
-			return step_type::cubic_abs;
+			return step::type::cubic_abs;
 		case 'c':
-			return step_type::cubic_rel;
+			return step::type::cubic_rel;
 		case 'S':
-			return step_type::cubic_smooth_abs;
+			return step::type::cubic_smooth_abs;
 		case 's':
-			return step_type::cubic_smooth_rel;
+			return step::type::cubic_smooth_rel;
 		case 'Q':
-			return step_type::quadratic_abs;
+			return step::type::quadratic_abs;
 		case 'q':
-			return step_type::quadratic_rel;
+			return step::type::quadratic_rel;
 		case 'T':
-			return step_type::quadratic_smooth_abs;
+			return step::type::quadratic_smooth_abs;
 		case 't':
-			return step_type::quadratic_smooth_rel;
+			return step::type::quadratic_smooth_rel;
 		case 'A':
-			return step_type::arc_abs;
+			return step::type::arc_abs;
 		case 'a':
-			return step_type::arc_rel;
+			return step::type::arc_rel;
 		default:
-			return step_type::unknown;
+			return step::type::unknown;
 	}
 }
 

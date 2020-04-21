@@ -20,54 +20,54 @@ struct shape :
 typedef shape Shape;
 
 struct path_element : public shape{
-	enum class step_type{
-		unknown,
-		UNKNOWN = unknown, // TODO: deprecated, remove.
-		close,
-		CLOSE = close, // TODO: deprecated, remove.
-		move_abs,
-		MOVE_ABS = move_abs, // TODO: deprecated, remove.
-		move_rel,
-		MOVE_REL = move_rel, // TODO: deprecated, remove.
-		line_abs,
-		LINE_ABS = line_abs, // TODO: deprecated, remove.
-		line_rel,
-		LINE_REL = line_rel, // TODO: deprecated, remove.
-		horizontal_line_abs,
-		HORIZONTAL_LINE_ABS = horizontal_line_abs, // TODO: deprecated, remove.
-		horizontal_line_rel,
-		HORIZONTAL_LINE_REL = horizontal_line_rel, // TODO: deprecated, remove.
-		vertical_line_abs,
-		VERTICAL_LINE_ABS = vertical_line_abs, // TODO: deprecated, remove.
-		vertical_line_rel,
-		VERTICAL_LINE_REL = vertical_line_rel, // TODO: deprecated, remove.
-		cubic_abs,
-		CUBIC_ABS = cubic_abs, // TODO: deprecated, remove.
-		cubic_rel,
-		CUBIC_REL = cubic_rel, // TODO: deprecated, remove.
-		cubic_smooth_abs,
-		CUBIC_SMOOTH_ABS = cubic_smooth_abs, // TODO: deprecated, remove.
-		cubic_smooth_rel,
-		CUBIC_SMOOTH_REL = cubic_smooth_rel, // TODO: deprecated, remove.
-		quadratic_abs,
-		QUADRATIC_ABS = quadratic_abs, // TODO: deprecated, remove.
-		quadratic_rel,
-		QUADRATIC_REL = quadratic_rel, // TODO: deprecated, remove.
-		quadratic_smooth_abs,
-		QUADRATIC_SMOOTH_ABS = quadratic_smooth_abs, // TODO: deprecated, remove.
-		quadratic_smooth_rel,
-		QUADRATIC_SMOOTH_REL = quadratic_smooth_rel, // TODO: deprecated, remove.
-		arc_abs,
-		ARC_ABS = arc_abs, // TODO: deprecated, remove.
-		arc_rel,
-		ARC_REL = arc_rel // TODO: deprecated, remove.
-	};
-
 	struct step{
-		step_type type;
+		enum class type{
+			unknown,
+			UNKNOWN = unknown, // TODO: deprecated, remove.
+			close,
+			CLOSE = close, // TODO: deprecated, remove.
+			move_abs,
+			MOVE_ABS = move_abs, // TODO: deprecated, remove.
+			move_rel,
+			MOVE_REL = move_rel, // TODO: deprecated, remove.
+			line_abs,
+			LINE_ABS = line_abs, // TODO: deprecated, remove.
+			line_rel,
+			LINE_REL = line_rel, // TODO: deprecated, remove.
+			horizontal_line_abs,
+			HORIZONTAL_LINE_ABS = horizontal_line_abs, // TODO: deprecated, remove.
+			horizontal_line_rel,
+			HORIZONTAL_LINE_REL = horizontal_line_rel, // TODO: deprecated, remove.
+			vertical_line_abs,
+			VERTICAL_LINE_ABS = vertical_line_abs, // TODO: deprecated, remove.
+			vertical_line_rel,
+			VERTICAL_LINE_REL = vertical_line_rel, // TODO: deprecated, remove.
+			cubic_abs,
+			CUBIC_ABS = cubic_abs, // TODO: deprecated, remove.
+			cubic_rel,
+			CUBIC_REL = cubic_rel, // TODO: deprecated, remove.
+			cubic_smooth_abs,
+			CUBIC_SMOOTH_ABS = cubic_smooth_abs, // TODO: deprecated, remove.
+			cubic_smooth_rel,
+			CUBIC_SMOOTH_REL = cubic_smooth_rel, // TODO: deprecated, remove.
+			quadratic_abs,
+			QUADRATIC_ABS = quadratic_abs, // TODO: deprecated, remove.
+			quadratic_rel,
+			QUADRATIC_REL = quadratic_rel, // TODO: deprecated, remove.
+			quadratic_smooth_abs,
+			QUADRATIC_SMOOTH_ABS = quadratic_smooth_abs, // TODO: deprecated, remove.
+			quadratic_smooth_rel,
+			QUADRATIC_SMOOTH_REL = quadratic_smooth_rel, // TODO: deprecated, remove.
+			arc_abs,
+			ARC_ABS = arc_abs, // TODO: deprecated, remove.
+			arc_rel,
+			ARC_REL = arc_rel // TODO: deprecated, remove.
+		};
+		
+		type type_;
 	
 		// TODO: deprecated, remove.
-		typedef step_type Type_e;
+		typedef type Type_e;
 
 		real x, y;
 		
@@ -95,17 +95,17 @@ struct path_element : public shape{
 			} flags;
 		};
 		
-		static step_type char_to_type(char c);
+		static type char_to_type(char c);
 
 		// TODO: deprecated, remove.
-		static step_type charToType(char c){
+		static type charToType(char c){
 			return char_to_type(c);
 		}
 
-		static char type_to_char(step_type t);
+		static char type_to_char(type t);
 
 		// TODO: deprecated, remove.
-		static char typeToChar(step_type t){
+		static char typeToChar(type t){
 			return type_to_char(t);
 		}
 	};

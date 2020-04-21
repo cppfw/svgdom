@@ -11,27 +11,26 @@ namespace svgdom{
  * @brief An element which has 'transform' attribute or similar.
  */
 struct transformable{
-
-	enum class transformation_type{
-		matrix,
-		MATRIX = matrix, // TODO: deprecated, remove.
-		translate,
-		TRANSLATE = translate, // TODO: deprecated, remove.
-		scale,
-		SCALE = scale, // TODO: deprecated, remove.
-		rotate,
-		ROTATE = rotate, // TODO: deprecated, remove.
-		skewx,
-		SKEWX = skewx, // TODO: deprecated, remove.
-		skewy,
-		SKEWY = skewy // TODO: deprecated, remove.
-	};
-
 	struct transformation{
-		transformation_type type;
+		enum class type{
+			matrix,
+			MATRIX = matrix, // TODO: deprecated, remove.
+			translate,
+			TRANSLATE = translate, // TODO: deprecated, remove.
+			scale,
+			SCALE = scale, // TODO: deprecated, remove.
+			rotate,
+			ROTATE = rotate, // TODO: deprecated, remove.
+			skewx,
+			SKEWX = skewx, // TODO: deprecated, remove.
+			skewy,
+			SKEWY = skewy // TODO: deprecated, remove.
+		};
+		
+		type type_;
 
 		// TODO: deprecated, remove.
-		typedef transformation_type Type_e;
+		typedef type Type_e;
 
 		union{
 			real a;

@@ -287,56 +287,56 @@ struct enable_background_property{
 // TODO: deprecated, remove.
 typedef enable_background_property EnableBackground;
 
-enum class style_value_type{
-	/**
-	 * @brief Invalid style value.
-	 */
-	unknown,
-	UNKNOWN = unknown, // TODO: deprecated, remove.
-
-	/**
-	 * @brief No special value is used.
-	 */
-	normal,
-	NORMAL = normal, // TODO: deprecated, remove.
-
-	/**
-	 * @brief For paint 'none' value.
-	 * For paint property (e.g. fill, stroke, etc.) means that color is 'none'
-	 */
-	none,
-	NONE = none, // TODO: deprecated, remove.
-
-	/**
-	 * @brief For paint 'currentColor' value.
-	 * Means "use 'color' property value".
-	 */
-	current_color,
-	CURRENT_COLOR = current_color, // TODO: deprecated, remove.
-
-	/**
-	 * @brief Property 'inherit' value.
-	 * Means that property inheritance was explicitly stated using the 'inherit' keyword.
-	 */
-	inherit,
-	INHERIT = inherit, // TODO: deprecated, remove.
-
-	/**
-	 * @brief For paint 'url' value.
-	 * Means that "str" member holds URL.
-	 */
-	url,
-	URL = url // TODO: deprecated, remove.
-};
-
 struct style_value{
-	style_value_type type = style_value_type::unknown;
+	enum class type{
+		/**
+		 * @brief Invalid style value.
+		 */
+		unknown,
+		UNKNOWN = unknown, // TODO: deprecated, remove.
+
+		/**
+		 * @brief No special value is used.
+		 */
+		normal,
+		NORMAL = normal, // TODO: deprecated, remove.
+
+		/**
+		 * @brief For paint 'none' value.
+		 * For paint property (e.g. fill, stroke, etc.) means that color is 'none'
+		 */
+		none,
+		NONE = none, // TODO: deprecated, remove.
+
+		/**
+		 * @brief For paint 'currentColor' value.
+		 * Means "use 'color' property value".
+		 */
+		current_color,
+		CURRENT_COLOR = current_color, // TODO: deprecated, remove.
+
+		/**
+		 * @brief Property 'inherit' value.
+		 * Means that property inheritance was explicitly stated using the 'inherit' keyword.
+		 */
+		inherit,
+		INHERIT = inherit, // TODO: deprecated, remove.
+
+		/**
+		 * @brief For paint 'url' value.
+		 * Means that "str" member holds URL.
+		 */
+		url,
+		URL = url // TODO: deprecated, remove.
+	};
+
+	type type_ = type::unknown;
 
 	// TODO: deprecated, remove.
-	typedef style_value_type Type_e;
+	typedef type Type_e;
 
 	bool is_valid()const noexcept{
-		return this->type != style_value_type::unknown;
+		return this->type_ != type::unknown;
 	}
 
 	// TODO: deprecated, remove.
@@ -345,7 +345,7 @@ struct style_value{
 	}
 
 	bool is_normal()const noexcept{
-		return this->type == style_value_type::normal;
+		return this->type_ == type::normal;
 	}
 
 	// TODO: deprecated, remove.
@@ -354,7 +354,7 @@ struct style_value{
 	}
 
 	bool is_none()const noexcept{
-		return this->type == style_value_type::none;
+		return this->type_ == type::none;
 	}
 
 	// TODO: deprecated, remove.
@@ -363,7 +363,7 @@ struct style_value{
 	}
 
 	bool is_url()const noexcept{
-		return this->type == style_value_type::url;
+		return this->type_ == type::url;
 	}
 
 	// TODO: deprecated, remove.

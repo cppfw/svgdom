@@ -32,15 +32,15 @@ void gradient::stop_element::accept(const_visitor& v) const {
 }
 
 std::string gradient::spread_method_to_string() const {
-	switch(this->spread_method){
+	switch(this->spread_method_){
 		default:
-		case gradient_spread_method::default_:
+		case gradient::spread_method::default_:
 			return "";
-		case gradient_spread_method::pad:
+		case gradient::spread_method::pad:
 			return "pad";
-		case gradient_spread_method::reflect:
+		case gradient::spread_method::reflect:
 			return "reflect";
-		case gradient_spread_method::repeat:
+		case gradient::spread_method::repeat:
 			return "repeat";
 	}
 }

@@ -37,7 +37,7 @@ std::string styleable::styles_to_string() const {
 		
 		s << propertyToString(st.first) << ":";
 		
-		if(st.second.type == style_value_type::inherit){
+		if(st.second.type_ == style_value::type::inherit){
 			s << "inherit";
 			continue;
 		}
@@ -136,7 +136,7 @@ style_value styleable::parse_style_property_value(style_property type, const std
 	style_value v;
 
 	if (str == "inherit") {
-		v.type = style_value_type::INHERIT;
+		v.type_ = style_value::type::inherit;
 		return v;
 	}
 
@@ -151,7 +151,7 @@ style_value styleable::parse_style_property_value(style_property type, const std
 			{
 				std::stringstream iss(str);
 				v.stroke_miterlimit = readInReal(iss);
-				v.type = style_value_type::NORMAL;
+				v.type_ = style_value::type::normal;
 				v.stroke_miterlimit = std::max(v.stroke_miterlimit, real(1)); // minimal value is 1
 			}
 			break;
@@ -163,7 +163,7 @@ style_value styleable::parse_style_property_value(style_property type, const std
 				std::istringstream iss(str);
 				v.opacity = readInReal(iss);
 				utki::clampRange(v.opacity, real(0), real(1));
-				v.type = style_value_type::NORMAL;
+				v.type_ = style_value::type::normal;
 			}
 			break;
 		case style_property::STOP_COLOR:
@@ -174,11 +174,11 @@ style_value styleable::parse_style_property_value(style_property type, const std
 			break;
 		case style_property::STROKE_WIDTH:
 			v.stroke_width = length::parse(str);
-			v.type = style_value_type::NORMAL;
+			v.type_ = style_value::type::normal;
 //				TRACE(<< "stroke-width read = " << v.length << std::endl)
 			break;
 		case style_property::STROKE_LINECAP:
-			v.type = style_value_type::NORMAL;
+			v.type_ = style_value::type::normal;
 			if(str == "butt"){
 				v.stroke_line_cap = stroke_line_cap::BUTT;
 			}else if(str == "round"){
@@ -186,12 +186,12 @@ style_value styleable::parse_style_property_value(style_property type, const std
 			}else if(str == "square"){
 				v.stroke_line_cap = stroke_line_cap::SQUARE;
 			}else{
-				v.type = style_value_type::UNKNOWN;
+				v.type_ = style_value::type::unknown;
 				TRACE(<< "unknown strokeLineCap value:" << str << std::endl)
 			}
 			break;
 		case style_property::STROKE_LINEJOIN:
-			v.type = style_value_type::NORMAL;
+			v.type_ = style_value::type::normal;
 			if(str == "miter"){
 				v.stroke_line_join = stroke_line_join::MITER;
 			}else if(str == "round"){
@@ -199,18 +199,18 @@ style_value styleable::parse_style_property_value(style_property type, const std
 			}else if(str == "bevel"){
 				v.stroke_line_join = stroke_line_join::BEVEL;
 			}else{
-				v.type = style_value_type::UNKNOWN;
+				v.type_ = style_value::type::unknown;
 				TRACE(<< "unknown strokeLineJoin value:" << str << std::endl)
 			}
 			break;
 		case style_property::FILL_RULE:
-			v.type = style_value_type::NORMAL;
+			v.type_ = style_value::type::normal;
 			if(str == "nonzero"){
 				v.fill_rule = fill_rule::NONZERO;
 			}else if(str == "evenodd"){
 				v.fill_rule = fill_rule::EVENODD;
 			}else{
-				v.type = style_value_type::UNKNOWN;
+				v.type_ = style_value::type::UNKNOWN;
 				TRACE(<< "unknown fill-rule value:" << str << std::endl)
 			}
 			break;
@@ -233,7 +233,7 @@ style_value styleable::parse_style_property_value(style_property type, const std
 
 style_value style_value::parse_url(const std::string& str) {
 	style_value ret;
-	ret.type = style_value_type::UNKNOWN;
+	ret.type_ = style_value::type::UNKNOWN;
 	
 	std::string url = "url(";
 	
@@ -254,7 +254,7 @@ style_value style_value::parse_url(const std::string& str) {
 	skipWhitespaces(s);
 	if(s.get() == ')'){
 		ret.str = tmpStr;
-		ret.type = style_value_type::URL;
+		ret.type_ = style_value::type::URL;
 	}
 
 	return ret;
@@ -640,7 +640,7 @@ style_value style_value::parse_display(const std::string& str) {
 		ret.display = i->second;
 	}
 	
-	ret.type = style_value_type::normal;
+	ret.type_ = style_value::type::normal;
 	
 	return ret;
 }
@@ -677,7 +677,7 @@ style_value style_value::parse_visibility(const std::string& str){
 		ret.visibility = i->second;
 	}
 	
-	ret.type = style_value_type::NORMAL;
+	ret.type_ = style_value::type::NORMAL;
 	
 	return ret;
 }
@@ -704,7 +704,7 @@ style_value style_value::parse_color_interpolation(const std::string& str) {
 		return ret;
 	}
 	
-	ret.type = style_value_type::NORMAL;
+	ret.type_ = style_value::type::NORMAL;
 	
 	return ret;
 }
@@ -782,7 +782,7 @@ style_value style_value::parse_enable_background(const std::string& str) {
 		ret.enable_background.value = svgdom::enable_background::accumulate; // default value
 	}
 	
-	ret.type = style_value_type::normal;
+	ret.type_ = style_value::type::normal;
 	
 	return ret;
 }
@@ -866,7 +866,7 @@ style_value style_value::parse_paint(const std::string& str){
 	style_value ret;
 	
 	if(str.size() == 0){
-		ret.type = style_value_type::none;
+		ret.type_ = style_value::type::none;
 		return ret;
 	}
 	
@@ -880,12 +880,12 @@ style_value style_value::parse_paint(const std::string& str){
 	}
 	
 	if(str == "none"){
-		ret.type = style_value_type::none;
+		ret.type_ = style_value::type::none;
 		return ret;
 	}
 	
 	if(str == "currentColor"){
-		ret.type = style_value_type::current_color;
+		ret.type_ = style_value::type::current_color;
 		return ret;
 	}
 	
@@ -914,16 +914,16 @@ style_value style_value::parse_paint(const std::string& str){
 				ret.color = (std::uint32_t(d[0]) << 4) | (std::uint32_t(d[0]))
 						| (std::uint32_t(d[1]) << 12) | (std::uint32_t(d[1]) << 8)
 						| (std::uint32_t(d[2]) << 20) | (std::uint32_t(d[2]) << 16);
-				ret.type = style_value_type::normal;
+				ret.type_ = style_value::type::normal;
 				break;
 			case 6:
 				ret.color = (std::uint32_t(d[0]) << 4) | (std::uint32_t(d[1]))
 						| (std::uint32_t(d[2]) << 12) | (std::uint32_t(d[3]) << 8)
 						| (std::uint32_t(d[4]) << 20) | (std::uint32_t(d[5]) << 16);
-				ret.type = style_value_type::normal;
+				ret.type_ = style_value::type::normal;
 				break;
 			default:
-				ret.type = style_value_type::none;
+				ret.type_ = style_value::type::none;
 				break;
 		}
 		
@@ -954,7 +954,7 @@ style_value style_value::parse_paint(const std::string& str){
 			
 			if(s.get() == ')'){
 				ret.color = r | (g << 8) | (b << 16);
-				ret.type = style_value_type::normal;
+				ret.type_ = style_value::type::normal;
 			}
 			return ret;
 		}
@@ -989,7 +989,7 @@ style_value style_value::parse_paint(const std::string& str){
 			
 			if(ss.get() == ')'){
 				ret.color = hslToRgb(real(h), real(s) / real(100), real(l) / real(100));
-				ret.type = style_value_type::normal;
+				ret.type_ = style_value::type::normal;
 			}
 			return ret;
 		}
@@ -1006,7 +1006,7 @@ style_value style_value::parse_paint(const std::string& str){
 			ASSERT(i->first == name)
 			ret.str = name;
 			ret.color = i->second;
-			ret.type = style_value_type::normal;
+			ret.type_ = style_value::type::normal;
 			return ret;
 		}
 	}
@@ -1015,15 +1015,15 @@ style_value style_value::parse_paint(const std::string& str){
 }
 
 std::string style_value::paint_to_string()const{
-	switch(this->type){
+	switch(this->type_){
 		default:
-		case style_value_type::none:
+		case style_value::type::none:
 			return "none";
-		case style_value_type::inherit:
+		case style_value::type::inherit:
 			return "inherit";
-		case style_value_type::current_color:
+		case style_value::type::current_color:
 			return "currentColor";
-		case style_value_type::normal:
+		case style_value::type::normal:
 			if(this->str.size() == 0){
 				// it is a # notation
 
@@ -1040,7 +1040,7 @@ std::string style_value::paint_to_string()const{
 			}else{
 				return this->str;
 			}
-		case style_value_type::url:
+		case style_value::type::url:
 			{
 				std::stringstream ss;
 				ss << "url(" << this->str << ")";
