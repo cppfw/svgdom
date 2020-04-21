@@ -3,7 +3,7 @@
 #include "elements/structurals.hpp"
 #include "elements/shapes.hpp"
 #include "elements/gradients.hpp"
-#include "elements/Filter.hpp"
+#include "elements/filter.hpp"
 #include "elements/image_element.hpp"
 #include "elements/text_element.hpp"
 
@@ -80,14 +80,14 @@ public:
 	virtual void visit(gradient::stop_element& e);
 	virtual void visit(linear_gradient_element& e);
 	virtual void visit(radial_gradient_element& e);
-	virtual void visit(FilterElement& e);
-	virtual void visit(FeGaussianBlurElement& e);
-	virtual void visit(FeColorMatrixElement& e);
+	virtual void visit(filter_element& e);
+	virtual void visit(fe_gaussian_blur_element& e);
+	virtual void visit(fe_color_matrix_element& e);
 	virtual void visit(FeBlendElement& e);
-	virtual void visit(FeCompositeElement& e);
+	virtual void visit(fe_composite_element& e);
 	virtual void visit(image_element& e);
 	virtual void visit(mask_element& e);
-	virtual void visit(TextElement& e);
+	virtual void visit(text_element& e);
 	
 	/**
 	 * @brief Default visit method.
@@ -152,14 +152,14 @@ public:
 	virtual void visit(const gradient::stop_element& e);
 	virtual void visit(const linear_gradient_element& e);
 	virtual void visit(const radial_gradient_element& e);
-	virtual void visit(const FilterElement& e);
-	virtual void visit(const FeGaussianBlurElement& e);
-	virtual void visit(const FeColorMatrixElement& e);
+	virtual void visit(const filter_element& e);
+	virtual void visit(const fe_gaussian_blur_element& e);
+	virtual void visit(const fe_color_matrix_element& e);
 	virtual void visit(const FeBlendElement& e);
-	virtual void visit(const FeCompositeElement& e);
+	virtual void visit(const fe_composite_element& e);
 	virtual void visit(const image_element& e);
 	virtual void visit(const mask_element& e);
-	virtual void visit(const TextElement& e);
+	virtual void visit(const text_element& e);
 	
 	/**
 	 * @brief Default visit method.

@@ -54,7 +54,7 @@ void visitor::visit(mask_element& e) {
 	this->defaultVisit(e, e);
 }
 
-void visitor::visit(TextElement& e){
+void visitor::visit(text_element& e){
 	this->defaultVisit(e, e);
 }
 
@@ -70,15 +70,15 @@ void visitor::visit(radial_gradient_element& e) {
 	this->defaultVisit(e, e);
 }
 
-void visitor::visit(FilterElement& e){
+void visitor::visit(filter_element& e){
 	this->defaultVisit(e, e);
 }
 
-void visitor::visit(FeGaussianBlurElement& e){
+void visitor::visit(fe_gaussian_blur_element& e){
 	this->defaultVisit(e);
 }
 
-void visitor::visit(FeColorMatrixElement& e){
+void visitor::visit(fe_color_matrix_element& e){
 	this->defaultVisit(e);
 }
 
@@ -86,7 +86,7 @@ void visitor::visit(FeBlendElement& e){
 	this->defaultVisit(e);
 }
 
-void visitor::visit(FeCompositeElement& e){
+void visitor::visit(fe_composite_element& e){
 	this->defaultVisit(e);
 }
 
@@ -163,7 +163,7 @@ void const_visitor::visit(const mask_element& e) {
 	this->defaultVisit(e, e);
 }
 
-void const_visitor::visit(const TextElement& e){
+void const_visitor::visit(const text_element& e){
 	this->defaultVisit(e, e);
 }
 
@@ -179,15 +179,15 @@ void const_visitor::visit(const radial_gradient_element& e) {
 	this->defaultVisit(e, e);
 }
 
-void const_visitor::visit(const FilterElement& e){
+void const_visitor::visit(const filter_element& e){
 	this->defaultVisit(e ,e);
 }
 
-void const_visitor::visit(const FeGaussianBlurElement& e){
+void const_visitor::visit(const fe_gaussian_blur_element& e){
 	this->defaultVisit(e);
 }
 
-void const_visitor::visit(const FeColorMatrixElement& e){
+void const_visitor::visit(const fe_color_matrix_element& e){
 	this->defaultVisit(e);
 }
 
@@ -195,7 +195,7 @@ void const_visitor::visit(const FeBlendElement& e){
 	this->defaultVisit(e);
 }
 
-void const_visitor::visit(const FeCompositeElement& e){
+void const_visitor::visit(const fe_composite_element& e){
 	this->defaultVisit(e);
 }
 

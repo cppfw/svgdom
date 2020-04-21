@@ -14,7 +14,7 @@ namespace svgdom{
 struct g_element :
 		public element,
 		public container,
-		public Transformable,
+		public transformable,
 		public styleable
 {
 	void accept(visitor& v)override;
@@ -27,7 +27,7 @@ typedef g_element GElement;
 struct defs_element :
 		public element,
 		public container,
-		public Transformable,
+		public transformable,
 		public styleable
 {
 	void accept(visitor& v)override;
@@ -39,7 +39,7 @@ typedef defs_element DefsElement;
 
 struct use_element :
 		public element,
-		public Transformable,
+		public transformable,
 		public referencing,
 		public rectangle,
 		public styleable
@@ -55,7 +55,7 @@ struct svg_element :
 		public element,
 		public container,
 		public rectangle,
-		public ViewBoxed,
+		public view_boxed,
 		public aspect_ratioed,
 		public styleable
 {
@@ -96,7 +96,7 @@ typedef svg_element SvgElement;
 struct symbol_element :
 		public element,
 		public container,
-		public ViewBoxed,
+		public view_boxed,
 		public aspect_ratioed,
 		public styleable
 {

@@ -45,8 +45,8 @@ void cloner::visit(const defs_element& e) {
 	this->cur_parent->children.push_back(std::move(clone));
 }
 
-void cloner::visit(const FilterElement& e) {
-	auto clone = std::make_unique<FilterElement>(e);
+void cloner::visit(const filter_element& e) {
+	auto clone = std::make_unique<filter_element>(e);
 	this->clone_children(e, *clone); 
 	this->cur_parent->children.push_back(std::move(clone));
 }
@@ -97,8 +97,8 @@ void cloner::visit(const polygon_element& e) {
     this->cur_parent->children.push_back(std::move(clone));
 }
 
-void cloner::visit(const FeGaussianBlurElement& e) {
-	auto clone = std::make_unique<FeGaussianBlurElement>(e);
+void cloner::visit(const fe_gaussian_blur_element& e) {
+	auto clone = std::make_unique<fe_gaussian_blur_element>(e);
     this->cur_parent->children.push_back(std::move(clone));
 }
 

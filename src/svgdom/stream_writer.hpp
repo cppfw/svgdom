@@ -23,9 +23,9 @@ protected:
 	void write(const container* children = nullptr);
 	
 	void add_element_attributes(const element& e);
-	void add_transformable_attributes(const Transformable& e);
+	void add_transformable_attributes(const transformable& e);
 	void add_styleable_attributes(const styleable& e);
-	void add_view_boxed_attributes(const ViewBoxed& e);
+	void add_view_boxed_attributes(const view_boxed& e);
 	void add_aspect_ratioed_attributes(const aspect_ratioed& e);
 	void add_rectangle_attributes(
 			const rectangle& e,
@@ -39,10 +39,10 @@ protected:
 	void add_shape_attributes(const shape& e);
 	void add_referencing_attributes(const referencing& e);
 	void add_gradient_attributes(const gradient& e);
-	void add_filter_primitive_attributes(const FilterPrimitive& e);
-	void add_inputable_attributes(const Inputable& e);
-	void add_second_inputable_attributes(const SecondInputable& e);
-	void add_text_positioning_attributes(const TextPositioning& e);
+	void add_filter_primitive_attributes(const filter_primitive& e);
+	void add_inputable_attributes(const inputable& e);
+	void add_second_inputable_attributes(const second_inputable& e);
+	void add_text_positioning_attributes(const text_positioning& e);
 	
 	// TODO: deprecated, remove.
 	std::string indentStr(){
@@ -75,7 +75,7 @@ protected:
 	}
 
 	// TODO: deprecated, remove.
-	void addTransformableAttributes(const Transformable& e){
+	void addTransformableAttributes(const transformable& e){
 		this->add_transformable_attributes(e);
 	}
 
@@ -85,7 +85,7 @@ protected:
 	}
 
 	// TODO: deprecated, remove.
-	void addViewBoxedAttributes(const ViewBoxed& e){
+	void addViewBoxedAttributes(const view_boxed& e){
 		this->add_view_boxed_attributes(e);
 	}
 
@@ -124,22 +124,22 @@ protected:
 	}
 
 	// TODO: deprecated, remove.
-	void addFilterPrimitiveAttributes(const FilterPrimitive& e){
+	void addFilterPrimitiveAttributes(const filter_primitive& e){
 		this->add_filter_primitive_attributes(e);
 	}
 
 	// TODO: deprecated, remove.
-	void addInputableAttributes(const Inputable& e){
+	void addInputableAttributes(const inputable& e){
 		this->add_inputable_attributes(e);
 	}
 
 	// TODO: deprecated, remove.
-	void addSecondInputableAttributes(const SecondInputable& e){
+	void addSecondInputableAttributes(const second_inputable& e){
 		this->add_second_inputable_attributes(e);
 	}
 
 	// TODO: deprecated, remove.
-	void addTextPositioningAttributes(const TextPositioning& e){
+	void addTextPositioningAttributes(const text_positioning& e){
 		this->add_text_positioning_attributes(e);
 	}
 public:
@@ -160,14 +160,14 @@ public:
 	void visit(const ellipse_element& e) override;
 	void visit(const rect_element& e) override;
 	void visit(const line_element& e) override;
-	void visit(const FilterElement& e) override;
-	void visit(const FeGaussianBlurElement& e) override;
-	void visit(const FeColorMatrixElement& e) override;
+	void visit(const filter_element& e) override;
+	void visit(const fe_gaussian_blur_element& e) override;
+	void visit(const fe_color_matrix_element& e) override;
 	void visit(const FeBlendElement& e) override;
-	void visit(const FeCompositeElement& e) override;
+	void visit(const fe_composite_element& e) override;
 	void visit(const image_element& e) override;
 	void visit(const mask_element& e) override;
-	void visit(const TextElement& e) override;
+	void visit(const text_element& e) override;
 };
 
 // TODO: deprecated, remove.

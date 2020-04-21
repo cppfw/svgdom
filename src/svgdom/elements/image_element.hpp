@@ -11,7 +11,7 @@ namespace svgdom{
 struct image_element :
 		public element,
 		public styleable,
-		public Transformable,
+		public transformable,
 		public rectangle,
 		public referencing,
 		public aspect_ratioed

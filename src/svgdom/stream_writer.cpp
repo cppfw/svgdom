@@ -76,7 +76,7 @@ void StreamWriter::add_element_attributes(const element& e) {
 	}
 }
 
-void StreamWriter::add_transformable_attributes(const Transformable& e) {
+void StreamWriter::add_transformable_attributes(const transformable& e) {
 	if(e.transformations.size() != 0){
 		this->add_attribute("transform", e.transformationsToString());
 	}
@@ -88,7 +88,7 @@ void StreamWriter::add_styleable_attributes(const styleable& e) {
 	}
 }
 
-void StreamWriter::add_view_boxed_attributes(const ViewBoxed& e) {
+void StreamWriter::add_view_boxed_attributes(const view_boxed& e) {
 	if (e.isViewBoxSpecified()) {
 		this->add_attribute("viewBox", e.viewBoxToString());
 	}
@@ -142,7 +142,7 @@ void StreamWriter::add_gradient_attributes(const gradient& e) {
 	}
 }
 
-void StreamWriter::add_filter_primitive_attributes(const FilterPrimitive& e) {
+void StreamWriter::add_filter_primitive_attributes(const filter_primitive& e) {
 	this->add_element_attributes(e);
 	this->add_styleable_attributes(e);
 	this->add_rectangle_attributes(e);
@@ -152,19 +152,19 @@ void StreamWriter::add_filter_primitive_attributes(const FilterPrimitive& e) {
 	}
 }
 
-void StreamWriter::add_inputable_attributes(const Inputable& e) {
+void StreamWriter::add_inputable_attributes(const inputable& e) {
 	if(e.in.length() != 0){
 		this->add_attribute("in", e.in);
 	}
 }
 
-void StreamWriter::add_second_inputable_attributes(const SecondInputable& e) {
+void StreamWriter::add_second_inputable_attributes(const second_inputable& e) {
 	if(e.in2.length() != 0){
 		this->add_attribute("in2", e.in2);
 	}
 }
 
-void StreamWriter::add_text_positioning_attributes(const TextPositioning& e) {
+void StreamWriter::add_text_positioning_attributes(const text_positioning& e) {
 	//TODO: add missing attributes
 }
 
@@ -410,7 +410,7 @@ void StreamWriter::visit(const mask_element& e) {
 	this->write(&e);
 }
 
-void StreamWriter::visit(const TextElement& e){
+void StreamWriter::visit(const text_element& e){
 	this->setName("text");
 	this->add_element_attributes(e);
 	this->add_transformable_attributes(e);
@@ -431,7 +431,7 @@ void StreamWriter::visit(const symbol_element& e) {
 	this->write(&e);
 }
 
-void StreamWriter::visit(const FilterElement& e){
+void StreamWriter::visit(const filter_element& e){
 	this->setName("filter");
 	this->add_element_attributes(e);
 	this->add_styleable_attributes(e);
@@ -457,19 +457,19 @@ void StreamWriter::visit(const FilterElement& e){
 	this->write(&e);
 }
 
-void StreamWriter::visit(const FeGaussianBlurElement& e){
+void StreamWriter::visit(const fe_gaussian_blur_element& e){
 	this->setName("feGaussianBlur");
 	
 	this->add_filter_primitive_attributes(e);
 	this->add_inputable_attributes(e);
 	
-	if(e.isStdDeviationSpecified()){
+	if(e.is_std_deviation_specified()){
 		this->add_attribute("stdDeviation", numberOptionalNumberToString(e.stdDeviation, -1));
 	}
 	this->write();
 }
 
-void StreamWriter::visit(const FeColorMatrixElement& e){
+void StreamWriter::visit(const fe_color_matrix_element& e){
 	this->setName("feColorMatrix");
 	
 	this->add_filter_primitive_attributes(e);
@@ -478,19 +478,19 @@ void StreamWriter::visit(const FeColorMatrixElement& e){
 	{
 		std::string typeValue;
 		
-		//write type
-		switch(e.type){
+		// write type
+		switch(e.type_){
 			default:
-			case FeColorMatrixElement::Type_e::MATRIX:
-				//default value is 'matrix', so omit type attribute.
+			case fe_color_matrix_element::type::matrix:
+				// default value is 'matrix', so omit type attribute.
 				break;
-			case FeColorMatrixElement::Type_e::HUE_ROTATE:
+			case fe_color_matrix_element::type::hue_rotate:
 				typeValue = "hueRotate";
 				break;
-			case FeColorMatrixElement::Type_e::SATURATE:
+			case fe_color_matrix_element::type::saturate:
 				typeValue = "saturate";
 				break;
-			case FeColorMatrixElement::Type_e::LUMINANCE_TO_ALPHA:
+			case fe_color_matrix_element::type::luminance_to_alpha:
 				typeValue = "luminanceToAlpha";
 				break;
 		}
@@ -501,10 +501,10 @@ void StreamWriter::visit(const FeColorMatrixElement& e){
 	
 	{
 		std::string valuesValue;
-		switch(e.type){
+		switch(e.type_){
 			default:
-			case FeColorMatrixElement::Type_e::MATRIX:
-				//write 20 values
+			case fe_color_matrix_element::type::matrix:
+				// write 20 values
 				{
 					std::stringstream ss;
 					for(unsigned i = 0; i != e.values.size(); ++i){
@@ -516,14 +516,14 @@ void StreamWriter::visit(const FeColorMatrixElement& e){
 					valuesValue = ss.str();
 				}
 				break;
-			case FeColorMatrixElement::Type_e::HUE_ROTATE:
-				//fall-through
-			case FeColorMatrixElement::Type_e::SATURATE:
-				//write 1 value
+			case fe_color_matrix_element::type::hue_rotate:
+				// fall-through
+			case fe_color_matrix_element::type::saturate:
+				// write 1 value
 				valuesValue = std::to_string(e.values[0]);
 				break;
-			case FeColorMatrixElement::Type_e::LUMINANCE_TO_ALPHA:
-				//'values' attribute can be omitted, so do nothing
+			case fe_color_matrix_element::type::luminance_to_alpha:
+				// 'values' attribute can be omitted, so do nothing
 				break;
 		}
 		if(valuesValue.length() != 0){
@@ -544,7 +544,7 @@ void StreamWriter::visit(const FeBlendElement& e){
 	
 	{
 		std::string modeValue;
-		switch(e.mode){
+		switch(e.mode_){
 			default:
 			case FeBlendElement::Mode_e::NORMAL:
 				//default value, can be omitted
@@ -568,7 +568,7 @@ void StreamWriter::visit(const FeBlendElement& e){
 	this->write();
 }
 
-void StreamWriter::visit(const FeCompositeElement& e){
+void StreamWriter::visit(const fe_composite_element& e){
 	this->setName("feComposite");
 	
 	this->add_filter_primitive_attributes(e);
@@ -577,24 +577,24 @@ void StreamWriter::visit(const FeCompositeElement& e){
 	
 	{
 		std::string operatorValue;
-		switch(e.operator_v){
+		switch(e.operator__){
 			default:
-			case FeCompositeElement::Operator_e::OVER:
+			case fe_composite_element::operator_::over:
 				//default value, can be omitted
 				break;
-			case FeCompositeElement::Operator_e::IN:
+			case fe_composite_element::operator_::in:
 				operatorValue = "in";
 				break;
-			case FeCompositeElement::Operator_e::OUT:
+			case fe_composite_element::operator_::out:
 				operatorValue = "out";
 				break;
-			case FeCompositeElement::Operator_e::ATOP:
+			case fe_composite_element::operator_::atop:
 				operatorValue = "atop";
 				break;
-			case FeCompositeElement::Operator_e::XOR:
+			case fe_composite_element::operator_::xor_:
 				operatorValue = "xor";
 				break;
-			case FeCompositeElement::Operator_e::ARITHMETIC:
+			case fe_composite_element::operator_::arithmetic:
 				operatorValue = "arithmetic";
 				break;
 		}

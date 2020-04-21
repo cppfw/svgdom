@@ -7,7 +7,7 @@
 using namespace svgdom;
 
 
-std::string Transformable::transformations_to_string() const {
+std::string transformable::transformations_to_string() const {
 	std::stringstream s;
 
 	bool isFirst = true;
@@ -23,34 +23,34 @@ std::string Transformable::transformations_to_string() const {
 			default:
 				ASSERT(false)
 				break;
-			case Transformation::Type_e::MATRIX:
+			case transformation_type::MATRIX:
 				s << "matrix(" << t.a << "," << t.b << "," << t.c << "," << t.d << "," << t.e << "," << t.f << ")";
 				break;
-			case Transformation::Type_e::TRANSLATE:
+			case transformation_type::TRANSLATE:
 				s << "translate(" << t.x;
 				if(t.y != 0){
 					s << "," << t.y;
 				}
 				s << ")";
 				break;
-			case Transformation::Type_e::SCALE:
+			case transformation_type::SCALE:
 				s << "scale(" << t.x;
 				if(t.x != t.y){
 					s << "," << t.y;
 				}
 				s << ")";
 				break;
-			case Transformation::Type_e::ROTATE:
+			case transformation_type::ROTATE:
 				s << "rotate(" << t.angle;
 				if(t.x != 0 || t.y != 0){
 					s << "," << t.x << "," << t.y;
 				}
 				s << ")";
 				break;
-			case Transformation::Type_e::SKEWX:
+			case transformation_type::SKEWX:
 				s << "skewX(" << t.angle << ")";
 				break;
-			case Transformation::Type_e::SKEWY:
+			case transformation_type::SKEWY:
 				s << "skewY(" << t.angle << ")";
 				break;
 		}
@@ -60,34 +60,34 @@ std::string Transformable::transformations_to_string() const {
 }
 
 
-decltype(Transformable::transformations) Transformable::parse(const std::string& str){
+decltype(transformable::transformations) transformable::parse(const std::string& str){
 	std::istringstream s(str);
 
 	s >> std::skipws;
 
 	skipWhitespaces(s);
 
-	decltype(Transformable::transformations) ret;
+	decltype(transformable::transformations) ret;
 
 	while(!s.eof()){
 		std::string transform = readTillCharOrWhitespace(s, '(');
 
 //		TRACE(<< "transform = " << transform << std::endl)
 
-		Transformation t;
+		transformation t;
 
 		if(transform == "matrix"){
-			t.type = Transformation::Type_e::MATRIX;
+			t.type = transformation_type::MATRIX;
 		}else if(transform == "translate"){
-			t.type = Transformation::Type_e::TRANSLATE;
+			t.type = transformation_type::TRANSLATE;
 		}else if(transform == "scale"){
-			t.type = Transformation::Type_e::SCALE;
+			t.type = transformation_type::SCALE;
 		}else if(transform == "rotate"){
-			t.type = Transformation::Type_e::ROTATE;
+			t.type = transformation_type::ROTATE;
 		}else if(transform == "skewX"){
-			t.type = Transformation::Type_e::SKEWX;
+			t.type = transformation_type::SKEWX;
 		}else if(transform == "skewY"){
-			t.type = Transformation::Type_e::SKEWY;
+			t.type = transformation_type::SKEWY;
 		}else{
 			return ret;//unknown transformation, stop parsing
 		}
@@ -105,7 +105,7 @@ decltype(Transformable::transformations) Transformable::parse(const std::string&
 			default:
 				ASSERT(false)
 				break;
-			case Transformation::Type_e::MATRIX:
+			case transformation_type::MATRIX:
 				t.a = readInReal(s);
 				if(s.fail()){
 					return ret;
@@ -136,7 +136,7 @@ decltype(Transformable::transformations) Transformable::parse(const std::string&
 					return ret;
 				}
 				break;
-			case Transformation::Type_e::TRANSLATE:
+			case transformation_type::TRANSLATE:
 				t.x = readInReal(s);
 				if(s.fail()){
 //					TRACE(<< "failed to read in x translation" << std::endl)
@@ -151,7 +151,7 @@ decltype(Transformable::transformations) Transformable::parse(const std::string&
 				}
 //				TRACE(<< "translation read: x,y = " << t.x << ", " << t.y << std::endl)
 				break;
-			case Transformation::Type_e::SCALE:
+			case transformation_type::SCALE:
 				t.x = readInReal(s);
 				if(s.fail()){
 					return ret;
@@ -163,7 +163,7 @@ decltype(Transformable::transformations) Transformable::parse(const std::string&
 					t.y = t.x;
 				}
 				break;
-			case Transformation::Type_e::ROTATE:
+			case transformation_type::ROTATE:
 				t.angle = readInReal(s);
 				if(s.fail()){
 					return ret;
@@ -182,8 +182,8 @@ decltype(Transformable::transformations) Transformable::parse(const std::string&
 					}
 				}
 				break;
-			case Transformation::Type_e::SKEWY:
-			case Transformation::Type_e::SKEWX:
+			case transformation_type::SKEWY:
+			case transformation_type::SKEWX:
 				t.angle = readInReal(s);
 				if(s.fail()){
 					return ret;

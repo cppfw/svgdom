@@ -229,7 +229,7 @@ void Parser::fillGradient(gradient& g) {
 		g.spreadMethod = gradientStringToSpreadMethod(*a);
 	}
 	if(auto a = this->findAttributeOfNamespace(XmlNamespace_e::SVG, "gradientTransform")){
-		g.transformations = Transformable::parse(*a);
+		g.transformations = transformable::parse(*a);
 	}
 	if(auto a = this->findAttributeOfNamespace(XmlNamespace_e::SVG, "gradientUnits")){
 		g.units = parseCoordinateUnits(*a);
@@ -293,20 +293,20 @@ void Parser::fillStyleable(styleable& s) {
 	}
 }
 
-void Parser::fillTransformable(Transformable& t) {
+void Parser::fillTransformable(transformable& t) {
 	ASSERT(t.transformations.size() == 0)
 	if(auto a = this->findAttributeOfNamespace(XmlNamespace_e::SVG, "transform")){
-		t.transformations = Transformable::parse(*a);
+		t.transformations = transformable::parse(*a);
 	}
 }
 
-void Parser::fillViewBoxed(ViewBoxed& v) {
+void Parser::fillViewBoxed(view_boxed& v) {
 	if(auto a = this->findAttributeOfNamespace(XmlNamespace_e::SVG, "viewBox")){
 		v.viewBox = svg_element::parseViewbox(*a);
 	}
 }
 
-void Parser::fillTextPositioning(TextPositioning& p) {
+void Parser::fillTextPositioning(text_positioning& p) {
 	//TODO: parse missing attributes
 }
 
@@ -390,7 +390,7 @@ void Parser::parseTextElement() {
 	ASSERT(this->getNamespace(this->cur_element).ns == XmlNamespace_e::SVG)
 	ASSERT(this->getNamespace(this->cur_element).name == "text")
 
-	auto ret = std::make_unique<TextElement>();
+	auto ret = std::make_unique<text_element>();
 
 	this->fillElement(*ret);
 	this->fillStyleable(*ret);
@@ -490,7 +490,7 @@ void Parser::parseFilterElement() {
 	ASSERT(this->getNamespace(this->cur_element).ns == XmlNamespace_e::SVG)
 	ASSERT(this->getNamespace(this->cur_element).name == "filter")
 	
-	auto ret = std::make_unique<FilterElement>();
+	auto ret = std::make_unique<filter_element>();
 	
 	this->fillElement(*ret);
 	this->fillStyleable(*ret);
@@ -516,7 +516,7 @@ void Parser::parseFilterElement() {
 	this->addElement(std::move(ret), c);
 }
 
-void Parser::fillFilterPrimitive(FilterPrimitive& p) {
+void Parser::fillFilterPrimitive(filter_primitive& p) {
 	this->fillElement(p);
 	this->fillRectangle(p);
 	this->fillStyleable(p);
@@ -526,13 +526,13 @@ void Parser::fillFilterPrimitive(FilterPrimitive& p) {
 	}
 }
 
-void Parser::fillInputable(Inputable& p) {
+void Parser::fillInputable(inputable& p) {
 	if(auto a = this->findAttributeOfNamespace(XmlNamespace_e::SVG, "in")){
 		p.in = *a;
 	}
 }
 
-void Parser::fillSecondInputable(SecondInputable& p) {
+void Parser::fillSecondInputable(second_inputable& p) {
 	if(auto a = this->findAttributeOfNamespace(XmlNamespace_e::SVG, "in2")){
 		p.in2 = *a;
 	}
@@ -543,7 +543,7 @@ void Parser::parseFeGaussianBlurElement() {
 	ASSERT(this->getNamespace(this->cur_element).ns == XmlNamespace_e::SVG)
 	ASSERT(this->getNamespace(this->cur_element).name == "feGaussianBlur")
 	
-	auto ret = std::make_unique<FeGaussianBlurElement>();
+	auto ret = std::make_unique<fe_gaussian_blur_element>();
 	
 	this->fillFilterPrimitive(*ret);
 	this->fillInputable(*ret);
@@ -559,29 +559,29 @@ void Parser::parseFeColorMatrixElement() {
 	ASSERT(this->getNamespace(this->cur_element).ns == XmlNamespace_e::SVG)
 	ASSERT(this->getNamespace(this->cur_element).name == "feColorMatrix")
 	
-	auto ret = std::make_unique<FeColorMatrixElement>();
+	auto ret = std::make_unique<fe_color_matrix_element>();
 	
 	this->fillFilterPrimitive(*ret);
 	this->fillInputable(*ret);
 	
 	if(auto a = this->findAttributeOfNamespace(XmlNamespace_e::SVG, "type")){
 		if(*a == "saturate"){
-			ret->type = FeColorMatrixElement::Type_e::SATURATE;
+			ret->type_ = fe_color_matrix_element::Type_e::SATURATE;
 		}else if(*a == "hueRotate"){
-			ret->type = FeColorMatrixElement::Type_e::HUE_ROTATE;
+			ret->type_ = fe_color_matrix_element::Type_e::HUE_ROTATE;
 		}else if(*a == "luminanceToAlpha"){
-			ret->type = FeColorMatrixElement::Type_e::LUMINANCE_TO_ALPHA;
+			ret->type_ = fe_color_matrix_element::Type_e::LUMINANCE_TO_ALPHA;
 		}else{
-			ret->type = FeColorMatrixElement::Type_e::MATRIX; // default value
+			ret->type_ = fe_color_matrix_element::Type_e::MATRIX; // default value
 		}
 	}
 	
 	if(auto a = this->findAttributeOfNamespace(XmlNamespace_e::SVG, "values")){
-		switch(ret->type){
+		switch(ret->type_){
 			default:
 				ASSERT(false) // should never get here, MATRIX should always be the default value
 				break;
-			case FeColorMatrixElement::Type_e::MATRIX:
+			case fe_color_matrix_element::Type_e::MATRIX:
 				// 20 values expected
 				{
 					std::istringstream ss(*a);
@@ -595,9 +595,9 @@ void Parser::parseFeColorMatrixElement() {
 					}
 				}
 				break;
-			case FeColorMatrixElement::Type_e::HUE_ROTATE:
+			case fe_color_matrix_element::Type_e::HUE_ROTATE:
 				// fall-through
-			case FeColorMatrixElement::Type_e::SATURATE:
+			case fe_color_matrix_element::Type_e::SATURATE:
 				// one value is expected
 				{
 					std::istringstream ss(*a);
@@ -607,7 +607,7 @@ void Parser::parseFeColorMatrixElement() {
 					}
 				}
 				break;
-			case FeColorMatrixElement::Type_e::LUMINANCE_TO_ALPHA:
+			case fe_color_matrix_element::Type_e::LUMINANCE_TO_ALPHA:
 				// no values are expected
 				break;
 		}
@@ -628,15 +628,15 @@ void Parser::parseFeBlendElement() {
 	
 	if(auto a = this->findAttributeOfNamespace(XmlNamespace_e::SVG, "mode")){
 		if(*a == "normal"){
-			ret->mode = FeBlendElement::Mode_e::NORMAL;
+			ret->mode_ = FeBlendElement::Mode_e::NORMAL;
 		}else if(*a == "multiply"){
-			ret->mode = FeBlendElement::Mode_e::MULTIPLY;
+			ret->mode_ = FeBlendElement::Mode_e::MULTIPLY;
 		}else if(*a == "screen"){
-			ret->mode = FeBlendElement::Mode_e::SCREEN;
+			ret->mode_ = FeBlendElement::Mode_e::SCREEN;
 		}else if(*a == "darken"){
-			ret->mode = FeBlendElement::Mode_e::DARKEN;
+			ret->mode_ = FeBlendElement::Mode_e::DARKEN;
 		}else if(*a == "lighten"){
-			ret->mode = FeBlendElement::Mode_e::LIGHTEN;
+			ret->mode_ = FeBlendElement::Mode_e::LIGHTEN;
 		}
 	}
 	
@@ -647,7 +647,7 @@ void Parser::parseFeCompositeElement() {
 	ASSERT(this->getNamespace(this->cur_element).ns == XmlNamespace_e::SVG)
 	ASSERT(this->getNamespace(this->cur_element).name == "feComposite")
 	
-	auto ret = std::make_unique<FeCompositeElement>();
+	auto ret = std::make_unique<fe_composite_element>();
 	
 	this->fillFilterPrimitive(*ret);
 	this->fillInputable(*ret);
@@ -655,17 +655,17 @@ void Parser::parseFeCompositeElement() {
 	
 	if(auto a = this->findAttributeOfNamespace(XmlNamespace_e::SVG, "operator")){
 		if(*a == "over"){
-			ret->operator_v = FeCompositeElement::Operator_e::OVER;
+			ret->operator__ = fe_composite_element::operator_::over;
 		}else if(*a == "in"){
-			ret->operator_v = FeCompositeElement::Operator_e::IN;
+			ret->operator__ = fe_composite_element::operator_::in;
 		}else if(*a == "out"){
-			ret->operator_v = FeCompositeElement::Operator_e::OUT;
+			ret->operator__ = fe_composite_element::operator_::out;
 		}else if(*a == "atop"){
-			ret->operator_v = FeCompositeElement::Operator_e::ATOP;
+			ret->operator__ = fe_composite_element::operator_::atop;
 		}else if(*a == "xor"){
-			ret->operator_v = FeCompositeElement::Operator_e::XOR;
+			ret->operator__ = fe_composite_element::operator_::xor_;
 		}else if(*a == "arithmetic"){
-			ret->operator_v = FeCompositeElement::Operator_e::ARITHMETIC;
+			ret->operator__ = fe_composite_element::operator_::arithmetic;
 		}
 	}
 	

@@ -19,7 +19,7 @@ class text_element :
 		public element,
 		public container,
 		public styleable,
-		public Transformable,
+		public transformable,
 		public text_positioning
 {
 public:

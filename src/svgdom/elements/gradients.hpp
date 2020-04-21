@@ -27,7 +27,7 @@ struct gradient :
 		public element,
 		public container,
 		public referencing,
-		public Transformable,
+		public transformable,
 		public styleable
 {
 	gradient_spread_method spread_method = gradient_spread_method::default_;

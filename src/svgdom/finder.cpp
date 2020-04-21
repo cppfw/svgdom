@@ -51,7 +51,7 @@ public:
 	void visit(const svgdom::defs_element& e) override{
 		this->visitContainer(e, e, e);
 	}
-	void visit(const svgdom::FilterElement& e) override{
+	void visit(const svgdom::filter_element& e) override{
 		this->visitContainer(e, e, e);
 	}
 	
@@ -82,7 +82,7 @@ public:
 	void visit(const svgdom::polygon_element& e) override{
 		this->visitElement(e, e);
 	}	
-	void visit(const svgdom::FeGaussianBlurElement& e) override{
+	void visit(const svgdom::fe_gaussian_blur_element& e) override{
 		this->visitElement(e, e);
 	}
 	void visit(const image_element& e) override{
