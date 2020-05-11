@@ -38,13 +38,13 @@ std::unique_ptr<svg_element> load(const std::string& s);
  * @param buf - input buffer to load SVG from.
  * @return unique pointer to the root of SVG document tree.
  */
-std::unique_ptr<svg_element> load(const utki::span<char> buf);
+std::unique_ptr<svg_element> load(utki::span<const char> buf);
 
 /**
  * @brief Load SVG document from memory buffer.
  * @param buf - input buffer to load SVG from.
  * @return unique pointer to the root of SVG document tree.
  */
-std::unique_ptr<svg_element> load(const utki::span<uint8_t> buf);
+std::unique_ptr<svg_element> load(utki::span<const uint8_t> buf);
 
 }

@@ -3,6 +3,7 @@
 
 #include <utki/debug.hpp>
 #include <utki/util.hpp>
+#include <utki/string.hpp>
 
 #include "malformed_svg_error.hpp"
 
@@ -875,18 +876,18 @@ void Parser::parseUseElement() {
 	this->addElement(std::move(ret));
 }
 
-void Parser::on_element_start(const utki::span<char> name) {
-	this->cur_element = utki::to_string(name);
+void Parser::on_element_start(utki::span<const char> name) {
+	this->cur_element = utki::make_string(name);
 }
 
-void Parser::on_element_end(const utki::span<char> name) {
+void Parser::on_element_end(utki::span<const char> name) {
 	this->popNamespaces();
 	this->parentStack.pop_back();
 }
 
-void Parser::on_attribute_parsed(const utki::span<char> name, const utki::span<char> value) {
+void Parser::on_attribute_parsed(utki::span<const char> name, utki::span<const char> value) {
 	ASSERT(this->cur_element.length() != 0)
-	this->attributes[utki::to_string(name)] = utki::to_string(value);
+	this->attributes[utki::make_string(name)] = utki::make_string(value);
 }
 
 void Parser::on_attributes_end(bool is_empty_element) {
@@ -903,7 +904,7 @@ void Parser::on_attributes_end(bool is_empty_element) {
 	this->cur_element.clear();
 }
 
-void Parser::on_content_parsed(const utki::span<char> str) {
+void Parser::on_content_parsed(utki::span<const char> str) {
 	// do nothing for now
 }
 

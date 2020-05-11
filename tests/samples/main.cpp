@@ -31,8 +31,5 @@ int main(int argc, char** argv){
 	
 	papki::FSFile outFile("out.svg");
 	papki::File::Guard fileGuard(outFile, papki::File::E_Mode::CREATE);
-	outFile.write(utki::wrapBuf<std::uint8_t>(
-			reinterpret_cast<const std::uint8_t*>(str.c_str()),
-			str.length()
-		));
+	outFile.write(utki::make_span(str));
 }

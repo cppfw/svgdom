@@ -49,14 +49,14 @@ std::unique_ptr<svg_element> svgdom::load(std::istream& s){
 }
 
 std::unique_ptr<svg_element> svgdom::load(const std::string& s){
-	return load(utki::make_span(s.c_str(), s.length()));
+	return load(utki::make_span(s));
 }
 
-std::unique_ptr<svg_element> svgdom::load(const utki::span<uint8_t> buf){
-	return load(utki::make_span(reinterpret_cast<const char*>(&*buf.begin()), buf.size()));
+std::unique_ptr<svg_element> svgdom::load(utki::span<const uint8_t> buf){
+	return load(utki::make_span(reinterpret_cast<const char*>(buf.data()), buf.size()));
 }
 
-std::unique_ptr<svg_element> svgdom::load(const utki::span<char> buf){
+std::unique_ptr<svg_element> svgdom::load(utki::span<const char> buf){
 	Parser parser;
 
 	parser.feed(buf);

@@ -67,11 +67,11 @@ class Parser : public mikroxml::parser{
 	void addElement(std::unique_ptr<Element> e);
 	void addElement(std::unique_ptr<Element> e, Container* c);
 	
-	void on_element_start(const utki::span<char> name) override;
-	void on_element_end(const utki::span<char> name) override;
-	void on_attribute_parsed(const utki::span<char> name, const utki::span<char> value) override;
+	void on_element_start(utki::span<const char> name) override;
+	void on_element_end(utki::span<const char> name) override;
+	void on_attribute_parsed(utki::span<const char> name, utki::span<const char> value) override;
 	void on_attributes_end(bool is_empty_element) override;
-	void on_content_parsed(const utki::span<char> str) override;
+	void on_content_parsed(utki::span<const char> str) override;
 
 	void fillElement(Element& e);
 	void fillReferencing(Referencing& e);
