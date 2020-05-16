@@ -14,7 +14,11 @@ struct shape :
 		public element,
 		public transformable,
 		public styleable
-{};
+{
+	const std::string& get_id()override{
+		return this->id;
+	}
+};
 
 // TODO: deprecated, remove.
 typedef shape Shape;
@@ -126,6 +130,12 @@ struct path_element : public shape{
 	
 	void accept(visitor& v)override;
 	void accept(const_visitor& v) const override;
+
+	static const std::string tag;
+
+	const std::string& get_tag()override{
+		return tag;
+	}
 };
 
 // TODO: deprecated, remove.
@@ -140,6 +150,12 @@ struct rect_element :
 	
 	void accept(visitor& v)override;
 	void accept(const_visitor& v) const override;
+
+	static const std::string tag;
+
+	const std::string& get_tag()override{
+		return tag;
+	}
 
 	static rectangle rectangle_default_values(){
 		return rectangle(
@@ -164,6 +180,12 @@ struct circle_element : public shape{
 	
 	void accept(visitor& v)override;
 	void accept(const_visitor& v) const override;
+
+	static const std::string tag;
+
+	const std::string& get_tag()override{
+		return tag;
+	}
 };
 
 // TODO: deprecated, remove.
@@ -177,6 +199,12 @@ struct ellipse_element : public shape{
 	
 	void accept(visitor& v)override;
 	void accept(const_visitor& v) const override;
+
+	static const std::string tag;
+
+	const std::string& get_tag()override{
+		return tag;
+	}
 };
 
 // TODO: deprecated, remove.
@@ -190,6 +218,12 @@ struct line_element : public shape{
 	
 	void accept(visitor& v)override;
 	void accept(const_visitor& v) const override;
+
+	static const std::string tag;
+
+	const std::string& get_tag()override{
+		return tag;
+	}
 };
 
 //TODO: deprecated, remove.
@@ -214,6 +248,12 @@ typedef polyline_shape PolylineShape;
 struct polyline_element : public polyline_shape{
 	void accept(visitor& v)override;
 	void accept(const_visitor& v) const override;
+
+	static const std::string tag;
+
+	const std::string& get_tag()override{
+		return tag;
+	}
 };
 
 //TODO: deprecated, remove.
@@ -222,6 +262,12 @@ typedef polyline_element PolylineElement;
 struct polygon_element : public polyline_shape{
 	void accept(visitor& v)override;
 	void accept(const_visitor& v) const override;
+
+	static const std::string tag;
+
+	const std::string& get_tag()override{
+		return tag;
+	}
 };
 
 // TODO: deprecated, remove.

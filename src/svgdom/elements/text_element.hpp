@@ -27,6 +27,16 @@ public:
 	
 	void accept(visitor& v) override;
 	void accept(const_visitor& v) const override;
+
+	const std::string& get_id()override{
+		return this->id;
+	}
+
+	static const std::string tag;
+
+	const std::string& get_tag()override{
+		return tag;
+	}
 };
 
 // TODO: deprecated, remove.

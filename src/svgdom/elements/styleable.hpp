@@ -523,6 +523,12 @@ typedef style_value StyleValue;
 struct styleable{
 	std::map<style_property, style_value> styles;
 
+	virtual const std::string& get_id() = 0;
+
+	virtual const std::string& get_tag() = 0;
+
+	virtual ~styleable()noexcept{}
+
 	const style_value* find_style_property(style_property p)const;
 
 	// TODO: deprecated, remove.

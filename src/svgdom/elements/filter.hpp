@@ -30,6 +30,16 @@ struct filter_element :
 	
 	void accept(visitor& v)override;
 	void accept(const_visitor& v) const override;
+
+	const std::string& get_id()override{
+		return this->id;
+	}
+
+	static const std::string tag;
+
+	const std::string& get_tag()override{
+		return tag;
+	}
 };
 
 // TODO: deprecated, remove.
@@ -41,6 +51,10 @@ struct filter_primitive :
 		public styleable
 {
 	std::string result;
+
+	const std::string& get_id()override{
+		return this->id;
+	}
 };
 
 // TODO: deprecated, remove.
@@ -106,6 +120,12 @@ struct fe_gaussian_blur_element :
 	
 	void accept(visitor& v)override;
 	void accept(const_visitor& v) const override;
+
+	static const std::string tag;
+
+	const std::string& get_tag()override{
+		return tag;
+	}
 };
 
 // TODO: deprecated, remove.
@@ -135,6 +155,12 @@ struct fe_color_matrix_element :
 	
 	void accept(visitor& v)override;
 	void accept(const_visitor& v) const override;
+
+	static const std::string tag;
+
+	const std::string& get_tag()override{
+		return tag;
+	}
 };
 
 // TODO: deprecated, remove.
@@ -163,6 +189,12 @@ struct fe_blend_element :
 	
 	void accept(visitor& v) override;
 	void accept(const_visitor& v) const override;
+
+	static const std::string tag;
+
+	const std::string& get_tag()override{
+		return tag;
+	}
 };
 
 // TODO: deprecated, remove.
@@ -198,6 +230,12 @@ struct fe_composite_element :
 	
 	void accept(visitor& v) override;
 	void accept(const_visitor& v) const override;
+
+	static const std::string tag;
+
+	const std::string& get_tag()override{
+		return tag;
+	}
 };
 
 // TODO: deprecated, remove.

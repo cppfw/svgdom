@@ -19,6 +19,16 @@ struct g_element :
 {
 	void accept(visitor& v)override;
 	void accept(const_visitor& v) const override;
+
+	const std::string& get_id()override{
+		return this->id;
+	}
+
+	static const std::string tag;
+
+	const std::string& get_tag()override{
+		return tag;
+	}
 };
 
 // TODO: deprecated, remove.
@@ -32,6 +42,16 @@ struct defs_element :
 {
 	void accept(visitor& v)override;
 	void accept(const_visitor& v) const override;
+
+	const std::string& get_id()override{
+		return this->id;
+	}
+
+	static const std::string tag;
+
+	const std::string& get_tag()override{
+		return tag;
+	}
 };
 
 // TODO: deprecated, remove.
@@ -46,6 +66,16 @@ struct use_element :
 {
 	void accept(visitor& v)override;
 	void accept(const_visitor& v) const override;
+
+	const std::string& get_id()override{
+		return this->id;
+	}
+
+	static const std::string tag;
+
+	const std::string& get_tag()override{
+		return tag;
+	}
 };
 
 // TODO: deprecated, remove.
@@ -61,6 +91,16 @@ struct svg_element :
 {
 	void accept(visitor& v)override;
 	void accept(const_visitor& v) const override;
+
+	const std::string& get_id()override{
+		return this->id;
+	}
+
+	static const std::string tag;
+
+	const std::string& get_tag()override{
+		return tag;
+	}
 	
 	/**
 	 * @brief Get aspect ratio of the element.
@@ -102,6 +142,16 @@ struct symbol_element :
 {
 	void accept(visitor& v)override;
 	void accept(const_visitor& v) const override;
+
+	const std::string& get_id()override{
+		return this->id;
+	}
+
+	static const std::string tag;
+
+	const std::string& get_tag()override{
+		return tag;
+	}
 };
 
 // TODO: deprecated, remove.
@@ -125,6 +175,16 @@ struct mask_element :
 	
 	void accept(visitor& v)override;
 	void accept(const_visitor& v) const override;
+
+	const std::string& get_id()override{
+		return this->id;
+	}
+
+	static const std::string tag;
+
+	const std::string& get_tag()override{
+		return tag;
+	}
 };
 
 // TODO: deprecated, remove.

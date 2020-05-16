@@ -48,6 +48,16 @@ struct gradient :
 		
 		void accept(visitor& v)override;
 		void accept(const_visitor& v) const override;
+
+		const std::string& get_id()override{
+			return this->id;
+		}
+
+		static const std::string tag;
+
+		const std::string& get_tag()override{
+			return tag;
+		}
 	};
 
 	// TODO: deprecated, remove.
@@ -59,6 +69,10 @@ struct gradient :
 	std::string spreadMethodToString()const{
 		return this->spread_method_to_string();
 	}
+
+	const std::string& get_id()override{
+		return this->id;
+	}
 };
 
 struct linear_gradient_element : public gradient{
@@ -69,6 +83,12 @@ struct linear_gradient_element : public gradient{
 	
 	void accept(visitor& v)override;
 	void accept(const_visitor& v) const override;
+
+	static const std::string tag;
+
+	const std::string& get_tag()override{
+		return tag;
+	}
 };
 
 struct radial_gradient_element : public gradient{
@@ -80,6 +100,12 @@ struct radial_gradient_element : public gradient{
 	
 	void accept(visitor& v)override;
 	void accept(const_visitor& v) const override;
+
+	static const std::string tag;
+
+	const std::string& get_tag()override{
+		return tag;
+	}
 };
 
 // TODO: deprecated, remove.
