@@ -551,28 +551,86 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\src\**\*.hpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="..\..\src\**\*.cpp" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\src\svgdom\cloner.cpp" />
+    <ClCompile Include="..\..\src\svgdom\dom.cpp" />
+    <ClCompile Include="..\..\src\svgdom\elements\aspect_ratioed.cpp" />
+    <ClCompile Include="..\..\src\svgdom\elements\element.cpp" />
+    <ClCompile Include="..\..\src\svgdom\elements\filter.cpp" />
+    <ClCompile Include="..\..\src\svgdom\elements\gradients.cpp" />
+    <ClCompile Include="..\..\src\svgdom\elements\image_element.cpp" />
+    <ClCompile Include="..\..\src\svgdom\elements\rectangle.cpp" />
+    <ClCompile Include="..\..\src\svgdom\elements\referencing.cpp" />
+    <ClCompile Include="..\..\src\svgdom\elements\shapes.cpp" />
+    <ClCompile Include="..\..\src\svgdom\elements\structurals.cpp" />
+    <ClCompile Include="..\..\src\svgdom\elements\style.cpp" />
+    <ClCompile Include="..\..\src\svgdom\elements\styleable.cpp" />
+    <ClCompile Include="..\..\src\svgdom\elements\text_element.cpp" />
+    <ClCompile Include="..\..\src\svgdom\elements\transformable.cpp" />
+    <ClCompile Include="..\..\src\svgdom\elements\view_boxed.cpp" />
+    <ClCompile Include="..\..\src\svgdom\finder.cpp" />
+    <ClCompile Include="..\..\src\svgdom\length.cpp" />
+    <ClCompile Include="..\..\src\svgdom\Parser.cpp" />
+    <ClCompile Include="..\..\src\svgdom\stream_writer.cpp" />
+    <ClCompile Include="..\..\src\svgdom\style_stack.cpp" />
+    <ClCompile Include="..\..\src\svgdom\util.cpp" />
+    <ClCompile Include="..\..\src\svgdom\visitor.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\src\svgdom\caster.hpp" />
+    <ClInclude Include="..\..\src\svgdom\cloner.hpp" />
+    <ClInclude Include="..\..\src\svgdom\config.hpp" />
+    <ClInclude Include="..\..\src\svgdom\dom.hpp" />
+    <ClInclude Include="..\..\src\svgdom\elements\AspectRatioed.hpp" />
+    <ClInclude Include="..\..\src\svgdom\elements\aspect_ratioed.hpp" />
+    <ClInclude Include="..\..\src\svgdom\elements\container.hpp" />
+    <ClInclude Include="..\..\src\svgdom\elements\CoordinateUnits.hpp" />
+    <ClInclude Include="..\..\src\svgdom\elements\coordinate_units.hpp" />
+    <ClInclude Include="..\..\src\svgdom\elements\element.hpp" />
+    <ClInclude Include="..\..\src\svgdom\elements\filter.hpp" />
+    <ClInclude Include="..\..\src\svgdom\elements\gradients.hpp" />
+    <ClInclude Include="..\..\src\svgdom\elements\ImageElement.hpp" />
+    <ClInclude Include="..\..\src\svgdom\elements\image_element.hpp" />
+    <ClInclude Include="..\..\src\svgdom\elements\rectangle.hpp" />
+    <ClInclude Include="..\..\src\svgdom\elements\referencing.hpp" />
+    <ClInclude Include="..\..\src\svgdom\elements\shapes.hpp" />
+    <ClInclude Include="..\..\src\svgdom\elements\structurals.hpp" />
+    <ClInclude Include="..\..\src\svgdom\elements\style.hpp" />
+    <ClInclude Include="..\..\src\svgdom\elements\styleable.hpp" />
+    <ClInclude Include="..\..\src\svgdom\elements\TextElement.hpp" />
+    <ClInclude Include="..\..\src\svgdom\elements\text_element.hpp" />
+    <ClInclude Include="..\..\src\svgdom\elements\transformable.hpp" />
+    <ClInclude Include="..\..\src\svgdom\elements\ViewBoxed.hpp" />
+    <ClInclude Include="..\..\src\svgdom\elements\view_boxed.hpp" />
+    <ClInclude Include="..\..\src\svgdom\finder.hpp" />
+    <ClInclude Include="..\..\src\svgdom\length.hpp" />
+    <ClInclude Include="..\..\src\svgdom\malformed_svg_error.hpp" />
+    <ClInclude Include="..\..\src\svgdom\StreamWriter.hpp" />
+    <ClInclude Include="..\..\src\svgdom\stream_writer.hpp" />
+    <ClInclude Include="..\..\src\svgdom\StyleStack.hpp" />
+    <ClInclude Include="..\..\src\svgdom\style_stack.hpp" />
+    <ClInclude Include="..\..\src\svgdom\visitor.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
-    <Import Project="..\packages\libutki.1.1.70\build\native\libutki.targets" Condition="Exists('..\packages\libutki.1.1.70\build\native\libutki.targets')" />
-    <Import Project="..\packages\libpapki.1.0.74\build\native\libpapki.targets" Condition="Exists('..\packages\libpapki.1.0.74\build\native\libpapki.targets')" />
     <Import Project="..\packages\libunikod.2.0.38\build\native\libunikod.targets" Condition="Exists('..\packages\libunikod.2.0.38\build\native\libunikod.targets')" />
-    <Import Project="..\packages\libmikroxml.0.1.19\build\native\libmikroxml.targets" Condition="Exists('..\packages\libmikroxml.0.1.19\build\native\libmikroxml.targets')" />
+    <Import Project="..\packages\libutki.1.1.89\build\native\libutki.targets" Condition="Exists('..\packages\libutki.1.1.89\build\native\libutki.targets')" />
+    <Import Project="..\packages\libmikroxml.0.1.22\build\native\libmikroxml.targets" Condition="Exists('..\packages\libmikroxml.0.1.22\build\native\libmikroxml.targets')" />
+    <Import Project="..\packages\libpapki.1.0.80\build\native\libpapki.targets" Condition="Exists('..\packages\libpapki.1.0.80\build\native\libpapki.targets')" />
+    <Import Project="..\packages\zlib_static.1.2.11.5\build\native\zlib_static.targets" Condition="Exists('..\packages\zlib_static.1.2.11.5\build\native\zlib_static.targets')" />
+    <Import Project="..\packages\libcssdom.0.1.2\build\native\libcssdom.targets" Condition="Exists('..\packages\libcssdom.0.1.2\build\native\libcssdom.targets')" />
   </ImportGroup>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\packages\libutki.1.1.70\build\native\libutki.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\libutki.1.1.70\build\native\libutki.targets'))" />
-    <Error Condition="!Exists('..\packages\libpapki.1.0.74\build\native\libpapki.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\libpapki.1.0.74\build\native\libpapki.targets'))" />
     <Error Condition="!Exists('..\packages\libunikod.2.0.38\build\native\libunikod.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\libunikod.2.0.38\build\native\libunikod.targets'))" />
-    <Error Condition="!Exists('..\packages\libmikroxml.0.1.19\build\native\libmikroxml.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\libmikroxml.0.1.19\build\native\libmikroxml.targets'))" />
+    <Error Condition="!Exists('..\packages\libutki.1.1.89\build\native\libutki.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\libutki.1.1.89\build\native\libutki.targets'))" />
+    <Error Condition="!Exists('..\packages\libmikroxml.0.1.22\build\native\libmikroxml.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\libmikroxml.0.1.22\build\native\libmikroxml.targets'))" />
+    <Error Condition="!Exists('..\packages\libpapki.1.0.80\build\native\libpapki.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\libpapki.1.0.80\build\native\libpapki.targets'))" />
+    <Error Condition="!Exists('..\packages\zlib_static.1.2.11.5\build\native\zlib_static.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\zlib_static.1.2.11.5\build\native\zlib_static.targets'))" />
+    <Error Condition="!Exists('..\packages\libcssdom.0.1.2\build\native\libcssdom.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\libcssdom.0.1.2\build\native\libcssdom.targets'))" />
   </Target>
 </Project>
