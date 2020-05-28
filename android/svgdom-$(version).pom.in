@@ -28,5 +28,12 @@
 		  <type>aar</type>
 		  <scope>compile</scope>
 	  </dependency>
+	  <dependency>
+		  <groupId>io.github.igagis</groupId>
+		  <artifactId>cssdom</artifactId>
+		  <version>[0.1.1,)</version>
+		  <type>aar</type>
+		  <scope>compile</scope>
+	  </dependency>
   </dependencies>
 </project>

@@ -49,6 +49,7 @@ dependencies {
     implementation 'io.github.igagis:utki:+'
     implementation 'io.github.igagis:papki:+'
     implementation 'io.github.igagis:mikroxml:+'
+    implementation 'io.github.igagis:cssdom:+'
 }
 
 

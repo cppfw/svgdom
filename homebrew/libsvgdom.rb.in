@@ -9,6 +9,7 @@ class Libsvgdom < Formula
   depends_on "myci" => :build
   depends_on "pkg-config" => :build
   depends_on "libmikroxml" => :build
+  depends_on "libcssdom"
   depends_on "libpapki"
   depends_on "libutki"
 

@@ -81,7 +81,7 @@ before_install:
     fi;
   fi
 - if [ "$TRAVIS_JOB_NAME" == "macosx" ]; then
-    brew install prorab prorab-extra libutki libpapki libmikroxml;
+    brew install prorab prorab-extra libutki libpapki libmikroxml libcssdom;
   fi
 - if [ "$TRAVIS_JOB_NAME" == "ios" ]; then
     sudo gem install cocoapods &&

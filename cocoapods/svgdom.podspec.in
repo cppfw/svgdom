@@ -18,4 +18,5 @@ Pod::Spec.new do |s|
   s.dependency 'utki', '>= 1.1.30'
   s.dependency 'papki', '>= 1.0.3'
   s.dependency 'mikroxml', '>= 0.1.1'
+  s.dependency 'cssdom', '>= 0.1.1'
 end
