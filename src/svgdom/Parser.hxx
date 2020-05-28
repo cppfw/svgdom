@@ -62,10 +62,9 @@ class Parser : public mikroxml::parser{
 	std::map<std::string, std::string> attributes;
 	
 	std::unique_ptr<svg_element> svg; // root svg element
-	std::vector<container*> element_stack;
+	std::vector<element*> element_stack;
 	
 	void addElement(std::unique_ptr<element> e);
-	void addElement(std::unique_ptr<element> e, container* c);
 	
 	void on_element_start(utki::span<const char> name) override;
 	void on_element_end(utki::span<const char> name) override;

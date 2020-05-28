@@ -1,7 +1,7 @@
 #include "Parser.hxx"
 #include "util.hxx"
 #include "malformed_svg_error.hpp"
-#include "caster.hpp"
+#include "casters.hpp"
 
 #include <utki/debug.hpp>
 #include <utki/util.hpp>
@@ -321,18 +321,16 @@ void Parser::fillAspectRatioed(aspect_ratioed& e){
 }
 
 void Parser::addElement(std::unique_ptr<element> e){
-	this->addElement(std::move(e), nullptr);
-}
-
-void Parser::addElement(std::unique_ptr<element> e, container* c){
 	ASSERT(e)
 	
+	auto elem = e.get();
+
 	if(this->element_stack.empty()){
 		if(this->svg){
 			throw malformed_svg_error("more than one root element found in the SVG document");
 		}
 
-		caster<svg_element> c;
+		element_caster<svg_element> c;
 		e->accept(c);
 		if(!c.pointer){
 			throw malformed_svg_error("first element of the SVG document is not an 'svg' element");
@@ -341,9 +339,14 @@ void Parser::addElement(std::unique_ptr<element> e, container* c){
 		e.release();
 		this->svg = decltype(this->svg)(c.pointer);
 	}else{
-		this->element_stack.back()->children.push_back(std::move(e));
+		container_caster c;
+		auto parent = this->element_stack.back();
+		parent->accept(c);
+		if(c.pointer){
+			c.pointer->children.push_back(std::move(e));
+		}
 	}
-	this->element_stack.push_back(c);
+	this->element_stack.push_back(elem);
 }
 
 void Parser::parseCircleElement(){
@@ -377,8 +380,7 @@ void Parser::parseDefsElement(){
 	this->fillTransformable(*ret);
 	this->fillStyleable(*ret);
 
-	auto c = ret.get();
-	this->addElement(std::move(ret), c);
+	this->addElement(std::move(ret));
 }
 
 void Parser::parseMaskElement() {
@@ -399,8 +401,7 @@ void Parser::parseMaskElement() {
 		ret->mask_content_units = parseCoordinateUnits(*a);
 	}
 	
-	auto c = ret.get();
-	this->addElement(std::move(ret), c);
+	this->addElement(std::move(ret));
 }
 
 void Parser::parseTextElement() {
@@ -416,8 +417,7 @@ void Parser::parseTextElement() {
 	
 	//TODO: parse missing text element attributes
 	
-	auto c = ret.get();
-	this->addElement(std::move(ret), c);
+	this->addElement(std::move(ret));
 }
 
 void Parser::parse_style_element(){
@@ -468,8 +468,7 @@ void Parser::parseGElement() {
 	this->fillTransformable(*ret);
 	this->fillStyleable(*ret);
 
-	auto c = ret.get();
-	this->addElement(std::move(ret), c);
+	this->addElement(std::move(ret));
 }
 
 void Parser::parseGradientStopElement() {
@@ -542,8 +541,7 @@ void Parser::parseFilterElement() {
 		ret->primitiveUnits = svgdom::parseCoordinateUnits(*a);
 	}
 	
-	auto c = ret.get();
-	this->addElement(std::move(ret), c);
+	this->addElement(std::move(ret));
 }
 
 void Parser::fillFilterPrimitive(filter_primitive& p) {
@@ -738,8 +736,7 @@ void Parser::parseLinearGradientElement() {
 		ret->y2 = length::parse(*a);
 	}
 
-	auto c = ret.get();
-	this->addElement(std::move(ret), c);
+	this->addElement(std::move(ret));
 }
 
 void Parser::parsePathElement() {
@@ -811,8 +808,7 @@ void Parser::parseRadialGradientElement() {
 		ret->fy = length::parse(*a);
 	}
 
-	auto c = ret.get();
-	this->addElement(std::move(ret), c);
+	this->addElement(std::move(ret));
 }
 
 void Parser::parseRectElement() {
@@ -846,8 +842,7 @@ void Parser::parseSvgElement() {
 	this->fillViewBoxed(*ret);
 	this->fillAspectRatioed(*ret);
 	
-	auto c = ret.get();
-	this->addElement(std::move(ret), c);
+	this->addElement(std::move(ret));
 }
 
 void Parser::parseImageElement() {
@@ -879,8 +874,7 @@ void Parser::parseSymbolElement() {
 	this->fillViewBoxed(*ret);
 	this->fillAspectRatioed(*ret);
 
-	auto c = ret.get();
-	this->addElement(std::move(ret), c);
+	this->addElement(std::move(ret));
 }
 
 void Parser::parseUseElement() {
