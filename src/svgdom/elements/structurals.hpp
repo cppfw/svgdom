@@ -20,13 +20,13 @@ struct g_element :
 	void accept(visitor& v)override;
 	void accept(const_visitor& v) const override;
 
-	const std::string& get_id()override{
+	const std::string& get_id()const override{
 		return this->id;
 	}
 
 	static const std::string tag;
 
-	const std::string& get_tag()override{
+	const std::string& get_tag()const override{
 		return tag;
 	}
 };
@@ -43,13 +43,13 @@ struct defs_element :
 	void accept(visitor& v)override;
 	void accept(const_visitor& v) const override;
 
-	const std::string& get_id()override{
+	const std::string& get_id()const override{
 		return this->id;
 	}
 
 	static const std::string tag;
 
-	const std::string& get_tag()override{
+	const std::string& get_tag()const override{
 		return tag;
 	}
 };
@@ -67,13 +67,13 @@ struct use_element :
 	void accept(visitor& v)override;
 	void accept(const_visitor& v) const override;
 
-	const std::string& get_id()override{
+	const std::string& get_id()const override{
 		return this->id;
 	}
 
 	static const std::string tag;
 
-	const std::string& get_tag()override{
+	const std::string& get_tag()const override{
 		return tag;
 	}
 };
@@ -92,13 +92,13 @@ struct svg_element :
 	void accept(visitor& v)override;
 	void accept(const_visitor& v) const override;
 
-	const std::string& get_id()override{
+	const std::string& get_id()const override{
 		return this->id;
 	}
 
 	static const std::string tag;
 
-	const std::string& get_tag()override{
+	const std::string& get_tag()const override{
 		return tag;
 	}
 	
@@ -143,13 +143,13 @@ struct symbol_element :
 	void accept(visitor& v)override;
 	void accept(const_visitor& v) const override;
 
-	const std::string& get_id()override{
+	const std::string& get_id()const override{
 		return this->id;
 	}
 
 	static const std::string tag;
 
-	const std::string& get_tag()override{
+	const std::string& get_tag()const override{
 		return tag;
 	}
 };
@@ -176,13 +176,13 @@ struct mask_element :
 	void accept(visitor& v)override;
 	void accept(const_visitor& v) const override;
 
-	const std::string& get_id()override{
+	const std::string& get_id()const override{
 		return this->id;
 	}
 
 	static const std::string tag;
 
-	const std::string& get_tag()override{
+	const std::string& get_tag()const override{
 		return tag;
 	}
 };

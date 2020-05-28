@@ -6,6 +6,7 @@
 #include "elements/filter.hpp"
 #include "elements/image_element.hpp"
 #include "elements/text_element.hpp"
+#include "elements/style.hpp"
 
 namespace svgdom{
 /**
@@ -88,6 +89,7 @@ public:
 	virtual void visit(image_element& e);
 	virtual void visit(mask_element& e);
 	virtual void visit(text_element& e);
+	virtual void visit(style_element& e);
 	
 	/**
 	 * @brief Default visit method.
@@ -155,11 +157,12 @@ public:
 	virtual void visit(const filter_element& e);
 	virtual void visit(const fe_gaussian_blur_element& e);
 	virtual void visit(const fe_color_matrix_element& e);
-	virtual void visit(const FeBlendElement& e);
+	virtual void visit(const fe_blend_element& e);
 	virtual void visit(const fe_composite_element& e);
 	virtual void visit(const image_element& e);
 	virtual void visit(const mask_element& e);
 	virtual void visit(const text_element& e);
+	virtual void visit(const style_element& e);
 	
 	/**
 	 * @brief Default visit method.

@@ -17,6 +17,7 @@
 #include "elements/filter.hpp"
 #include "elements/image_element.hpp"
 #include "elements/text_element.hpp"
+#include "elements/style.hpp"
 
 namespace svgdom{
 
@@ -60,12 +61,11 @@ class Parser : public mikroxml::parser{
 	std::string cur_element;
 	std::map<std::string, std::string> attributes;
 	
-	SvgElement* svg = nullptr;
-	Container root;
-	std::vector<Container*> parentStack = {&this->root};
+	std::unique_ptr<svg_element> svg; // root svg element
+	std::vector<container*> element_stack;
 	
-	void addElement(std::unique_ptr<Element> e);
-	void addElement(std::unique_ptr<Element> e, Container* c);
+	void addElement(std::unique_ptr<element> e);
+	void addElement(std::unique_ptr<element> e, container* c);
 	
 	void on_element_start(utki::span<const char> name) override;
 	void on_element_end(utki::span<const char> name) override;
@@ -76,12 +76,12 @@ class Parser : public mikroxml::parser{
 	void fillElement(Element& e);
 	void fillReferencing(Referencing& e);
 	void fillRectangle(
-			Rectangle& r,
-			const Rectangle& defaultValues = Rectangle(
-					Length::make(0, Length::Unit_e::PERCENT),
-					Length::make(0, Length::Unit_e::PERCENT),
-					Length::make(100, Length::Unit_e::PERCENT),
-					Length::make(100, Length::Unit_e::PERCENT)
+			rectangle& r,
+			const rectangle& defaultValues = rectangle(
+					length::make(0, length_unit::percent),
+					length::make(0, length_unit::percent),
+					length::make(100, length_unit::percent),
+					length::make(100, length_unit::percent)
 				)
 		);
 	void fillViewBoxed(ViewBoxed& v);
@@ -94,6 +94,7 @@ class Parser : public mikroxml::parser{
 	void fillInputable(Inputable& p);
 	void fillSecondInputable(SecondInputable& p);
 	void fillTextPositioning(TextPositioning& p);
+	void fill_style(style_element& e);
 	
 	void parseGradientStopElement();
 	void parseSvgElement();
@@ -118,10 +119,11 @@ class Parser : public mikroxml::parser{
 	void parseImageElement();
 	void parseMaskElement();
 	void parseTextElement();
+	void parse_style_element();
 	
-	void parseNode();
+	void parse_element();
 public:
-	std::unique_ptr<SvgElement> getDom();
+	std::unique_ptr<SvgElement> get_dom();
 };
 
 }

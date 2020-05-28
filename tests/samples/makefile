@@ -30,17 +30,18 @@ $(eval $(prorab-build-app))
 this_dirs := $(subst /, ,$(d))
 this_test := $(word $(words $(this_dirs)),$(this_dirs))
 
-this_svgs := $(patsubst %.svg,%,$(shell ls $(d)testdata/*.svg))
+this_svgs := $(patsubst $(d)%,%,$(shell ls $(d)testdata/*.svg))
 
 define this_rules
 test:: $(prorab_this_name)
 $(.RECIPEPREFIX)@myci-running-test.sh $(this_test)
 $(.RECIPEPREFIX)$(a)cp $(d)../../src/build/*.dll $(d) || true
 $(.RECIPEPREFIX)$(a)for f in $(this_svgs); do \
-	    echo "checking file $$$$f.svg" && \
-	    LD_LIBRARY_PATH=$(d)../../src/build DYLD_LIBRARY_PATH=$$$$LD_LIBRARY_PATH $(d)./parsesvg $$$$f.svg && \
-	    cmp out.svg $$$$f.svg.cmp; \
-	    if [ $$$$? -ne 0 ]; then myci-error.sh "parsed SVG did not match etalon sample"; exit 1; fi \
+	    echo "checking file $$$$f" && \
+	    (cd $(d) && LD_LIBRARY_PATH=../../src/build DYLD_LIBRARY_PATH=$$$$LD_LIBRARY_PATH ./parsesvg $$$$f ) && \
+	    cmp $(d)out.svg $(d)$$$$f.cmp; \
+	    if [ $$$$? -ne 0 ]; then myci-error.sh "parsed SVG did not match etalon sample"; exit 1; fi; \
+		rm -f $(d)out.svg; \
 	done
 $(.RECIPEPREFIX)@myci-passed.sh
 endef

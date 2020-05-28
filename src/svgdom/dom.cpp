@@ -25,7 +25,7 @@ std::unique_ptr<svg_element> svgdom::load(const papki::file& f){
 		parser.end();
 	}
 	
-	return parser.getDom();
+	return parser.get_dom();
 }
 
 std::unique_ptr<svg_element> svgdom::load(std::istream& s){
@@ -45,7 +45,7 @@ std::unique_ptr<svg_element> svgdom::load(std::istream& s){
 	}
 	parser.end();
 	
-	return parser.getDom();
+	return parser.get_dom();
 }
 
 std::unique_ptr<svg_element> svgdom::load(const std::string& s){
@@ -62,5 +62,5 @@ std::unique_ptr<svg_element> svgdom::load(utki::span<const char> buf){
 	parser.feed(buf);
 	parser.end();
 
-	return parser.getDom();
+	return parser.get_dom();
 }

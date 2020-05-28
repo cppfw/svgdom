@@ -19,13 +19,13 @@ struct image_element :
 	void accept(visitor& v) override;
 	void accept(const_visitor& v) const override;
 
-	const std::string& get_id()override{
+	const std::string& get_id()const override{
 		return this->id;
 	}
 
 	static const std::string tag;
 
-	const std::string& get_tag()override{
+	const std::string& get_tag()const override{
 		return tag;
 	}
 };

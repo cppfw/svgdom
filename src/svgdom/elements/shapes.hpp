@@ -15,7 +15,7 @@ struct shape :
 		public transformable,
 		public styleable
 {
-	const std::string& get_id()override{
+	const std::string& get_id()const override{
 		return this->id;
 	}
 };
@@ -133,7 +133,7 @@ struct path_element : public shape{
 
 	static const std::string tag;
 
-	const std::string& get_tag()override{
+	const std::string& get_tag()const override{
 		return tag;
 	}
 };
@@ -153,7 +153,7 @@ struct rect_element :
 
 	static const std::string tag;
 
-	const std::string& get_tag()override{
+	const std::string& get_tag()const override{
 		return tag;
 	}
 
@@ -183,7 +183,7 @@ struct circle_element : public shape{
 
 	static const std::string tag;
 
-	const std::string& get_tag()override{
+	const std::string& get_tag()const override{
 		return tag;
 	}
 };
@@ -202,7 +202,7 @@ struct ellipse_element : public shape{
 
 	static const std::string tag;
 
-	const std::string& get_tag()override{
+	const std::string& get_tag()const override{
 		return tag;
 	}
 };
@@ -221,7 +221,7 @@ struct line_element : public shape{
 
 	static const std::string tag;
 
-	const std::string& get_tag()override{
+	const std::string& get_tag()const override{
 		return tag;
 	}
 };
@@ -251,7 +251,7 @@ struct polyline_element : public polyline_shape{
 
 	static const std::string tag;
 
-	const std::string& get_tag()override{
+	const std::string& get_tag()const override{
 		return tag;
 	}
 };
@@ -265,7 +265,7 @@ struct polygon_element : public polyline_shape{
 
 	static const std::string tag;
 
-	const std::string& get_tag()override{
+	const std::string& get_tag()const override{
 		return tag;
 	}
 };

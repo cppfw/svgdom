@@ -31,13 +31,13 @@ struct filter_element :
 	void accept(visitor& v)override;
 	void accept(const_visitor& v) const override;
 
-	const std::string& get_id()override{
+	const std::string& get_id()const override{
 		return this->id;
 	}
 
 	static const std::string tag;
 
-	const std::string& get_tag()override{
+	const std::string& get_tag()const override{
 		return tag;
 	}
 };
@@ -52,7 +52,7 @@ struct filter_primitive :
 {
 	std::string result;
 
-	const std::string& get_id()override{
+	const std::string& get_id()const override{
 		return this->id;
 	}
 };
@@ -123,7 +123,7 @@ struct fe_gaussian_blur_element :
 
 	static const std::string tag;
 
-	const std::string& get_tag()override{
+	const std::string& get_tag()const override{
 		return tag;
 	}
 };
@@ -158,7 +158,7 @@ struct fe_color_matrix_element :
 
 	static const std::string tag;
 
-	const std::string& get_tag()override{
+	const std::string& get_tag()const override{
 		return tag;
 	}
 };
@@ -192,7 +192,7 @@ struct fe_blend_element :
 
 	static const std::string tag;
 
-	const std::string& get_tag()override{
+	const std::string& get_tag()const override{
 		return tag;
 	}
 };
@@ -233,7 +233,7 @@ struct fe_composite_element :
 
 	static const std::string tag;
 
-	const std::string& get_tag()override{
+	const std::string& get_tag()const override{
 		return tag;
 	}
 };

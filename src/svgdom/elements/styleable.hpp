@@ -1,6 +1,9 @@
 #pragma once
 
 #include <map>
+#include <vector>
+
+#include <cssdom/dom.hpp>
 
 #include "../config.hpp"
 #include "../length.hpp"
@@ -520,12 +523,14 @@ typedef style_value StyleValue;
 /**
  * @brief An element which has 'style' attribute or can be styled.
  */
-struct styleable{
+struct styleable : public cssdom::styleable{
 	std::map<style_property, style_value> styles;
 
-	virtual const std::string& get_id() = 0;
+	std::vector<std::string> classes;
 
-	virtual const std::string& get_tag() = 0;
+	utki::span<const std::string> get_classes()const override{
+		return utki::make_span(this->classes);
+	}
 
 	virtual ~styleable()noexcept{}
 

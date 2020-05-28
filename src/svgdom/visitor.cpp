@@ -2,55 +2,55 @@
 
 using namespace svgdom;
 
-void visitor::visit(path_element& e) {
+void visitor::visit(path_element& e){
 	this->defaultVisit(e);
 }
 
-void visitor::visit(rect_element& e) {
+void visitor::visit(rect_element& e){
 	this->defaultVisit(e);
 }
 
-void visitor::visit(circle_element& e) {
+void visitor::visit(circle_element& e){
 	this->defaultVisit(e);
 }
 
-void visitor::visit(ellipse_element& e) {
+void visitor::visit(ellipse_element& e){
 	this->defaultVisit(e);
 }
 
-void visitor::visit(line_element& e) {
+void visitor::visit(line_element& e){
 	this->defaultVisit(e);
 }
 
-void visitor::visit(polyline_element& e) {
+void visitor::visit(polyline_element& e){
 	this->defaultVisit(e);
 }
 
-void visitor::visit(polygon_element& e) {
+void visitor::visit(polygon_element& e){
 	this->defaultVisit(e);
 }
 
-void visitor::visit(g_element& e) {
+void visitor::visit(g_element& e){
 	this->defaultVisit(e, e);
 }
 
-void visitor::visit(svg_element& e) {
+void visitor::visit(svg_element& e){
 	this->defaultVisit(e, e);
 }
 
-void visitor::visit(symbol_element& e) {
+void visitor::visit(symbol_element& e){
 	this->defaultVisit(e, e);
 }
 
-void visitor::visit(use_element& e) {
+void visitor::visit(use_element& e){
 	this->defaultVisit(e);
 }
 
-void visitor::visit(defs_element& e) {
+void visitor::visit(defs_element& e){
 	this->defaultVisit(e, e);
 }
 
-void visitor::visit(mask_element& e) {
+void visitor::visit(mask_element& e){
 	this->defaultVisit(e, e);
 }
 
@@ -58,15 +58,19 @@ void visitor::visit(text_element& e){
 	this->defaultVisit(e, e);
 }
 
-void visitor::visit(gradient::stop_element& e) {
+void visitor::visit(style_element& e){
 	this->defaultVisit(e);
 }
 
-void visitor::visit(linear_gradient_element& e) {
+void visitor::visit(gradient::stop_element& e){
+	this->defaultVisit(e);
+}
+
+void visitor::visit(linear_gradient_element& e){
 	this->defaultVisit(e, e);
 }
 
-void visitor::visit(radial_gradient_element& e) {
+void visitor::visit(radial_gradient_element& e){
 	this->defaultVisit(e, e);
 }
 
@@ -94,7 +98,7 @@ void visitor::visit(image_element& e){
 	this->defaultVisit(e);
 }
 
-void visitor::default_visit(element& e, container& c) {
+void visitor::default_visit(element& e, container& c){
 	this->default_visit(e);
 	this->relay_accept(c);
 }
@@ -167,6 +171,10 @@ void const_visitor::visit(const text_element& e){
 	this->defaultVisit(e, e);
 }
 
+void const_visitor::visit(const style_element& e){
+	this->defaultVisit(e);
+}
+
 void const_visitor::visit(const gradient::stop_element& e) {
 	this->defaultVisit(e);
 }
@@ -191,7 +199,7 @@ void const_visitor::visit(const fe_color_matrix_element& e){
 	this->defaultVisit(e);
 }
 
-void const_visitor::visit(const FeBlendElement& e){
+void const_visitor::visit(const fe_blend_element& e){
 	this->defaultVisit(e);
 }
 
