@@ -24,7 +24,7 @@ Package: libsvgdom-dev
 Section: libdevel
 Architecture: any
 Depends: libsvgdom$(soname) (= ${binary:Version}), libsvgdom$(soname)-dbg (= ${binary:Version}), ${misc:Depends},
-		libutki-dev, libpapki-dev
+		libutki-dev, libpapki-dev, libcssdom-dev
 Suggests: libsvgdom-doc
 Description: cross-platform C++ library for reading SVG files.
  SVG document object model library.
