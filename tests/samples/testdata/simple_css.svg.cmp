@@ -1,4 +1,15 @@
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1">
-	<circle cx="40" cy="40" r="24"/>
-	<circle cx="40" cy="100" r="24"/>
+	<style>
+		<![CDATA[
+		circle.myGreen {
+			fill: #00cc00; stroke: #006600; 
+		}
+		circle.myRed {
+			fill: #cc0000; stroke: #660000; 
+		}
+		]]>
+	</style>
+	<circle class="myGreen" cx="40" cy="40" r="24"/>
+	<circle class="myRed" cx="40" cy="100" r="24"/>
+	<style/>
 </svg>

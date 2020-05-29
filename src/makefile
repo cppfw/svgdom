@@ -28,7 +28,7 @@ this_cxxflags += -fstrict-aliasing # in order to comply with the c++ standard mo
 this_cxxflags += -std=c++14
 this_cxxflags += -g
 
-this_ldlibs += -lpapki -lmikroxml -lstdc++ -lm
+this_ldlibs += -lcssdom -lpapki -lmikroxml -lutki -lstdc++ -lm
 
 ifeq ($(os),linux)
     this_cxxflags += -fPIC # Since we are building shared library, we need Position-Independend Code

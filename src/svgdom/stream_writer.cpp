@@ -1,6 +1,9 @@
 #include "stream_writer.hpp"
 
 #include <utki/util.hpp>
+#include <utki/string.hpp>
+
+#include <papki/vector_file.hpp>
 
 #include "util.hxx"
 
@@ -26,7 +29,7 @@ void StreamWriter::add_attribute(const std::string& name, real value){
 	this->add_attribute(name, ss.str());
 }
 
-void StreamWriter::write(const container* children) {
+void StreamWriter::write(const container* children, const std::string& content){
 	auto ind = indent_str();
 
 	auto tag = std::move(this->name);
@@ -40,17 +43,20 @@ void StreamWriter::write(const container* children) {
 	this->attributes.clear();
 	this->name.clear();
 	
-	if (!children || children->children.size() == 0) {
+	if((!children || children->children.size() == 0) && content.empty()){
 		this->s << "/>";
-	} else {
+	}else{
 		this->s << ">" << std::endl;
-		this->childrenToStream(*children);
+		if(children){
+			this->childrenToStream(*children);
+		}
+		this->s << content;
 		this->s << ind << "</" << tag << ">";
 	}
 	this->s << std::endl;
 }
 
-std::string StreamWriter::indent_str() {
+std::string StreamWriter::indent_str(){
 	std::string ind;
 
 	std::stringstream ss;
@@ -60,7 +66,7 @@ std::string StreamWriter::indent_str() {
 	return ss.str();
 }
 
-void StreamWriter::childrenToStream(const container& e) {
+void StreamWriter::childrenToStream(const container& e){
 	++this->indent;
 	utki::ScopeExit scopeExit([this]() {
 		--this->indent;
@@ -70,37 +76,40 @@ void StreamWriter::childrenToStream(const container& e) {
 	}
 }
 
-void StreamWriter::add_element_attributes(const element& e) {
+void StreamWriter::add_element_attributes(const element& e){
 	if(e.id.length() != 0){
 		this->add_attribute("id", e.id);
 	}
 }
 
-void StreamWriter::add_transformable_attributes(const transformable& e) {
+void StreamWriter::add_transformable_attributes(const transformable& e){
 	if(e.transformations.size() != 0){
 		this->add_attribute("transform", e.transformationsToString());
 	}
 }
 
-void StreamWriter::add_styleable_attributes(const styleable& e) {
-	if(e.styles.size() != 0){
+void StreamWriter::add_styleable_attributes(const styleable& e){
+	if(!e.styles.empty()){
 		this->add_attribute("style", e.stylesToString());
+	}
+	if(!e.classes.empty()){
+		this->add_attribute("class", e.classes_to_string());
 	}
 }
 
-void StreamWriter::add_view_boxed_attributes(const view_boxed& e) {
-	if (e.isViewBoxSpecified()) {
+void StreamWriter::add_view_boxed_attributes(const view_boxed& e){
+	if(e.isViewBoxSpecified()){
 		this->add_attribute("viewBox", e.viewBoxToString());
 	}
 }
 
-void StreamWriter::add_aspect_ratioed_attributes(const aspect_ratioed& e) {
-	if (e.preserveAspectRatio.preserve != aspect_ratioed::PreserveAspectRatio_e::NONE || e.preserveAspectRatio.defer || e.preserveAspectRatio.slice) {
+void StreamWriter::add_aspect_ratioed_attributes(const aspect_ratioed& e){
+	if(e.preserveAspectRatio.preserve != aspect_ratioed::PreserveAspectRatio_e::NONE || e.preserveAspectRatio.defer || e.preserveAspectRatio.slice){
 		this->add_attribute("preserveAspectRatio", e.preserve_aspect_ratio.to_string());
 	}
 }
 
-void StreamWriter::add_rectangle_attributes(const rectangle& e, const rectangle& defaultValues) {
+void StreamWriter::add_rectangle_attributes(const rectangle& e, const rectangle& defaultValues){
 	if(e.isXSpecified() && e.x != defaultValues.x){
 		this->add_attribute("x", e.x);
 	}
@@ -118,13 +127,13 @@ void StreamWriter::add_rectangle_attributes(const rectangle& e, const rectangle&
 	}
 }
 
-void StreamWriter::add_referencing_attributes(const referencing& e) {
+void StreamWriter::add_referencing_attributes(const referencing& e){
 	if(e.iri.length() != 0){
 		this->add_attribute("xlink:href", e.iri);
 	}
 }
 
-void StreamWriter::add_gradient_attributes(const gradient& e) {
+void StreamWriter::add_gradient_attributes(const gradient& e){
 	this->add_element_attributes(e);
 	this->add_referencing_attributes(e);
 	this->add_styleable_attributes(e);
@@ -177,7 +186,7 @@ void StreamWriter::add_shape_attributes(const shape& e) {
 
 
 void StreamWriter::visit(const g_element& e) {
-	this->setName("g");
+	this->setName(g_element::tag);
 	this->add_element_attributes(e);
 	this->add_transformable_attributes(e);
 	this->add_styleable_attributes(e);
@@ -185,7 +194,7 @@ void StreamWriter::visit(const g_element& e) {
 }
 
 void StreamWriter::visit(const svg_element& e) {
-	this->setName("svg");
+	this->setName(svg_element::tag);
 	
 	if(this->indent == 0){//if outermost "svg" element
 		this->add_attribute("xmlns", "http://www.w3.org/2000/svg");
@@ -202,7 +211,7 @@ void StreamWriter::visit(const svg_element& e) {
 }
 
 void StreamWriter::visit(const image_element& e){
-	this->setName("image");
+	this->setName(image_element::tag);
 	
 	this->add_element_attributes(e);
 	this->add_styleable_attributes(e);
@@ -222,7 +231,7 @@ void StreamWriter::visit(const image_element& e){
 }
 
 void StreamWriter::visit(const line_element& e) {
-	this->setName("line");
+	this->setName(line_element::tag);
 	this->add_shape_attributes(e);
 	
 	if(e.x1.unit != length_unit::unknown){
@@ -245,7 +254,7 @@ void StreamWriter::visit(const line_element& e) {
 }
 
 void StreamWriter::visit(const rect_element& e) {
-	this->setName("rect");
+	this->setName(rect_element::tag);
 	this->add_shape_attributes(e);
 	this->add_rectangle_attributes(e, rect_element::rectangle_default_values());
 	
@@ -261,7 +270,7 @@ void StreamWriter::visit(const rect_element& e) {
 }
 
 void StreamWriter::visit(const ellipse_element& e) {
-	this->setName("ellipse");
+	this->setName(ellipse_element::tag);
 	this->add_shape_attributes(e);
 	
 	if(e.cx.unit != length_unit::unknown){
@@ -284,7 +293,7 @@ void StreamWriter::visit(const ellipse_element& e) {
 }
 
 void StreamWriter::visit(const polygon_element& e) {
-	this->setName("polygon");
+	this->setName(polygon_element::tag);
 	this->add_shape_attributes(e);
 	if(e.points.size() != 0){
 		this->add_attribute("points", e.pointsToString());
@@ -293,7 +302,7 @@ void StreamWriter::visit(const polygon_element& e) {
 }
 
 void StreamWriter::visit(const polyline_element& e) {
-	this->setName("polyline");
+	this->setName(polyline_element::tag);
 	this->add_shape_attributes(e);
 	if(e.points.size() != 0){
 		this->add_attribute("points", e.pointsToString());
@@ -302,7 +311,7 @@ void StreamWriter::visit(const polyline_element& e) {
 }
 
 void StreamWriter::visit(const circle_element& e) {
-	this->setName("circle");
+	this->setName(circle_element::tag);
 	this->add_shape_attributes(e);
 	
 	if(e.cx.unit != length_unit::unknown){
@@ -320,7 +329,7 @@ void StreamWriter::visit(const circle_element& e) {
 }
 
 void StreamWriter::visit(const path_element& e){
-	this->setName("path");
+	this->setName(path_element::tag);
 	this->add_shape_attributes(e);
 	if(e.path.size() != 0){
 		this->add_attribute("d", e.pathToString());
@@ -329,7 +338,7 @@ void StreamWriter::visit(const path_element& e){
 }
 
 void StreamWriter::visit(const use_element& e) {
-	this->setName("use");
+	this->setName(use_element::tag);
 	this->add_element_attributes(e);
 	this->add_transformable_attributes(e);
 	this->add_styleable_attributes(e);
@@ -339,7 +348,7 @@ void StreamWriter::visit(const use_element& e) {
 }
 
 void StreamWriter::visit(const gradient::stop_element& e) {
-	this->setName("stop");
+	this->setName(gradient::stop_element::tag);
 	this->add_attribute("offset", e.offset);
 	this->add_element_attributes(e);
 	this->add_styleable_attributes(e);
@@ -347,7 +356,7 @@ void StreamWriter::visit(const gradient::stop_element& e) {
 }
 
 void StreamWriter::visit(const radial_gradient_element& e) {
-	this->setName("radialGradient");
+	this->setName(radial_gradient_element::tag);
 	this->add_gradient_attributes(e);
 	if(e.cx.unit != length_unit::PERCENT || e.cx.value != 50){
 		this->add_attribute("cx", e.cx);
@@ -368,7 +377,7 @@ void StreamWriter::visit(const radial_gradient_element& e) {
 }
 
 void StreamWriter::visit(const linear_gradient_element& e) {
-	this->setName("linearGradient");
+	this->setName(linear_gradient_element::tag);
 	this->add_gradient_attributes(e);
 	if(e.x1.unit != length_unit::PERCENT || e.x1.value != 0){
 		this->add_attribute("x1", e.x1);
@@ -386,7 +395,7 @@ void StreamWriter::visit(const linear_gradient_element& e) {
 }
 
 void StreamWriter::visit(const defs_element& e) {
-	this->setName("defs");
+	this->setName(defs_element::tag);
 	this->add_element_attributes(e);
 	this->add_transformable_attributes(e);
 	this->add_styleable_attributes(e);
@@ -394,7 +403,7 @@ void StreamWriter::visit(const defs_element& e) {
 }
 
 void StreamWriter::visit(const mask_element& e) {
-	this->setName("mask");
+	this->setName(mask_element::tag);
 	this->add_element_attributes(e);
 	this->add_rectangle_attributes(e);
 	this->add_styleable_attributes(e);
@@ -410,8 +419,50 @@ void StreamWriter::visit(const mask_element& e) {
 	this->write(&e);
 }
 
+namespace{
+const auto cdata_open = "<![CDATA[";
+const auto cdata_close = "]]>";
+}
+
+void stream_writer::visit(const style_element& e){
+	this->set_name(style_element::tag);
+	this->add_element_attributes(e);
+
+	//TODO: add style element specific attributes
+
+	++this->indent;
+	auto ind = this->indent_str();
+	--this->indent;
+
+	papki::vector_file fi;
+	e.css.write(
+			fi,
+			[](uint32_t id) -> std::string{
+				return styleable::property_to_string(style_property(id));
+			},
+			[](uint32_t id, const cssdom::property_value_base& value) -> std::string{
+				return styleable::style_value_to_string(
+						style_property(id),
+						static_cast<const style_element::css_style_value&>(value).value
+					);
+			},
+			ind
+		);
+
+	auto css_vec = fi.reset_data();
+
+	std::stringstream ss;
+	if(!css_vec.empty()){
+		ss << ind << cdata_open << std::endl;
+		ss << utki::make_string(css_vec);
+		ss << ind << cdata_close << std::endl;
+	}
+
+	this->write(nullptr, ss.str());
+}
+
 void StreamWriter::visit(const text_element& e){
-	this->setName("text");
+	this->setName(text_element::tag);
 	this->add_element_attributes(e);
 	this->add_transformable_attributes(e);
 	this->add_styleable_attributes(e);
@@ -423,7 +474,7 @@ void StreamWriter::visit(const text_element& e){
 }
 
 void StreamWriter::visit(const symbol_element& e) {
-	this->setName("symbol");
+	this->setName(symbol_element::tag);
 	this->add_element_attributes(e);
 	this->add_styleable_attributes(e);
 	this->add_view_boxed_attributes(e);
@@ -432,7 +483,7 @@ void StreamWriter::visit(const symbol_element& e) {
 }
 
 void StreamWriter::visit(const filter_element& e){
-	this->setName("filter");
+	this->setName(filter_element::tag);
 	this->add_element_attributes(e);
 	this->add_styleable_attributes(e);
 	this->add_rectangle_attributes(
@@ -458,7 +509,7 @@ void StreamWriter::visit(const filter_element& e){
 }
 
 void StreamWriter::visit(const fe_gaussian_blur_element& e){
-	this->setName("feGaussianBlur");
+	this->setName(fe_gaussian_blur_element::tag);
 	
 	this->add_filter_primitive_attributes(e);
 	this->add_inputable_attributes(e);
@@ -470,7 +521,7 @@ void StreamWriter::visit(const fe_gaussian_blur_element& e){
 }
 
 void StreamWriter::visit(const fe_color_matrix_element& e){
-	this->setName("feColorMatrix");
+	this->setName(fe_color_matrix_element::tag);
 	
 	this->add_filter_primitive_attributes(e);
 	this->add_inputable_attributes(e);
@@ -536,7 +587,7 @@ void StreamWriter::visit(const fe_color_matrix_element& e){
 
 
 void StreamWriter::visit(const FeBlendElement& e){
-	this->setName("feBlend");
+	this->setName(fe_blend_element::tag);
 	
 	this->add_filter_primitive_attributes(e);
 	this->add_inputable_attributes(e);
@@ -569,7 +620,7 @@ void StreamWriter::visit(const FeBlendElement& e){
 }
 
 void StreamWriter::visit(const fe_composite_element& e){
-	this->setName("feComposite");
+	this->setName(fe_composite_element::tag);
 	
 	this->add_filter_primitive_attributes(e);
 	this->add_inputable_attributes(e);
@@ -580,7 +631,7 @@ void StreamWriter::visit(const fe_composite_element& e){
 		switch(e.operator__){
 			default:
 			case fe_composite_element::operator_::over:
-				//default value, can be omitted
+				// default value, can be omitted
 				break;
 			case fe_composite_element::operator_::in:
 				operatorValue = "in";

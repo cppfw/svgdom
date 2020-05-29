@@ -21,7 +21,99 @@
 
 using namespace svgdom;
 
-std::string styleable::styles_to_string() const {
+std::string styleable::style_value_to_string(style_property p, const style_value& v){
+	if(v.type_ == style_value::type::inherit){
+		return "inherit";
+	}
+
+	std::stringstream s;
+	switch(p){
+		default:
+			TRACE(<< "Unimplemented style property: " << styleable::propertyToString(p) << ", writing empty value." << std::endl)
+			break;
+		case style_property::COLOR_INTERPOLATION_FILTERS:
+			s << v.colorInterpolationFiltersToString();
+			break;
+		case style_property::STROKE_MITERLIMIT:
+			s << v.stroke_miterlimit;
+			break;
+		case style_property::STOP_OPACITY:
+		case style_property::OPACITY:
+		case style_property::STROKE_OPACITY:
+		case style_property::FILL_OPACITY:
+			s << v.opacity;
+			break;
+		case style_property::STOP_COLOR:
+		case style_property::FILL:
+		case style_property::STROKE:
+			s << v.paintToString();
+			break;
+		case style_property::STROKE_WIDTH:
+			s << v.stroke_width;
+			break;
+		case style_property::STROKE_LINECAP:
+			switch(v.stroke_line_cap){
+				default:
+					ASSERT(false)
+					break;
+				case stroke_line_cap::BUTT:
+					s << "butt";
+					break;
+				case stroke_line_cap::ROUND:
+					s << "round";
+					break;
+				case stroke_line_cap::SQUARE:
+					s << "square";
+					break;
+			}
+			break;
+		case style_property::STROKE_LINEJOIN:
+			switch(v.stroke_line_join){
+				default:
+					ASSERT(false)
+					break;
+				case stroke_line_join::MITER:
+					s << "miter";
+					break;
+				case stroke_line_join::ROUND:
+					s << "round";
+					break;
+				case stroke_line_join::BEVEL:
+					s << "bevel";
+					break;
+			}
+			break;
+		case style_property::FILL_RULE:
+			switch(v.fill_rule){
+				default:
+					ASSERT(false)
+					break;
+				case fill_rule::EVENODD:
+					s << "evenodd";
+					break;
+				case fill_rule::NONZERO:
+					s << "nonzero";
+					break;
+			}
+			break;
+		case style_property::MASK:
+		case style_property::FILTER:
+			s << "url(" << v.str << ")";
+			break;
+		case style_property::DISPLAY:
+			s << v.displayToString();
+			break;
+		case style_property::ENABLE_BACKGROUND:
+			s << v.enableBackgroundToString();
+			break;
+		case style_property::VISIBILITY:
+			s << v.visibilityToString();
+			break;
+	}
+	return s.str();
+}
+
+std::string styleable::styles_to_string()const{
 	std::stringstream s;
 	
 	bool isFirst = true;
@@ -37,99 +129,23 @@ std::string styleable::styles_to_string() const {
 		
 		s << propertyToString(st.first) << ":";
 		
-		if(st.second.type_ == style_value::type::inherit){
-			s << "inherit";
-			continue;
-		}
-		
-		switch(st.first){
-			default:
-				TRACE(<< "Unimplemented style property: " << styleable::propertyToString(st.first) << ", writing empty value." << std::endl)
-				break;
-			case style_property::COLOR_INTERPOLATION_FILTERS:
-				s << st.second.colorInterpolationFiltersToString();
-				break;
-			case style_property::STROKE_MITERLIMIT:
-				s << st.second.stroke_miterlimit;
-				break;
-			case style_property::STOP_OPACITY:
-			case style_property::OPACITY:
-			case style_property::STROKE_OPACITY:
-			case style_property::FILL_OPACITY:
-				s << st.second.opacity;
-				break;
-			case style_property::STOP_COLOR:
-			case style_property::FILL:
-			case style_property::STROKE:
-				s << st.second.paintToString();
-				break;
-			case style_property::STROKE_WIDTH:
-				s << st.second.stroke_width;
-				break;
-			case style_property::STROKE_LINECAP:
-				switch(st.second.stroke_line_cap){
-					default:
-						ASSERT(false)
-						break;
-					case stroke_line_cap::BUTT:
-						s << "butt";
-						break;
-					case stroke_line_cap::ROUND:
-						s << "round";
-						break;
-					case stroke_line_cap::SQUARE:
-						s << "square";
-						break;
-				}
-				break;
-			case style_property::STROKE_LINEJOIN:
-				switch(st.second.stroke_line_join){
-					default:
-						ASSERT(false)
-						break;
-					case stroke_line_join::MITER:
-						s << "miter";
-						break;
-					case stroke_line_join::ROUND:
-						s << "round";
-						break;
-					case stroke_line_join::BEVEL:
-						s << "bevel";
-						break;
-				}
-				break;
-			case style_property::FILL_RULE:
-				switch(st.second.fill_rule){
-					default:
-						ASSERT(false)
-						break;
-					case fill_rule::EVENODD:
-						s << "evenodd";
-						break;
-					case fill_rule::NONZERO:
-						s << "nonzero";
-						break;
-				}
-				break;
-			case style_property::MASK:
-			case style_property::FILTER:
-				s << "url(" << st.second.str << ")";
-				break;
-			case style_property::DISPLAY:
-				s << st.second.displayToString();
-				break;
-			case style_property::ENABLE_BACKGROUND:
-				s << st.second.enableBackgroundToString();
-				break;
-			case style_property::VISIBILITY:
-				s << st.second.visibilityToString();
-				break;
-		}
+		s << style_value_to_string(st.first, st.second);
 	}
 	return s.str();
 }
 
+std::string styleable::classes_to_string()const{
+	std::stringstream ss;
 
+	for(auto i = this->classes.begin(); i != this->classes.end(); ++i){
+		if(i != this->classes.begin()){
+			ss << " ";
+		}
+		ss << *i;
+	}
+
+	return ss.str();
+}
 
 //input parameter 'str' should have no leading or trailing white spaces
 style_value styleable::parse_style_property_value(style_property type, const std::string& str){
@@ -340,7 +356,7 @@ bool styleable::is_inherited(style_property p) {
 }
 
 namespace{
-std::map<std::string, style_property> stringToPropertyMap = {
+const std::map<std::string, style_property> stringToPropertyMap = {
 	{"alignment-baseline", style_property::ALIGNMENT_BASELINE},
 	{"baseline-shift", style_property::BASELINE_SHIFT},
 	{"clip", style_property::CLIP},

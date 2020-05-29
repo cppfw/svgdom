@@ -16,7 +16,7 @@ public:
 	using svgdom::ConstVisitor::visit;
 	
 	virtual void visit(const CustomElement& e){
-		this->defaultVisit(e);
+		this->default_visit(e);
 	}
 };
 
@@ -24,12 +24,12 @@ void CustomElement::accept(svgdom::ConstVisitor& visitor) const{
 	if(auto v = dynamic_cast<CustomVisitor*>(&visitor)){
 		v->visit(*this);
 	}else{
-		visitor.defaultVisit(*this);
+		visitor.default_visit(*this);
 	}
 }
 
 void CustomElement::accept(svgdom::Visitor& visitor){
-	visitor.defaultVisit(*this);
+	visitor.default_visit(*this);
 }
 
 class CustomStreamWriter :

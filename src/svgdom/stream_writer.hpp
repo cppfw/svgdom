@@ -20,7 +20,7 @@ protected:
 	void add_attribute(const std::string& name, const std::string& value);
 	void add_attribute(const std::string& name, const length& value);
 	void add_attribute(const std::string& name, real value);
-	void write(const container* children = nullptr);
+	void write(const container* children = nullptr, const std::string& content = std::string());
 	
 	void add_element_attributes(const element& e);
 	void add_transformable_attributes(const transformable& e);
@@ -30,10 +30,10 @@ protected:
 	void add_rectangle_attributes(
 			const rectangle& e,
 			const rectangle& default_values = rectangle(
-					length(0, length::Unit_e::PERCENT),
-					length(0, length::Unit_e::PERCENT),
-					length(100, length::Unit_e::PERCENT),
-					length(100, length::Unit_e::PERCENT)
+					length(0, length_unit::percent),
+					length(0, length_unit::percent),
+					length(100, length_unit::percent),
+					length(100, length_unit::percent)
 				)
 		);
 	void add_shape_attributes(const shape& e);
@@ -98,10 +98,10 @@ protected:
 	void addRectangleAttributes(
 			const rectangle& e,
 			const rectangle& defaultValues = rectangle(
-					length(0, length::Unit_e::PERCENT),
-					length(0, length::Unit_e::PERCENT),
-					length(100, length::Unit_e::PERCENT),
-					length(100, length::Unit_e::PERCENT)
+					length(0, length_unit::percent),
+					length(0, length_unit::percent),
+					length(100, length_unit::percent),
+					length(100, length_unit::percent)
 				)
 		)
 	{
@@ -168,6 +168,7 @@ public:
 	void visit(const image_element& e) override;
 	void visit(const mask_element& e) override;
 	void visit(const text_element& e) override;
+	void visit(const style_element& e) override;
 };
 
 // TODO: deprecated, remove.

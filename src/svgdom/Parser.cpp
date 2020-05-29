@@ -7,6 +7,8 @@
 #include <utki/util.hpp>
 #include <utki/string.hpp>
 
+#include <papki/span_file.hpp>
+
 using namespace svgdom;
 
 namespace{
@@ -276,10 +278,15 @@ void Parser::fillStyleable(styleable& s) {
 		auto nsn = this->getNamespace(a.first);
 		switch (nsn.ns) {
 			case XmlNamespace_e::SVG:
-				if (nsn.name == "style") {
+				if(nsn.name == "style"){
 					s.styles = styleable::parse(a.second);
 					break;
+				}else if(nsn.name == "class"){
+					s.classes = utki::split(a.second);
+					break;
 				}
+
+				// parse style attributes
 				{
 					style_property type = styleable::stringToProperty(nsn.name);
 					if (type != style_property::UNKNOWN) {
@@ -341,9 +348,13 @@ void Parser::addElement(std::unique_ptr<element> e){
 	}else{
 		container_caster c;
 		auto parent = this->element_stack.back();
-		parent->accept(c);
+		if(parent){
+			parent->accept(c);
+		}
 		if(c.pointer){
 			c.pointer->children.push_back(std::move(e));
+		}else{
+			elem = nullptr;
 		}
 	}
 	this->element_stack.push_back(elem);
@@ -917,8 +928,45 @@ void Parser::on_attributes_end(bool is_empty_element){
 	this->cur_element.clear();
 }
 
+namespace{
+class parse_content_visitor : public visitor{
+	const utki::span<const char> content;
+public:
+	parse_content_visitor(utki::span<const char> content) :
+			content(content)
+	{}
+
+	void default_visit(element&, container&)override{
+		// do nothing
+	}
+
+	void visit(style_element& e)override{
+		e.css.append(cssdom::read(
+				papki::span_file(this->content),
+				[](const std::string& name) -> uint32_t{
+					return uint32_t(styleable::string_to_property(name));
+				},
+				[](uint32_t id, std::string&& v) -> std::unique_ptr<cssdom::property_value_base>{
+					auto sp = style_property(id);
+					if(sp == style_property::unknown){
+						return nullptr;
+					}
+					auto ret = std::make_unique<style_element::css_style_value>();
+					ret->value = styleable::parse_style_property_value(sp, v);
+					return ret;
+				}
+			));
+	}
+};
+}
+
 void Parser::on_content_parsed(utki::span<const char> str){
-	// do nothing for now
+	if(this->element_stack.empty() || !this->element_stack.back()){
+		return;
+	}
+
+	parse_content_visitor v(str);
+	this->element_stack.back()->accept(v);
 }
 
 std::unique_ptr<svg_element> Parser::get_dom(){

@@ -29,7 +29,7 @@ public:
 		this->addToCache(e);
 	}
 	
-	void defaultVisit(const svgdom::element& e) override{
+	void default_visit(const svgdom::element& e)override{
 		this->addToCache(e);
 	}
 	

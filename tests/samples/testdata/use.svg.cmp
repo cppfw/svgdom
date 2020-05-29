@@ -1,10 +1,17 @@
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="80" height="80">
+	<style>
+		<![CDATA[
+		.classA {
+			fill: red; 
+		}
+		]]>
+	</style>
 	<defs>
 		<g id="Port">
 			<circle style="fill:inherit" r="10"/>
 		</g>
 	</defs>
 	<use x="50" y="10" xlink:href="#Port"/>
-	<use x="50" y="30" xlink:href="#Port"/>
+	<use class="classA" x="50" y="30" xlink:href="#Port"/>
 	<use style="fill:blue" x="50" y="50" xlink:href="#Port"/>
 </svg>

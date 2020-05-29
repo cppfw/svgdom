@@ -26,6 +26,14 @@ public:
 	void visit(T& e)override{
 		this->pointer = &e;
 	}
+
+	void default_visit(
+			typename std::conditional<std::is_const<T>::value, const element&, element&>::type e,
+			typename std::conditional<std::is_const<T>::value, const container&, container&>::type c
+		)override
+	{
+		// do nothing
+	}
 };
 
 template <bool Const> class container_caster_template :
@@ -34,40 +42,12 @@ template <bool Const> class container_caster_template :
 public:
 	typename std::conditional<Const, const container*, container*>::type pointer = nullptr;
 
-	void visit(typename std::conditional<Const, const svg_element&, svg_element&>::type e)override{
-		this->pointer = &e;
-	}
-
-	void visit(typename std::conditional<Const, const g_element&, g_element&>::type e)override{
-		this->pointer = &e;
-	}
-
-	void visit(typename std::conditional<Const, const filter_element&, filter_element&>::type e)override{
-		this->pointer = &e;
-	}
-
-	void visit(typename std::conditional<Const, const linear_gradient_element&, linear_gradient_element&>::type e)override{
-		this->pointer = &e;
-	}
-
-	void visit(typename std::conditional<Const, const radial_gradient_element&, radial_gradient_element&>::type e)override{
-		this->pointer = &e;
-	}
-
-	void visit(typename std::conditional<Const, const defs_element&, defs_element&>::type e)override{
-		this->pointer = &e;
-	}
-
-	void visit(typename std::conditional<Const, const symbol_element&, symbol_element&>::type e)override{
-		this->pointer = &e;
-	}
-
-	void visit(typename std::conditional<Const, const mask_element&, mask_element&>::type e)override{
-		this->pointer = &e;
-	}
-
-	void visit(typename std::conditional<Const, const text_element&, text_element&>::type e)override{
-		this->pointer = &e;
+	void default_visit(
+			typename std::conditional<Const, const element&, element&>::type e,
+			typename std::conditional<Const, const container&, container&>::type c
+		)override
+	{
+		this->pointer = &c;
 	}
 };
 

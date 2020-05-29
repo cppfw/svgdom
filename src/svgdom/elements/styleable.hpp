@@ -19,7 +19,7 @@ namespace svgdom{
 /**
  * @brief Style property names enumeration.
  */
-enum class style_property{
+enum class style_property : uint32_t{
 	unknown,					// 0
 	UNKNOWN = unknown, // TODO: deprecated, remove.
 	font,
@@ -541,12 +541,16 @@ struct styleable : public cssdom::styleable{
 		return this->find_style_property(p);
 	}
 
+	std::string classes_to_string()const;
+
 	std::string styles_to_string()const;
 
 	// TODO: deprecated, remove.
 	std::string stylesToString()const{
 		return this->styles_to_string();
 	}
+
+	static std::string style_value_to_string(style_property p, const style_value& v);
 
 	static decltype(styles) parse(const std::string& str);
 

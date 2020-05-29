@@ -96,12 +96,7 @@ public:
 	 * This method is called by all the visit methods by default.
 	 * @param e - SVG element to visit.
 	 */
-	virtual void default_visit(element& e){
-		this->defaultVisit(e);
-	}
-
-	// TODO: deprecated, remove.
-	virtual void defaultVisit(element& e){}
+	virtual void default_visit(element& e){}
 	
 	/**
 	 * @brief Default visit method for container elements.
@@ -111,11 +106,6 @@ public:
 	 * @param c - 'container' ancestor of the element to visit.
 	 */
 	virtual void default_visit(element& e, container& c);
-
-	// TODO: deprecated, remove.
-	virtual void defaultVisit(element& e, container& c){
-		this->default_visit(e, c);
-	}
 	
 	virtual ~visitor()noexcept{}
 };
@@ -169,13 +159,8 @@ public:
 	 * This method is called by all the visit methods by default.
 	 * @param e - SVG element to visit.
 	 */
-	virtual void default_visit(const element& e){
-		this->defaultVisit(e);
-	}
+	virtual void default_visit(const element& e){}
 
-	// TODO: deprecated, remove.
-	virtual void defaultVisit(const element& e){}
-	
 	/**
 	 * @brief Default visit method for container elements.
 	 * Default implementation of this method calls this->default_visit(e) and
@@ -184,11 +169,6 @@ public:
 	 * @param c - 'container' ancestor of the element to visit.
 	 */
 	virtual void default_visit(const element& e, const container& c);
-
-	// TODO: deprecated, remove.
-	virtual void defaultVisit(const element& e, const container& c){
-		this->default_visit(e, c);
-	}
 	
 	virtual ~const_visitor()noexcept{}
 };

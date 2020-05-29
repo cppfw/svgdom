@@ -19,4 +19,6 @@
 
     <circle  class="myGreen" cx="40" cy="40"  r="24"/>
     <circle  class="myRed"   cx="40" cy="100" r="24"/>
+
+    <style></style>
 </svg>
