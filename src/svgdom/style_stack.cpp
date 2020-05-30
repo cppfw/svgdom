@@ -11,10 +11,13 @@ const svgdom::style_value* style_stack::get_style_property(svgdom::style_propert
 		ASSERT(*i)
 		auto v = (*i)->get_style_property(p);
 		if (!v) {
-			if (!explicitInherit && !svgdom::styleable::is_inherited(p)) {
-				return nullptr;
+			v = (*i)->get_presentation_attribute(p);
+			if(!v){
+				if (!explicitInherit && !svgdom::styleable::is_inherited(p)) {
+					return nullptr;
+				}
+				continue;
 			}
-			continue;
 		}
 		if (v->type_ == svgdom::style_value::type::inherit) {
 			explicitInherit = true;
