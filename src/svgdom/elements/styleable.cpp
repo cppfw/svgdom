@@ -442,9 +442,17 @@ std::string styleable::property_to_string(style_property p){
 	return std::string();
 }
 
-const style_value* styleable::find_style_property(style_property p)const{
+const style_value* styleable::get_style_property(style_property p)const{
 	auto i = this->styles.find(p);
 	if(i != this->styles.end()){
+		return &i->second;
+	}
+	return nullptr;
+}
+
+const style_value* styleable::get_presentation_attribute(style_property p)const{
+	auto i = this->presentation_attributes.find(p);
+	if(i != this->presentation_attributes.end()){
 		return &i->second;
 	}
 	return nullptr;

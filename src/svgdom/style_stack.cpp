@@ -9,7 +9,7 @@ const svgdom::style_value* style_stack::get_style_property(svgdom::style_propert
 
 	for (auto i = this->stack.rbegin(); i != this->stack.rend(); ++i) {
 		ASSERT(*i)
-		auto v = (*i)->findStyleProperty(p);
+		auto v = (*i)->get_style_property(p);
 		if (!v) {
 			if (!explicitInherit && !svgdom::styleable::is_inherited(p)) {
 				return nullptr;

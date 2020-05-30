@@ -56,7 +56,7 @@ protected:
 	
 	/**
 	 * @brief Relay accept to children.
-	 * @param container - container to whose children the 'accept' should be relayed.
+	 * @param c - container to whose children the 'accept' should be relayed.
 	 */
 	void relay_accept(container& c);
 
@@ -119,7 +119,7 @@ protected:
 	
 	/**
 	 * @brief Relay accept to children.
-	 * @param container - container to whose children the 'accept' should be relayed.
+	 * @param c - container to whose children the 'accept' should be relayed.
 	 */
 	void relay_accept(const container& c);
 

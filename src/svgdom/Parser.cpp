@@ -290,7 +290,7 @@ void Parser::fillStyleable(styleable& s) {
 				{
 					style_property type = styleable::stringToProperty(nsn.name);
 					if (type != style_property::UNKNOWN) {
-						s.styles[type] = styleable::parseStylePropertyValue(type, a.second);
+						s.presentation_attributes[type] = styleable::parseStylePropertyValue(type, a.second);
 					}
 				}
 				break;

@@ -525,6 +525,7 @@ typedef style_value StyleValue;
  */
 struct styleable : public cssdom::styleable{
 	std::map<style_property, style_value> styles;
+	std::map<style_property, style_value> presentation_attributes;
 
 	std::vector<std::string> classes;
 
@@ -534,21 +535,13 @@ struct styleable : public cssdom::styleable{
 
 	virtual ~styleable()noexcept{}
 
-	const style_value* find_style_property(style_property p)const;
+	const style_value* get_style_property(style_property p)const;
 
-	// TODO: deprecated, remove.
-	const style_value* findStyleProperty(style_property p)const{
-		return this->find_style_property(p);
-	}
+	const style_value* get_presentation_attribute(style_property p)const;
 
 	std::string classes_to_string()const;
 
 	std::string styles_to_string()const;
-
-	// TODO: deprecated, remove.
-	std::string stylesToString()const{
-		return this->styles_to_string();
-	}
 
 	static std::string style_value_to_string(style_property p, const style_value& v);
 

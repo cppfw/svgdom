@@ -90,7 +90,14 @@ void StreamWriter::add_transformable_attributes(const transformable& e){
 
 void StreamWriter::add_styleable_attributes(const styleable& e){
 	if(!e.styles.empty()){
-		this->add_attribute("style", e.stylesToString());
+		this->add_attribute("style", e.styles_to_string());
+	}
+	for(auto& s : e.presentation_attributes){
+		auto n = styleable::property_to_string(s.first);
+		if(n.empty()){ // unknown property
+			continue;
+		}
+		this->add_attribute(n, styleable::style_value_to_string(s.first, s.second));
 	}
 	if(!e.classes.empty()){
 		this->add_attribute("class", e.classes_to_string());
