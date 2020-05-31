@@ -8,10 +8,9 @@ const svgdom::style_value* style_stack::get_style_property(svgdom::style_propert
 	bool explicitInherit = false;
 
 	for (auto i = this->stack.rbegin(); i != this->stack.rend(); ++i) {
-		ASSERT(*i)
-		auto v = (*i)->get_style_property(p);
+		auto v = i->s.get_style_property(p);
 		if (!v) {
-			v = (*i)->get_presentation_attribute(p);
+			v = i->s.get_presentation_attribute(p);
 			if(!v){
 				if (!explicitInherit && !svgdom::styleable::is_inherited(p)) {
 					return nullptr;
@@ -32,7 +31,18 @@ const svgdom::style_value* style_stack::get_style_property(svgdom::style_propert
 style_stack::push::push(style_stack& ss, const svgdom::styleable& s) :
 		ss(ss)
 {
-	this->ss.stack.push_back(&s);
+	if(!this->ss.stack.empty()){
+		ASSERT(this->ss.stack.back().c)
+		++this->ss.stack.back().index;
+	}
+
+	this->ss.stack.push_back(node(s));
+}
+
+style_stack::push::push(style_stack& ss, const svgdom::styleable& s, const svgdom::container& c) :
+		push(ss, s)
+{
+	this->ss.stack.back().c = &c;
 }
 
 style_stack::push::~push()noexcept{

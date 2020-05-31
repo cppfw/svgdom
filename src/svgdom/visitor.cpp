@@ -211,7 +211,7 @@ void const_visitor::visit(const image_element& e){
 	this->default_visit(e);
 }
 
-void const_visitor::default_visit(const element& e, const container& c) {
+void const_visitor::default_visit(const element& e, const container& c){
 	this->default_visit(e);
 	this->relay_accept(c);
 }

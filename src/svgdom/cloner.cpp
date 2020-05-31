@@ -5,7 +5,7 @@ using namespace svgdom;
 void cloner::clone_children(const container& e, container& clone){
 	auto oldParent = this->cur_parent;
 	this->cur_parent = &clone;
-	relayAccept(e);
+	this->relay_accept(e);
 	this->cur_parent = oldParent;
 }
 

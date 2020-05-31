@@ -15,15 +15,18 @@ public:
 	
 	struct element_info{
 		const svgdom::element& e;
-		const StyleStack ss;
+		const style_stack ss;
 		
-		element_info(const svgdom::element& e, StyleStack ss) : e(e), ss(ss){}
+		element_info(const svgdom::element& e, style_stack ss) :
+				e(e),
+				ss(ss)
+		{}
 	};
 
 	// TODO: DEPRECATED, remove.
 	typedef element_info ElementInfo;
 	
-	const ElementInfo* find_by_id(const std::string& id)const;
+	const element_info* find_by_id(const std::string& id)const;
 	
 	// TODO: DEPRECATED, remove.
 	const ElementInfo* findById(const std::string& id)const{
@@ -44,7 +47,7 @@ public:
 	}
 	
 private:
-	std::map<std::string, ElementInfo> cache;
+	std::map<std::string, element_info> cache;
 };
 
 // TODO: DEPRECATED, remove.

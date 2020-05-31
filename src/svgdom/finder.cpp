@@ -11,7 +11,7 @@ class CacheCreator : virtual public svgdom::const_visitor{
 public:
 	std::map<std::string, finder::ElementInfo> cache;
 	
-	StyleStack styleStack;
+	style_stack styleStack;
 	
 	void addToCache(const svgdom::element& e){
 		if(e.id.length() != 0){
@@ -20,12 +20,12 @@ public:
 	}
 	
 	void visitContainer(const svgdom::element& e, const svgdom::container& c, const svgdom::styleable& s){
-		StyleStack::Push push(this->styleStack, s);
+		style_stack::push push(this->styleStack, s, c);
 		this->addToCache(e);
-		this->relayAccept(c);
+		this->relay_accept(c);
 	}
 	void visitElement(const svgdom::element& e, const svgdom::styleable& s){
-		StyleStack::Push push(this->styleStack, s);
+		style_stack::push push(this->styleStack, s);
 		this->addToCache(e);
 	}
 	

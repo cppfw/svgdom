@@ -117,16 +117,13 @@ public:
 class const_visitor{
 protected:
 	
+	size_t index_in_parent = 0;
+
 	/**
 	 * @brief Relay accept to children.
 	 * @param c - container to whose children the 'accept' should be relayed.
 	 */
 	void relay_accept(const container& c);
-
-	// TODO: deprecated, remove.
-	void relayAccept(const container& c){
-		this->relay_accept(c);
-	}
 	
 public:
 	virtual void visit(const path_element& e);

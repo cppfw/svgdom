@@ -27,6 +27,13 @@
             "command": "make test debug=true",
             "problemMatcher": [],
             "dependsOn": "build_debug"
+        },
+        {
+            "label": "test_stylke_stack_debug",
+            "type": "shell",
+            "command": "make -C tests/style_stack test debug=true",
+            "problemMatcher": [],
+            "dependsOn": "build_debug"
         }
     ]
 }
