@@ -17,7 +17,7 @@ auto svg = R"qwertyuiop(
            stroke: #006600; fill: #00cc00;
         }
       	circle.myRed {
-			stroke: #660000; fill: #cc0000;
+			stroke: #670000; fill: #cc0000;
     	}
 
       ]]>
@@ -37,8 +37,13 @@ auto svg = R"qwertyuiop(
 
 namespace{
 class traverse_visitor : public svgdom::const_visitor{
-	svgdom::style_stack ss;
 public:
+	svgdom::style_stack ss;
+
+	void visit(const svgdom::style_element& e)override{
+		this->ss.add_css(e.css);
+	}
+
 	void visit(const svgdom::svg_element& e)override{
 		svgdom::style_stack::push ss_push(this->ss, e, e);
 		this->relay_accept(e);
@@ -59,9 +64,12 @@ public:
 		ASSERT_INFO_ALWAYS(sp, "no stroke style property defined for circle with id=" << e.id)
 
 		std::map<std::string, uint32_t> id_to_expected_stroke_map{
-			{"green1", 0x006600},
-			{"red1", 0x000066}
-			// TODO:
+			{"green1", 0x6600},
+			{"red1", 0x67},
+			{"blue1", svgdom::style_value::parse_paint("blue").color},
+			{"red2", 0x67},
+			{"green2", svgdom::style_value::parse_paint("green").color},
+			{"green3", svgdom::style_value::parse_paint("green").color}
 		};
 		
 		auto i = id_to_expected_stroke_map.find(e.id);
@@ -78,5 +86,6 @@ int main(int argc, char** argv){
 	ASSERT_ALWAYS(dom->children.size() != 0)
 	
 	traverse_visitor v;
+
 	dom->accept(v);
 }

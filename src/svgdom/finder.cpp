@@ -14,7 +14,7 @@ public:
 	style_stack styleStack;
 	
 	void addToCache(const svgdom::element& e){
-		if(e.id.length() != 0){
+		if(!e.id.empty()){
 			this->cache.insert(std::make_pair(e.id, finder::ElementInfo(e, this->styleStack)));
 		}
 	}

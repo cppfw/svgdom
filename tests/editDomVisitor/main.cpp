@@ -1,5 +1,5 @@
 #include "../../src/svgdom/dom.hpp"
-#include "../../src/svgdom/StreamWriter.hpp"
+#include "../../src/svgdom/stream_writer.hpp"
 #include "../../src/svgdom/visitor.hpp"
 
 #include <utki/debug.hpp>
@@ -9,11 +9,11 @@ class EditingVisitor : public svgdom::Visitor{
 	std::vector<std::pair<svgdom::Container*, decltype(svgdom::Container::children)::iterator>> elementsToRemove;
 	
 	void addToRemove(){
-		if(!this->curParent()){
-			//root element does not have parent, nowhere to remove it from
+		if(!this->cur_parent()){
+			// root element does not have parent, nowhere to remove it from
 			return;
 		}
-		this->elementsToRemove.push_back(std::make_pair(this->curParent(), this->curIter()));
+		this->elementsToRemove.push_back(std::make_pair(this->cur_parent(), this->cur_iter()));
 	}
 	
 public:

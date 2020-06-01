@@ -9,6 +9,11 @@
 #include "elements/style.hpp"
 
 namespace svgdom{
+
+class abstract_visitor{
+
+};
+
 /**
  * @brief Visitor interface.
  * A visitor interface which allows traversing of the SVG element tree.
@@ -31,11 +36,6 @@ protected:
 	decltype(curParent_v) cur_parent()const{
 		return this->curParent_v;
 	}
-
-	// TODO: deprecated, remove.
-	decltype(curParent_v) curParent()const{
-		return this->cur_parent();
-	}
 	
 	/**
 	 * @brief Get iterator if current visited child element.
@@ -47,11 +47,6 @@ protected:
 	 */
 	decltype(container::children)::iterator cur_iter()const{
 		return this->curIter_v;
-	}
-
-	// TODO: deprecated, remove.
-	decltype(container::children)::iterator curIter()const{
-		return this->cur_iter();
 	}
 	
 	/**
@@ -84,7 +79,7 @@ public:
 	virtual void visit(filter_element& e);
 	virtual void visit(fe_gaussian_blur_element& e);
 	virtual void visit(fe_color_matrix_element& e);
-	virtual void visit(FeBlendElement& e);
+	virtual void visit(fe_blend_element& e);
 	virtual void visit(fe_composite_element& e);
 	virtual void visit(image_element& e);
 	virtual void visit(mask_element& e);
@@ -116,8 +111,6 @@ public:
  */
 class const_visitor{
 protected:
-	
-	size_t index_in_parent = 0;
 
 	/**
 	 * @brief Relay accept to children.

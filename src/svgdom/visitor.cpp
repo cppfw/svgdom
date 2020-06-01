@@ -86,7 +86,7 @@ void visitor::visit(fe_color_matrix_element& e){
 	this->default_visit(e);
 }
 
-void visitor::visit(FeBlendElement& e){
+void visitor::visit(fe_blend_element& e){
 	this->default_visit(e);
 }
 
