@@ -1,3 +1,10 @@
+libsvgdom (0.3.36) unstable; urgency=medium
+
+  * style_stack now can keep track of CSS and query properties from
+    there
+
+ -- Ivan Gagis <igagis@gmail.com>  Tue, 02 Jun 2020 02:17:30 +0300
+
 libsvgdom (0.3.35) unstable; urgency=medium
 
   * fixed debian dev package dependency
