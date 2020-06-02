@@ -10,17 +10,7 @@
 namespace svgdom{
 class style_stack{
 public:
-	struct node{
-		const svgdom::styleable& s;
-		const svgdom::container* c = nullptr;
-		size_t index = 0; // index in its parent of the next item in the stack
-
-		node(const svgdom::styleable& s) :
-				s(s)
-		{}
-	};
-
-	std::vector<node> stack;
+	std::vector<std::reference_wrapper<const styleable>> stack;
 
 private:
 	std::vector<std::reference_wrapper<const cssdom::document>> css;
@@ -28,8 +18,8 @@ private:
 	class crawler : public cssdom::xml_dom_crawler{
 		const decltype(style_stack::stack)& stack;
 
-		std::remove_reference<decltype(stack)>::type::const_reverse_iterator viter;
-		decltype(container::children)::const_iterator hiter;
+		std::remove_reference<decltype(stack)>::type::const_reverse_iterator iter;
+
 	public:
 		crawler(decltype(stack) stack);
 
@@ -50,7 +40,6 @@ public:
 		style_stack& ss;
 	public:
 		push(style_stack& ss, const svgdom::styleable& s);
-		push(style_stack& ss, const svgdom::styleable& s, const svgdom::container& c);
 		~push()noexcept;
 	};
 };

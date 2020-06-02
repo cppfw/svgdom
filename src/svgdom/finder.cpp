@@ -20,7 +20,7 @@ public:
 	}
 	
 	void visitContainer(const svgdom::element& e, const svgdom::container& c, const svgdom::styleable& s){
-		style_stack::push push(this->styleStack, s, c);
+		style_stack::push push(this->styleStack, s);
 		this->addToCache(e);
 		this->relay_accept(c);
 	}

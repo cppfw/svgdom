@@ -45,15 +45,15 @@ public:
 	}
 
 	void visit(const svgdom::svg_element& e)override{
-		svgdom::style_stack::push ss_push(this->ss, e, e);
+		svgdom::style_stack::push ss_push(this->ss, e);
 		this->relay_accept(e);
 	}
 	void visit(const svgdom::defs_element& e)override{
-		svgdom::style_stack::push ss_push(this->ss, e, e);
+		svgdom::style_stack::push ss_push(this->ss, e);
 		this->relay_accept(e);
 	}
 	void visit(const svgdom::g_element& e)override{
-		svgdom::style_stack::push ss_push(this->ss, e, e);
+		svgdom::style_stack::push ss_push(this->ss, e);
 		this->relay_accept(e);
 	}
 
