@@ -9,6 +9,7 @@
 
 namespace svgdom{
 class style_stack{
+public:
 	struct node{
 		const svgdom::styleable& s;
 		const svgdom::container* c = nullptr;
@@ -21,6 +22,7 @@ class style_stack{
 
 	std::vector<node> stack;
 
+private:
 	std::vector<std::reference_wrapper<const cssdom::document>> css;
 
 	class crawler : public cssdom::xml_dom_crawler{
