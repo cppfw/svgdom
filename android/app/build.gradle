@@ -44,7 +44,7 @@ repositories {
     }
 }
 dependencies {
-    implementation project(path: ':svgdom', configuration: 'default')
+//    implementation project(path: ':svgdom', configuration: 'default')
 }
 
 
