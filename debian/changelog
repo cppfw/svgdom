@@ -1,3 +1,9 @@
+libsvgdom (0.3.39) unstable; urgency=medium
+
+  * use android native bundle plugin
+
+ -- Ivan Gagis <igagis@gmail.com>  Fri, 19 Jun 2020 03:10:08 +0300
+
 libsvgdom (0.3.38) unstable; urgency=medium
 
   * style_stack now supports only vertical CSS crawling
