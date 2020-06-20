@@ -1,7 +1,13 @@
 # WiKi main page
 
-Istallation:
-- [Linux](InstallLinux.md)
-- [MacOSX](InstallMacOSX.md)
-- [MSYS](InstallMSYS.md)
-- [Visual Studio](InstallMSVS.md)
+== Istallation
+
+. Setup your OS-preferred package system repo following link:https://github.com/igagis/pravila/blob/master/EnableRepo.adoc[this manual]
+. Install package
++
+- **deb** (Linux): **libsvgdom-dev**
+- **homebrew** (MacOS X): **libsvgdom**
+- **Android**: **io.github.igagis:svgdom**
+- **cocoapods** (iOS): **svgdom**
+- **Msys2** (Windows): **mingw-w64-i686-svgdom**, **mingw-w64-x86_64-svgdom**
+- **Nuget** (Windows, Visual Studio): **libsvgdom**
