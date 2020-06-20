@@ -1,7 +1,7 @@
 = WiKi main page
-:package_name: svgdom
 
 == Istallation
+:package_name: svgdom
 
 . Setup your OS-preferred package system repo following link:https://github.com/igagis/pravila/blob/master/EnableRepo.adoc[this manual]
 . Install package
