@@ -1,4 +1,4 @@
-#WiKi main page
+# WiKi main page
 
 Istallation:
 - [Linux](InstallLinux.md)
