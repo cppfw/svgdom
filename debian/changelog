@@ -1,3 +1,9 @@
+libsvgdom (0.3.40) unstable; urgency=medium
+
+  * update to latest libs
+
+ -- Ivan Gagis <igagis@gmail.com>  Sat, 04 Jul 2020 17:33:20 +0300
+
 libsvgdom (0.3.39) unstable; urgency=medium
 
   * use android native bundle plugin
