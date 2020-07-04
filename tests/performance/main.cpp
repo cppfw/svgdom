@@ -4,7 +4,7 @@
 
 #include <utki/debug.hpp>
 
-#include <papki/FSFile.hpp>
+#include <papki/fs_file.hpp>
 
 namespace{
 std::uint32_t getTicks(){
@@ -15,7 +15,7 @@ std::uint32_t getTicks(){
 int main(int argc, char** argv){
 	auto loadStart = getTicks();
 	
-	auto buf = papki::FSFile("../samples/testdata/back.svg").loadWholeFileIntoMemory();
+	auto buf = papki::fs_file("../samples/testdata/back.svg").load();
 	
 	TRACE_ALWAYS(<< "SVG loaded in " << float(getTicks() - loadStart) / 1000.0f << " sec." << std::endl)
 	

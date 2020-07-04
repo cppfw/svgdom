@@ -73,7 +73,7 @@ void Parser::pushNamespaces() {
 			}
 		}
 		
-		this->flippedNamespacesStack.push_back(utki::flipMap(this->namespacesStack.back()));
+		this->flippedNamespacesStack.push_back(utki::flip_map(this->namespacesStack.back()));
 	}
 }
 

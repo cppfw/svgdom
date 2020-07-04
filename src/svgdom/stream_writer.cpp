@@ -68,7 +68,7 @@ std::string StreamWriter::indent_str(){
 
 void StreamWriter::childrenToStream(const container& e){
 	++this->indent;
-	utki::ScopeExit scopeExit([this]() {
+	utki::scope_exit scope_exit([this](){
 		--this->indent;
 	});
 	for (auto& c : e.children) {

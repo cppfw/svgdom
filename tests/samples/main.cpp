@@ -2,8 +2,7 @@
 
 #include <utki/debug.hpp>
 
-#include <papki/FSFile.hpp>
-
+#include <papki/fs_file.hpp>
 
 int main(int argc, char** argv){
 	std::string filename;
@@ -20,7 +19,7 @@ int main(int argc, char** argv){
 			break;
 	}
 	
-	auto dom = svgdom::load(papki::FSFile(filename));
+	auto dom = svgdom::load(papki::fs_file(filename));
 	
 //	TRACE_ALWAYS(<< "file read" << std::endl)
 	
@@ -29,7 +28,7 @@ int main(int argc, char** argv){
 	auto str = dom->toString();
 //	TRACE_ALWAYS(<< str << std::endl)
 	
-	papki::FSFile outFile("out.svg");
-	papki::File::Guard fileGuard(outFile, papki::File::E_Mode::CREATE);
+	papki::fs_file outFile("out.svg");
+	papki::file::guard fileGuard(outFile, papki::file::mode::create);
 	outFile.write(utki::make_span(str));
 }

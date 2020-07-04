@@ -178,7 +178,8 @@ style_value styleable::parse_style_property_value(style_property type, const std
 			{
 				std::istringstream iss(str);
 				v.opacity = readInReal(iss);
-				utki::clampRange(v.opacity, real(0), real(1));
+				v.opacity = std::min(v.opacity, real(1)); // clamp top
+				v.opacity = std::max(v.opacity, real(0)); // clamp bottom
 				v.type_ = style_value::type::normal;
 			}
 			break;
@@ -422,7 +423,7 @@ const std::map<std::string, style_property> stringToPropertyMap = {
 }
 
 namespace{
-auto propertytoStringMap = utki::flipMap(stringToPropertyMap);
+auto propertytoStringMap = utki::flip_map(stringToPropertyMap);
 }
 
 style_property styleable::string_to_property(std::string str){
@@ -649,7 +650,7 @@ std::map<std::string, display> stringToDisplayMap = {
 }
 
 namespace{
-auto displayToStringMap = utki::flipMap(stringToDisplayMap);
+auto displayToStringMap = utki::flip_map(stringToDisplayMap);
 }
 
 style_value style_value::parse_display(const std::string& str) {
@@ -686,7 +687,7 @@ std::map<std::string, visibility> stringToVisibilityMap = {
 }
 
 namespace{
-auto visibilityToStringMap = utki::flipMap(stringToVisibilityMap);
+auto visibilityToStringMap = utki::flip_map(stringToVisibilityMap);
 }
 
 style_value style_value::parse_visibility(const std::string& str){

@@ -10,7 +10,7 @@ std::unique_ptr<svg_element> svgdom::load(const papki::file& f){
 	Parser parser;
 	
 	{
-		papki::File::Guard fileGuard(f);
+		papki::file::guard file_guard(f);
 
 		std::array<uint8_t, 4096> buf; // 4k
 
