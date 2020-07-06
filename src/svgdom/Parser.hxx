@@ -122,7 +122,7 @@ class Parser : public mikroxml::parser{
 	
 	void parse_element();
 public:
-	std::unique_ptr<SvgElement> get_dom();
+	std::unique_ptr<svg_element> get_dom();
 };
 
 }

@@ -31,9 +31,6 @@ struct g_element :
 	}
 };
 
-// TODO: deprecated, remove.
-typedef g_element GElement;
-
 struct defs_element :
 		public element,
 		public container,
@@ -53,9 +50,6 @@ struct defs_element :
 		return tag;
 	}
 };
-
-// TODO: deprecated, remove.
-typedef defs_element DefsElement;
 
 struct use_element :
 		public element,
@@ -77,9 +71,6 @@ struct use_element :
 		return tag;
 	}
 };
-
-// TODO: deprecated, remove.
-typedef use_element UseElement;
 
 struct svg_element :
 		public element,
@@ -109,11 +100,6 @@ struct svg_element :
 	 * @return 0 if any of height or weight is specified in percent.
 	 */
 	real aspect_ratio(real dpi)const;
-
-	// TODO: deprecated, remove.
-	real aspectRatio(real dpi)const{
-		return this->aspect_ratio(dpi);
-	}
 	
 	/**
 	 * @brief Get natural dimensions in pixels.
@@ -123,15 +109,7 @@ struct svg_element :
 	 * @return Width and height.
 	 */
 	std::array<real, 2> get_dimensions(real dpi)const noexcept;
-
-	// TODO: deprecated, remove.
-	std::array<real, 2> getDimensions(real dpi)const noexcept{
-		return this->get_dimensions(dpi);
-	}
 };
-
-// TODO: deprecated, remove.
-typedef svg_element SvgElement;
 
 struct symbol_element :
 		public element,
@@ -154,9 +132,6 @@ struct symbol_element :
 	}
 };
 
-// TODO: deprecated, remove.
-typedef symbol_element SymbolElement;
-
 struct mask_element :
 		public element,
 		public container,
@@ -165,13 +140,7 @@ struct mask_element :
 {
 	coordinate_units mask_units;
 
-	// TODO: deprecated, remove.
-	coordinate_units& maskUnits = mask_units;
-
 	coordinate_units mask_content_units;
-
-	// TODO: deprecated, remove.
-	coordinate_units& maskContentUnits = mask_content_units;
 	
 	void accept(visitor& v)override;
 	void accept(const_visitor& v) const override;
@@ -186,8 +155,5 @@ struct mask_element :
 		return tag;
 	}
 };
-
-// TODO: deprecated, remove.
-typedef mask_element MaskElement;
 
 }

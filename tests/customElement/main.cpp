@@ -51,7 +51,7 @@ public:
 };
 
 int main(int argc, char** argv){
-	auto dom = std::make_unique<svgdom::SvgElement>();
+	auto dom = std::make_unique<svgdom::svg_element>();
 
 	svgdom::path_element path;
 

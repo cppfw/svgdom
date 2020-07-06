@@ -17,11 +17,11 @@ class EditingVisitor : public svgdom::visitor{
 	}
 	
 public:
-	void visit(svgdom::SvgElement& e) override{
+	void visit(svgdom::svg_element& e) override{
 		this->relay_accept(e);
 	}
 	
-	void visit(svgdom::GElement& e) override{
+	void visit(svgdom::g_element& e) override{
 		this->relay_accept(e);
 	}
 	
@@ -42,7 +42,7 @@ public:
 };
 
 int main(int argc, char** argv){
-	auto dom = std::make_unique<svgdom::SvgElement>();
+	auto dom = std::make_unique<svgdom::svg_element>();
 
 	svgdom::path_element path;
 
@@ -63,7 +63,7 @@ int main(int argc, char** argv){
 	dom->children.push_back(std::make_unique<svgdom::line_element>());
 	
 	{
-		auto g = std::make_unique<svgdom::GElement>();
+		auto g = std::make_unique<svgdom::g_element>();
 		g->children.push_back(std::make_unique<svgdom::line_element>());
 		
 		dom->children.push_back(std::move(g));
@@ -76,16 +76,16 @@ int main(int argc, char** argv){
 	ASSERT_ALWAYS(dom->children.size() == 3)
 	ASSERT_ALWAYS(dynamic_cast<svgdom::path_element*>(dom->children.begin()->get()))
 	ASSERT_ALWAYS(dynamic_cast<svgdom::line_element*>((++dom->children.begin())->get()))
-	ASSERT_ALWAYS(dynamic_cast<svgdom::GElement*>((++++dom->children.begin())->get()))
-	ASSERT_ALWAYS(dynamic_cast<svgdom::GElement*>((++++dom->children.begin())->get())->children.size() == 1)
+	ASSERT_ALWAYS(dynamic_cast<svgdom::g_element*>((++++dom->children.begin())->get()))
+	ASSERT_ALWAYS(dynamic_cast<svgdom::g_element*>((++++dom->children.begin())->get())->children.size() == 1)
 	ASSERT_ALWAYS(
-			dynamic_cast<svgdom::line_element*>(dynamic_cast<svgdom::GElement*>((++++dom->children.begin())->get())->children.front().get())
+			dynamic_cast<svgdom::line_element*>(dynamic_cast<svgdom::g_element*>((++++dom->children.begin())->get())->children.front().get())
 		)
 	
 	visitor.removeLines();
 	
 	ASSERT_INFO_ALWAYS(dom->children.size() == 2, "dom->children.size() = " << dom->children.size())
 	ASSERT_ALWAYS(dynamic_cast<svgdom::path_element*>(dom->children.begin()->get()))
-	ASSERT_ALWAYS(dynamic_cast<svgdom::GElement*>((++dom->children.begin())->get()))
-	ASSERT_ALWAYS(dynamic_cast<svgdom::GElement*>((++dom->children.begin())->get())->children.size() == 0)
+	ASSERT_ALWAYS(dynamic_cast<svgdom::g_element*>((++dom->children.begin())->get()))
+	ASSERT_ALWAYS(dynamic_cast<svgdom::g_element*>((++dom->children.begin())->get())->children.size() == 0)
 }

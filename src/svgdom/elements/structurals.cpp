@@ -35,9 +35,8 @@ std::array<real, 2> svg_element::get_dimensions(real dpi) const noexcept{
 	return {{w, h}};
 }
 
-
 real svg_element::aspect_ratio(real dpi)const{
-	auto wh = this->getDimensions(dpi);
+	auto wh = this->get_dimensions(dpi);
 	
 	if(wh[0] <= 0 || wh[1] <= 0){
 		return 0;

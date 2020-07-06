@@ -5,7 +5,7 @@
 #include <utki/debug.hpp>
 
 int main(int argc, char** argv){
-	std::unique_ptr<svgdom::SvgElement> domOriginal = std::make_unique<svgdom::SvgElement>();
+	std::unique_ptr<svgdom::svg_element> domOriginal = std::make_unique<svgdom::svg_element>();
 	
 	std::unique_ptr<svgdom::path_element> path = std::make_unique<svgdom::path_element>();
 
@@ -37,7 +37,7 @@ int main(int argc, char** argv){
 	
 	domOriginal->accept(cloner);
 	
-	std::unique_ptr<svgdom::SvgElement> domClone = cloner.get_clone_as<svgdom::SvgElement>();
+	std::unique_ptr<svgdom::svg_element> domClone = cloner.get_clone_as<svgdom::svg_element>();
 
 	std::string domOriginalStr = domOriginal->to_string();
 	
