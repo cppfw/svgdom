@@ -24,7 +24,4 @@ struct container{
 	container(const container& orig){}
 };
 
-// TODO: deprecated, remove.
-typedef container Container;
-
 }

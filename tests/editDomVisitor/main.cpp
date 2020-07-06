@@ -6,7 +6,7 @@
 
 // visitor to remove all 'line' elements
 class EditingVisitor : public svgdom::visitor{
-	std::vector<std::pair<svgdom::Container*, decltype(svgdom::Container::children)::iterator>> elementsToRemove;
+	std::vector<std::pair<svgdom::container*, decltype(svgdom::container::children)::iterator>> elementsToRemove;
 	
 	void addToRemove(){
 		if(!this->cur_parent()){
