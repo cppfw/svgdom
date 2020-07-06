@@ -47,9 +47,6 @@ struct path_element : public shape{
 		
 		type type_;
 	
-		// TODO: deprecated, remove.
-		typedef type Type_e;
-
 		real x, y;
 		
 		union{
@@ -65,7 +62,6 @@ struct path_element : public shape{
 		union{
 			real x2;
 			real x_axis_rotation;
-			real xAxisRotation; // TODO: deprecated, remove.
 		};
 		
 		union{

@@ -15,22 +15,22 @@ int main(int argc, char** argv){
 	style.setRgb(0x42, 0x13, 0xfe); 
 	path.styles[svgdom::StyleProperty_e::FILL] = style;
 
-	step.type_ = svgdom::PathElement::Step::Type_e::move_abs;
+	step.type_ = svgdom::PathElement::Step::type::move_abs;
 	step.x = 0;
 	step.y = 0;
 	path.path.push_back(step);
 
-	step.type_ = svgdom::PathElement::Step::Type_e::line_abs;
+	step.type_ = svgdom::PathElement::Step::type::line_abs;
 	step.x = 0;
 	step.y = 300;
 	path.path.push_back(step);
 
-	step.type_ = svgdom::PathElement::Step::Type_e::line_abs;
+	step.type_ = svgdom::PathElement::Step::type::line_abs;
 	step.x = 300;
 	step.y = 300;
 	path.path.push_back(step);
 
-	step.type_ = svgdom::PathElement::Step::Type_e::line_abs;
+	step.type_ = svgdom::PathElement::Step::type::line_abs;
 	step.x = 300;
 	step.y = 0;
 	path.path.push_back(step);
