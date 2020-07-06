@@ -111,7 +111,7 @@ void stream_writer::add_view_boxed_attributes(const view_boxed& e){
 }
 
 void stream_writer::add_aspect_ratioed_attributes(const aspect_ratioed& e){
-	if(e.preserveAspectRatio.preserve != aspect_ratioed::PreserveAspectRatio_e::NONE || e.preserveAspectRatio.defer || e.preserveAspectRatio.slice){
+	if(e.preserveAspectRatio.preserve != aspect_ratioed::aspect_ratio_preservation::none || e.preserveAspectRatio.defer || e.preserveAspectRatio.slice){
 		this->add_attribute("preserveAspectRatio", e.preserve_aspect_ratio.to_string());
 	}
 }
