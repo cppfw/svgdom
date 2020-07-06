@@ -504,12 +504,12 @@ void stream_writer::visit(const filter_element& e){
 		);
 	this->add_referencing_attributes(e);
 	
-	if(e.filterUnits != coordinate_units::unknown && e.filterUnits != coordinate_units::object_bounding_box){
-		this->add_attribute("filterUnits", coordinateUnitsToString(e.filterUnits));
+	if(e.filter_units != coordinate_units::unknown && e.filter_units != coordinate_units::object_bounding_box){
+		this->add_attribute("filterUnits", coordinateUnitsToString(e.filter_units));
 	}
 
-	if(e.primitiveUnits != coordinate_units::unknown && e.primitiveUnits != coordinate_units::user_space_on_use){
-		this->add_attribute("primitiveUnits", coordinateUnitsToString(e.primitiveUnits));
+	if(e.primitive_units != coordinate_units::unknown && e.primitive_units != coordinate_units::user_space_on_use){
+		this->add_attribute("primitiveUnits", coordinateUnitsToString(e.primitive_units));
 	}
 	
 	this->write(&e);

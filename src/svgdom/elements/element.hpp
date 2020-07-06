@@ -15,11 +15,6 @@ struct element{
 	
 	std::string to_string()const;
 
-	// TODO: deprecated, remove.
-	std::string toString()const{
-		return this->to_string();
-	}
-	
 	/**
 	 * @brief Accept method for visitor pattern.
 	 * @param v - visitor to accept.
@@ -34,8 +29,5 @@ struct element{
 
 	virtual ~element()noexcept{}
 };
-
-// TODO: deprecated, remove.
-typedef element Element;
 
 }

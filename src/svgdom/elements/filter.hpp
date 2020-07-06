@@ -20,12 +20,6 @@ struct filter_element :
 	coordinate_units filter_units = coordinate_units::object_bounding_box;
 	coordinate_units primitive_units = coordinate_units::user_space_on_use;
 
-	// TODO: deprecated, remove.
-	decltype(filter_units)& filterUnits = filter_units;
-
-	// TODO: deprecated, remove.
-	decltype(primitive_units)& primitiveUnits = primitive_units;
-	
 	// NOTE: filterRes attribute is dropped, it seems deprecated.
 	
 	void accept(visitor& v)override;
@@ -41,9 +35,6 @@ struct filter_element :
 		return tag;
 	}
 };
-
-// TODO: deprecated, remove.
-typedef filter_element FilterElement;
 
 struct filter_primitive :
 		public element,

@@ -546,10 +546,10 @@ void Parser::parseFilterElement() {
 	this->fillReferencing(*ret);
 	
 	if(auto a = this->findAttributeOfNamespace(XmlNamespace_e::SVG, "filterUnits")){
-		ret->filterUnits = svgdom::parseCoordinateUnits(*a);
+		ret->filter_units = svgdom::parseCoordinateUnits(*a);
 	}
 	if(auto a = this->findAttributeOfNamespace(XmlNamespace_e::SVG, "primitiveUnits")){
-		ret->primitiveUnits = svgdom::parseCoordinateUnits(*a);
+		ret->primitive_units = svgdom::parseCoordinateUnits(*a);
 	}
 	
 	this->addElement(std::move(ret));

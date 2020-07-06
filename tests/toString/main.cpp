@@ -39,7 +39,7 @@ int main(int argc, char** argv){
 
 	dom->children.push_back(std::make_unique<svgdom::PathElement>(path));
 
-	auto str = dom->toString();
+	auto str = dom->to_string();
 	
 	TRACE_ALWAYS(<< str << std::endl)
 	

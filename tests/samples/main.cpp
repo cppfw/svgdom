@@ -25,7 +25,7 @@ int main(int argc, char** argv){
 	
 	ASSERT_ALWAYS(dom)
 	
-	auto str = dom->toString();
+	auto str = dom->to_string();
 //	TRACE_ALWAYS(<< str << std::endl)
 	
 	papki::fs_file outFile("out.svg");

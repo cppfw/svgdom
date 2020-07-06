@@ -4,8 +4,7 @@
 
 #include <utki/debug.hpp>
 
-struct CustomElement : public svgdom::Element{	
-	
+struct CustomElement : public svgdom::element{
 	void accept(svgdom::const_visitor& visitor) const override;
 	void accept(svgdom::visitor& visitor) override;
 
