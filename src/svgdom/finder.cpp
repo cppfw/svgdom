@@ -9,13 +9,13 @@ using namespace svgdom;
 namespace{
 class CacheCreator : virtual public svgdom::const_visitor{
 public:
-	std::map<std::string, finder::ElementInfo> cache;
+	std::map<std::string, finder::element_info> cache;
 	
 	style_stack styleStack;
 	
 	void addToCache(const svgdom::element& e){
 		if(!e.id.empty()){
-			this->cache.insert(std::make_pair(e.id, finder::ElementInfo(e, this->styleStack)));
+			this->cache.insert(std::make_pair(e.id, finder::element_info(e, this->styleStack)));
 		}
 	}
 	
@@ -101,7 +101,7 @@ finder::finder(const svgdom::element& root) :
 		}())
 {}
 
-const finder::ElementInfo* finder::find_by_id(const std::string& id)const{
+const finder::element_info* finder::find_by_id(const std::string& id)const{
 	if(id.length() == 0){
 		return nullptr;
 	}

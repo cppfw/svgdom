@@ -30,11 +30,6 @@ public:
 		return ret;
 	}
 
-	// TODO: DEPRECATED, remove.
-	template <class T> std::unique_ptr<T> getCloneAs(){
-		return this->get_clone_as<T>();
-	}
-	
 	void visit(const svgdom::path_element& e) override;
 	void visit(const svgdom::rect_element& e) override;
 	void visit(const svgdom::circle_element& e) override;
@@ -54,8 +49,5 @@ public:
 	void visit(const svgdom::fe_gaussian_blur_element& e) override;
 	void visit(const svgdom::image_element& e) override;
 };
-
-// TODO: DEPRECATED, remove.
-typedef cloner Cloner;
 
 }

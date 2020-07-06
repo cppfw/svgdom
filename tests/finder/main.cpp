@@ -21,7 +21,7 @@ int main(int argc, char** argv){
 	
 	class TraverseVisitor : public svgdom::ConstVisitor{
 	public:
-		svgdom::Finder finder;
+		svgdom::finder finder;
 		
 		TraverseVisitor(const svgdom::element& root) : finder(root){}
 		
@@ -44,5 +44,5 @@ int main(int argc, char** argv){
 	
 	TRACE_ALWAYS(<< "SVG searched in " << float(searchDuration) / 1000.0f << " sec." << std::endl)
 	
-	ASSERT_INFO_ALWAYS(visitor.finder.cacheSize() == 17763, "visitor.finder.cacheSize() = " << visitor.finder.cacheSize())
+	ASSERT_INFO_ALWAYS(visitor.finder.size() == 17763, "visitor.finder.cacheSize() = " << visitor.finder.size())
 }

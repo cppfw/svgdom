@@ -33,15 +33,15 @@ int main(int argc, char** argv){
 
 	domOriginal->children.push_back(std::move(path));
 
-	svgdom::Cloner cloner;
+	svgdom::cloner cloner;
 	
 	domOriginal->accept(cloner);
 	
-	std::unique_ptr<svgdom::SvgElement> domClone = cloner.getCloneAs<svgdom::SvgElement>();
+	std::unique_ptr<svgdom::SvgElement> domClone = cloner.get_clone_as<svgdom::SvgElement>();
 
-	std::string domOriginalStr = domOriginal->toString();
+	std::string domOriginalStr = domOriginal->to_string();
 	
-	std::string domCloneStr = domClone->toString();
+	std::string domCloneStr = domClone->to_string();
 	
 	ASSERT_ALWAYS(domOriginalStr == domCloneStr)
 }
