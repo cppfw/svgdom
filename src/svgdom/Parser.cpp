@@ -537,10 +537,10 @@ void Parser::parseFilterElement() {
 	this->fillRectangle(
 			*ret,
 			rectangle(
-					length(-10, length_unit::PERCENT),
-					length(-10, length_unit::PERCENT),
-					length(120, length_unit::PERCENT),
-					length(120, length_unit::PERCENT)
+					length(-10, length_unit::percent),
+					length(-10, length_unit::percent),
+					length(120, length_unit::percent),
+					length(120, length_unit::percent)
 				)
 		);
 	this->fillReferencing(*ret);

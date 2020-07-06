@@ -226,10 +226,10 @@ void StreamWriter::visit(const image_element& e){
 	this->add_rectangle_attributes(
 			e,
 			rectangle(
-					length(0, length_unit::NUMBER),
-					length(0, length_unit::NUMBER),
-					length(0, length_unit::NUMBER),
-					length(0, length_unit::NUMBER)
+					length(0, length_unit::number),
+					length(0, length_unit::number),
+					length(0, length_unit::number),
+					length(0, length_unit::number)
 				)
 		);
 	this->add_referencing_attributes(e);
@@ -365,13 +365,13 @@ void StreamWriter::visit(const gradient::stop_element& e) {
 void StreamWriter::visit(const radial_gradient_element& e) {
 	this->setName(radial_gradient_element::tag);
 	this->add_gradient_attributes(e);
-	if(e.cx.unit != length_unit::PERCENT || e.cx.value != 50){
+	if(e.cx.unit != length_unit::percent || e.cx.value != 50){
 		this->add_attribute("cx", e.cx);
 	}
-	if(e.cy.unit != length_unit::PERCENT || e.cy.value != 50){
+	if(e.cy.unit != length_unit::percent || e.cy.value != 50){
 		this->add_attribute("cy", e.cy);
 	}
-	if(e.r.unit != length_unit::PERCENT || e.r.value != 50){
+	if(e.r.unit != length_unit::percent || e.r.value != 50){
 		this->add_attribute("r", e.r);
 	}
 	if(e.fx.unit != length_unit::unknown){
@@ -386,16 +386,16 @@ void StreamWriter::visit(const radial_gradient_element& e) {
 void StreamWriter::visit(const linear_gradient_element& e) {
 	this->setName(linear_gradient_element::tag);
 	this->add_gradient_attributes(e);
-	if(e.x1.unit != length_unit::PERCENT || e.x1.value != 0){
+	if(e.x1.unit != length_unit::percent || e.x1.value != 0){
 		this->add_attribute("x1", e.x1);
 	}
-	if(e.y1.unit != length_unit::PERCENT || e.y1.value != 0){
+	if(e.y1.unit != length_unit::percent || e.y1.value != 0){
 		this->add_attribute("y1", e.y1);
 	}
-	if(e.x2.unit != length_unit::PERCENT || e.x2.value != 100){
+	if(e.x2.unit != length_unit::percent || e.x2.value != 100){
 		this->add_attribute("x2", e.x2);
 	}
-	if(e.y2.unit != length_unit::PERCENT || e.y2.value != 0){
+	if(e.y2.unit != length_unit::percent || e.y2.value != 0){
 		this->add_attribute("y2", e.y2);
 	}
 	this->write(&e);
@@ -496,10 +496,10 @@ void StreamWriter::visit(const filter_element& e){
 	this->add_rectangle_attributes(
 			e,
 			rectangle(
-				length(-10, length_unit::PERCENT),
-				length(-10, length_unit::PERCENT),
-				length(120, length_unit::PERCENT),
-				length(120, length_unit::PERCENT)
+				length(-10, length_unit::percent),
+				length(-10, length_unit::percent),
+				length(120, length_unit::percent),
+				length(120, length_unit::percent)
 			)
 		);
 	this->add_referencing_attributes(e);

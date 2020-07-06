@@ -12,36 +12,22 @@ namespace svgdom{
 
 enum class length_unit{
 	unknown,
-	UNKNOWN = unknown, // TODO: deprecated, remove.
 	number,
-	NUMBER = number, // TODO: deprecated, remove.
 	percent,
-	PERCENT = percent, // TODO: deprecated, remove.
 	em,
-	EM = em, // TODO: deprecated, remove.
 	ex,
-	EX = ex, // TODO: deprecated, remove.
 	px,
-	PX = px, // TODO: deprecated, remove.
 	cm,
-	CM = cm, // TODO: deprecated, remove.
 	in,
-	IN = in, // TODO: deprecated, remove.
 	pt,
-	PT = pt, // TODO: deprecated, remove.
 	pc,
-	PC = pc, // TODO: deprecated, remove.
-	mm,
-	MM = mm // TODO: deprecated, remove.
+	mm
 };
 
 /**
  * @brief SVG attribute value of type 'length'.
  */
 struct length{
-	// TODO: DEPRECATED, remove.
-	typedef length_unit Unit_e;
-
 	real value;
 	length_unit unit;
 	
