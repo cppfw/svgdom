@@ -7,26 +7,26 @@
 int main(int argc, char** argv){
 	std::unique_ptr<svgdom::SvgElement> domOriginal = std::make_unique<svgdom::SvgElement>();
 	
-	std::unique_ptr<svgdom::PathElement> path = std::make_unique<svgdom::PathElement>();
+	std::unique_ptr<svgdom::path_element> path = std::make_unique<svgdom::path_element>();
 
-	svgdom::PathElement::Step step;
+	svgdom::path_element::step step;
 
-	step.type_ = svgdom::PathElement::Step::type::move_abs;
+	step.type_ = svgdom::path_element::step::type::move_abs;
 	step.x = 0;
 	step.y = 0;
 	path->path.push_back(step);
 
-	step.type_ = svgdom::PathElement::Step::type::line_abs;
+	step.type_ = svgdom::path_element::step::type::line_abs;
 	step.x = 0;
 	step.y = 300;
 	path->path.push_back(step);
 
-	step.type_ = svgdom::PathElement::Step::type::line_abs;
+	step.type_ = svgdom::path_element::step::type::line_abs;
 	step.x = 300;
 	step.y = 300;
 	path->path.push_back(step);
 
-	step.type_ = svgdom::PathElement::Step::type::line_abs;
+	step.type_ = svgdom::path_element::step::type::line_abs;
 	step.x = 300;
 	step.y = 0;
 	path->path.push_back(step);

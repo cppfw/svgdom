@@ -74,30 +74,12 @@ struct path_element : public shape{
 		
 		static type char_to_type(char c);
 
-		// TODO: deprecated, remove.
-		static type charToType(char c){
-			return char_to_type(c);
-		}
-
 		static char type_to_char(type t);
-
-		// TODO: deprecated, remove.
-		static char typeToChar(type t){
-			return type_to_char(t);
-		}
 	};
-
-	// TODO: deprecated, remove.
-	typedef step Step;
 
 	std::vector<step> path;
 	
 	std::string path_to_string()const;
-
-	// TODO: deprecated, remove.
-	std::string pathToString()const{
-		return this->path_to_string();
-	}
 	
 	static decltype(path) parse(const std::string& str);
 	
@@ -110,9 +92,6 @@ struct path_element : public shape{
 		return tag;
 	}
 };
-
-// TODO: deprecated, remove.
-typedef path_element PathElement;
 
 struct rect_element :
 		public shape,
@@ -138,13 +117,7 @@ struct rect_element :
 				length(0, length_unit::unknown)
 			);
 	}
-
-	// TODO: deprecated, remove.
-	static rectangle rectangleDefaultValues;
 };
-
-// TODO: deprecated, remove.
-typedef rect_element RectElement;
 
 struct circle_element : public shape{
 	length cx = length(0, length_unit::unknown);
@@ -160,9 +133,6 @@ struct circle_element : public shape{
 		return tag;
 	}
 };
-
-// TODO: deprecated, remove.
-typedef circle_element CircleElement;
 
 struct ellipse_element : public shape{
 	length cx = length(0, length_unit::unknown);
@@ -180,9 +150,6 @@ struct ellipse_element : public shape{
 	}
 };
 
-// TODO: deprecated, remove.
-typedef ellipse_element EllipseElement;
-
 struct line_element : public shape{
 	length x1 = length(0, length_unit::unknown);
 	length y1 = length(0, length_unit::unknown);
@@ -199,24 +166,13 @@ struct line_element : public shape{
 	}
 };
 
-//TODO: deprecated, remove.
-typedef line_element LineElement;
-
 struct polyline_shape : public shape{
 	std::vector<std::array<real, 2>> points;
 	
 	std::string points_to_string()const;
 
-	// TODO: deprecated, remove.
-	std::string pointsToString()const{
-		return this->points_to_string();
-	}
-	
 	static decltype(points) parse(const std::string& str);
 };
-
-// TODO: deprecated, remove.
-typedef polyline_shape PolylineShape;
 
 struct polyline_element : public polyline_shape{
 	void accept(visitor& v)override;
@@ -229,9 +185,6 @@ struct polyline_element : public polyline_shape{
 	}
 };
 
-//TODO: deprecated, remove.
-typedef polyline_element PolylineElement;
-
 struct polygon_element : public polyline_shape{
 	void accept(visitor& v)override;
 	void accept(const_visitor& v) const override;
@@ -242,8 +195,5 @@ struct polygon_element : public polyline_shape{
 		return tag;
 	}
 };
-
-// TODO: deprecated, remove.
-typedef polygon_element PolygonElement;
 
 }

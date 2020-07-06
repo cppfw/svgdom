@@ -303,7 +303,7 @@ void stream_writer::visit(const polygon_element& e) {
 	this->set_name(polygon_element::tag);
 	this->add_shape_attributes(e);
 	if(e.points.size() != 0){
-		this->add_attribute("points", e.pointsToString());
+		this->add_attribute("points", e.points_to_string());
 	}
 	this->write();
 }
@@ -312,7 +312,7 @@ void stream_writer::visit(const polyline_element& e) {
 	this->set_name(polyline_element::tag);
 	this->add_shape_attributes(e);
 	if(e.points.size() != 0){
-		this->add_attribute("points", e.pointsToString());
+		this->add_attribute("points", e.points_to_string());
 	}
 	this->write();
 }
@@ -339,7 +339,7 @@ void stream_writer::visit(const path_element& e){
 	this->set_name(path_element::tag);
 	this->add_shape_attributes(e);
 	if(e.path.size() != 0){
-		this->add_attribute("d", e.pathToString());
+		this->add_attribute("d", e.path_to_string());
 	}
 	this->write();
 }
