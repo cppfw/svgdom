@@ -33,20 +33,20 @@ void CustomElement::accept(svgdom::Visitor& visitor){
 }
 
 class CustomStreamWriter :
-		public svgdom::StreamWriter,
+		public svgdom::stream_writer,
 		public CustomVisitor
 {
 public:
 	CustomStreamWriter(std::ostream& s) :
-			svgdom::StreamWriter(s)
+			svgdom::stream_writer(s)
 	{}
 	
-	using svgdom::StreamWriter::visit;
+	using svgdom::stream_writer::visit;
 
 	void visit(const CustomElement& e)override{
-		this->setName("custom");
-		this->addAttribute("customAttrib1", "value1");
-		this->addAttribute("customAttrib2", "value2");
+		this->set_name("custom");
+		this->add_attribute("customAttrib1", "value1");
+		this->add_attribute("customAttrib2", "value2");
 		this->write();
 	}
 };

@@ -9,10 +9,10 @@
 
 using namespace svgdom;
 
-std::string element::to_string() const{
+std::string element::to_string()const{
 	std::stringstream s;
 	
-	StreamWriter visitor(s);
+	stream_writer visitor(s);
 	this->accept(visitor);
 	
 	return s.str();

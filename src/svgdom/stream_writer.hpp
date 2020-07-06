@@ -44,104 +44,6 @@ protected:
 	void add_second_inputable_attributes(const second_inputable& e);
 	void add_text_positioning_attributes(const text_positioning& e);
 	
-	// TODO: deprecated, remove.
-	std::string indentStr(){
-		return this->indent_str();
-	}
-
-	// TODO: DEPRECATED, remove.
-	void setName(const std::string& name){
-		this->set_name(name);
-	}
-
-	// TODO: DEPRECATED, remove.
-	void addAttribute(const std::string& name, const std::string& value){
-		this->add_attribute(name, value);
-	}
-
-	// TODO: deprecaed, remove.
-	void addAttribute(const std::string& name, const length& value){
-		this->add_attribute(name, value);
-	}
-
-	// TODO: deprecated, remove.
-	void addAttribute(const std::string& name, real value){
-		this->add_attribute(name, value);
-	}
-
-	// TODO: deprecatged, remove.
-	void addElementAttributes(const element& e){
-		this->add_element_attributes(e);
-	}
-
-	// TODO: deprecated, remove.
-	void addTransformableAttributes(const transformable& e){
-		this->add_transformable_attributes(e);
-	}
-
-	// TODO: deprecated, remove.
-	void addStyleableAttributes(const styleable& e){
-		this->add_styleable_attributes(e);
-	}
-
-	// TODO: deprecated, remove.
-	void addViewBoxedAttributes(const view_boxed& e){
-		this->add_view_boxed_attributes(e);
-	}
-
-	// TODO: deprecated, remove.
-	void addAspectRatioedAttributes(const aspect_ratioed& e){
-		this->add_aspect_ratioed_attributes(e);
-	}
-
-	// TODO: deprecaed, remove.
-	void addRectangleAttributes(
-			const rectangle& e,
-			const rectangle& defaultValues = rectangle(
-					length(0, length_unit::percent),
-					length(0, length_unit::percent),
-					length(100, length_unit::percent),
-					length(100, length_unit::percent)
-				)
-		)
-	{
-		this->add_rectangle_attributes(e, defaultValues);
-	}
-
-	// TODO: deprecated, remove.
-	void addShapeAttributes(const shape& e){
-		this->add_shape_attributes(e);
-	}
-
-	// TODO: deprecated, remove.
-	void addReferencingAttributes(const referencing& e){
-		this->add_referencing_attributes(e);
-	}
-
-	// TODO: deprecated, remove.
-	void addGradientAttributes(const gradient& e){
-		this->add_gradient_attributes(e);
-	}
-
-	// TODO: deprecated, remove.
-	void addFilterPrimitiveAttributes(const filter_primitive& e){
-		this->add_filter_primitive_attributes(e);
-	}
-
-	// TODO: deprecated, remove.
-	void addInputableAttributes(const inputable& e){
-		this->add_inputable_attributes(e);
-	}
-
-	// TODO: deprecated, remove.
-	void addSecondInputableAttributes(const second_inputable& e){
-		this->add_second_inputable_attributes(e);
-	}
-
-	// TODO: deprecated, remove.
-	void addTextPositioningAttributes(const text_positioning& e){
-		this->add_text_positioning_attributes(e);
-	}
 public:
 	stream_writer(std::ostream& s) : s(s) {}
 	
@@ -170,8 +72,5 @@ public:
 	void visit(const text_element& e) override;
 	void visit(const style_element& e) override;
 };
-
-// TODO: deprecated, remove.
-typedef stream_writer StreamWriter;
 
 }
