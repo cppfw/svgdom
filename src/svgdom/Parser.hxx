@@ -77,10 +77,10 @@ class Parser : public mikroxml::parser{
 	void fillRectangle(
 			rectangle& r,
 			const rectangle& defaultValues = rectangle(
-					length::make(0, length_unit::percent),
-					length::make(0, length_unit::percent),
-					length::make(100, length_unit::percent),
-					length::make(100, length_unit::percent)
+					length(0, length_unit::percent),
+					length(0, length_unit::percent),
+					length(100, length_unit::percent),
+					length(100, length_unit::percent)
 				)
 		);
 	void fillViewBoxed(ViewBoxed& v);

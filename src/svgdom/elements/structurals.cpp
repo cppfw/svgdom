@@ -13,8 +13,8 @@ const std::string symbol_element::tag = "symbol";
 const std::string use_element::tag = "use";
 
 std::array<real, 2> svg_element::get_dimensions(real dpi) const noexcept{
-	real w = this->width.toPx(dpi);
-	real h = this->height.toPx(dpi);
+	real w = this->width.to_px(dpi);
+	real h = this->height.to_px(dpi);
 
 	if(w <= 0){
 		if(this->viewBox[2] > 0){

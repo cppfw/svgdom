@@ -40,43 +40,20 @@ struct length{
 			unit(unit)
 	{}
 
-	//TODO: deprecated, remove.
-	static constexpr length make(real value, length_unit unit = length_unit::number)noexcept{
-		return length(value, unit);
-	}
-	
 	bool is_valid()const noexcept{
 		return this->unit != length_unit::unknown;
 	}
 
-	// TODO: deprecated, remove.
-	bool isValid()const noexcept{
-		return this->is_valid();
-	}
-	
 	bool is_percent()const noexcept{
 		return this->unit == length_unit::percent;
 	}
-
-	// TODO: deprecated, remove.
-	bool isPercent()const noexcept{
-		return this->is_percent();
-	}
 	
 	real to_px(real dpi)const noexcept;
-
-	// TODO: deprecated, remove.
-	real toPx(real dpi)const noexcept{
-		return this->to_px(dpi);
-	}
 	
 	bool operator!=(const length& l)const{
 		return this->value != l.value || (this->unit != l.unit && this->value != real(0));
 	}
 };
-
-// TODO: DEPRECATED, remove.
-typedef length Length;
 
 }
 
