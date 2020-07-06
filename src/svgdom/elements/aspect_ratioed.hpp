@@ -25,22 +25,6 @@ struct aspect_ratioed{
 		std::string to_string()const;
 		void parse(const std::string& str);
 	} preserve_aspect_ratio;
-
-	// TODO: deprecated, remove.
-	decltype(preserve_aspect_ratio)& preserveAspectRatio = preserve_aspect_ratio;
-
-	// TODO: deprecated, remove.
-	std::string preserveAspectRatioToString()const{
-		return this->preserve_aspect_ratio.to_string();
-	}
-
-	// TODO: deprecated, remove.
-	void parseAndFillPreserveAspectRatio(const std::string& str){
-		this->preserve_aspect_ratio.parse(str);
-	}
 };
-
-// TODO: DEPRECATED, remove.
-typedef aspect_ratioed AspectRatioed;
 
 }

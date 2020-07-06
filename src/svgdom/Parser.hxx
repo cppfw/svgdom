@@ -84,7 +84,7 @@ class Parser : public mikroxml::parser{
 				)
 		);
 	void fillViewBoxed(ViewBoxed& v);
-	void fillAspectRatioed(AspectRatioed& e);
+	void fillAspectRatioed(aspect_ratioed& e);
 	void fillTransformable(Transformable& t);
 	void fillStyleable(Styleable& s);
 	void fillGradient(Gradient& g);
