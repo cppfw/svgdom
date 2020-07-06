@@ -18,9 +18,6 @@ const std::string polygon_element::tag = "polygon";
 const std::string polyline_element::tag = "polyline";
 const std::string rect_element::tag = "rect";
 
-// TODO: deprecated, remove.
-rectangle rect_element::rectangleDefaultValues = rect_element::rectangle_default_values();
-
 void path_element::accept(visitor& v){
 	v.visit(*this);
 }

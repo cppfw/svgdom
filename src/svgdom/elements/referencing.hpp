@@ -20,14 +20,6 @@ struct referencing{
 	 * @return Empty string if this Referencing does not refer to any element or the reference is not local IRI.
 	 */
 	std::string get_local_id_from_iri()const;
-
-	// TODO: deprecated, remove.
-	std::string getLocalIdFromIri()const{
-		return this->get_local_id_from_iri();
-	}
 };
-
-// TODO: derprecated, remove.
-typedef referencing Referencing;
 
 }

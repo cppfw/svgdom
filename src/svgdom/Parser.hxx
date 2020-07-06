@@ -73,7 +73,7 @@ class Parser : public mikroxml::parser{
 	void on_content_parsed(utki::span<const char> str) override;
 
 	void fillElement(element& e);
-	void fillReferencing(Referencing& e);
+	void fillReferencing(referencing& e);
 	void fillRectangle(
 			rectangle& r,
 			const rectangle& defaultValues = rectangle(
@@ -88,7 +88,7 @@ class Parser : public mikroxml::parser{
 	void fillTransformable(Transformable& t);
 	void fillStyleable(Styleable& s);
 	void fillGradient(gradient& g);
-	void fillShape(Shape& s);
+	void fillShape(shape& s);
 	void fillFilterPrimitive(filter_primitive& p);
 	void fillInputable(inputable& p);
 	void fillSecondInputable(second_inputable& p);

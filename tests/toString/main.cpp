@@ -3,8 +3,6 @@
 
 #include <utki/debug.hpp>
 
-
-
 int main(int argc, char** argv){
 	auto dom = std::make_unique<svgdom::SvgElement>();
 
@@ -13,26 +11,26 @@ int main(int argc, char** argv){
 	svgdom::PathElement::Step step;
 
 	svgdom::StyleValue style;
-	style.type_ = svgdom::StyleValue::Type_e::NORMAL; 
+	style.type_ = svgdom::StyleValue::Type_e::normal; 
 	style.setRgb(0x42, 0x13, 0xfe); 
 	path.styles[svgdom::StyleProperty_e::FILL] = style;
 
-	step.type_ = svgdom::PathElement::Step::Type_e::MOVE_ABS;
+	step.type_ = svgdom::PathElement::Step::Type_e::move_abs;
 	step.x = 0;
 	step.y = 0;
 	path.path.push_back(step);
 
-	step.type_ = svgdom::PathElement::Step::Type_e::LINE_ABS;
+	step.type_ = svgdom::PathElement::Step::Type_e::line_abs;
 	step.x = 0;
 	step.y = 300;
 	path.path.push_back(step);
 
-	step.type_ = svgdom::PathElement::Step::Type_e::LINE_ABS;
+	step.type_ = svgdom::PathElement::Step::Type_e::line_abs;
 	step.x = 300;
 	step.y = 300;
 	path.path.push_back(step);
 
-	step.type_ = svgdom::PathElement::Step::Type_e::LINE_ABS;
+	step.type_ = svgdom::PathElement::Step::Type_e::line_abs;
 	step.x = 300;
 	step.y = 0;
 	path.path.push_back(step);
