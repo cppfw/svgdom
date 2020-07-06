@@ -12,9 +12,6 @@ public:
 	//TODO: attributes x, y, dx, dy, rotate are not implemented yet.
 };
 
-// TODO: deprecated, remove.
-typedef text_positioning TextPositioning;
-
 class text_element :
 		public element,
 		public container,
@@ -38,8 +35,5 @@ public:
 		return tag;
 	}
 };
-
-// TODO: deprecated, remove.
-typedef text_element TextElement;
 
 }

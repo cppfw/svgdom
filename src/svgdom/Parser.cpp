@@ -288,9 +288,9 @@ void Parser::fillStyleable(styleable& s) {
 
 				// parse style attributes
 				{
-					style_property type = styleable::stringToProperty(nsn.name);
-					if (type != style_property::UNKNOWN) {
-						s.presentation_attributes[type] = styleable::parseStylePropertyValue(type, a.second);
+					style_property type = styleable::string_to_property(nsn.name);
+					if (type != style_property::unknown) {
+						s.presentation_attributes[type] = styleable::parse_style_property_value(type, a.second);
 					}
 				}
 				break;
@@ -309,12 +309,12 @@ void Parser::fillTransformable(transformable& t) {
 
 void Parser::fillViewBoxed(view_boxed& v){
 	if(auto a = this->findAttributeOfNamespace(XmlNamespace_e::SVG, "viewBox")){
-		v.viewBox = svg_element::parseViewbox(*a);
+		v.view_box = svg_element::parse_view_box(*a);
 	}
 }
 
 void Parser::fillTextPositioning(text_positioning& p){
-	//TODO: parse missing attributes
+	// TODO: parse missing attributes
 }
 
 void Parser::fill_style(style_element& e){

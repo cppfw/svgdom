@@ -23,34 +23,34 @@ std::string transformable::transformations_to_string() const {
 			default:
 				ASSERT(false)
 				break;
-			case transformation::type::MATRIX:
+			case transformation::type::matrix:
 				s << "matrix(" << t.a << "," << t.b << "," << t.c << "," << t.d << "," << t.e << "," << t.f << ")";
 				break;
-			case transformation::type::TRANSLATE:
+			case transformation::type::translate:
 				s << "translate(" << t.x;
 				if(t.y != 0){
 					s << "," << t.y;
 				}
 				s << ")";
 				break;
-			case transformation::type::SCALE:
+			case transformation::type::scale:
 				s << "scale(" << t.x;
 				if(t.x != t.y){
 					s << "," << t.y;
 				}
 				s << ")";
 				break;
-			case transformation::type::ROTATE:
+			case transformation::type::rotate:
 				s << "rotate(" << t.angle;
 				if(t.x != 0 || t.y != 0){
 					s << "," << t.x << "," << t.y;
 				}
 				s << ")";
 				break;
-			case transformation::type::SKEWX:
+			case transformation::type::skewx:
 				s << "skewX(" << t.angle << ")";
 				break;
-			case transformation::type::SKEWY:
+			case transformation::type::skewy:
 				s << "skewY(" << t.angle << ")";
 				break;
 		}
@@ -77,17 +77,17 @@ decltype(transformable::transformations) transformable::parse(const std::string&
 		transformation t;
 
 		if(transform == "matrix"){
-			t.type_ = transformation::type::MATRIX;
+			t.type_ = transformation::type::matrix;
 		}else if(transform == "translate"){
-			t.type_ = transformation::type::TRANSLATE;
+			t.type_ = transformation::type::translate;
 		}else if(transform == "scale"){
-			t.type_ = transformation::type::SCALE;
+			t.type_ = transformation::type::scale;
 		}else if(transform == "rotate"){
-			t.type_ = transformation::type::ROTATE;
+			t.type_ = transformation::type::rotate;
 		}else if(transform == "skewX"){
-			t.type_ = transformation::type::SKEWX;
+			t.type_ = transformation::type::skewx;
 		}else if(transform == "skewY"){
-			t.type_ = transformation::type::SKEWY;
+			t.type_ = transformation::type::skewy;
 		}else{
 			return ret; // unknown transformation, stop parsing
 		}
@@ -105,7 +105,7 @@ decltype(transformable::transformations) transformable::parse(const std::string&
 			default:
 				ASSERT(false)
 				break;
-			case transformation::type::MATRIX:
+			case transformation::type::matrix:
 				t.a = readInReal(s);
 				if(s.fail()){
 					return ret;
@@ -136,7 +136,7 @@ decltype(transformable::transformations) transformable::parse(const std::string&
 					return ret;
 				}
 				break;
-			case transformation::type::TRANSLATE:
+			case transformation::type::translate:
 				t.x = readInReal(s);
 				if(s.fail()){
 //					TRACE(<< "failed to read in x translation" << std::endl)
@@ -151,7 +151,7 @@ decltype(transformable::transformations) transformable::parse(const std::string&
 				}
 //				TRACE(<< "translation read: x,y = " << t.x << ", " << t.y << std::endl)
 				break;
-			case transformation::type::SCALE:
+			case transformation::type::scale:
 				t.x = readInReal(s);
 				if(s.fail()){
 					return ret;
@@ -163,7 +163,7 @@ decltype(transformable::transformations) transformable::parse(const std::string&
 					t.y = t.x;
 				}
 				break;
-			case transformation::type::ROTATE:
+			case transformation::type::rotate:
 				t.angle = readInReal(s);
 				if(s.fail()){
 					return ret;
@@ -178,12 +178,12 @@ decltype(transformable::transformations) transformable::parse(const std::string&
 					skipWhitespacesAndOrComma(s);
 					t.y = readInReal(s);
 					if(s.fail()){
-						return ret;//malformed rotate transformation
+						return ret; // malformed rotate transformation
 					}
 				}
 				break;
-			case transformation::type::SKEWY:
-			case transformation::type::SKEWX:
+			case transformation::type::skewy:
+			case transformation::type::skewx:
 				t.angle = readInReal(s);
 				if(s.fail()){
 					return ret;
@@ -194,7 +194,7 @@ decltype(transformable::transformations) transformable::parse(const std::string&
 		skipWhitespaces(s);
 
 		if(s.get() != ')'){
-			return ret;//expected )
+			return ret; // expected )
 		}
 
 		ret.push_back(t);

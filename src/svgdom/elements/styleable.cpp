@@ -13,12 +13,6 @@
 #include "element.hpp"
 #include "../malformed_svg_error.hpp"
 
-// TODO: remove when deprecated stuff is removed.
-// some header defines OVERFLOW, undefine it
-#ifdef OVERFLOW
-#	undef OVERFLOW
-#endif
-
 using namespace svgdom;
 
 std::string styleable::style_value_to_string(style_property p, const style_value& v){
@@ -29,85 +23,85 @@ std::string styleable::style_value_to_string(style_property p, const style_value
 	std::stringstream s;
 	switch(p){
 		default:
-			TRACE(<< "Unimplemented style property: " << styleable::propertyToString(p) << ", writing empty value." << std::endl)
+			TRACE(<< "Unimplemented style property: " << styleable::property_to_string(p) << ", writing empty value." << std::endl)
 			break;
-		case style_property::COLOR_INTERPOLATION_FILTERS:
-			s << v.colorInterpolationFiltersToString();
+		case style_property::color_interpolation_filters:
+			s << v.color_interpolation_filters_to_string();
 			break;
-		case style_property::STROKE_MITERLIMIT:
+		case style_property::stroke_miterlimit:
 			s << v.stroke_miterlimit;
 			break;
-		case style_property::STOP_OPACITY:
-		case style_property::OPACITY:
-		case style_property::STROKE_OPACITY:
-		case style_property::FILL_OPACITY:
+		case style_property::stop_opacity:
+		case style_property::opacity:
+		case style_property::stroke_opacity:
+		case style_property::fill_opacity:
 			s << v.opacity;
 			break;
-		case style_property::STOP_COLOR:
-		case style_property::FILL:
-		case style_property::STROKE:
-			s << v.paintToString();
+		case style_property::stop_color:
+		case style_property::fill:
+		case style_property::stroke:
+			s << v.paint_to_string();
 			break;
-		case style_property::STROKE_WIDTH:
+		case style_property::stroke_width:
 			s << v.stroke_width;
 			break;
-		case style_property::STROKE_LINECAP:
+		case style_property::stroke_linecap:
 			switch(v.stroke_line_cap){
 				default:
 					ASSERT(false)
 					break;
-				case stroke_line_cap::BUTT:
+				case stroke_line_cap::butt:
 					s << "butt";
 					break;
-				case stroke_line_cap::ROUND:
+				case stroke_line_cap::round:
 					s << "round";
 					break;
-				case stroke_line_cap::SQUARE:
+				case stroke_line_cap::square:
 					s << "square";
 					break;
 			}
 			break;
-		case style_property::STROKE_LINEJOIN:
+		case style_property::stroke_linejoin:
 			switch(v.stroke_line_join){
 				default:
 					ASSERT(false)
 					break;
-				case stroke_line_join::MITER:
+				case stroke_line_join::miter:
 					s << "miter";
 					break;
-				case stroke_line_join::ROUND:
+				case stroke_line_join::round:
 					s << "round";
 					break;
-				case stroke_line_join::BEVEL:
+				case stroke_line_join::bevel:
 					s << "bevel";
 					break;
 			}
 			break;
-		case style_property::FILL_RULE:
+		case style_property::fill_rule:
 			switch(v.fill_rule){
 				default:
 					ASSERT(false)
 					break;
-				case fill_rule::EVENODD:
+				case fill_rule::evenodd:
 					s << "evenodd";
 					break;
-				case fill_rule::NONZERO:
+				case fill_rule::nonzero:
 					s << "nonzero";
 					break;
 			}
 			break;
-		case style_property::MASK:
-		case style_property::FILTER:
+		case style_property::mask:
+		case style_property::filter:
 			s << "url(" << v.str << ")";
 			break;
-		case style_property::DISPLAY:
-			s << v.displayToString();
+		case style_property::display:
+			s << v.display_to_string();
 			break;
-		case style_property::ENABLE_BACKGROUND:
-			s << v.enableBackgroundToString();
+		case style_property::enable_background:
+			s << v.enable_background_to_string();
 			break;
-		case style_property::VISIBILITY:
-			s << v.visibilityToString();
+		case style_property::visibility:
+			s << v.visibility_to_string();
 			break;
 	}
 	return s.str();
@@ -127,7 +121,7 @@ std::string styleable::styles_to_string()const{
 		
 		ASSERT(st.first != style_property::unknown)
 		
-		s << propertyToString(st.first) << ":";
+		s << property_to_string(st.first) << ":";
 		
 		s << style_value_to_string(st.first, st.second);
 	}
@@ -147,7 +141,7 @@ std::string styleable::classes_to_string()const{
 	return ss.str();
 }
 
-//input parameter 'str' should have no leading or trailing white spaces
+// input parameter 'str' should have no leading or trailing white spaces
 style_value styleable::parse_style_property_value(style_property type, const std::string& str){
 	style_value v;
 
@@ -158,12 +152,12 @@ style_value styleable::parse_style_property_value(style_property type, const std
 
 	switch(type){
 		default:
-			TRACE(<< "unimplemented style property encountered: " << styleable::propertyToString(type) << std::endl)
+			TRACE(<< "unimplemented style property encountered: " << styleable::property_to_string(type) << std::endl)
 			break;
-		case style_property::COLOR_INTERPOLATION_FILTERS:
-			v = style_value::parseColorInterpolation(str);
+		case style_property::color_interpolation_filters:
+			v = style_value::parse_color_interpolation(str);
 			break;
-		case style_property::STROKE_MITERLIMIT:
+		case style_property::stroke_miterlimit:
 			{
 				std::stringstream iss(str);
 				v.stroke_miterlimit = readInReal(iss);
@@ -171,10 +165,10 @@ style_value styleable::parse_style_property_value(style_property type, const std
 				v.stroke_miterlimit = std::max(v.stroke_miterlimit, real(1)); // minimal value is 1
 			}
 			break;
-		case style_property::STOP_OPACITY:
-		case style_property::OPACITY:
-		case style_property::STROKE_OPACITY:
-		case style_property::FILL_OPACITY:
+		case style_property::stop_opacity:
+		case style_property::opacity:
+		case style_property::stroke_opacity:
+		case style_property::fill_opacity:
 			{
 				std::istringstream iss(str);
 				v.opacity = readInReal(iss);
@@ -183,66 +177,66 @@ style_value styleable::parse_style_property_value(style_property type, const std
 				v.type_ = style_value::type::normal;
 			}
 			break;
-		case style_property::STOP_COLOR:
-		case style_property::FILL:
-		case style_property::STROKE:
-			v = style_value::parsePaint(str);
+		case style_property::stop_color:
+		case style_property::fill:
+		case style_property::stroke:
+			v = style_value::parse_paint(str);
 //				TRACE(<< "paint read = " << std::hex << v.integer << std::endl)
 			break;
-		case style_property::STROKE_WIDTH:
+		case style_property::stroke_width:
 			v.stroke_width = length::parse(str);
 			v.type_ = style_value::type::normal;
 //				TRACE(<< "stroke-width read = " << v.length << std::endl)
 			break;
-		case style_property::STROKE_LINECAP:
+		case style_property::stroke_linecap:
 			v.type_ = style_value::type::normal;
 			if(str == "butt"){
-				v.stroke_line_cap = stroke_line_cap::BUTT;
+				v.stroke_line_cap = stroke_line_cap::butt;
 			}else if(str == "round"){
-				v.stroke_line_cap = stroke_line_cap::ROUND;
+				v.stroke_line_cap = stroke_line_cap::round;
 			}else if(str == "square"){
-				v.stroke_line_cap = stroke_line_cap::SQUARE;
+				v.stroke_line_cap = stroke_line_cap::square;
 			}else{
 				v.type_ = style_value::type::unknown;
 				TRACE(<< "unknown strokeLineCap value:" << str << std::endl)
 			}
 			break;
-		case style_property::STROKE_LINEJOIN:
+		case style_property::stroke_linejoin:
 			v.type_ = style_value::type::normal;
 			if(str == "miter"){
-				v.stroke_line_join = stroke_line_join::MITER;
+				v.stroke_line_join = stroke_line_join::miter;
 			}else if(str == "round"){
-				v.stroke_line_join = stroke_line_join::ROUND;
+				v.stroke_line_join = stroke_line_join::round;
 			}else if(str == "bevel"){
-				v.stroke_line_join = stroke_line_join::BEVEL;
+				v.stroke_line_join = stroke_line_join::bevel;
 			}else{
 				v.type_ = style_value::type::unknown;
 				TRACE(<< "unknown strokeLineJoin value:" << str << std::endl)
 			}
 			break;
-		case style_property::FILL_RULE:
+		case style_property::fill_rule:
 			v.type_ = style_value::type::normal;
 			if(str == "nonzero"){
-				v.fill_rule = fill_rule::NONZERO;
+				v.fill_rule = fill_rule::nonzero;
 			}else if(str == "evenodd"){
-				v.fill_rule = fill_rule::EVENODD;
+				v.fill_rule = fill_rule::evenodd;
 			}else{
-				v.type_ = style_value::type::UNKNOWN;
+				v.type_ = style_value::type::unknown;
 				TRACE(<< "unknown fill-rule value:" << str << std::endl)
 			}
 			break;
-		case style_property::MASK:
-		case style_property::FILTER:
-			v = style_value::parseUrl(str);
+		case style_property::mask:
+		case style_property::filter:
+			v = style_value::parse_url(str);
 			break;
-		case style_property::DISPLAY:
-			v = style_value::parseDisplay(str);
+		case style_property::display:
+			v = style_value::parse_display(str);
 			break;
-		case style_property::ENABLE_BACKGROUND:
-			v = style_value::parseEnableBackground(str);
+		case style_property::enable_background:
+			v = style_value::parse_enable_background(str);
 			break;
-		case style_property::VISIBILITY:
-			v = style_value::parseVisibility(str);
+		case style_property::visibility:
+			v = style_value::parse_visibility(str);
 			break;
 	}
 	return v;
@@ -250,7 +244,7 @@ style_value styleable::parse_style_property_value(style_property type, const std
 
 style_value style_value::parse_url(const std::string& str) {
 	style_value ret;
-	ret.type_ = style_value::type::UNKNOWN;
+	ret.type_ = style_value::type::unknown;
 	
 	std::string url = "url(";
 	
@@ -271,7 +265,7 @@ style_value style_value::parse_url(const std::string& str) {
 	skipWhitespaces(s);
 	if(s.get() == ')'){
 		ret.str = tmpStr;
-		ret.type_ = style_value::type::URL;
+		ret.type_ = style_value::type::url;
 	}
 
 	return ret;
@@ -282,7 +276,7 @@ style_value parseStylePropertyValue(style_property type, std::istream& s){
 	skipWhitespaces(s);
 	std::string str = readTillChar(s, ';');
 	str = trimTail(str);
-	return styleable::parseStylePropertyValue(type, str);
+	return styleable::parse_style_property_value(type, str);
 }
 }
 
@@ -296,10 +290,10 @@ decltype(styleable::styles) styleable::parse(const std::string& str){
 	while(!s.eof()){
 		std::string property = readTillCharOrWhitespace(s, ':');
 		
-		style_property type = styleable::stringToProperty(property);
+		style_property type = styleable::string_to_property(property);
 		
-		if(type == style_property::UNKNOWN){
-			//unknown style property, skip it
+		if(type == style_property::unknown){
+			// unknown style property, skip it
 			TRACE(<< "Unknown style property: " << property << std::endl)
 			TRACE(<< "str = " << str << std::endl)
 			TRACE(<< "ret.size() = " << ret.size() << std::endl)
@@ -310,7 +304,7 @@ decltype(styleable::styles) styleable::parse(const std::string& str){
 		skipWhitespaces(s);
 		
 		if(s.get() != ':'){
-			return ret;//expected colon
+			return ret; // expected colon
 		}
 		
 		style_value v = ::parseStylePropertyValue(type, s);
@@ -318,7 +312,7 @@ decltype(styleable::styles) styleable::parse(const std::string& str){
 		skipWhitespaces(s);
 		
 		if(!s.eof() && s.get() != ';'){
-			return ret;//expected semicolon
+			return ret; // expected semicolon
 		}
 		
 		ret[type] = std::move(v);
@@ -331,24 +325,24 @@ decltype(styleable::styles) styleable::parse(const std::string& str){
 
 namespace{
 const std::set<style_property> nonInheritedStyleProperties = {
-	style_property::ALIGNMENT_BASELINE,
-	style_property::BASELINE_SHIFT,
-	style_property::CLIP,
-	style_property::CLIP_PATH,
-	style_property::DISPLAY,
-	style_property::DOMINANT_BASELINE,
-	style_property::ENABLE_BACKGROUND,
-	style_property::FILTER,
-	style_property::FLOOD_COLOR,
-	style_property::FLOOD_OPACITY,
-	style_property::LIGHTING_COLOR,
-	style_property::MASK,
-	style_property::OPACITY,
-	style_property::OVERFLOW,
-	style_property::STOP_COLOR,
-	style_property::STOP_OPACITY,
-	style_property::TEXT_DECORATION,
-	style_property::UNICODE_BIDI
+	style_property::alignment_baseline,
+	style_property::baseline_shift,
+	style_property::clip,
+	style_property::clip_path,
+	style_property::display,
+	style_property::dominant_baseline,
+	style_property::enable_background,
+	style_property::filter,
+	style_property::flood_color,
+	style_property::flood_opacity,
+	style_property::lighting_color,
+	style_property::mask,
+	style_property::opacity,
+	style_property::overflow,
+	style_property::stop_color,
+	style_property::stop_opacity,
+	style_property::text_decoration,
+	style_property::unicode_bidi
 };
 }
 
@@ -358,67 +352,67 @@ bool styleable::is_inherited(style_property p) {
 
 namespace{
 const std::map<std::string, style_property> stringToPropertyMap = {
-	{"alignment-baseline", style_property::ALIGNMENT_BASELINE},
-	{"baseline-shift", style_property::BASELINE_SHIFT},
-	{"clip", style_property::CLIP},
-	{"clip-path", style_property::CLIP_PATH},
-	{"clip-rule", style_property::CLIP_RULE},
-	{"color", style_property::COLOR},
-	{"color-interpolation", style_property::COLOR_INTERPOLATION},
-	{"color-interpolation-filters", style_property::COLOR_INTERPOLATION_FILTERS},
-	{"color-profile", style_property::COLOR_PROFILE},
-	{"color-rendering", style_property::COLOR_RENDERING},
-	{"cursor", style_property::CURSOR},
-	{"direction", style_property::DIRECTION},
-	{"display", style_property::DISPLAY},
-	{"dominant-baseline", style_property::DOMINANT_BASELINE},
-	{"enable-background", style_property::ENABLE_BACKGROUND},
-	{"fill", style_property::FILL},
-	{"fill-opacity", style_property::FILL_OPACITY},
-	{"fill-rule", style_property::FILL_RULE},
-	{"filter", style_property::FILTER},
-	{"flood-color", style_property::FLOOD_COLOR},
-	{"flood-opacity", style_property::FLOOD_OPACITY},
-	{"font", style_property::FONT},
-	{"font-family", style_property::FONT_FAMILY},
-	{"font-size", style_property::FONT_SIZE},
-	{"font-size-adjust", style_property::FONT_SIZE_ADJUST},
-	{"font-stretch", style_property::FONT_STRETCH},
-	{"font-style", style_property::FONT_STYLE},
-	{"font-variant", style_property::FONT_VARIANT},
-	{"font-weight", style_property::FONT_WEIGHT},
-	{"glyph-orientation-horizontal", style_property::GLYPH_ORIENTATION_HORIZONTAL},
-	{"glyph-orientation-vertical", style_property::GLYPH_ORIENTATION_VERTICAL},
-	{"image-rendering", style_property::IMAGE_RENDERING},
-	{"kerning", style_property::KERNING},
-	{"letter-spacing", style_property::LETTER_SPACING},
-	{"lighting-color", style_property::LIGHTING_COLOR},
-	{"marker", style_property::MARKER},
-	{"marker-end", style_property::MARKER_END},
-	{"marker-mid", style_property::MARKER_MID},
-	{"marker-start", style_property::MARKER_START},
-	{"mask", style_property::MASK},
-	{"opacity", style_property::OPACITY},
-	{"overflow", style_property::OVERFLOW},
-	{"pointer-events", style_property::POINTER_EVENTS},
-	{"shape-rendering", style_property::SHAPE_RENDERING},
-	{"stop-color", style_property::STOP_COLOR},
-	{"stop-opacity", style_property::STOP_OPACITY},
-	{"stroke", style_property::STROKE},
-	{"stroke-dasharray", style_property::STROKE_DASHARRAY},
-	{"stroke-dashoffset", style_property::STROKE_DASHOFFSET},
-	{"stroke-linecap", style_property::STROKE_LINECAP},
-	{"stroke-linejoin", style_property::STROKE_LINEJOIN},
-	{"stroke-miterlimit", style_property::STROKE_MITERLIMIT},
-	{"stroke-opacity", style_property::STROKE_OPACITY},
-	{"stroke-width", style_property::STROKE_WIDTH},
-	{"text-anchor", style_property::TEXT_ANCHOR},
-	{"text-decoration", style_property::TEXT_DECORATION},
-	{"text-rendering", style_property::TEXT_RENDERING},
-	{"unicode-bidi", style_property::UNICODE_BIDI},
-	{"visibility", style_property::VISIBILITY},
-	{"word-spacing", style_property::WORD_SPACING},
-	{"writing-mode", style_property::WRITING_MODE}
+	{"alignment-baseline", style_property::alignment_baseline},
+	{"baseline-shift", style_property::baseline_shift},
+	{"clip", style_property::clip},
+	{"clip-path", style_property::clip_path},
+	{"clip-rule", style_property::clip_rule},
+	{"color", style_property::color},
+	{"color-interpolation", style_property::color_interpolation},
+	{"color-interpolation-filters", style_property::color_interpolation_filters},
+	{"color-profile", style_property::color_profile},
+	{"color-rendering", style_property::color_rendering},
+	{"cursor", style_property::cursor},
+	{"direction", style_property::direction},
+	{"display", style_property::display},
+	{"dominant-baseline", style_property::dominant_baseline},
+	{"enable-background", style_property::enable_background},
+	{"fill", style_property::fill},
+	{"fill-opacity", style_property::fill_opacity},
+	{"fill-rule", style_property::fill_rule},
+	{"filter", style_property::filter},
+	{"flood-color", style_property::flood_color},
+	{"flood-opacity", style_property::flood_opacity},
+	{"font", style_property::font},
+	{"font-family", style_property::font_family},
+	{"font-size", style_property::font_size},
+	{"font-size-adjust", style_property::font_size_adjust},
+	{"font-stretch", style_property::font_stretch},
+	{"font-style", style_property::font_style},
+	{"font-variant", style_property::font_variant},
+	{"font-weight", style_property::font_weight},
+	{"glyph-orientation-horizontal", style_property::glyph_orientation_horizontal},
+	{"glyph-orientation-vertical", style_property::glyph_orientation_vertical},
+	{"image-rendering", style_property::image_rendering},
+	{"kerning", style_property::kerning},
+	{"letter-spacing", style_property::letter_spacing},
+	{"lighting-color", style_property::lighting_color},
+	{"marker", style_property::marker},
+	{"marker-end", style_property::marker_end},
+	{"marker-mid", style_property::marker_mid},
+	{"marker-start", style_property::marker_start},
+	{"mask", style_property::mask},
+	{"opacity", style_property::opacity},
+	{"overflow", style_property::overflow},
+	{"pointer-events", style_property::pointer_events},
+	{"shape-rendering", style_property::shape_rendering},
+	{"stop-color", style_property::stop_color},
+	{"stop-opacity", style_property::stop_opacity},
+	{"stroke", style_property::stroke},
+	{"stroke-dasharray", style_property::stroke_dasharray},
+	{"stroke-dashoffset", style_property::stroke_dashoffset},
+	{"stroke-linecap", style_property::stroke_linecap},
+	{"stroke-linejoin", style_property::stroke_linejoin},
+	{"stroke-miterlimit", style_property::stroke_miterlimit},
+	{"stroke-opacity", style_property::stroke_opacity},
+	{"stroke-width", style_property::stroke_width},
+	{"text-anchor", style_property::text_anchor},
+	{"text-decoration", style_property::text_decoration},
+	{"text-rendering", style_property::text_rendering},
+	{"unicode-bidi", style_property::unicode_bidi},
+	{"visibility", style_property::visibility},
+	{"word-spacing", style_property::word_spacing},
+	{"writing-mode", style_property::writing_mode}
 };
 }
 
@@ -432,7 +426,7 @@ style_property styleable::string_to_property(std::string str){
 		return i->second;
 	}
 	
-	return style_property::UNKNOWN;
+	return style_property::unknown;
 }
 
 std::string styleable::property_to_string(style_property p){
@@ -680,9 +674,9 @@ std::string style_value::display_to_string()const{
 
 namespace{
 std::map<std::string, visibility> stringToVisibilityMap = {
-	{"visible", visibility::VISIBLE},
-	{"hidden", visibility::HIDDEN},
-	{"collapse", visibility::COLLAPSE}
+	{"visible", visibility::visible},
+	{"hidden", visibility::hidden},
+	{"collapse", visibility::collapse}
 };
 }
 
@@ -702,7 +696,7 @@ style_value style_value::parse_visibility(const std::string& str){
 		ret.visibility = i->second;
 	}
 	
-	ret.type_ = style_value::type::NORMAL;
+	ret.type_ = style_value::type::normal;
 	
 	return ret;
 }
@@ -715,21 +709,20 @@ std::string style_value::visibility_to_string()const{
 	return i->second;
 }
 
-
 style_value style_value::parse_color_interpolation(const std::string& str) {
 	style_value ret;
 	
 	if(str == "auto"){
-		ret.color_interpolation_filters = color_interpolation::AUTO;
+		ret.color_interpolation_filters = color_interpolation::auto_;
 	}else if(str == "linearRGB"){
-		ret.color_interpolation_filters = color_interpolation::LINEAR_RGB;
+		ret.color_interpolation_filters = color_interpolation::linear_rgb;
 	}else if(str == "sRGB"){
-		ret.color_interpolation_filters = color_interpolation::S_RGB;
+		ret.color_interpolation_filters = color_interpolation::s_rgb;
 	}else{
 		return ret;
 	}
 	
-	ret.type_ = style_value::type::NORMAL;
+	ret.type_ = style_value::type::normal;
 	
 	return ret;
 }
@@ -737,11 +730,11 @@ style_value style_value::parse_color_interpolation(const std::string& str) {
 namespace{
 std::string colorInterpolationToString(color_interpolation ci){
 	switch(ci){
-		case color_interpolation::AUTO:
+		case color_interpolation::auto_:
 			return "auto";
-		case color_interpolation::LINEAR_RGB:
+		case color_interpolation::linear_rgb:
 			return "linearRGB";
-		case color_interpolation::S_RGB:
+		case color_interpolation::s_rgb:
 			return "sRGB";
 		default:
 			ASSERT_INFO(false, "ci = " << unsigned(ci))
@@ -812,7 +805,7 @@ style_value style_value::parse_enable_background(const std::string& str) {
 	return ret;
 }
 
-std::string style_value::enable_background_to_string() const {
+std::string style_value::enable_background_to_string()const{
 	switch(this->enable_background.value){
 		default:
 		case svgdom::enable_background::accumulate:
@@ -823,7 +816,7 @@ std::string style_value::enable_background_to_string() const {
 				
 				ss << "new";
 				
-				if(this->enable_background.isRectSpecified()){
+				if(this->enable_background.is_rect_specified()){
 					ss << " " << this->enable_background.x;
 					ss << " " << this->enable_background.y;
 					ss << " " << this->enable_background.width;
@@ -898,8 +891,8 @@ style_value style_value::parse_paint(const std::string& str){
 	ASSERT(!std::isspace(str[0])) // leading spaces should be skept already	
 	
 	{
-		ret = style_value::parseUrl(str);
-		if(ret.isValid()){
+		ret = style_value::parse_url(str);
+		if(ret.is_valid()){
 			return ret;
 		}
 	}

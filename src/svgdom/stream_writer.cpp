@@ -84,7 +84,7 @@ void stream_writer::add_element_attributes(const element& e){
 
 void stream_writer::add_transformable_attributes(const transformable& e){
 	if(e.transformations.size() != 0){
-		this->add_attribute("transform", e.transformationsToString());
+		this->add_attribute("transform", e.transformations_to_string());
 	}
 }
 
@@ -105,8 +105,8 @@ void stream_writer::add_styleable_attributes(const styleable& e){
 }
 
 void stream_writer::add_view_boxed_attributes(const view_boxed& e){
-	if(e.isViewBoxSpecified()){
-		this->add_attribute("viewBox", e.viewBoxToString());
+	if(e.is_view_box_specified()){
+		this->add_attribute("viewBox", e.view_box_to_string());
 	}
 }
 
@@ -154,7 +154,7 @@ void stream_writer::add_gradient_attributes(const gradient& e){
 	}
 	
 	if(e.transformations.size() != 0){
-		this->add_attribute("gradientTransform", e.transformationsToString());
+		this->add_attribute("gradientTransform", e.transformations_to_string());
 	}
 }
 

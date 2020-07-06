@@ -17,16 +17,16 @@ std::array<real, 2> svg_element::get_dimensions(real dpi) const noexcept{
 	real h = this->height.to_px(dpi);
 
 	if(w <= 0){
-		if(this->viewBox[2] > 0){
-			w = this->viewBox[2];
+		if(this->view_box[2] > 0){
+			w = this->view_box[2];
 		}else{
 			w = 300;
 		}
 	}
 	
 	if(h <= 0){
-		if(this->viewBox[3] > 0){
-			h = this->viewBox[3];
+		if(this->view_box[3] > 0){
+			h = this->view_box[3];
 		}else{
 			h = 150;
 		}
