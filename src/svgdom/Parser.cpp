@@ -587,7 +587,7 @@ void Parser::parseFeGaussianBlurElement() {
 	this->fillInputable(*ret);
 
 	if(auto a = this->findAttributeOfNamespace(XmlNamespace_e::SVG, "stdDeviation")){
-		ret->stdDeviation = parseNumberOptionalNumber(*a, {{-1, -1}});
+		ret->std_deviation = parseNumberOptionalNumber(*a, {{-1, -1}});
 	}
 	
 	this->addElement(std::move(ret));
@@ -604,13 +604,13 @@ void Parser::parseFeColorMatrixElement() {
 	
 	if(auto a = this->findAttributeOfNamespace(XmlNamespace_e::SVG, "type")){
 		if(*a == "saturate"){
-			ret->type_ = fe_color_matrix_element::Type_e::SATURATE;
+			ret->type_ = fe_color_matrix_element::type::saturate;
 		}else if(*a == "hueRotate"){
-			ret->type_ = fe_color_matrix_element::Type_e::HUE_ROTATE;
+			ret->type_ = fe_color_matrix_element::type::hue_rotate;
 		}else if(*a == "luminanceToAlpha"){
-			ret->type_ = fe_color_matrix_element::Type_e::LUMINANCE_TO_ALPHA;
+			ret->type_ = fe_color_matrix_element::type::luminance_to_alpha;
 		}else{
-			ret->type_ = fe_color_matrix_element::Type_e::MATRIX; // default value
+			ret->type_ = fe_color_matrix_element::type::matrix; // default value
 		}
 	}
 	
@@ -619,7 +619,7 @@ void Parser::parseFeColorMatrixElement() {
 			default:
 				ASSERT(false) // should never get here, MATRIX should always be the default value
 				break;
-			case fe_color_matrix_element::Type_e::MATRIX:
+			case fe_color_matrix_element::type::matrix:
 				// 20 values expected
 				{
 					std::istringstream ss(*a);
@@ -633,9 +633,9 @@ void Parser::parseFeColorMatrixElement() {
 					}
 				}
 				break;
-			case fe_color_matrix_element::Type_e::HUE_ROTATE:
+			case fe_color_matrix_element::type::hue_rotate:
 				// fall-through
-			case fe_color_matrix_element::Type_e::SATURATE:
+			case fe_color_matrix_element::type::saturate:
 				// one value is expected
 				{
 					std::istringstream ss(*a);
@@ -645,7 +645,7 @@ void Parser::parseFeColorMatrixElement() {
 					}
 				}
 				break;
-			case fe_color_matrix_element::Type_e::LUMINANCE_TO_ALPHA:
+			case fe_color_matrix_element::type::luminance_to_alpha:
 				// no values are expected
 				break;
 		}
@@ -666,15 +666,15 @@ void Parser::parseFeBlendElement() {
 	
 	if(auto a = this->findAttributeOfNamespace(XmlNamespace_e::SVG, "mode")){
 		if(*a == "normal"){
-			ret->mode_ = FeBlendElement::Mode_e::NORMAL;
+			ret->mode_ = FeBlendElement::mode::normal;
 		}else if(*a == "multiply"){
-			ret->mode_ = FeBlendElement::Mode_e::MULTIPLY;
+			ret->mode_ = FeBlendElement::mode::multiply;
 		}else if(*a == "screen"){
-			ret->mode_ = FeBlendElement::Mode_e::SCREEN;
+			ret->mode_ = FeBlendElement::mode::screen;
 		}else if(*a == "darken"){
-			ret->mode_ = FeBlendElement::Mode_e::DARKEN;
+			ret->mode_ = FeBlendElement::mode::darken;
 		}else if(*a == "lighten"){
-			ret->mode_ = FeBlendElement::Mode_e::LIGHTEN;
+			ret->mode_ = FeBlendElement::mode::lighten;
 		}
 	}
 	

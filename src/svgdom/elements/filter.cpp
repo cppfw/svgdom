@@ -55,8 +55,8 @@ std::array<real, 2> fe_gaussian_blur_element::get_std_deviation() const noexcept
 	}
 	
 	if(this->is_std_deviation_y_specified()){
-		return this->stdDeviation;
+		return this->std_deviation;
 	}
 	
-	return {{this->stdDeviation[0], this->stdDeviation[0]}};
+	return {{this->std_deviation[0], this->std_deviation[0]}};
 }

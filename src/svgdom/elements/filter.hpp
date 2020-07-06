@@ -48,22 +48,13 @@ struct filter_primitive :
 	}
 };
 
-// TODO: deprecated, remove.
-typedef filter_primitive FilterPrimitive;
-
 struct inputable{
 	std::string in;
 };
 
-// TODO: deprecated, remove.
-typedef inputable Inputable;
-
 struct second_inputable{
 	std::string in2;
 };
-
-// TODO: deprecated, remove.
-typedef second_inputable SecondInputable;
 
 struct fe_gaussian_blur_element :
 		public filter_primitive,
@@ -71,9 +62,6 @@ struct fe_gaussian_blur_element :
 {
 	std::array<real, 2> std_deviation = {{-1, -1}};
 
-	// TODO: deprecated, remove.
-	decltype(std_deviation)& stdDeviation = std_deviation;
-	
 	/**
 	 * @brief Tells if stdDeviation attribute is specified in XML.
 	 * @return true if stdDeviation attribute is specified in XML.
@@ -82,11 +70,6 @@ struct fe_gaussian_blur_element :
 	bool is_std_deviation_specified()const noexcept{
 		return this->std_deviation[0] >= 0;
 	}
-
-	// TODO: deprecated, remove.
-	bool isStdDeviationSpecified()const noexcept{
-		return this->is_std_deviation_specified();
-	}
 	
 	/**
 	 * @brief Tells if two numbers are specified for stdDeviation attribute.
@@ -94,21 +77,11 @@ struct fe_gaussian_blur_element :
 	 * @return false otherwise.
 	 */
 	bool is_std_deviation_y_specified()const noexcept{
-		return this->stdDeviation[1] >= 0;
+		return this->std_deviation[1] >= 0;
 	}
 
-	// TODO: deprecated, remove.
-	bool isStdDeviationYSpecified()const noexcept{
-		return this->is_std_deviation_y_specified();
-	}
-	
 	std::array<real, 2> get_std_deviation()const noexcept;
 
-	// TODO: deprecated, remove.
-	std::array<real, 2> getStdDeviation()const noexcept{
-		return this->get_std_deviation();
-	}
-	
 	void accept(visitor& v)override;
 	void accept(const_visitor& v) const override;
 
@@ -119,28 +92,18 @@ struct fe_gaussian_blur_element :
 	}
 };
 
-// TODO: deprecated, remove.
-typedef fe_gaussian_blur_element FeGaussianBlurElement;
-
 struct fe_color_matrix_element :
 		public filter_primitive,
 		public inputable
 {
 	enum class type{
 		matrix,
-		MATRIX = matrix, // TODO: deprecated, remove.
 		saturate,
-		SATURATE = saturate, // TODO: deprecated, remove.
 		hue_rotate,
-		HUE_ROTATE = hue_rotate, // TODO: deprecated, remove.
-		luminance_to_alpha,
-		LUMINANCE_TO_ALPHA = luminance_to_alpha // TODO: deprecated, remove.
+		luminance_to_alpha
 	};
 
 	type type_ = type::matrix;
-	
-	// TODO: deprecated, remove.
-	typedef type Type_e;
 
 	std::array<real, 20> values;
 	
@@ -154,9 +117,6 @@ struct fe_color_matrix_element :
 	}
 };
 
-// TODO: deprecated, remove.
-typedef fe_color_matrix_element FeColorMatrixElement;
-
 struct fe_blend_element :
 		public filter_primitive,
 		public inputable,
@@ -164,20 +124,12 @@ struct fe_blend_element :
 {
 	enum class mode{
 		normal,
-		NORMAL = normal, // TODO: deprecated, remove.
 		multiply,
-		MULTIPLY = multiply, // TODO: deprecated, remove.
 		screen,
-		SCREEN = screen, // TODO: deprecated, remove.
 		darken,
-		DARKEN = darken, // TODO: deprecated, remove.
-		lighten,
-		LIGHTEN = lighten // TODO: deprecated, remove.
+		lighten
 	} mode_ = mode::normal;
 
-	// TODO: deprecated, remove.
-	typedef mode Mode_e;
-	
 	void accept(visitor& v) override;
 	void accept(const_visitor& v) const override;
 

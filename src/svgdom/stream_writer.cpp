@@ -522,7 +522,7 @@ void stream_writer::visit(const fe_gaussian_blur_element& e){
 	this->add_inputable_attributes(e);
 	
 	if(e.is_std_deviation_specified()){
-		this->add_attribute("stdDeviation", numberOptionalNumberToString(e.stdDeviation, -1));
+		this->add_attribute("stdDeviation", numberOptionalNumberToString(e.std_deviation, -1));
 	}
 	this->write();
 }
@@ -604,19 +604,19 @@ void stream_writer::visit(const FeBlendElement& e){
 		std::string modeValue;
 		switch(e.mode_){
 			default:
-			case FeBlendElement::Mode_e::NORMAL:
+			case FeBlendElement::mode::normal:
 				//default value, can be omitted
 				break;
-			case FeBlendElement::Mode_e::MULTIPLY:
+			case FeBlendElement::mode::multiply:
 				modeValue = "multiply";
 				break;
-			case FeBlendElement::Mode_e::SCREEN:
+			case FeBlendElement::mode::screen:
 				modeValue = "screen";
 				break;
-			case FeBlendElement::Mode_e::DARKEN:
+			case FeBlendElement::mode::darken:
 				modeValue = "darken";
 				break;
-			case FeBlendElement::Mode_e::LIGHTEN:
+			case FeBlendElement::mode::lighten:
 				modeValue = "lighten";
 				break;
 		}
