@@ -50,15 +50,7 @@ struct gradient :
 		}
 	};
 
-	// TODO: deprecated, remove.
-	typedef stop_element StopElement;
-	
 	std::string spread_method_to_string()const;
-
-	// TODO: deprecated, remove.
-	std::string spreadMethodToString()const{
-		return this->spread_method_to_string();
-	}
 
 	const std::string& get_id()const override{
 		return this->id;
@@ -97,14 +89,5 @@ struct radial_gradient_element : public gradient{
 		return tag;
 	}
 };
-
-// TODO: deprecated, remove.
-typedef gradient Gradient;
-
-// TODO: deprecated, remove.
-typedef linear_gradient_element LinearGradientElement;
-
-// TODO: deprecated, remove.
-typedef radial_gradient_element RadialGradientElement;
 
 }

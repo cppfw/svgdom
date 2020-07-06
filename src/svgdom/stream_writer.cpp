@@ -117,19 +117,19 @@ void stream_writer::add_aspect_ratioed_attributes(const aspect_ratioed& e){
 }
 
 void stream_writer::add_rectangle_attributes(const rectangle& e, const rectangle& defaultValues){
-	if(e.isXSpecified() && e.x != defaultValues.x){
+	if(e.is_x_specified() && e.x != defaultValues.x){
 		this->add_attribute("x", e.x);
 	}
 	
-	if(e.isYSpecified() && e.y != defaultValues.y){
+	if(e.is_y_specified() && e.y != defaultValues.y){
 		this->add_attribute("y", e.y);
 	}
 	
-	if(e.isWidthSpecified() && e.width != defaultValues.width){
+	if(e.is_width_specified() && e.width != defaultValues.width){
 		this->add_attribute("width", e.width);
 	}
 	
-	if(e.isHeightSpecified() && e.height != defaultValues.height){
+	if(e.is_height_specified() && e.height != defaultValues.height){
 		this->add_attribute("height", e.height);
 	}
 }
@@ -146,7 +146,7 @@ void stream_writer::add_gradient_attributes(const gradient& e){
 	this->add_styleable_attributes(e);
 	
 	if(e.spread_method_ != gradient::spread_method::default_){
-		this->add_attribute("spreadMethod", e.spreadMethodToString());
+		this->add_attribute("spreadMethod", e.spread_method_to_string());
 	}
 	
 	if(e.units != coordinate_units::unknown){

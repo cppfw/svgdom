@@ -30,7 +30,4 @@ struct image_element :
 	}
 };
 
-// TODO: deprecated, remove.
-typedef image_element ImageElement;
-
 }

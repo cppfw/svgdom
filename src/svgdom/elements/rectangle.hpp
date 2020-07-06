@@ -23,40 +23,17 @@ struct rectangle{
 		return this->x.unit != length_unit::unknown;
 	}
 
-	// TODO: deprecated, remove.
-	bool isXSpecified()const noexcept{
-		return this->is_x_specified();
-	}
-	
 	bool is_y_specified()const noexcept{
 		return this->y.unit != length_unit::unknown;
-	}
-
-	// TODO: deprecated, remove.
-	bool isYSpecified()const noexcept{
-		return this->is_y_specified();
 	}
 	
 	bool is_width_specified()const noexcept{
 		return this->width.unit != length_unit::unknown;
 	}
-
-	// TODO: deprecated, remove.
-	bool isWidthSpecified()const noexcept{
-		return this->is_width_specified();
-	}
 	
 	bool is_height_specified()const noexcept{
 		return this->height.unit != length_unit::unknown;
 	}
-
-	// TODO: deprecated, remove.
-	bool isHeightSpecified()const noexcept{
-		return this->is_height_specified();
-	}
 };
-
-// TODO: deprecated, remove.
-typedef rectangle Rectangle;
 
 }
