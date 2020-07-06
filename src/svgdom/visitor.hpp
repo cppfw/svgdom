@@ -55,11 +55,6 @@ protected:
 	 */
 	void relay_accept(container& c);
 
-	// TODO: deprecated, remove.
-	void relayAccept(container& c){
-		this->relay_accept(c);
-	}
-	
 public:
 	virtual void visit(path_element& e);
 	virtual void visit(rect_element& e);
@@ -162,11 +157,5 @@ public:
 	
 	virtual ~const_visitor()noexcept{}
 };
-
-// TODO: deprecated, remove.
-typedef visitor Visitor;
-
-// TODO: deprecated, remove.
-typedef const_visitor ConstVisitor;
 
 }

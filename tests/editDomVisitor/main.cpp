@@ -5,7 +5,7 @@
 #include <utki/debug.hpp>
 
 // visitor to remove all 'line' elements
-class EditingVisitor : public svgdom::Visitor{
+class EditingVisitor : public svgdom::visitor{
 	std::vector<std::pair<svgdom::Container*, decltype(svgdom::Container::children)::iterator>> elementsToRemove;
 	
 	void addToRemove(){
@@ -18,11 +18,11 @@ class EditingVisitor : public svgdom::Visitor{
 	
 public:
 	void visit(svgdom::SvgElement& e) override{
-		this->relayAccept(e);
+		this->relay_accept(e);
 	}
 	
 	void visit(svgdom::GElement& e) override{
-		this->relayAccept(e);
+		this->relay_accept(e);
 	}
 	
 	void visit(svgdom::PathElement& e) override{

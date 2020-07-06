@@ -6,21 +6,21 @@
 
 struct CustomElement : public svgdom::Element{	
 	
-	void accept(svgdom::ConstVisitor& visitor) const override;
-	void accept(svgdom::Visitor& visitor) override;
+	void accept(svgdom::const_visitor& visitor) const override;
+	void accept(svgdom::visitor& visitor) override;
 
 };
 
-class CustomVisitor : virtual public svgdom::ConstVisitor{
+class CustomVisitor : virtual public svgdom::const_visitor{
 public:
-	using svgdom::ConstVisitor::visit;
+	using svgdom::const_visitor::visit;
 	
 	virtual void visit(const CustomElement& e){
 		this->default_visit(e);
 	}
 };
 
-void CustomElement::accept(svgdom::ConstVisitor& visitor) const{
+void CustomElement::accept(svgdom::const_visitor& visitor) const{
 	if(auto v = dynamic_cast<CustomVisitor*>(&visitor)){
 		v->visit(*this);
 	}else{
@@ -28,7 +28,7 @@ void CustomElement::accept(svgdom::ConstVisitor& visitor) const{
 	}
 }
 
-void CustomElement::accept(svgdom::Visitor& visitor){
+void CustomElement::accept(svgdom::visitor& visitor){
 	visitor.default_visit(*this);
 }
 

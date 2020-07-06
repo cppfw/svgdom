@@ -19,7 +19,7 @@ int main(int argc, char** argv){
 	
 	auto searchStart = utki::get_ticks_ms();
 	
-	class TraverseVisitor : public svgdom::ConstVisitor{
+	class TraverseVisitor : public svgdom::const_visitor{
 	public:
 		svgdom::finder finder;
 		
