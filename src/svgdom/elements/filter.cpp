@@ -29,7 +29,7 @@ void fe_color_matrix_element::accept(visitor& visitor) {
 	visitor.visit(*this);
 }
 
-void FeBlendElement::accept(visitor& visitor) {
+void fe_blend_element::accept(visitor& visitor) {
 	visitor.visit(*this);
 }
 
@@ -41,7 +41,7 @@ void fe_color_matrix_element::accept(const_visitor& visitor) const{
 	visitor.visit(*this);
 }
 
-void FeBlendElement::accept(const_visitor& visitor) const{
+void fe_blend_element::accept(const_visitor& visitor) const{
 	visitor.visit(*this);
 }
 

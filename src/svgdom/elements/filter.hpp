@@ -140,9 +140,6 @@ struct fe_blend_element :
 	}
 };
 
-// TODO: deprecated, remove.
-typedef fe_blend_element FeBlendElement;
-
 struct fe_composite_element :
 		public filter_primitive,
 		public inputable,
@@ -150,24 +147,12 @@ struct fe_composite_element :
 {
 	enum class operator_{
 		over,
-		OVER = over, // TODO: deprecated, remove.
 		in,
-		IN = in, // TODO: deprecated, remove.
 		out,
-#ifdef OUT // on Windows somebody defines OUT macro
-#	undef OUT
-#endif
-		OUT = out, // TODO: deprecated, remove.
 		atop,
-		ATOP = atop, // TODO: deprecated, remove.
 		xor_,
-		XOR = xor_, // TODO: deprecated, remove.
-		arithmetic,
-		ARITHMETIC = arithmetic // TODO: deprecated, remove.
+		arithmetic
 	} operator__ = operator_::over;
-	
-	// TODO: deprecated, remove.
-	typedef operator_ Operator_e;
 
 	real k1, k2, k3, k4;
 	
@@ -180,8 +165,5 @@ struct fe_composite_element :
 		return tag;
 	}
 };
-
-// TODO: deprecated, remove.
-typedef fe_composite_element FeCompositeElement;
 
 }

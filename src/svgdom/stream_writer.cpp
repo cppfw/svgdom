@@ -145,7 +145,7 @@ void stream_writer::add_gradient_attributes(const gradient& e){
 	this->add_referencing_attributes(e);
 	this->add_styleable_attributes(e);
 	
-	if(e.spreadMethod != gradient::spread_method::default_){
+	if(e.spread_method_ != gradient::spread_method::default_){
 		this->add_attribute("spreadMethod", e.spreadMethodToString());
 	}
 	
@@ -593,7 +593,7 @@ void stream_writer::visit(const fe_color_matrix_element& e){
 }
 
 
-void stream_writer::visit(const FeBlendElement& e){
+void stream_writer::visit(const fe_blend_element& e){
 	this->set_name(fe_blend_element::tag);
 	
 	this->add_filter_primitive_attributes(e);
@@ -604,19 +604,19 @@ void stream_writer::visit(const FeBlendElement& e){
 		std::string modeValue;
 		switch(e.mode_){
 			default:
-			case FeBlendElement::mode::normal:
+			case fe_blend_element::mode::normal:
 				//default value, can be omitted
 				break;
-			case FeBlendElement::mode::multiply:
+			case fe_blend_element::mode::multiply:
 				modeValue = "multiply";
 				break;
-			case FeBlendElement::mode::screen:
+			case fe_blend_element::mode::screen:
 				modeValue = "screen";
 				break;
-			case FeBlendElement::mode::darken:
+			case fe_blend_element::mode::darken:
 				modeValue = "darken";
 				break;
-			case FeBlendElement::mode::lighten:
+			case fe_blend_element::mode::lighten:
 				modeValue = "lighten";
 				break;
 		}

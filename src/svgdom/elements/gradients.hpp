@@ -21,23 +21,13 @@ struct gradient :
 {
 	enum class spread_method{
 		default_,
-		DEFAULT = default_, // TODO: deprecated, remove.
 		pad,
-		PAD = pad, // TODO: deprecated, remove.
 		reflect,
-		REFLECT = reflect, // TODO: deprecated, remove.
-		repeat,
-		REPEAT = repeat // TODO: deprecated, remove.
+		repeat
 	};
 
 	spread_method spread_method_ = spread_method::default_;
 
-	// TODO: deprecated, remove.
-	spread_method& spreadMethod = spread_method_;
-
-	// TODO: deprecated, remove.
-	typedef spread_method SpreadMethod_e;
-	
 	coordinate_units units = coordinate_units::unknown;
 	
 	struct stop_element :

@@ -228,7 +228,7 @@ void Parser::fillGradient(gradient& g) {
 	this->fillStyleable(g);
 
 	if(auto a = this->findAttributeOfNamespace(XmlNamespace_e::SVG, "spreadMethod")){
-		g.spreadMethod = gradientStringToSpreadMethod(*a);
+		g.spread_method_ = gradientStringToSpreadMethod(*a);
 	}
 	if(auto a = this->findAttributeOfNamespace(XmlNamespace_e::SVG, "gradientTransform")){
 		g.transformations = transformable::parse(*a);
@@ -666,15 +666,15 @@ void Parser::parseFeBlendElement() {
 	
 	if(auto a = this->findAttributeOfNamespace(XmlNamespace_e::SVG, "mode")){
 		if(*a == "normal"){
-			ret->mode_ = FeBlendElement::mode::normal;
+			ret->mode_ = fe_blend_element::mode::normal;
 		}else if(*a == "multiply"){
-			ret->mode_ = FeBlendElement::mode::multiply;
+			ret->mode_ = fe_blend_element::mode::multiply;
 		}else if(*a == "screen"){
-			ret->mode_ = FeBlendElement::mode::screen;
+			ret->mode_ = fe_blend_element::mode::screen;
 		}else if(*a == "darken"){
-			ret->mode_ = FeBlendElement::mode::darken;
+			ret->mode_ = fe_blend_element::mode::darken;
 		}else if(*a == "lighten"){
-			ret->mode_ = FeBlendElement::mode::lighten;
+			ret->mode_ = fe_blend_element::mode::lighten;
 		}
 	}
 	

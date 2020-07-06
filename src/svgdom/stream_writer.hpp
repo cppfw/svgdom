@@ -65,7 +65,7 @@ public:
 	void visit(const filter_element& e) override;
 	void visit(const fe_gaussian_blur_element& e) override;
 	void visit(const fe_color_matrix_element& e) override;
-	void visit(const FeBlendElement& e) override;
+	void visit(const fe_blend_element& e) override;
 	void visit(const fe_composite_element& e) override;
 	void visit(const image_element& e) override;
 	void visit(const mask_element& e) override;
