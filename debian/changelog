@@ -1,3 +1,9 @@
+libsvgdom (0.3.42) unstable; urgency=medium
+
+  * deploy to raspbian buster
+
+ -- Ivan Gagis <igagis@gmail.com>  Wed, 12 Aug 2020 02:58:52 +0300
+
 libsvgdom (0.3.41) unstable; urgency=medium
 
   * remove deprecated stuff
