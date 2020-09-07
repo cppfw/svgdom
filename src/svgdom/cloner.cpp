@@ -106,3 +106,8 @@ void cloner::visit(const image_element& e) {
 	auto clone = std::make_unique<image_element>(e);
     this->cur_parent->children.push_back(std::move(clone));
 }
+
+void cloner::visit(const style_element& e) {
+    auto clone = std::make_unique<style_element>(e);
+    this->cur_parent->children.push_back(std::move(clone));
+}

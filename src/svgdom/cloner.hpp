@@ -48,6 +48,7 @@ public:
 	void visit(const svgdom::filter_element& e) override;
 	void visit(const svgdom::fe_gaussian_blur_element& e) override;
 	void visit(const svgdom::image_element& e) override;
+	void visit(const svgdom::style_element& e) override;
 };
 
 }
