@@ -1,3 +1,9 @@
+libsvgdom (0.3.43) unstable; urgency=medium
+
+  * add style element to cloner
+
+ -- Ivan Gagis <igagis@gmail.com>  Mon, 07 Sep 2020 14:30:48 +0300
+
 libsvgdom (0.3.42) unstable; urgency=medium
 
   * deploy to raspbian buster
