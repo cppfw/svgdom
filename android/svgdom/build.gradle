@@ -54,6 +54,7 @@ dependencies {
     implementation 'io.github.igagis:papki:+'
     implementation 'io.github.igagis:mikroxml:+'
     implementation 'io.github.igagis:cssdom:+'
+    implementation 'io.github.igagis:r4:+'
 }
 
 // copy and rename release AAR to unified name
