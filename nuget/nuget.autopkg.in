@@ -35,7 +35,7 @@ nuget{
 			libpapki/1.0.26;
 			libmikroxml/0.1.1;
 			libcssdom/0.1.1;
-			libr4/1.0.23;
+			libr4/1.0.24;
 		};
 	}
 	files {
