@@ -26,7 +26,7 @@ nuget{
 
 		description: @"C++ SVG DOM library";
 		releaseNotes: "Initial release";
-		copyright: Copyright 2016 Ivan Gagis;
+		copyright: Copyright 2020 Ivan Gagis;
 		tags: { native};
 	}
 	dependencies {
@@ -35,7 +35,7 @@ nuget{
 			libpapki/1.0.26;
 			libmikroxml/0.1.1;
 			libcssdom/0.1.1;
-			r4/1.0.23;
+			libr4/1.0.23;
 		};
 	}
 	files {
