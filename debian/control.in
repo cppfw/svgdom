@@ -3,7 +3,7 @@ Section: libs
 Priority: extra
 Maintainer: Ivan Gagis <igagis@gmail.com>
 Build-Depends: debhelper (>= 9), prorab, prorab-extra, myci,
-		libc6-dev, libutki-dev, libpapki-dev, libmikroxml-dev, libcssdom-dev
+		libc6-dev, libutki-dev, libpapki-dev, libmikroxml-dev, libcssdom-dev, libr4-dev
 Build-Depends-Indep: doxygen
 Standards-Version: 3.9.2
 
@@ -24,7 +24,7 @@ Package: libsvgdom-dev
 Section: libdevel
 Architecture: any
 Depends: libsvgdom$(soname) (= ${binary:Version}), libsvgdom$(soname)-dbg (= ${binary:Version}), ${misc:Depends},
-		libutki-dev, libpapki-dev, libcssdom-dev
+		libutki-dev, libpapki-dev, libcssdom-dev, libr4-dev
 Suggests: libsvgdom-doc
 Description: cross-platform C++ library for reading SVG files.
  SVG document object model library.

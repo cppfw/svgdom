@@ -9,6 +9,8 @@
 #include "container.hpp"
 #include "coordinate_units.hpp"
 
+#include <r4/vector2.hpp>
+
 namespace svgdom{
 struct filter_element :
 		public element,
@@ -60,7 +62,7 @@ struct fe_gaussian_blur_element :
 		public filter_primitive,
 		public inputable
 {
-	std::array<real, 2> std_deviation = {{-1, -1}};
+	r4::vector2<real> std_deviation = -1;
 
 	/**
 	 * @brief Tells if stdDeviation attribute is specified in XML.
@@ -80,7 +82,7 @@ struct fe_gaussian_blur_element :
 		return this->std_deviation[1] >= 0;
 	}
 
-	std::array<real, 2> get_std_deviation()const noexcept;
+	r4::vector2<real> get_std_deviation()const noexcept;
 
 	void accept(visitor& v)override;
 	void accept(const_visitor& v) const override;

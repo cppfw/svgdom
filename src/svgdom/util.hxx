@@ -3,6 +3,8 @@
 #include <istream>
 #include <array>
 
+#include <r4/vector2.hpp>
+
 #include "config.hpp"
 #include "elements/coordinate_units.hpp"
 
@@ -28,7 +30,7 @@ coordinate_units parseCoordinateUnits(const std::string& s);
 
 std::string coordinateUnitsToString(coordinate_units u);
 
-std::array<real, 2> parseNumberOptionalNumber(const std::string& s, std::array<real, 2> defaults);
+r4::vector2<real> parseNumberOptionalNumber(const std::string& s, r4::vector2<real> defaults);
 
 std::string numberOptionalNumberToString(std::array<real, 2> non, real optionalNumberDefault);
 

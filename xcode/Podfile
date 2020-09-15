@@ -9,4 +9,5 @@ target "svgdom" do
 	pod 'papki', '>= 1.0.3'
 	pod 'mikroxml', '>= 0.1.1'
 	pod 'cssdom', '>= 0.1.1'
+	pod 'r4', '>= 1.0.23'
 end

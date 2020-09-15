@@ -12,6 +12,7 @@ class Libsvgdom < Formula
   depends_on "libcssdom"
   depends_on "libpapki"
   depends_on "libutki"
+  depends_on "libr4"
 
   def install
     ENV['PATH'] += ':/usr/local/bin'

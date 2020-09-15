@@ -198,8 +198,9 @@ std::string svgdom::coordinateUnitsToString(coordinate_units u){
 }
 
 
-std::array<real, 2> svgdom::parseNumberOptionalNumber(const std::string& s, std::array<real, 2> defaults){
-	std::array<real, 2> ret;
+r4::vector2<real> svgdom::parseNumberOptionalNumber(const std::string& s, r4::vector2<real> defaults){
+	r4::vector2<real> ret;
+	
 	std::istringstream ss(s);
 	skipWhitespaces(ss);
 	ret[0] = readInReal(ss);

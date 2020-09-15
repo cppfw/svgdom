@@ -19,4 +19,5 @@ Pod::Spec.new do |s|
   s.dependency 'papki', '>= 1.0.3'
   s.dependency 'mikroxml', '>= 0.1.1'
   s.dependency 'cssdom', '>= 0.1.1'
+  s.dependency 'r4', '>= 1.0.23'
 end
