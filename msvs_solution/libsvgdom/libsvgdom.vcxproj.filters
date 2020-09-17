@@ -68,7 +68,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\svgdom\config.hpp" />
-    <ClInclude Include="..\..\src\svgdom\CoordinateUnits.hpp" />
     <ClInclude Include="..\..\src\svgdom\dom.hpp" />
     <ClInclude Include="..\..\src\svgdom\elements\AspectRatioed.hpp" />
     <ClInclude Include="..\..\src\svgdom\elements\Container.hpp" />
@@ -83,7 +82,6 @@
     <ClInclude Include="..\..\src\svgdom\elements\Styleable.hpp" />
     <ClInclude Include="..\..\src\svgdom\elements\Transformable.hpp" />
     <ClInclude Include="..\..\src\svgdom\elements\ViewBoxed.hpp" />
-    <ClInclude Include="..\..\src\svgdom\Exc.hpp" />
     <ClInclude Include="..\..\src\svgdom\Finder.hpp" />
     <ClInclude Include="..\..\src\svgdom\Length.hpp" />
     <ClInclude Include="..\..\src\svgdom\StreamWriter.hpp" />
@@ -567,23 +565,18 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\svgdom\dom.cpp" />
-    <ClCompile Include="..\..\src\svgdom\elements\AspectRatioed.cpp" />
     <ClCompile Include="..\..\src\svgdom\elements\Element.cpp" />
     <ClCompile Include="..\..\src\svgdom\elements\Filter.cpp" />
     <ClCompile Include="..\..\src\svgdom\elements\Gradients.cpp" />
-    <ClCompile Include="..\..\src\svgdom\elements\ImageElement.cpp" />
     <ClCompile Include="..\..\src\svgdom\elements\Rectangle.cpp" />
     <ClCompile Include="..\..\src\svgdom\elements\Referencing.cpp" />
     <ClCompile Include="..\..\src\svgdom\elements\Shapes.cpp" />
     <ClCompile Include="..\..\src\svgdom\elements\Structurals.cpp" />
     <ClCompile Include="..\..\src\svgdom\elements\Styleable.cpp" />
     <ClCompile Include="..\..\src\svgdom\elements\Transformable.cpp" />
-    <ClCompile Include="..\..\src\svgdom\elements\ViewBoxed.cpp" />
     <ClCompile Include="..\..\src\svgdom\Finder.cpp" />
     <ClCompile Include="..\..\src\svgdom\Length.cpp" />
     <ClCompile Include="..\..\src\svgdom\Parser.cpp" />
-    <ClCompile Include="..\..\src\svgdom\StreamWriter.cpp" />
-    <ClCompile Include="..\..\src\svgdom\StyleStack.cpp" />
     <ClCompile Include="..\..\src\svgdom\util.cpp" />
     <ClCompile Include="..\..\src\svgdom\Visitor.cpp" />
     <ClCompile Include="..\..\src\svgdom\Cloner.cpp">
