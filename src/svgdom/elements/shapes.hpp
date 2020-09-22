@@ -5,6 +5,8 @@
 #include "element.hpp"
 #include "rectangle.hpp"
 
+#include <r4/vector2.hpp>
+
 namespace svgdom{
 
 /**
@@ -167,7 +169,7 @@ struct line_element : public shape{
 };
 
 struct polyline_shape : public shape{
-	std::vector<std::array<real, 2>> points;
+	std::vector<r4::vector2<real>> points;
 	
 	std::string points_to_string()const;
 
