@@ -7,8 +7,8 @@
 #include <papki/fs_file.hpp>
 
 namespace{
-std::uint32_t getTicks(){
-	return std::uint32_t(std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now().time_since_epoch()).count());
+uint32_t getTicks(){
+	return uint32_t(std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now().time_since_epoch()).count());
 }
 }
 

@@ -453,24 +453,29 @@ const style_value* styleable::get_presentation_attribute(style_property p)const{
 	return nullptr;
 }
 
-rgb style_value::get_rgb() const{
+r4::vector3<real> style_value::get_rgb()const{
 	auto c = this->color;
 	
-	rgb ret;
+	r4::vector3<real> ret;
 	
-	ret.r = real(c & 0xff) / real(0xff);
-	ret.g = real((c >> 8) & 0xff) / real(0xff);
-	ret.b = real((c >> 16) & 0xff) / real(0xff);
+	ret.r() = real(c & 0xff) / real(0xff);
+	ret.g() = real((c >> 8) & 0xff) / real(0xff);
+	ret.b() = real((c >> 16) & 0xff) / real(0xff);
 	
 	return ret;
 }
 
-void style_value::set_rgb(uint8_t r, uint8_t g, uint8_t b) {
-	this->color =  std::uint32_t(r) | (std::uint32_t(g) << 8) | (std::uint32_t(b) << 16);
+void style_value::set_rgb(uint8_t r, uint8_t g, uint8_t b){
+	this->color = uint32_t(r) | (uint32_t(g) << 8) | (uint32_t(b) << 16);
+}
+
+void style_value::set_rgb(const r4::vector3<real>& rgb){
+	auto c = (rgb * 0xff).to<uint8_t>();
+	this->set_rgb(c.r(), c.g(), c.b());
 }
 
 namespace{
-const std::map<std::string, std::uint32_t> colorNames = {
+const std::map<std::string, uint32_t> colorNames = {
 	{"aliceblue", 0xfff8f0},
 	{"antiquewhite", 0xd7ebfa},
 	{"aqua", 0xffff00},
@@ -829,7 +834,7 @@ std::string style_value::enable_background_to_string()const{
 }
 
 namespace{
-std::uint32_t hslToRgb(real h, real s, real l){
+uint32_t hslToRgb(real h, real s, real l){
 	real c = (real(1) - (std::abs(real(2) * l - real(1))) ) * s;
 	real x = c * (1 - (std::abs(std::fmod(h / real(60), real(2)) - 1)));
 	
@@ -869,11 +874,11 @@ std::uint32_t hslToRgb(real h, real s, real l){
 	g *= 255;
 	b *= 255;
 	
-	std::uint32_t ret = 0;
+	uint32_t ret = 0;
 	
-	ret |= std::uint32_t(r);
-	ret |= (std::uint32_t(g) << 8);
-	ret |= (std::uint32_t(b) << 16);
+	ret |= uint32_t(r);
+	ret |= (uint32_t(g) << 8);
+	ret |= (uint32_t(b) << 16);
 	
 	return ret;
 }
@@ -929,15 +934,15 @@ style_value style_value::parse_paint(const std::string& str){
 		}
 		switch(numDigits){
 			case 3:
-				ret.color = (std::uint32_t(d[0]) << 4) | (std::uint32_t(d[0]))
-						| (std::uint32_t(d[1]) << 12) | (std::uint32_t(d[1]) << 8)
-						| (std::uint32_t(d[2]) << 20) | (std::uint32_t(d[2]) << 16);
+				ret.color = (uint32_t(d[0]) << 4) | (uint32_t(d[0]))
+						| (uint32_t(d[1]) << 12) | (uint32_t(d[1]) << 8)
+						| (uint32_t(d[2]) << 20) | (uint32_t(d[2]) << 16);
 				ret.type_ = style_value::type::normal;
 				break;
 			case 6:
-				ret.color = (std::uint32_t(d[0]) << 4) | (std::uint32_t(d[1]))
-						| (std::uint32_t(d[2]) << 12) | (std::uint32_t(d[3]) << 8)
-						| (std::uint32_t(d[4]) << 20) | (std::uint32_t(d[5]) << 16);
+				ret.color = (uint32_t(d[0]) << 4) | (uint32_t(d[1]))
+						| (uint32_t(d[2]) << 12) | (uint32_t(d[3]) << 8)
+						| (uint32_t(d[4]) << 20) | (uint32_t(d[5]) << 16);
 				ret.type_ = style_value::type::normal;
 				break;
 			default:
@@ -960,7 +965,7 @@ style_value style_value::parse_paint(const std::string& str){
 			s >> std::setw(int(rgb.length())) >> tmpStr >> std::setw(0);
 			ASSERT(tmpStr == rgb)
 			
-			std::uint32_t r, g, b;
+			uint32_t r, g, b;
 			
 			skipWhitespaces(s);
 			s >> r;
@@ -989,7 +994,7 @@ style_value style_value::parse_paint(const std::string& str){
 			ss >> std::setw(int(hsl.length())) >> tmpStr >> std::setw(0);
 			ASSERT(tmpStr == hsl)
 			
-			std::uint32_t h, s, l;
+			uint32_t h, s, l;
 			
 			skipWhitespaces(ss);
 			ss >> h;

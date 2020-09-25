@@ -5,6 +5,8 @@
 
 #include <cssdom/dom.hpp>
 
+#include <r4/vector3.hpp>
+
 #include "../config.hpp"
 #include "../length.hpp"
 
@@ -78,14 +80,6 @@ enum class style_property : uint32_t{
 	writing_mode,
 	
 	ENUM_SIZE
-};
-
-/**
- * @brief Red, green and blue values.
- * All values are in range [0:1].
- */
-struct rgb{
-	real r, g, b;
 };
 
 enum class stroke_line_cap{
@@ -210,7 +204,7 @@ struct style_value{
 	}
 
 	union{
-		std::uint32_t color;
+		uint32_t color;
 		real opacity;
 		real stroke_miterlimit;
 		length stroke_width;
@@ -265,14 +259,25 @@ struct style_value{
 	 * color as red, green and blue values.
 	 * @return RGB structure holding red, green and blue.
 	 */
-	rgb get_rgb()const;
+	r4::vector3<real> get_rgb()const;
 	
 	/**
 	 * @brief set color from RGB.
 	 * If this style property represents a color then this method sets the
 	 * color from red, green and blue values.
+	 * @param r - red component, from [0, 0xff].
+	 * @param g - green component, from [0, 0xff].
+	 * @param b - blue component, from [0, 0xff].
 	 */
 	void set_rgb(uint8_t r, uint8_t g, uint8_t b);
+
+	/**
+	 * @brief set color from RGB.
+	 * If this style property represents a color then this method sets the
+	 * color from red, green and blue values.
+	 * @param rgb - red, green, blue color components, each from [0, 1].
+	 */
+	void set_rgb(const r4::vector3<real>& rgb);
 };
 
 /**
