@@ -1,3 +1,9 @@
+libsvgdom (0.3.46) unstable; urgency=medium
+
+  * use r4::vector3 instead of rgb structure
+
+ -- Ivan Gagis <igagis@gmail.com>  Fri, 25 Sep 2020 14:36:36 +0300
+
 libsvgdom (0.3.45) unstable; urgency=medium
 
   * use r4
