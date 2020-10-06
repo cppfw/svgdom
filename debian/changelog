@@ -1,3 +1,9 @@
+libsvgdom (0.3.47) unstable; urgency=medium
+
+  * parse viewBox even if numbers are separated with commas
+
+ -- Ivan Gagis <igagis@gmail.com>  Wed, 07 Oct 2020 00:27:29 +0300
+
 libsvgdom (0.3.46) unstable; urgency=medium
 
   * use r4::vector3 instead of rgb structure
