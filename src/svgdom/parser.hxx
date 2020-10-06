@@ -21,7 +21,7 @@
 
 namespace svgdom{
 
-class Parser : public mikroxml::parser{
+class parser : public mikroxml::parser{
 	enum class XmlNamespace_e{
 		ENUM_FIRST,
 		UNKNOWN = ENUM_FIRST,
@@ -41,7 +41,7 @@ class Parser : public mikroxml::parser{
 	std::vector<XmlNamespace_e> defaultNamespaceStack;
 	
 	
-	XmlNamespace_e findNamespace(const std::string& ns);
+	XmlNamespace_e find_namespace(const std::string& ns);
 	const std::string* findFlippedNamespace(XmlNamespace_e ns);
 	
 	struct NamespaceNamePair{

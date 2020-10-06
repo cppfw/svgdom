@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" overflow="" width="400" height="150">
+	<defs>
+		<linearGradient id="rainbow" x1="0" y1="0" x2="100" y2="0">
+			<stop offset="0" stop-color="none"/>
+			<stop offset="0.143" stop-color="blue"/>
+			<stop offset="0.286" stop-color="cyan"/>
+			<stop offset="0.429" stop-color="none"/>
+			<stop offset="0.572" stop-color="yellow"/>
+			<stop offset="0.715" stop-color="orange"/>
+			<stop offset="0.857" stop-color="red"/>
+			<stop offset="1" stop-color="maroon"/>
+		</linearGradient>
+		<linearGradient id="rainbow45" xlink:href="#rainbow" gradientTransform="rotate(45)" x1="0" y1="0" x2="100" y2="0"/>
+		<linearGradient id="rainbow45-user" xlink:href="#rainbow" gradientUnits="userSpaceOnUse" gradientTransform="rotate(45)" x1="20%" y1="0" x2="50%" y2="0"/>
+	</defs>
+	<svg width="600px" height="450px" viewBox="60 50 400 300">
+		<ellipse fill="url(#rainbow45)" cx="130" cy="100" rx="60" ry="40"/>
+	</svg>
+	<svg x="200" width="600px" height="450px" viewBox="60 50 400 300">
+		<ellipse fill="url(#rainbow45-user)" cx="130" cy="100" rx="60" ry="40"/>
+	</svg>
+</svg>

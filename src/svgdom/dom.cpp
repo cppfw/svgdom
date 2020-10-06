@@ -2,12 +2,12 @@
 #include "config.hpp"
 #include "util.hxx"
 
-#include "Parser.hxx"
+#include "parser.hxx"
 
 using namespace svgdom;
 
 std::unique_ptr<svg_element> svgdom::load(const papki::file& f){
-	Parser parser;
+	svgdom::parser parser;
 	
 	{
 		papki::file::guard file_guard(f);
@@ -29,7 +29,7 @@ std::unique_ptr<svg_element> svgdom::load(const papki::file& f){
 }
 
 std::unique_ptr<svg_element> svgdom::load(std::istream& s){
-	Parser parser;
+	svgdom::parser parser;
 	
 	while(!s.eof()){
 		std::vector<char> buf;
@@ -57,7 +57,7 @@ std::unique_ptr<svg_element> svgdom::load(utki::span<const uint8_t> buf){
 }
 
 std::unique_ptr<svg_element> svgdom::load(utki::span<const char> buf){
-	Parser parser;
+	svgdom::parser parser;
 
 	parser.feed(buf);
 	parser.end();

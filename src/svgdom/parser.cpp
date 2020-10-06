@@ -1,4 +1,4 @@
-#include "Parser.hxx"
+#include "parser.hxx"
 #include "util.hxx"
 #include "malformed_svg_error.hpp"
 #include "casters.hpp"
@@ -17,7 +17,7 @@ const std::string DXlinkNamespace = "http://www.w3.org/1999/xlink";
 }
 
 namespace{
-gradient::spread_method gradientStringToSpreadMethod(const std::string& str) {
+gradient::spread_method gradientStringToSpreadMethod(const std::string& str){
 	if(str == "pad"){
 		return gradient::spread_method::pad;
 	}else if(str == "reflect"){
@@ -29,7 +29,7 @@ gradient::spread_method gradientStringToSpreadMethod(const std::string& str) {
 }
 }
 
-void Parser::pushNamespaces() {
+void parser::pushNamespaces(){
 	//parse default namespace
 	{
 		auto i = this->attributes.find("xmlns");
@@ -77,7 +77,7 @@ void Parser::pushNamespaces() {
 	}
 }
 
-void Parser::popNamespaces() {
+void parser::popNamespaces(){
 	ASSERT(this->namespacesStack.size() != 0)
 	this->namespacesStack.pop_back();
 	ASSERT(this->defaultNamespaceStack.size() != 0)
@@ -86,20 +86,20 @@ void Parser::popNamespaces() {
 	this->flippedNamespacesStack.pop_back();
 }
 
-void Parser::parse_element(){
+void parser::parse_element(){
 	auto nsn = this->getNamespace(this->cur_element);
 //	TRACE(<< "nsn.name = " << nsn.name << std::endl)
 	switch(nsn.ns){
 		case XmlNamespace_e::SVG:
 			if(nsn.name == svg_element::tag){
 				this->parseSvgElement();
-			}else if(nsn.name == symbol_element::tag) {
+			}else if(nsn.name == symbol_element::tag){
 				this->parseSymbolElement();
 			}else if(nsn.name == g_element::tag){
 				this->parseGElement();
 			}else if(nsn.name == defs_element::tag){
 				this->parseDefsElement();
-			}else if (nsn.name == use_element::tag) {
+			}else if(nsn.name == use_element::tag){
 				this->parseUseElement();
 			}else if(nsn.name == path_element::tag){
 				this->parsePathElement();
@@ -151,10 +151,10 @@ void Parser::parse_element(){
 	this->element_stack.push_back(nullptr);
 }
 
-Parser::XmlNamespace_e Parser::findNamespace(const std::string& ns) {
-	for(auto i = this->namespacesStack.rbegin(), e = this->namespacesStack.rend(); i != e; ++i) {
+parser::XmlNamespace_e parser::find_namespace(const std::string& ns){
+	for(auto i = this->namespacesStack.rbegin(), e = this->namespacesStack.rend(); i != e; ++i){
 		auto iter = i->find(ns);
-		if (iter == i->end()) {
+		if(iter == i->end()){
 			continue;
 		}
 		ASSERT(ns == iter->first)
@@ -163,7 +163,7 @@ Parser::XmlNamespace_e Parser::findNamespace(const std::string& ns) {
 	return XmlNamespace_e::UNKNOWN;
 }
 
-const std::string* Parser::findFlippedNamespace(XmlNamespace_e ns) {
+const std::string* parser::findFlippedNamespace(XmlNamespace_e ns){
 	for(auto i = this->flippedNamespacesStack.rbegin(), e = this->flippedNamespacesStack.rend(); i != e; ++i){
 		auto iter = i->find(ns);
 		if(iter == i->end()){
@@ -175,11 +175,11 @@ const std::string* Parser::findFlippedNamespace(XmlNamespace_e ns) {
 	return nullptr;
 }
 
-Parser::NamespaceNamePair Parser::getNamespace(const std::string& xmlName) {
+parser::NamespaceNamePair parser::getNamespace(const std::string& xmlName){
 	NamespaceNamePair ret;
 
 	auto colonIndex = xmlName.find_first_of(':');
-	if (colonIndex == std::string::npos) {
+	if(colonIndex == std::string::npos){
 		ret.ns = this->defaultNamespaceStack.back();
 		ret.name = xmlName;
 		return ret;
@@ -187,13 +187,13 @@ Parser::NamespaceNamePair Parser::getNamespace(const std::string& xmlName) {
 
 	ASSERT(xmlName.length() >= colonIndex + 1)
 
-	ret.ns = this->findNamespace(xmlName.substr(0, colonIndex));
+	ret.ns = this->find_namespace(xmlName.substr(0, colonIndex));
 	ret.name = xmlName.substr(colonIndex + 1, xmlName.length() - 1 - colonIndex);
 
 	return ret;
 }
 
-const std::string* Parser::findAttribute(const std::string& name) {
+const std::string* parser::findAttribute(const std::string& name){
 	auto i = this->attributes.find(name);
 	if(i != this->attributes.end()){
 		return &i->second;
@@ -201,7 +201,7 @@ const std::string* Parser::findAttribute(const std::string& name) {
 	return nullptr;
 }
 
-const std::string* Parser::findAttributeOfNamespace(XmlNamespace_e ns, const std::string& name){
+const std::string* parser::findAttributeOfNamespace(XmlNamespace_e ns, const std::string& name){
 	if(this->defaultNamespaceStack.back() == ns){
 		if(auto a = this->findAttribute(name)){
 			return a;
@@ -216,13 +216,13 @@ const std::string* Parser::findAttributeOfNamespace(XmlNamespace_e ns, const std
 	return nullptr;
 }
 
-void Parser::fillElement(element& e) {
+void parser::fillElement(element& e){
 	if(auto a = this->findAttributeOfNamespace(XmlNamespace_e::SVG, "id")){
 		e.id = *a;
 	}
 }
 
-void Parser::fillGradient(gradient& g) {
+void parser::fillGradient(gradient& g){
 	this->fillElement(g);
 	this->fillReferencing(g);
 	this->fillStyleable(g);
@@ -238,7 +238,7 @@ void Parser::fillGradient(gradient& g) {
 	}
 }
 
-void Parser::fillRectangle(rectangle& r, const rectangle& defaultValues) {
+void parser::fillRectangle(rectangle& r, const rectangle& defaultValues){
 	r = defaultValues;
 	
 	if(auto a = this->findAttributeOfNamespace(XmlNamespace_e::SVG, "x")){
@@ -255,7 +255,7 @@ void Parser::fillRectangle(rectangle& r, const rectangle& defaultValues) {
 	}
 }
 
-void Parser::fillReferencing(referencing& e) {
+void parser::fillReferencing(referencing& e){
 	auto a = this->findAttributeOfNamespace(XmlNamespace_e::XLINK, "href");
 	if(!a){
 		a = this->findAttributeOfNamespace(XmlNamespace_e::SVG, "href");//in some SVG documents the svg namespace is used instead of xlink, though this is against SVG spec we allow to do so.
@@ -265,18 +265,18 @@ void Parser::fillReferencing(referencing& e) {
 	}
 }
 
-void Parser::fillShape(shape& s) {
+void parser::fillShape(shape& s){
 	this->fillElement(s);
 	this->fillStyleable(s);
 	this->fillTransformable(s);
 }
 
-void Parser::fillStyleable(styleable& s) {
+void parser::fillStyleable(styleable& s){
 	ASSERT(s.styles.size() == 0)
 
 	for(auto& a : this->attributes){
 		auto nsn = this->getNamespace(a.first);
-		switch (nsn.ns) {
+		switch (nsn.ns){
 			case XmlNamespace_e::SVG:
 				if(nsn.name == "style"){
 					s.styles = styleable::parse(a.second);
@@ -289,7 +289,7 @@ void Parser::fillStyleable(styleable& s) {
 				// parse style attributes
 				{
 					style_property type = styleable::string_to_property(nsn.name);
-					if (type != style_property::unknown) {
+					if(type != style_property::unknown){
 						s.presentation_attributes[type] = styleable::parse_style_property_value(type, a.second);
 					}
 				}
@@ -300,34 +300,34 @@ void Parser::fillStyleable(styleable& s) {
 	}
 }
 
-void Parser::fillTransformable(transformable& t) {
+void parser::fillTransformable(transformable& t){
 	ASSERT(t.transformations.size() == 0)
 	if(auto a = this->findAttributeOfNamespace(XmlNamespace_e::SVG, "transform")){
 		t.transformations = transformable::parse(*a);
 	}
 }
 
-void Parser::fillViewBoxed(view_boxed& v){
+void parser::fillViewBoxed(view_boxed& v){
 	if(auto a = this->findAttributeOfNamespace(XmlNamespace_e::SVG, "viewBox")){
 		v.view_box = svg_element::parse_view_box(*a);
 	}
 }
 
-void Parser::fillTextPositioning(text_positioning& p){
+void parser::fillTextPositioning(text_positioning& p){
 	// TODO: parse missing attributes
 }
 
-void Parser::fill_style(style_element& e){
+void parser::fill_style(style_element& e){
 	// TODO: parse missing attributes
 }
 
-void Parser::fillAspectRatioed(aspect_ratioed& e){
+void parser::fillAspectRatioed(aspect_ratioed& e){
 	if(auto a = this->findAttributeOfNamespace(XmlNamespace_e::SVG, "preserveAspectRatio")){
 		e.preserve_aspect_ratio.parse(*a);
 	}
 }
 
-void Parser::addElement(std::unique_ptr<element> e){
+void parser::addElement(std::unique_ptr<element> e){
 	ASSERT(e)
 	
 	auto elem = e.get();
@@ -360,7 +360,7 @@ void Parser::addElement(std::unique_ptr<element> e){
 	this->element_stack.push_back(elem);
 }
 
-void Parser::parseCircleElement(){
+void parser::parseCircleElement(){
 	ASSERT(this->getNamespace(this->cur_element).ns == XmlNamespace_e::SVG)
 	ASSERT(this->getNamespace(this->cur_element).name == circle_element::tag)
 
@@ -381,7 +381,7 @@ void Parser::parseCircleElement(){
 	this->addElement(std::move(ret));
 }
 
-void Parser::parseDefsElement(){
+void parser::parseDefsElement(){
 	ASSERT(this->getNamespace(this->cur_element).ns == XmlNamespace_e::SVG)
 	ASSERT(this->getNamespace(this->cur_element).name == defs_element::tag)
 
@@ -394,7 +394,7 @@ void Parser::parseDefsElement(){
 	this->addElement(std::move(ret));
 }
 
-void Parser::parseMaskElement() {
+void parser::parseMaskElement(){
 	ASSERT(this->getNamespace(this->cur_element).ns == XmlNamespace_e::SVG)
 	ASSERT(this->getNamespace(this->cur_element).name == mask_element::tag)
 
@@ -415,7 +415,7 @@ void Parser::parseMaskElement() {
 	this->addElement(std::move(ret));
 }
 
-void Parser::parseTextElement() {
+void parser::parseTextElement(){
 	ASSERT(this->getNamespace(this->cur_element).ns == XmlNamespace_e::SVG)
 	ASSERT(this->getNamespace(this->cur_element).name == text_element::tag)
 
@@ -431,7 +431,7 @@ void Parser::parseTextElement() {
 	this->addElement(std::move(ret));
 }
 
-void Parser::parse_style_element(){
+void parser::parse_style_element(){
 	ASSERT(this->getNamespace(this->cur_element).ns == XmlNamespace_e::SVG)
 	ASSERT(this->getNamespace(this->cur_element).name == style_element::tag)
 
@@ -445,7 +445,7 @@ void Parser::parse_style_element(){
 	this->addElement(std::move(ret));
 }
 
-void Parser::parseEllipseElement() {
+void parser::parseEllipseElement(){
 	ASSERT(this->getNamespace(this->cur_element).ns == XmlNamespace_e::SVG)
 	ASSERT(this->getNamespace(this->cur_element).name == ellipse_element::tag)
 
@@ -469,7 +469,7 @@ void Parser::parseEllipseElement() {
 	this->addElement(std::move(ret));
 }
 
-void Parser::parseGElement() {
+void parser::parseGElement(){
 	ASSERT(this->getNamespace(this->cur_element).ns == XmlNamespace_e::SVG)
 	ASSERT(this->getNamespace(this->cur_element).name == g_element::tag)
 
@@ -482,7 +482,7 @@ void Parser::parseGElement() {
 	this->addElement(std::move(ret));
 }
 
-void Parser::parseGradientStopElement() {
+void parser::parseGradientStopElement(){
 	ASSERT(this->getNamespace(this->cur_element).ns == XmlNamespace_e::SVG)
 	ASSERT(this->getNamespace(this->cur_element).name == gradient::stop_element::tag)
 
@@ -493,7 +493,7 @@ void Parser::parseGradientStopElement() {
 	if(auto a = this->findAttributeOfNamespace(XmlNamespace_e::SVG, "offset")){
 		std::istringstream s(*a);
 		s >> ret->offset;
-		if (!s.eof() && s.peek() == '%') {
+		if(!s.eof() && s.peek() == '%'){
 			ret->offset /= 100;
 		}
 	}
@@ -501,7 +501,7 @@ void Parser::parseGradientStopElement() {
 	this->addElement(std::move(ret));
 }
 
-void Parser::parseLineElement() {
+void parser::parseLineElement(){
 	ASSERT(this->getNamespace(this->cur_element).ns == XmlNamespace_e::SVG)
 	ASSERT(this->getNamespace(this->cur_element).name == line_element::tag)
 
@@ -526,7 +526,7 @@ void Parser::parseLineElement() {
 	this->addElement(std::move(ret));
 }
 
-void Parser::parseFilterElement() {
+void parser::parseFilterElement(){
 	ASSERT(this->getNamespace(this->cur_element).ns == XmlNamespace_e::SVG)
 	ASSERT(this->getNamespace(this->cur_element).name == filter_element::tag)
 	
@@ -555,7 +555,7 @@ void Parser::parseFilterElement() {
 	this->addElement(std::move(ret));
 }
 
-void Parser::fillFilterPrimitive(filter_primitive& p) {
+void parser::fillFilterPrimitive(filter_primitive& p){
 	this->fillElement(p);
 	this->fillRectangle(p);
 	this->fillStyleable(p);
@@ -565,19 +565,19 @@ void Parser::fillFilterPrimitive(filter_primitive& p) {
 	}
 }
 
-void Parser::fillInputable(inputable& p) {
+void parser::fillInputable(inputable& p){
 	if(auto a = this->findAttributeOfNamespace(XmlNamespace_e::SVG, "in")){
 		p.in = *a;
 	}
 }
 
-void Parser::fillSecondInputable(second_inputable& p) {
+void parser::fillSecondInputable(second_inputable& p){
 	if(auto a = this->findAttributeOfNamespace(XmlNamespace_e::SVG, "in2")){
 		p.in2 = *a;
 	}
 }
 
-void Parser::parseFeGaussianBlurElement() {
+void parser::parseFeGaussianBlurElement(){
 	ASSERT(this->getNamespace(this->cur_element).ns == XmlNamespace_e::SVG)
 	ASSERT(this->getNamespace(this->cur_element).name == fe_gaussian_blur_element::tag)
 	
@@ -593,7 +593,7 @@ void Parser::parseFeGaussianBlurElement() {
 	this->addElement(std::move(ret));
 }
 
-void Parser::parseFeColorMatrixElement() {
+void parser::parseFeColorMatrixElement(){
 	ASSERT(this->getNamespace(this->cur_element).ns == XmlNamespace_e::SVG)
 	ASSERT(this->getNamespace(this->cur_element).name == fe_color_matrix_element::tag)
 	
@@ -654,7 +654,7 @@ void Parser::parseFeColorMatrixElement() {
 	this->addElement(std::move(ret));
 }
 
-void Parser::parseFeBlendElement() {
+void parser::parseFeBlendElement(){
 	ASSERT(this->getNamespace(this->cur_element).ns == XmlNamespace_e::SVG)
 	ASSERT(this->getNamespace(this->cur_element).name == fe_blend_element::tag)
 	
@@ -681,7 +681,7 @@ void Parser::parseFeBlendElement() {
 	this->addElement(std::move(ret));
 }
 
-void Parser::parseFeCompositeElement() {
+void parser::parseFeCompositeElement(){
 	ASSERT(this->getNamespace(this->cur_element).ns == XmlNamespace_e::SVG)
 	ASSERT(this->getNamespace(this->cur_element).name == fe_composite_element::tag)
 	
@@ -726,7 +726,7 @@ void Parser::parseFeCompositeElement() {
 	this->addElement(std::move(ret));
 }
 
-void Parser::parseLinearGradientElement() {
+void parser::parseLinearGradientElement(){
 	ASSERT(this->getNamespace(this->cur_element).ns == XmlNamespace_e::SVG)
 	ASSERT(this->getNamespace(this->cur_element).name == linear_gradient_element::tag)
 
@@ -750,7 +750,7 @@ void Parser::parseLinearGradientElement() {
 	this->addElement(std::move(ret));
 }
 
-void Parser::parsePathElement() {
+void parser::parsePathElement(){
 	ASSERT(this->getNamespace(this->cur_element).ns == XmlNamespace_e::SVG)
 	ASSERT(this->getNamespace(this->cur_element).name == path_element::tag)
 
@@ -765,7 +765,7 @@ void Parser::parsePathElement() {
 	this->addElement(std::move(ret));
 }
 
-void Parser::parsePolygonElement() {
+void parser::parsePolygonElement(){
 	ASSERT(this->getNamespace(this->cur_element).ns == XmlNamespace_e::SVG)
 	ASSERT(this->getNamespace(this->cur_element).name == polygon_element::tag)
 
@@ -780,7 +780,7 @@ void Parser::parsePolygonElement() {
 	this->addElement(std::move(ret));
 }
 
-void Parser::parsePolylineElement() {
+void parser::parsePolylineElement(){
 	ASSERT(this->getNamespace(this->cur_element).ns == XmlNamespace_e::SVG)
 	ASSERT(this->getNamespace(this->cur_element).name == polyline_element::tag)
 
@@ -795,7 +795,7 @@ void Parser::parsePolylineElement() {
 	this->addElement(std::move(ret));
 }
 
-void Parser::parseRadialGradientElement() {
+void parser::parseRadialGradientElement(){
 	ASSERT(this->getNamespace(this->cur_element).ns == XmlNamespace_e::SVG)
 	ASSERT(this->getNamespace(this->cur_element).name == radial_gradient_element::tag)
 
@@ -822,7 +822,7 @@ void Parser::parseRadialGradientElement() {
 	this->addElement(std::move(ret));
 }
 
-void Parser::parseRectElement() {
+void parser::parseRectElement(){
 	ASSERT(this->getNamespace(this->cur_element).ns == XmlNamespace_e::SVG)
 	ASSERT(this->getNamespace(this->cur_element).name == rect_element::tag)
 
@@ -841,7 +841,7 @@ void Parser::parseRectElement() {
 	this->addElement(std::move(ret));
 }
 
-void Parser::parseSvgElement() {
+void parser::parseSvgElement(){
 	ASSERT(this->getNamespace(this->cur_element).ns == XmlNamespace_e::SVG)
 	ASSERT(this->getNamespace(this->cur_element).name == svg_element::tag)
 
@@ -856,7 +856,7 @@ void Parser::parseSvgElement() {
 	this->addElement(std::move(ret));
 }
 
-void Parser::parseImageElement() {
+void parser::parseImageElement(){
 	ASSERT(this->getNamespace(this->cur_element).ns == XmlNamespace_e::SVG)
 	ASSERT(this->getNamespace(this->cur_element).name == image_element::tag)
 
@@ -872,7 +872,7 @@ void Parser::parseImageElement() {
 	this->addElement(std::move(ret));
 }
 
-void Parser::parseSymbolElement() {
+void parser::parseSymbolElement(){
 	ASSERT(this->getNamespace(this->cur_element).ns == XmlNamespace_e::SVG)
 	ASSERT(this->getNamespace(this->cur_element).name == symbol_element::tag)
 
@@ -888,7 +888,7 @@ void Parser::parseSymbolElement() {
 	this->addElement(std::move(ret));
 }
 
-void Parser::parseUseElement() {
+void parser::parseUseElement(){
 	ASSERT(this->getNamespace(this->cur_element).ns == XmlNamespace_e::SVG)
 	ASSERT(this->getNamespace(this->cur_element).name == use_element::tag)
 
@@ -903,21 +903,21 @@ void Parser::parseUseElement() {
 	this->addElement(std::move(ret));
 }
 
-void Parser::on_element_start(utki::span<const char> name){
+void parser::on_element_start(utki::span<const char> name){
 	this->cur_element = utki::make_string(name);
 }
 
-void Parser::on_element_end(utki::span<const char> name){
+void parser::on_element_end(utki::span<const char> name){
 	this->popNamespaces();
 	this->element_stack.pop_back();
 }
 
-void Parser::on_attribute_parsed(utki::span<const char> name, utki::span<const char> value){
+void parser::on_attribute_parsed(utki::span<const char> name, utki::span<const char> value){
 	ASSERT(this->cur_element.length() != 0)
 	this->attributes[utki::make_string(name)] = utki::make_string(value);
 }
 
-void Parser::on_attributes_end(bool is_empty_element){
+void parser::on_attributes_end(bool is_empty_element){
 //	TRACE(<< "this->cur_element = " << this->cur_element << std::endl)
 //	TRACE(<< "this->element_stack.size() = " << this->element_stack.size() << std::endl)
 	this->pushNamespaces();
@@ -960,7 +960,7 @@ public:
 };
 }
 
-void Parser::on_content_parsed(utki::span<const char> str){
+void parser::on_content_parsed(utki::span<const char> str){
 	if(this->element_stack.empty() || !this->element_stack.back()){
 		return;
 	}
@@ -969,6 +969,6 @@ void Parser::on_content_parsed(utki::span<const char> str){
 	this->element_stack.back()->accept(v);
 }
 
-std::unique_ptr<svg_element> Parser::get_dom(){
+std::unique_ptr<svg_element> parser::get_dom(){
 	return std::move(this->svg);
 }
