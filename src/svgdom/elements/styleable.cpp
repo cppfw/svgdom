@@ -283,8 +283,8 @@ style_value parseStylePropertyValue(style_property type, std::istream& s){
 decltype(styleable::styles) styleable::parse(const std::string& str){
 	std::istringstream s(str);
 	
-	s >> std::skipws;
-	
+	skipWhitespaces(s);
+
 	decltype(styleable::styles) ret;
 	
 	while(!s.eof()){
