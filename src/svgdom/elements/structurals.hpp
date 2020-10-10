@@ -106,9 +106,9 @@ struct svg_element :
 	 * If any of the dimensions cannot be converted to pixels, e.g. because specified in percentage,
 	 * then this dimensions will be returned as zero.
 	 * @param dpi - dots per inch to use when converting lengths to pixels.
-	 * @return Width and height.
+	 * @return dimensions in pixels.
 	 */
-	std::array<real, 2> get_dimensions(real dpi)const noexcept;
+	r4::vector2<real> get_dimensions(real dpi)const noexcept;
 };
 
 struct symbol_element :

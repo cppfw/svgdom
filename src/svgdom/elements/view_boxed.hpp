@@ -12,7 +12,7 @@ namespace svgdom{
  * Provides handling of viewBox and preserveAspectRatio attributes.
  */
 struct view_boxed{
-	std::array<real, 4> view_box = {{-1, -1, -1, -1}};
+	std::array<real, 4> view_box{{-1, -1, -1, -1}};
 
 	std::string view_box_to_string()const;
 

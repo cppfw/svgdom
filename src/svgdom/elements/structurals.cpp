@@ -12,7 +12,7 @@ const std::string g_element::tag = "g";
 const std::string symbol_element::tag = "symbol";
 const std::string use_element::tag = "use";
 
-std::array<real, 2> svg_element::get_dimensions(real dpi) const noexcept{
+r4::vector2<real> svg_element::get_dimensions(real dpi) const noexcept{
 	real w = this->width.to_px(dpi);
 	real h = this->height.to_px(dpi);
 
@@ -32,7 +32,7 @@ std::array<real, 2> svg_element::get_dimensions(real dpi) const noexcept{
 		}
 	}
 	
-	return {{w, h}};
+	return {w, h};
 }
 
 real svg_element::aspect_ratio(real dpi)const{
