@@ -1,6 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
 
-    package="igagis.github.io.svgdomtests">
+    package="cppfw.github.io.svgdomtests">
 
     <application
         android:allowBackup="true"

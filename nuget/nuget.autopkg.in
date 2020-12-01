@@ -18,9 +18,9 @@ nuget{
 		title: C++ SVG DOM library;
 		authors: {Ivan Gagis};
 		owners: {Ivan Gagis};
-		licenseUrl: "https://raw.githubusercontent.com/igagis/svgdom/master/LICENSE";
-		projectUrl: "https://github.com/igagis/svgdom";
-		iconUrl: "https://github.com/igagis/svgdom/blob/master/logo.svg";
+		licenseUrl: "https://raw.githubusercontent.com/cppfw/svgdom/master/LICENSE";
+		projectUrl: "https://github.com/cppfw/svgdom";
+		iconUrl: "https://github.com/cppfw/svgdom/blob/master/logo.svg";
 		requireLicenseAcceptance:false;
 		summary: C++ SVG DOM library;
 

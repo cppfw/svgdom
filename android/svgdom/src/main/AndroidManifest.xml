@@ -1,6 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
 
-    package="igagis.github.io.svgdom">
+    package="cppfw.github.io.svgdom">
 
     <application>
 
