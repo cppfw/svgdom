@@ -41,24 +41,24 @@ void style_stack::crawler::reset(){
 }
 
 const svgdom::style_value* style_stack::get_style_property(svgdom::style_property p)const{
-	bool explicitInherit = false;
+	bool explicit_inherit = false;
 
-	for (auto i = this->stack.rbegin(); i != this->stack.rend(); ++i) {
+	for(auto i = this->stack.rbegin(); i != this->stack.rend(); ++i){
 		auto v = i->get().get_style_property(p);
 		if(!v){
 			v = this->get_css_style_property(p);
 			if(!v){
 				v = i->get().get_presentation_attribute(p);
 				if(!v){
-					if (!explicitInherit && !svgdom::styleable::is_inherited(p)) {
+					if(!explicit_inherit && !svgdom::styleable::is_inherited(p)){
 						return nullptr;
 					}
 					continue;
 				}
 			}
 		}
-		if (v->type_ == svgdom::style_value::type::inherit) {
-			explicitInherit = true;
+		if(v->is_inherit()){
+			explicit_inherit = true;
 			continue;
 		}
 		return v;

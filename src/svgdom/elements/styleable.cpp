@@ -16,7 +16,7 @@
 using namespace svgdom;
 
 std::string styleable::style_value_to_string(style_property p, const style_value& v){
-	if(v.type_ == style_value::type::inherit){
+	if(v.is_inherit()){
 		return "inherit";
 	}
 
@@ -143,26 +143,23 @@ std::string styleable::classes_to_string()const{
 
 // input parameter 'str' should have no leading or trailing white spaces
 style_value styleable::parse_style_property_value(style_property type, const std::string& str){
-	style_value v;
-
-	if (str == "inherit") {
-		v.type_ = style_value::type::inherit;
-		return v;
+	if(str == "inherit"){
+		return style_value::make_inherit();
 	}
 
 	switch(type){
 		default:
 			TRACE(<< "unimplemented style property encountered: " << styleable::property_to_string(type) << std::endl)
-			break;
+			return style_value();
 		case style_property::color_interpolation_filters:
-			v = style_value::parse_color_interpolation(str);
-			break;
+			return style_value::parse_color_interpolation(str);
 		case style_property::stroke_miterlimit:
 			{
 				std::stringstream iss(str);
-				v.stroke_miterlimit = readInReal(iss);
-				v.type_ = style_value::type::normal;
-				v.stroke_miterlimit = std::max(v.stroke_miterlimit, real(1)); // minimal value is 1
+				real miterlimit = readInReal(iss);
+				using std::max;
+				miterlimit = max(miterlimit, real(1)); // minimal value is 1
+				return style_value(miterlimit);
 			}
 			break;
 		case style_property::stop_opacity:
@@ -171,75 +168,72 @@ style_value styleable::parse_style_property_value(style_property type, const std
 		case style_property::fill_opacity:
 			{
 				std::istringstream iss(str);
-				v.opacity = readInReal(iss);
-				v.opacity = std::min(v.opacity, real(1)); // clamp top
-				v.opacity = std::max(v.opacity, real(0)); // clamp bottom
-				v.type_ = style_value::type::normal;
+				real opacity = readInReal(iss);
+				using std::min;
+				using std::max;
+				opacity = max(real(0), min(opacity, real(1))); // clamp to [0:1]
+				return style_value(opacity);
 			}
 			break;
 		case style_property::stop_color:
 		case style_property::fill:
 		case style_property::stroke:
-			v = style_value::parse_paint(str);
-//				TRACE(<< "paint read = " << std::hex << v.integer << std::endl)
-			break;
+			return style_value::parse_paint(str);
 		case style_property::stroke_width:
-			v.stroke_width = length::parse(str);
-			v.type_ = style_value::type::normal;
-//				TRACE(<< "stroke-width read = " << v.length << std::endl)
-			break;
+			return style_value(length::parse(str));
 		case style_property::stroke_linecap:
-			v.type_ = style_value::type::normal;
-			if(str == "butt"){
-				v.stroke_line_cap = stroke_line_cap::butt;
-			}else if(str == "round"){
-				v.stroke_line_cap = stroke_line_cap::round;
-			}else if(str == "square"){
-				v.stroke_line_cap = stroke_line_cap::square;
-			}else{
-				v.type_ = style_value::type::unknown;
-				TRACE(<< "unknown strokeLineCap value:" << str << std::endl)
+			{
+				stroke_line_cap slc;
+				if(str == "butt"){
+					slc = stroke_line_cap::butt;
+				}else if(str == "round"){
+					slc = stroke_line_cap::round;
+				}else if(str == "square"){
+					slc = stroke_line_cap::square;
+				}else{
+					TRACE(<< "unknown strokeLineCap value:" << str << std::endl)
+					return style_value();
+				}
+				return style_value(slc);
 			}
-			break;
 		case style_property::stroke_linejoin:
-			v.type_ = style_value::type::normal;
-			if(str == "miter"){
-				v.stroke_line_join = stroke_line_join::miter;
-			}else if(str == "round"){
-				v.stroke_line_join = stroke_line_join::round;
-			}else if(str == "bevel"){
-				v.stroke_line_join = stroke_line_join::bevel;
-			}else{
-				v.type_ = style_value::type::unknown;
-				TRACE(<< "unknown strokeLineJoin value:" << str << std::endl)
+			{
+				stroke_line_join slj;
+				if(str == "miter"){
+					slj = stroke_line_join::miter;
+				}else if(str == "round"){
+					slj = stroke_line_join::round;
+				}else if(str == "bevel"){
+					slj = stroke_line_join::bevel;
+				}else{
+					TRACE(<< "unknown strokeLineJoin value:" << str << std::endl)
+					return style_value();
+				}
+				return style_value(slj);
 			}
-			break;
 		case style_property::fill_rule:
-			v.type_ = style_value::type::normal;
-			if(str == "nonzero"){
-				v.fill_rule = fill_rule::nonzero;
-			}else if(str == "evenodd"){
-				v.fill_rule = fill_rule::evenodd;
-			}else{
-				v.type_ = style_value::type::unknown;
-				TRACE(<< "unknown fill-rule value:" << str << std::endl)
+			{
+				fill_rule fr;
+				if(str == "nonzero"){
+					fr = fill_rule::nonzero;
+				}else if(str == "evenodd"){
+					fr = fill_rule::evenodd;
+				}else{
+					TRACE(<< "unknown fill-rule value:" << str << std::endl)
+					return style_value();
+				}
+				return style_value(fr);
 			}
-			break;
 		case style_property::mask:
 		case style_property::filter:
-			v = style_value::parse_url(str);
-			break;
+			return style_value::parse_url(str);
 		case style_property::display:
-			v = style_value::parse_display(str);
-			break;
+			return style_value::parse_display(str);
 		case style_property::enable_background:
-			v = style_value::parse_enable_background(str);
-			break;
+			return style_value::parse_enable_background(str);
 		case style_property::visibility:
-			v = style_value::parse_visibility(str);
-			break;
+			return style_value::parse_visibility(str);
 	}
-	return v;
 }
 
 style_value style_value::parse_url(const std::string& str) {
@@ -658,8 +652,10 @@ auto displayToStringMap = utki::flip_map(stringToDisplayMap);
 
 style_value style_value::parse_display(const std::string& str) {
 	style_value ret;
-	
+
 	// NOTE: "inherit" is already checked on upper level.
+
+	ret.type_ = style_value::type::normal;
 	
 	auto i = stringToDisplayMap.find(str);
 	if(i == stringToDisplayMap.end()){
@@ -667,8 +663,6 @@ style_value style_value::parse_display(const std::string& str) {
 	}else{
 		ret.display = i->second;
 	}
-	
-	ret.type_ = style_value::type::normal;
 	
 	return ret;
 }
@@ -698,14 +692,14 @@ style_value style_value::parse_visibility(const std::string& str){
 	
 	// NOTE: "inherit" is already checked on upper level.
 	
+	ret.type_ = style_value::type::normal;
+	
 	auto i = stringToVisibilityMap.find(str);
 	if(i == stringToVisibilityMap.end()){
 		ret.visibility = svgdom::visibility::visible; // default value
 	}else{
 		ret.visibility = i->second;
 	}
-	
-	ret.type_ = style_value::type::normal;
 	
 	return ret;
 }
@@ -737,7 +731,7 @@ style_value style_value::parse_color_interpolation(const std::string& str) {
 }
 
 namespace{
-std::string colorInterpolationToString(color_interpolation ci){
+std::string to_string(color_interpolation ci){
 	switch(ci){
 		case color_interpolation::auto_:
 			return "auto";
@@ -752,8 +746,8 @@ std::string colorInterpolationToString(color_interpolation ci){
 }
 }
 
-std::string style_value::color_interpolation_filters_to_string() const {
-	return colorInterpolationToString(this->color_interpolation_filters);
+std::string style_value::color_interpolation_filters_to_string()const{
+	return to_string(this->color_interpolation_filters);
 }
 
 namespace{
@@ -1082,7 +1076,7 @@ std::string style_value::paint_to_string()const{
 }
 
 std::string style_value::get_local_id_from_iri()const{
-	if(this->type_ != type::url){
+	if(!this->is_url()){
 		return std::string();
 	}
 	return iriToLocalId(this->url);

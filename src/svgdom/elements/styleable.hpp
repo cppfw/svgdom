@@ -185,8 +185,10 @@ struct style_value{
 		url
 	};
 
+private:
 	type type_ = type::unknown;
 
+public:
 	bool is_valid()const noexcept{
 		return this->type_ != type::unknown;
 	}
@@ -203,7 +205,11 @@ struct style_value{
 		return this->type_ == type::url;
 	}
 
-	union{
+	bool is_inherit()const noexcept{
+		return this->type_ == type::inherit;
+	}
+
+	const union{
 		uint32_t color;
 		real opacity;
 		real stroke_miterlimit;
@@ -216,6 +222,50 @@ struct style_value{
 		svgdom::enable_background_property enable_background;
 		svgdom::visibility visibility;
 	};
+
+	style_value(){}
+
+	style_value(uint32_t v) :
+			type_(type::normal),
+			color(v)
+	{}
+
+	style_value(real v) :
+			type_(type::normal),
+			opacity(v)
+	{}
+
+	style_value(uint8_t r, uint8_t g, uint8_t b) :
+			type_(type::normal)
+	{
+		this->set_rgb(r, g, b);
+	}
+
+	style_value(const r4::vector3<real>& rgb) :
+			type_(type::normal)
+	{
+		this->set_rgb(rgb);
+	}
+
+	style_value(length l) :
+			type_(type::normal),
+			stroke_width(l)
+	{}
+
+	style_value(svgdom::stroke_line_cap slc) :
+			type_(type::normal),
+			stroke_line_cap(slc)
+	{}
+
+	style_value(svgdom::stroke_line_join slj) :
+			type_(type::normal),
+			stroke_line_join(slj)
+	{}
+
+	style_value(svgdom::fill_rule fr) :
+			type_(type::normal),
+			fill_rule(fr)
+	{}
 
 	/**
 	 * @brief String data.
@@ -253,6 +303,12 @@ struct style_value{
 
 	static style_value parse_url(const std::string& str);
 
+	static style_value make_inherit(){
+		style_value ret;
+		ret.type_ = type::inherit;
+		return ret;
+	}
+
 	/**
 	 * @brief get color as RGB.
 	 * If this style property represents a color then this method returns the
@@ -261,6 +317,7 @@ struct style_value{
 	 */
 	r4::vector3<real> get_rgb()const;
 	
+private:
 	/**
 	 * @brief set color from RGB.
 	 * If this style property represents a color then this method sets the

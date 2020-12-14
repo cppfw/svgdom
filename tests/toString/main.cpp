@@ -10,10 +10,7 @@ int main(int argc, char** argv){
 
 	svgdom::path_element::step step;
 
-	svgdom::style_value style;
-	style.type_ = svgdom::style_value::type::normal; 
-	style.set_rgb(0x42, 0x13, 0xfe);
-	path.styles[svgdom::style_property::fill] = style;
+	path.styles[svgdom::style_property::fill] = svgdom::style_value(0x42, 0x13, 0xfe);
 
 	step.type_ = svgdom::path_element::step::type::move_abs;
 	step.x = 0;
