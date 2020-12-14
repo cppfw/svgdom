@@ -225,7 +225,7 @@ struct style_value{
 	 * In case the Type is NORMAL and property value is a color specified by color name
 	 * then it holds the color name.
 	 */
-	std::string str;
+	std::string url;
 
 	/**
 	 * @brief Get ID of the locally referenced element.

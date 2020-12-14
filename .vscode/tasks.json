@@ -10,30 +10,30 @@
             "problemMatcher": [
                 "$gcc"
             ],
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            }
+            "group": "build"
         },
         {
             "label": "clean",
             "type": "shell",
             "command": "make clean",
-            "problemMatcher": []
+            "problemMatcher": [],
+            "group": "build"
         },
         {
             "label": "test_debug",
             "type": "shell",
             "command": "make test debug=true",
             "problemMatcher": [],
-            "dependsOn": "build_debug"
+            "dependsOn": "build_debug",
+            "group": "build"
         },
         {
-            "label": "test_stylke_stack_debug",
+            "label": "test_style_stack_debug",
             "type": "shell",
             "command": "make -C tests/style_stack test debug=true",
             "problemMatcher": [],
-            "dependsOn": "build_debug"
+            "dependsOn": "build_debug",
+            "group": "build"
         }
     ]
 }

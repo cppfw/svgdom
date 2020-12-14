@@ -92,7 +92,7 @@ std::string styleable::style_value_to_string(style_property p, const style_value
 			break;
 		case style_property::mask:
 		case style_property::filter:
-			s << "url(" << v.str << ")";
+			s << "url(" << v.url << ")";
 			break;
 		case style_property::display:
 			s << v.display_to_string();
@@ -264,7 +264,7 @@ style_value style_value::parse_url(const std::string& str) {
 
 	skipWhitespaces(s);
 	if(s.get() == ')'){
-		ret.str = tmpStr;
+		ret.url = tmpStr;
 		ret.type_ = style_value::type::url;
 	}
 
@@ -351,7 +351,7 @@ bool styleable::is_inherited(style_property p) {
 }
 
 namespace{
-const std::map<std::string, style_property> stringToPropertyMap = {
+const std::map<std::string, style_property> string_to_property_map = {
 	{"alignment-baseline", style_property::alignment_baseline},
 	{"baseline-shift", style_property::baseline_shift},
 	{"clip", style_property::clip},
@@ -417,12 +417,12 @@ const std::map<std::string, style_property> stringToPropertyMap = {
 }
 
 namespace{
-auto propertytoStringMap = utki::flip_map(stringToPropertyMap);
+auto property_to_string_map = utki::flip_map(string_to_property_map);
 }
 
 style_property styleable::string_to_property(std::string str){
-	auto i = stringToPropertyMap.find(str);
-	if(i != stringToPropertyMap.end()){
+	auto i = string_to_property_map.find(str);
+	if(i != string_to_property_map.end()){
 		return i->second;
 	}
 	
@@ -430,8 +430,8 @@ style_property styleable::string_to_property(std::string str){
 }
 
 std::string styleable::property_to_string(style_property p){
-	auto i = propertytoStringMap.find(p);
-	if(i != propertytoStringMap.end()){
+	auto i = property_to_string_map.find(p);
+	if(i != property_to_string_map.end()){
 		return i->second;
 	}
 	return std::string();
@@ -475,7 +475,7 @@ void style_value::set_rgb(const r4::vector3<real>& rgb){
 }
 
 namespace{
-const std::map<std::string, uint32_t> colorNames = {
+const std::map<std::string, uint32_t> color_name_to_color_map = {
 	{"aliceblue", 0xfff8f0},
 	{"antiquewhite", 0xd7ebfa},
 	{"aqua", 0xffff00},
@@ -624,6 +624,10 @@ const std::map<std::string, uint32_t> colorNames = {
 	{"yellow", 0xffff},
 	{"yellowgreen", 0x32cd9a}
 };
+}
+
+namespace{
+const auto color_to_color_name_map = utki::flip_map(color_name_to_color_map);
 }
 
 namespace{
@@ -1024,10 +1028,9 @@ style_value style_value::parse_paint(const std::string& str){
 		std::string name;
 		s >> name;
 		
-		auto i = colorNames.find(name);
-		if(i != colorNames.end()){
+		auto i = color_name_to_color_map.find(name);
+		if(i != color_name_to_color_map.end()){
 			ASSERT(i->first == name)
-			ret.str = name;
 			ret.color = i->second;
 			ret.type_ = style_value::type::normal;
 			return ret;
@@ -1047,31 +1050,40 @@ std::string style_value::paint_to_string()const{
 		case style_value::type::current_color:
 			return "currentColor";
 		case style_value::type::normal:
-			if(this->str.size() == 0){
-				// it is a # notation
+			{
+				auto i = color_to_color_name_map.find(this->color);
+				if(i != color_to_color_name_map.end()){
+					// color name
 
-				std::stringstream s;
-				s << std::hex;
-				s << "#";
-				s << ((this->color >> 4) & 0xf);
-				s << ((this->color) & 0xf);
-				s << ((this->color >> 12) & 0xf);
-				s << ((this->color >> 8) & 0xf);
-				s << ((this->color >> 20) & 0xf);
-				s << ((this->color >> 16) & 0xf);
-				return s.str();
-			}else{
-				return this->str;
+					return i->second;
+				}else{
+					// #-notation
+
+					std::stringstream s;
+					s << std::hex;
+					s << "#";
+					s << ((this->color >> 4) & 0xf);
+					s << ((this->color) & 0xf);
+					s << ((this->color >> 12) & 0xf);
+					s << ((this->color >> 8) & 0xf);
+					s << ((this->color >> 20) & 0xf);
+					s << ((this->color >> 16) & 0xf);
+					return s.str();
+				}
 			}
+
 		case style_value::type::url:
 			{
 				std::stringstream ss;
-				ss << "url(" << this->str << ")";
+				ss << "url(" << this->url << ")";
 				return ss.str();
 			}
 	}
 }
 
 std::string style_value::get_local_id_from_iri()const{
-	return iriToLocalId(this->str);
+	if(this->type_ != type::url){
+		return std::string();
+	}
+	return iriToLocalId(this->url);
 }

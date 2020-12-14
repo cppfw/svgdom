@@ -3,7 +3,7 @@
 		<linearGradient id="rainbow" x1="0" y1="0" x2="100" y2="0">
 			<stop offset="0" stop-color="none"/>
 			<stop offset="0.143" stop-color="blue"/>
-			<stop offset="0.286" stop-color="cyan"/>
+			<stop offset="0.286" stop-color="aqua"/>
 			<stop offset="0.429" stop-color="none"/>
 			<stop offset="0.572" stop-color="yellow"/>
 			<stop offset="0.715" stop-color="orange"/>

@@ -1,17 +1,17 @@
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="57.129" height="57.54" viewBox="0 0 57.129 57.54">
 	<defs>
 		<mask id="mask">
-			<circle transform="translate(-8.40599,-8.47303)" fill="#ffffff" cx="36.972" cy="37.45" r="28.563"/>
-			<path transform="translate(-8.40599,-8.47303)" fill="#000000" d="M28.616,28.17 h0.8 c5.4,0 6.84,-2.8 6.96,-4.92 h4.6 v28.4 h-5.6 V32.09 h-6.76 v-3.92 z"/>
+			<circle transform="translate(-8.40599,-8.47303)" fill="white" cx="36.972" cy="37.45" r="28.563"/>
+			<path transform="translate(-8.40599,-8.47303)" fill="black" d="M28.616,28.17 h0.8 c5.4,0 6.84,-2.8 6.96,-4.92 h4.6 v28.4 h-5.6 V32.09 h-6.76 v-3.92 z"/>
 		</mask>
 		<mask id="mask2" maskUnits="userSpaceOnUse" maskContentUnits="objectBoundingBox">
-			<circle transform="translate(-8.40599,-8.47303)" fill="#ffffff" cx="36.972" cy="37.45" r="28.563"/>
-			<path transform="translate(-8.40599,-8.47303)" fill="#000000" d="M28.616,28.17 h0.8 c5.4,0 6.84,-2.8 6.96,-4.92 h4.6 v28.4 h-5.6 V32.09 h-6.76 v-3.92 z"/>
+			<circle transform="translate(-8.40599,-8.47303)" fill="white" cx="36.972" cy="37.45" r="28.563"/>
+			<path transform="translate(-8.40599,-8.47303)" fill="black" d="M28.616,28.17 h0.8 c5.4,0 6.84,-2.8 6.96,-4.92 h4.6 v28.4 h-5.6 V32.09 h-6.76 v-3.92 z"/>
 		</mask>
 		<mask id="mask3">
-			<circle transform="translate(-8.40599,-8.47303)" fill="#ffffff" cx="36.972" cy="37.45" r="28.563"/>
-			<path transform="translate(-8.40599,-8.47303)" fill="#000000" d="M28.616,28.17 h0.8 c5.4,0 6.84,-2.8 6.96,-4.92 h4.6 v28.4 h-5.6 V32.09 h-6.76 v-3.92 z"/>
+			<circle transform="translate(-8.40599,-8.47303)" fill="white" cx="36.972" cy="37.45" r="28.563"/>
+			<path transform="translate(-8.40599,-8.47303)" fill="black" d="M28.616,28.17 h0.8 c5.4,0 6.84,-2.8 6.96,-4.92 h4.6 v28.4 h-5.6 V32.09 h-6.76 v-3.92 z"/>
 		</mask>
 	</defs>
-	<rect mask="url(#mask)" fill="#ff00ff" width="100%" height="100%"/>
+	<rect mask="url(#mask)" fill="fuchsia" width="100%" height="100%"/>
 </svg>
