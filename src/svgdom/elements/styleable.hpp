@@ -13,7 +13,7 @@
 namespace svgdom{
 
 /**
- * @brief Style property names enumeration.
+ * @brief Style properties enumeration.
  */
 enum class style_property : uint32_t{
 	unknown,					// 0
@@ -180,15 +180,13 @@ struct style_value{
 
 		/**
 		 * @brief For paint 'url' value.
-		 * Means that "str" member holds URL.
+		 * Means that "url" member holds URL.
 		 */
 		url
 	};
 
-private:
 	type type_ = type::unknown;
 
-public:
 	bool is_valid()const noexcept{
 		return this->type_ != type::unknown;
 	}
@@ -209,7 +207,7 @@ public:
 		return this->type_ == type::inherit;
 	}
 
-	const union{
+	union{
 		uint32_t color;
 		real opacity;
 		real stroke_miterlimit;
@@ -267,14 +265,6 @@ public:
 			fill_rule(fr)
 	{}
 
-	/**
-	 * @brief String data.
-	 * This variable holds any string data which can be associated with the
-	 * property value.
-	 * In case the Type is URL it holds the url string.
-	 * In case the Type is NORMAL and property value is a color specified by color name
-	 * then it holds the color name.
-	 */
 	std::string url;
 
 	/**
@@ -317,7 +307,6 @@ public:
 	 */
 	r4::vector3<real> get_rgb()const;
 	
-private:
 	/**
 	 * @brief set color from RGB.
 	 * If this style property represents a color then this method sets the
