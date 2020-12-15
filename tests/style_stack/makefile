@@ -2,12 +2,7 @@ include prorab.mk
 
 this_name := tests
 
-this_cxxflags += -Wall
-# this_cxxflags += -Werror
-this_cxxflags += -DDEBUG
-this_cxxflags += -fstrict-aliasing
-this_cxxflags += -std=c++14
-this_cxxflags += -g
+$(eval $(call prorab-config, ../../config))
 
 this_srcs += main.cpp
 
@@ -41,6 +36,6 @@ endef
 $(eval $(this_rules))
 
 # add dependency on libsvgdom
-$(prorab_this_name): $(abspath $(d)../../src/build/libsvgdom$(dot_so))
+$(prorab_this_name): $(abspath $(d)../../src/out/$(c)/libsvgdom$(dot_so))
 
 $(eval $(call prorab-include, ../../src/makefile))

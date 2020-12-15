@@ -2,6 +2,7 @@
 
 #include <map>
 #include <vector>
+#include <variant>
 
 #include <cssdom/dom.hpp>
 
@@ -148,7 +149,14 @@ struct enable_background_property{
 	}
 };
 
-struct style_value{
+enum class style_value_special{
+	unknown,
+	none,
+	current_color,
+	inherit
+};
+
+struct style_value : public std::variant<style_value_special, uint32_t, real, length>{
 	enum class type{
 		/**
 		 * @brief Invalid style value.
