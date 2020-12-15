@@ -7,7 +7,7 @@ this_name := parsesvg
 this_srcs += main.cpp
 
 this_ldlibs += -lsvgdom -lpapki -lstdc++
-this_ldflags += -L$(d)../../src/build
+this_ldflags += -L$(d)../../src/out/$(c)
 
 ifeq ($(os), linux)
     this_cxxflags += -fPIC
@@ -30,10 +30,10 @@ this_svgs := $(patsubst $(d)%,%,$(shell ls $(d)testdata/*.svg))
 define this_rules
 test:: $(prorab_this_name)
 $(.RECIPEPREFIX)@myci-running-test.sh $(this_test)
-$(.RECIPEPREFIX)$(a)cp $(d)../../src/build/*.dll $(d) || true
+$(.RECIPEPREFIX)$(a)cp $(d)../../src/out/$(c)/*.dll $(d)out/$(c) || true
 $(.RECIPEPREFIX)$(a)for f in $(this_svgs); do \
 	    echo "checking file $$$$f" && \
-	    (cd $(d) && LD_LIBRARY_PATH=../../src/build DYLD_LIBRARY_PATH=$$$$LD_LIBRARY_PATH ./parsesvg $$$$f ) && \
+	    (cd $(d) && LD_LIBRARY_PATH=../../src/out/$(c) DYLD_LIBRARY_PATH=$$$$LD_LIBRARY_PATH ./out/$(c)/parsesvg $$$$f ) && \
 	    cmp $(d)out.svg $(d)$$$$f.cmp; \
 	    if [ $$$$? -ne 0 ]; then myci-error.sh "parsed SVG did not match etalon sample"; exit 1; fi; \
 		rm -f $(d)out.svg; \
