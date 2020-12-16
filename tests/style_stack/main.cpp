@@ -63,19 +63,22 @@ public:
 		auto sp = this->ss.get_style_property(svgdom::style_property::stroke);
 		ASSERT_INFO_ALWAYS(sp, "no stroke style property defined for circle with id=" << e.id)
 
+		auto blue = svgdom::parse_paint("blue");
+		auto green = svgdom::parse_paint("green");
+
 		std::map<std::string, uint32_t> id_to_expected_stroke_map{
 			{"green1", 0x6600},
 			{"red1", 0x67},
-			{"blue1", std::get<uint32_t>(svgdom::parse_paint("blue"))},
+			{"blue1", *std::get_if<uint32_t>(&blue)},
 			{"red2", 0x67},
-			{"green2", std::get<uint32_t>(svgdom::parse_paint("green"))},
-			{"green3", std::get<uint32_t>(svgdom::parse_paint("green"))}
+			{"green2", *std::get_if<uint32_t>(&green)},
+			{"green3", *std::get_if<uint32_t>(&green)}
 		};
 		
 		auto i = id_to_expected_stroke_map.find(e.id);
 		ASSERT_INFO_ALWAYS(i != id_to_expected_stroke_map.end(), "circle with id=" << e.id <<" not found in expected values map")
 
-		ASSERT_INFO_ALWAYS(std::get<uint32_t>(*sp) == i->second, "expected stroke=0x" << std::hex << i->second <<", got stroke=0x" << std::get<uint32_t>(*sp) << " for circle with id=" << e.id)
+		ASSERT_INFO_ALWAYS(*std::get_if<uint32_t>(sp) == i->second, "expected stroke=0x" << std::hex << i->second <<", got stroke=0x" << *std::get_if<uint32_t>(sp) << " for circle with id=" << e.id)
 	}
 };
 }

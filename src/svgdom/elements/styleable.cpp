@@ -34,7 +34,7 @@ std::string styleable::style_value_to_string(style_property p, const style_value
 		case style_property::stroke_opacity:
 		case style_property::fill_opacity:
 			if(std::holds_alternative<real>(v)){
-				s << std::get<real>(v);
+				s << *std::get_if<real>(&v);
 			}
 			break;
 		case style_property::stop_color:
@@ -44,12 +44,12 @@ std::string styleable::style_value_to_string(style_property p, const style_value
 			break;
 		case style_property::stroke_width:
 			if(std::holds_alternative<length>(v)){
-				s << std::get<length>(v);
+				s << *std::get_if<length>(&v);
 			}
 			break;
 		case style_property::stroke_linecap:
 			if(std::holds_alternative<svgdom::stroke_line_cap>(v)){
-				switch(std::get<svgdom::stroke_line_cap>(v)){
+				switch(*std::get_if<svgdom::stroke_line_cap>(&v)){
 					default:
 						ASSERT(false)
 						break;
@@ -67,7 +67,7 @@ std::string styleable::style_value_to_string(style_property p, const style_value
 			break;
 		case style_property::stroke_linejoin:
 			if(std::holds_alternative<svgdom::stroke_line_join>(v)){
-				switch(std::get<svgdom::stroke_line_join>(v)){
+				switch(*std::get_if<svgdom::stroke_line_join>(&v)){
 					default:
 						ASSERT(false)
 						break;
@@ -85,7 +85,7 @@ std::string styleable::style_value_to_string(style_property p, const style_value
 			break;
 		case style_property::fill_rule:
 			if(std::holds_alternative<svgdom::fill_rule>(v)){
-				switch(std::get<svgdom::fill_rule>(v)){
+				switch(*std::get_if<svgdom::fill_rule>(&v)){
 					default:
 						ASSERT(false)
 						break;
@@ -101,7 +101,7 @@ std::string styleable::style_value_to_string(style_property p, const style_value
 		case style_property::mask:
 		case style_property::filter:
 			if(std::holds_alternative<std::string>(v)){
-				s << "url(" << std::get<std::string>(v) << ")";
+				s << "url(" << *std::get_if<std::string>(&v) << ")";
 			}
 			break;
 		case style_property::display:
@@ -458,7 +458,7 @@ r4::vector3<real> svgdom::get_rgb(const style_value& v){
 		return 0;
 	}
 
-	auto c = std::get<uint32_t>(v);
+	auto c = *std::get_if<uint32_t>(&v);
 	
 	r4::vector3<real> ret;
 	
@@ -682,7 +682,7 @@ std::string svgdom::display_to_string(const style_value& v){
 		return default_value;
 	}
 
-	auto i = display_to_string_map.find(std::get<svgdom::display>(v));
+	auto i = display_to_string_map.find(*std::get_if<svgdom::display>(&v));
 	if(i == display_to_string_map.end()){
 		return default_value;
 	}
@@ -719,7 +719,7 @@ std::string svgdom::visibility_to_string(const style_value& v){
 		return default_value;
 	}
 
-	auto i = visibility_to_string_map.find(std::get<svgdom::visibility>(v));
+	auto i = visibility_to_string_map.find(*std::get_if<svgdom::visibility>(&v));
 	if(i == visibility_to_string_map.end()){
 		return default_value;
 	}
@@ -762,7 +762,7 @@ std::string svgdom::color_interpolation_filters_to_string(const style_value& v){
 		return std::string();
 	}
 
-	return to_string(std::get<svgdom::color_interpolation>(v));
+	return to_string(*std::get_if<svgdom::color_interpolation>(&v));
 }
 
 namespace{
@@ -828,7 +828,7 @@ std::string svgdom::enable_background_to_string(const style_value& v){
 		return default_value;
 	}
 
-	auto ebp = std::get<svgdom::enable_background_property>(v);
+	auto ebp = *std::get_if<svgdom::enable_background_property>(&v);
 
 	switch(ebp.value){
 		default:
@@ -1055,7 +1055,7 @@ style_value svgdom::parse_paint(const std::string& str){
 
 std::string svgdom::paint_to_string(const style_value& v){
 	if(std::holds_alternative<style_value_special>(v)){ // special value
-		switch(std::get<style_value_special>(v)){
+		switch(*std::get_if<style_value_special>(&v)){
 			case style_value_special::none:
 				return "none";
 			case style_value_special::inherit: // TODO: isn't it already handled in styleable::style_value_to_string()?
@@ -1067,10 +1067,10 @@ std::string svgdom::paint_to_string(const style_value& v){
 		}
 	}else if(std::holds_alternative<std::string>(v)){ // URL
 		std::stringstream ss;
-		ss << "url(" << std::get<std::string>(v) << ")";
+		ss << "url(" << *std::get_if<std::string>(&v) << ")";
 		return ss.str();
 	}else if(std::holds_alternative<uint32_t>(v)){
-		auto i = color_to_color_name_map.find(std::get<uint32_t>(v));
+		auto i = color_to_color_name_map.find(*std::get_if<uint32_t>(&v));
 		if(i != color_to_color_name_map.end()){
 			// color name
 
@@ -1081,12 +1081,12 @@ std::string svgdom::paint_to_string(const style_value& v){
 			std::stringstream s;
 			s << std::hex;
 			s << "#";
-			s << ((std::get<uint32_t>(v) >> 4) & 0xf);
-			s << ((std::get<uint32_t>(v)) & 0xf);
-			s << ((std::get<uint32_t>(v) >> 12) & 0xf);
-			s << ((std::get<uint32_t>(v) >> 8) & 0xf);
-			s << ((std::get<uint32_t>(v) >> 20) & 0xf);
-			s << ((std::get<uint32_t>(v) >> 16) & 0xf);
+			s << ((*std::get_if<uint32_t>(&v) >> 4) & 0xf);
+			s << ((*std::get_if<uint32_t>(&v)) & 0xf);
+			s << ((*std::get_if<uint32_t>(&v) >> 12) & 0xf);
+			s << ((*std::get_if<uint32_t>(&v) >> 8) & 0xf);
+			s << ((*std::get_if<uint32_t>(&v) >> 20) & 0xf);
+			s << ((*std::get_if<uint32_t>(&v) >> 16) & 0xf);
 			return s.str();
 		}
 	}
@@ -1097,5 +1097,5 @@ std::string svgdom::get_local_id_from_iri(const style_value& v){
 	if(!std::holds_alternative<std::string>(v)){
 		return std::string();
 	}
-	return iriToLocalId(std::get<std::string>(v));
+	return iriToLocalId(*std::get_if<std::string>(&v));
 }
