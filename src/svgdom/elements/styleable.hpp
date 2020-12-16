@@ -2,7 +2,6 @@
 
 #include <map>
 #include <vector>
-#include <variant>
 
 #include <cssdom/dom.hpp>
 
@@ -156,7 +155,7 @@ enum class style_value_special{
 	inherit
 };
 
-struct style_value : public std::variant<style_value_special, uint32_t, real, length>{
+struct style_value{
 	enum class type{
 		/**
 		 * @brief Invalid style value.
