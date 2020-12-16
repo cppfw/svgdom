@@ -66,16 +66,16 @@ public:
 		std::map<std::string, uint32_t> id_to_expected_stroke_map{
 			{"green1", 0x6600},
 			{"red1", 0x67},
-			{"blue1", svgdom::style_value::parse_paint("blue").color},
+			{"blue1", std::get<uint32_t>(svgdom::parse_paint("blue"))},
 			{"red2", 0x67},
-			{"green2", svgdom::style_value::parse_paint("green").color},
-			{"green3", svgdom::style_value::parse_paint("green").color}
+			{"green2", std::get<uint32_t>(svgdom::parse_paint("green"))},
+			{"green3", std::get<uint32_t>(svgdom::parse_paint("green"))}
 		};
 		
 		auto i = id_to_expected_stroke_map.find(e.id);
 		ASSERT_INFO_ALWAYS(i != id_to_expected_stroke_map.end(), "circle with id=" << e.id <<" not found in expected values map")
 
-		ASSERT_INFO_ALWAYS(sp->color == i->second, "expected stroke=0x" << std::hex << i->second <<", got stroke=0x" << sp->color << " for circle with id=" << e.id)
+		ASSERT_INFO_ALWAYS(std::get<uint32_t>(*sp) == i->second, "expected stroke=0x" << std::hex << i->second <<", got stroke=0x" << std::get<uint32_t>(*sp) << " for circle with id=" << e.id)
 	}
 };
 }

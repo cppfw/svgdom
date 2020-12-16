@@ -2,10 +2,12 @@
 
 #include <map>
 #include <vector>
+#include <variant>
 
 #include <cssdom/dom.hpp>
 
 #include <r4/vector3.hpp>
+#include <r4/rectangle.hpp>
 
 #include "../config.hpp"
 #include "../length.hpp"
@@ -141,10 +143,10 @@ enum class enable_background{
 
 struct enable_background_property{
 	enable_background value;
-	real x, y, width, height; // these only make sense when 'value' is NEW.
+	r4::rectangle<real> rect; // this only make sense when 'value' is NEW.
 	
 	bool is_rect_specified()const noexcept{
-		return this->width >= 0 && this->height >= 0;
+		return this->rect.d.x() >= 0 && this->rect.d.y() >= 0;
 	}
 };
 
@@ -155,183 +157,88 @@ enum class style_value_special{
 	inherit
 };
 
-struct style_value{
-	enum class type{
-		/**
-		 * @brief Invalid style value.
-		 */
-		unknown,
+typedef std::variant<
+		style_value_special,
+		uint32_t,
+		real,
+		length,
+		svgdom::stroke_line_cap,
+		svgdom::stroke_line_join,
+		svgdom::fill_rule,
+		svgdom::color_interpolation,
+		svgdom::display,
+		svgdom::enable_background_property,
+		svgdom::visibility,
+		std::string,
+		std::vector<length>
+	> style_value;
 
-		/**
-		 * @brief No special value is used.
-		 */
-		normal,
+inline bool is_valid(const style_value& v){
+	return !std::holds_alternative<style_value_special>(v) || std::get<style_value_special>(v) != style_value_special::unknown;
+}
 
-		/**
-		 * @brief For paint 'none' value.
-		 * For paint property (e.g. fill, stroke, etc.) means that color is 'none'
-		 */
-		none,
+inline bool is_none(const style_value& v){
+	return std::holds_alternative<style_value_special>(v) && std::get<style_value_special>(v) == style_value_special::none;
+}
 
-		/**
-		 * @brief For paint 'currentColor' value.
-		 * Means "use 'color' property value".
-		 */
-		current_color,
+inline bool is_inherit(const style_value& v){
+	return std::holds_alternative<style_value_special>(v) && std::get<style_value_special>(v) == style_value_special::inherit;
+}
 
-		/**
-		 * @brief Property 'inherit' value.
-		 * Means that property inheritance was explicitly stated using the 'inherit' keyword.
-		 */
-		inherit,
+inline bool is_current_color(const style_value& v){
+	return std::holds_alternative<style_value_special>(v) && std::get<style_value_special>(v) == style_value_special::current_color;
+}
 
-		/**
-		 * @brief For paint 'url' value.
-		 * Means that "url" member holds URL.
-		 */
-		url
-	};
+/**
+ * @brief Get ID of the locally referenced element.
+ * If the value represents an URL this function will return local ID of the referenced element.
+ * @param v - stly value holding an URL.
+ * @return ID of a locally referenced element.
+ * @return Empty string if the value is not URL or the reference is not local IRI.
+ */
+std::string get_local_id_from_iri(const style_value& v);
 
-	type type_ = type::unknown;
+style_value parse_paint(const std::string& str);
+std::string paint_to_string(const style_value& v);
 
-	bool is_valid()const noexcept{
-		return this->type_ != type::unknown;
-	}
-
-	bool is_normal()const noexcept{
-		return this->type_ == type::normal;
-	}
-
-	bool is_none()const noexcept{
-		return this->type_ == type::none;
-	}
-
-	bool is_url()const noexcept{
-		return this->type_ == type::url;
-	}
-
-	bool is_inherit()const noexcept{
-		return this->type_ == type::inherit;
-	}
-
-	union{
-		uint32_t color;
-		real opacity;
-		real stroke_miterlimit;
-		length stroke_width;
-		svgdom::stroke_line_cap stroke_line_cap;
-		svgdom::stroke_line_join stroke_line_join;
-		svgdom::fill_rule fill_rule;
-		svgdom::color_interpolation color_interpolation_filters;
-		svgdom::display display;
-		svgdom::enable_background_property enable_background;
-		svgdom::visibility visibility;
-	};
-
-	style_value(){}
-
-	style_value(uint32_t v) :
-			type_(type::normal),
-			color(v)
-	{}
-
-	style_value(real v) :
-			type_(type::normal),
-			opacity(v)
-	{}
-
-	style_value(uint8_t r, uint8_t g, uint8_t b) :
-			type_(type::normal)
-	{
-		this->set_rgb(r, g, b);
-	}
-
-	style_value(const r4::vector3<real>& rgb) :
-			type_(type::normal)
-	{
-		this->set_rgb(rgb);
-	}
-
-	style_value(length l) :
-			type_(type::normal),
-			stroke_width(l)
-	{}
-
-	style_value(svgdom::stroke_line_cap slc) :
-			type_(type::normal),
-			stroke_line_cap(slc)
-	{}
-
-	style_value(svgdom::stroke_line_join slj) :
-			type_(type::normal),
-			stroke_line_join(slj)
-	{}
-
-	style_value(svgdom::fill_rule fr) :
-			type_(type::normal),
-			fill_rule(fr)
-	{}
-
-	std::string url;
-
-	/**
-	 * @brief Get ID of the locally referenced element.
-	 * If this value represents an URL this method will return local ID of the referenced element.
-	 * @return ID of the locally referenced element.
-	 * @return Empty string if this value is not URL or the reference is not local IRI.
-	 */
-	std::string get_local_id_from_iri()const;
-
-	static style_value parse_paint(const std::string& str);
-	std::string paint_to_string()const;
-
-	static style_value parse_color_interpolation(const std::string& str);
+style_value parse_color_interpolation(const std::string& str);
 	
-	static style_value parse_display(const std::string& str);
-	std::string display_to_string()const;
+style_value parse_display(const std::string& str);
+std::string display_to_string(const style_value& v);
 
-	static style_value parse_visibility(const std::string& str);
-	std::string visibility_to_string()const;
+style_value parse_visibility(const std::string& str);
+std::string visibility_to_string(const style_value& v);
 	
-	static style_value parse_enable_background(const std::string& str);
-	std::string enable_background_to_string()const;
+style_value parse_enable_background(const std::string& str);
+std::string enable_background_to_string(const style_value& v);
 	
-	std::string color_interpolation_filters_to_string()const;
+std::string color_interpolation_filters_to_string(const style_value& v);
 
-	static style_value parse_url(const std::string& str);
+style_value parse_url(const std::string& str);
 
-	static style_value make_inherit(){
-		style_value ret;
-		ret.type_ = type::inherit;
-		return ret;
-	}
-
-	/**
-	 * @brief get color as RGB.
-	 * If this style property represents a color then this method returns the
-	 * color as red, green and blue values.
-	 * @return RGB structure holding red, green and blue.
-	 */
-	r4::vector3<real> get_rgb()const;
+/**
+ * @brief get color as RGB.
+ * If style value represents a color then this function returns the
+ * color as red, green and blue values.
+ * @param v - style value to get RGB values from.
+ * @return RGB structure holding red, green and blue.
+ */
+r4::vector3<real> get_rgb(const style_value& v);
 	
-	/**
-	 * @brief set color from RGB.
-	 * If this style property represents a color then this method sets the
-	 * color from red, green and blue values.
-	 * @param r - red component, from [0, 0xff].
-	 * @param g - green component, from [0, 0xff].
-	 * @param b - blue component, from [0, 0xff].
-	 */
-	void set_rgb(uint8_t r, uint8_t g, uint8_t b);
+/**
+ * @brief Make style_value representing a color.
+ * @param r - red component, from [0, 0xff].
+ * @param g - green component, from [0, 0xff].
+ * @param b - blue component, from [0, 0xff].
+ */
+style_value make_style_value(uint8_t r, uint8_t g, uint8_t b);
 
-	/**
-	 * @brief set color from RGB.
-	 * If this style property represents a color then this method sets the
-	 * color from red, green and blue values.
-	 * @param rgb - red, green, blue color components, each from [0, 1].
-	 */
-	void set_rgb(const r4::vector3<real>& rgb);
-};
+/**
+ * @brief Make style_value representing a color.
+ * @param rgb - red, green, blue color components, each from [0, 1].
+ */
+style_value make_style_value(const r4::vector3<real>& rgb);
+
 
 /**
  * @brief An element which has 'style' attribute or can be styled.

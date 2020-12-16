@@ -4,9 +4,18 @@
     "version": "2.0.0",
     "tasks": [
         {
+            "label": "build",
+            "type": "shell",
+            "command": "make autojobs=true",
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "group": "build"
+        },
+        {
             "label": "build_debug",
             "type": "shell",
-            "command": "make aj=true debug=true",
+            "command": "make autojobs=true config=dbg",
             "problemMatcher": [
                 "$gcc"
             ],
@@ -20,9 +29,24 @@
             "group": "build"
         },
         {
+            "label": "clean_debug",
+            "type": "shell",
+            "command": "make clean config=dbg",
+            "problemMatcher": [],
+            "group": "build"
+        },
+        {
+            "label": "test",
+            "type": "shell",
+            "command": "make test",
+            "problemMatcher": [],
+            "dependsOn": "build",
+            "group": "build"
+        },
+        {
             "label": "test_debug",
             "type": "shell",
-            "command": "make test debug=true",
+            "command": "make test config=dbg",
             "problemMatcher": [],
             "dependsOn": "build_debug",
             "group": "build"
@@ -30,7 +54,7 @@
         {
             "label": "test_style_stack_debug",
             "type": "shell",
-            "command": "make -C tests/style_stack test debug=true",
+            "command": "make -C tests/style_stack test config=dbg",
             "problemMatcher": [],
             "dependsOn": "build_debug",
             "group": "build"

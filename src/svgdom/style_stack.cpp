@@ -57,7 +57,8 @@ const svgdom::style_value* style_stack::get_style_property(svgdom::style_propert
 				}
 			}
 		}
-		if(v->is_inherit()){
+		ASSERT(v)
+		if(is_inherit(*v)){
 			explicit_inherit = true;
 			continue;
 		}

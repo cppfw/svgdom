@@ -16,7 +16,7 @@
 using namespace svgdom;
 
 std::string styleable::style_value_to_string(style_property p, const style_value& v){
-	if(v.is_inherit()){
+	if(is_inherit(v)){
 		return "inherit";
 	}
 
@@ -26,82 +26,92 @@ std::string styleable::style_value_to_string(style_property p, const style_value
 			TRACE(<< "Unimplemented style property: " << styleable::property_to_string(p) << ", writing empty value." << std::endl)
 			break;
 		case style_property::color_interpolation_filters:
-			s << v.color_interpolation_filters_to_string();
+			s << color_interpolation_filters_to_string(v);
 			break;
 		case style_property::stroke_miterlimit:
-			s << v.stroke_miterlimit;
-			break;
 		case style_property::stop_opacity:
 		case style_property::opacity:
 		case style_property::stroke_opacity:
 		case style_property::fill_opacity:
-			s << v.opacity;
+			if(std::holds_alternative<real>(v)){
+				s << std::get<real>(v);
+			}
 			break;
 		case style_property::stop_color:
 		case style_property::fill:
 		case style_property::stroke:
-			s << v.paint_to_string();
+			s << paint_to_string(v);
 			break;
 		case style_property::stroke_width:
-			s << v.stroke_width;
+			if(std::holds_alternative<length>(v)){
+				s << std::get<length>(v);
+			}
 			break;
 		case style_property::stroke_linecap:
-			switch(v.stroke_line_cap){
-				default:
-					ASSERT(false)
-					break;
-				case stroke_line_cap::butt:
-					s << "butt";
-					break;
-				case stroke_line_cap::round:
-					s << "round";
-					break;
-				case stroke_line_cap::square:
-					s << "square";
-					break;
+			if(std::holds_alternative<svgdom::stroke_line_cap>(v)){
+				switch(std::get<svgdom::stroke_line_cap>(v)){
+					default:
+						ASSERT(false)
+						break;
+					case stroke_line_cap::butt:
+						s << "butt";
+						break;
+					case stroke_line_cap::round:
+						s << "round";
+						break;
+					case stroke_line_cap::square:
+						s << "square";
+						break;
+				}
 			}
 			break;
 		case style_property::stroke_linejoin:
-			switch(v.stroke_line_join){
-				default:
-					ASSERT(false)
-					break;
-				case stroke_line_join::miter:
-					s << "miter";
-					break;
-				case stroke_line_join::round:
-					s << "round";
-					break;
-				case stroke_line_join::bevel:
-					s << "bevel";
-					break;
+			if(std::holds_alternative<svgdom::stroke_line_join>(v)){
+				switch(std::get<svgdom::stroke_line_join>(v)){
+					default:
+						ASSERT(false)
+						break;
+					case stroke_line_join::miter:
+						s << "miter";
+						break;
+					case stroke_line_join::round:
+						s << "round";
+						break;
+					case stroke_line_join::bevel:
+						s << "bevel";
+						break;
+				}
 			}
 			break;
 		case style_property::fill_rule:
-			switch(v.fill_rule){
-				default:
-					ASSERT(false)
-					break;
-				case fill_rule::evenodd:
-					s << "evenodd";
-					break;
-				case fill_rule::nonzero:
-					s << "nonzero";
-					break;
+			if(std::holds_alternative<svgdom::fill_rule>(v)){
+				switch(std::get<svgdom::fill_rule>(v)){
+					default:
+						ASSERT(false)
+						break;
+					case fill_rule::evenodd:
+						s << "evenodd";
+						break;
+					case fill_rule::nonzero:
+						s << "nonzero";
+						break;
+				}
 			}
 			break;
 		case style_property::mask:
 		case style_property::filter:
-			s << "url(" << v.url << ")";
+			if(std::holds_alternative<std::string>(v)){
+				s << "url(" << std::get<std::string>(v) << ")";
+			}
 			break;
 		case style_property::display:
-			s << v.display_to_string();
+			s << display_to_string(v);
 			break;
 		case style_property::enable_background:
-			s << v.enable_background_to_string();
+			s << enable_background_to_string(v);
 			break;
 		case style_property::visibility:
-			s << v.visibility_to_string();
+			s << visibility_to_string(v);
 			break;
 	}
 	return s.str();
@@ -144,15 +154,15 @@ std::string styleable::classes_to_string()const{
 // input parameter 'str' should have no leading or trailing white spaces
 style_value styleable::parse_style_property_value(style_property type, const std::string& str){
 	if(str == "inherit"){
-		return style_value::make_inherit();
+		return style_value(style_value_special::inherit);
 	}
 
 	switch(type){
 		default:
 			TRACE(<< "unimplemented style property encountered: " << styleable::property_to_string(type) << std::endl)
-			return style_value();
+			return style_value(style_value_special::unknown);
 		case style_property::color_interpolation_filters:
-			return style_value::parse_color_interpolation(str);
+			return parse_color_interpolation(str);
 		case style_property::stroke_miterlimit:
 			{
 				std::stringstream iss(str);
@@ -178,7 +188,7 @@ style_value styleable::parse_style_property_value(style_property type, const std
 		case style_property::stop_color:
 		case style_property::fill:
 		case style_property::stroke:
-			return style_value::parse_paint(str);
+			return parse_paint(str);
 		case style_property::stroke_width:
 			return style_value(length::parse(str));
 		case style_property::stroke_linecap:
@@ -226,24 +236,21 @@ style_value styleable::parse_style_property_value(style_property type, const std
 			}
 		case style_property::mask:
 		case style_property::filter:
-			return style_value::parse_url(str);
+			return parse_url(str);
 		case style_property::display:
-			return style_value::parse_display(str);
+			return parse_display(str);
 		case style_property::enable_background:
-			return style_value::parse_enable_background(str);
+			return parse_enable_background(str);
 		case style_property::visibility:
-			return style_value::parse_visibility(str);
+			return parse_visibility(str);
 	}
 }
 
-style_value style_value::parse_url(const std::string& str) {
-	style_value ret;
-	ret.type_ = style_value::type::unknown;
-	
+style_value svgdom::parse_url(const std::string& str){
 	std::string url = "url(";
 	
 	if(url != str.substr(0, url.length())){
-		return ret;
+		return style_value(style_value_special::unknown);
 	}
 	
 	std::istringstream s(str);
@@ -258,11 +265,10 @@ style_value style_value::parse_url(const std::string& str) {
 
 	skipWhitespaces(s);
 	if(s.get() == ')'){
-		ret.url = tmpStr;
-		ret.type_ = style_value::type::url;
+		return style_value(tmpStr);
 	}
 
-	return ret;
+	return style_value(style_value_special::unknown);;
 }
 
 namespace{
@@ -447,8 +453,12 @@ const style_value* styleable::get_presentation_attribute(style_property p)const{
 	return nullptr;
 }
 
-r4::vector3<real> style_value::get_rgb()const{
-	auto c = this->color;
+r4::vector3<real> svgdom::get_rgb(const style_value& v){
+	if(!std::holds_alternative<uint32_t>(v)){
+		return 0;
+	}
+
+	auto c = std::get<uint32_t>(v);
 	
 	r4::vector3<real> ret;
 	
@@ -459,13 +469,17 @@ r4::vector3<real> style_value::get_rgb()const{
 	return ret;
 }
 
-void style_value::set_rgb(uint8_t r, uint8_t g, uint8_t b){
-	this->color = uint32_t(r) | (uint32_t(g) << 8) | (uint32_t(b) << 16);
+style_value svgdom::make_style_value(uint8_t r, uint8_t g, uint8_t b){
+	return style_value(uint32_t(r) | (uint32_t(g) << 8) | (uint32_t(b) << 16));
 }
 
-void style_value::set_rgb(const r4::vector3<real>& rgb){
+style_value svgdom::make_style_value(const r4::vector3<real>& rgb){
 	auto c = (rgb * 0xff).to<uint8_t>();
-	this->set_rgb(c.r(), c.g(), c.b());
+	return make_style_value(
+			uint8_t(c.r()),
+			uint8_t(c.g()),
+			uint8_t(c.b())
+		);
 }
 
 namespace{
@@ -625,7 +639,7 @@ const auto color_to_color_name_map = utki::flip_map(color_name_to_color_map);
 }
 
 namespace{
-std::map<std::string, display> stringToDisplayMap = {
+std::map<std::string, display> string_to_display_map = {
 	{"inline", svgdom::display::inline_},
 	{"block", svgdom::display::block},
 	{"list-item", svgdom::display::list_item},
@@ -647,36 +661,36 @@ std::map<std::string, display> stringToDisplayMap = {
 }
 
 namespace{
-auto displayToStringMap = utki::flip_map(stringToDisplayMap);
+auto display_to_string_map = utki::flip_map(string_to_display_map);
 }
 
-style_value style_value::parse_display(const std::string& str) {
-	style_value ret;
-
+style_value svgdom::parse_display(const std::string& str){
 	// NOTE: "inherit" is already checked on upper level.
 
-	ret.type_ = style_value::type::normal;
-	
-	auto i = stringToDisplayMap.find(str);
-	if(i == stringToDisplayMap.end()){
-		ret.display = svgdom::display::inline_; // default value
+	auto i = string_to_display_map.find(str);
+	if(i == string_to_display_map.end()){
+		return style_value(svgdom::display::inline_); // default value
 	}else{
-		ret.display = i->second;
+		return style_value(i->second);
 	}
-	
-	return ret;
 }
 
-std::string style_value::display_to_string()const{
-	auto i = displayToStringMap.find(this->display);
-	if(i == displayToStringMap.end()){
-		return displayToStringMap[svgdom::display::inline_]; // default value
+std::string svgdom::display_to_string(const style_value& v){
+	const auto& default_value = display_to_string_map[svgdom::display::inline_];
+
+	if(!std::holds_alternative<svgdom::display>(v)){
+		return default_value;
+	}
+
+	auto i = display_to_string_map.find(std::get<svgdom::display>(v));
+	if(i == display_to_string_map.end()){
+		return default_value;
 	}
 	return i->second;
 }
 
 namespace{
-std::map<std::string, visibility> stringToVisibilityMap = {
+std::map<std::string, visibility> string_to_visibility_map = {
 	{"visible", visibility::visible},
 	{"hidden", visibility::hidden},
 	{"collapse", visibility::collapse}
@@ -684,50 +698,47 @@ std::map<std::string, visibility> stringToVisibilityMap = {
 }
 
 namespace{
-auto visibilityToStringMap = utki::flip_map(stringToVisibilityMap);
+auto visibility_to_string_map = utki::flip_map(string_to_visibility_map);
 }
 
-style_value style_value::parse_visibility(const std::string& str){
-	style_value ret;
-	
+style_value svgdom::parse_visibility(const std::string& str){
 	// NOTE: "inherit" is already checked on upper level.
 	
-	ret.type_ = style_value::type::normal;
-	
-	auto i = stringToVisibilityMap.find(str);
-	if(i == stringToVisibilityMap.end()){
-		ret.visibility = svgdom::visibility::visible; // default value
+	auto i = string_to_visibility_map.find(str);
+	if(i == string_to_visibility_map.end()){
+		return style_value(svgdom::visibility::visible); // default value
 	}else{
-		ret.visibility = i->second;
+		return style_value(i->second);
 	}
-	
-	return ret;
 }
 
-std::string style_value::visibility_to_string()const{
-	auto i = visibilityToStringMap.find(this->visibility);
-	if(i == visibilityToStringMap.end()){
-		return visibilityToStringMap[svgdom::visibility::visible]; // default value
+std::string svgdom::visibility_to_string(const style_value& v){
+	const auto& default_value = visibility_to_string_map[svgdom::visibility::visible];
+
+	if(!std::holds_alternative<svgdom::visibility>(v)){
+		return default_value;
+	}
+
+	auto i = visibility_to_string_map.find(std::get<svgdom::visibility>(v));
+	if(i == visibility_to_string_map.end()){
+		return default_value;
 	}
 	return i->second;
 }
 
-style_value style_value::parse_color_interpolation(const std::string& str) {
-	style_value ret;
-	
+style_value svgdom::parse_color_interpolation(const std::string& str){
+	color_interpolation v;
 	if(str == "auto"){
-		ret.color_interpolation_filters = color_interpolation::auto_;
+		v = color_interpolation::auto_;
 	}else if(str == "linearRGB"){
-		ret.color_interpolation_filters = color_interpolation::linear_rgb;
+		v = color_interpolation::linear_rgb;
 	}else if(str == "sRGB"){
-		ret.color_interpolation_filters = color_interpolation::s_rgb;
+		v = color_interpolation::s_rgb;
 	}else{
-		return ret;
+		return style_value(style_value_special::unknown);
 	}
 	
-	ret.type_ = style_value::type::normal;
-	
-	return ret;
+	return style_value(v);
 }
 
 namespace{
@@ -746,8 +757,12 @@ std::string to_string(color_interpolation ci){
 }
 }
 
-std::string style_value::color_interpolation_filters_to_string()const{
-	return to_string(this->color_interpolation_filters);
+std::string svgdom::color_interpolation_filters_to_string(const style_value& v){
+	if(!std::holds_alternative<svgdom::color_interpolation>(v)){
+		return std::string();
+	}
+
+	return to_string(std::get<svgdom::color_interpolation>(v));
 }
 
 namespace{
@@ -760,26 +775,26 @@ enable_background_property parseEnableBackgroundNewRect(const std::string& str){
 	skipWhitespaces(s);
 	
 	if(s.eof()){
-		ret.width = -1; // indicate that rectangle is not specified
+		ret.rect.d.x() = -1; // indicate that rectangle is not specified
 		return ret;
 	}
 	
-	ret.x = readInReal(s);
+	ret.rect.p.x() = readInReal(s);
 	if(s.fail()){
 		throw malformed_svg_error("malformed 'enable-background NEW' string");
 	}
 	
-	ret.y = readInReal(s);
+	ret.rect.p.y() = readInReal(s);
 	if(s.fail()){
 		throw malformed_svg_error("malformed 'enable-background NEW' string");
 	}
 	
-	ret.width = readInReal(s);
+	ret.rect.d.x() = readInReal(s);
 	if(s.fail()){
 		throw malformed_svg_error("malformed enable-background NEW string");
 	}
 	
-	ret.height = readInReal(s);
+	ret.rect.d.y() = readInReal(s);
 	if(s.fail()){
 		throw malformed_svg_error("malformed enable-background NEW string");
 	}
@@ -788,42 +803,48 @@ enable_background_property parseEnableBackgroundNewRect(const std::string& str){
 }
 }
 
-style_value style_value::parse_enable_background(const std::string& str) {
-	style_value ret;
-	
+style_value svgdom::parse_enable_background(const std::string& str){
+	enable_background_property ebp;
+
 	std::string newStr = "new";
 	if(str.substr(0, newStr.length()) == "new"){
 		try{
-			ret.enable_background = parseEnableBackgroundNewRect(str);
-			ret.enable_background.value = svgdom::enable_background::new_;
+			ebp = parseEnableBackgroundNewRect(str);
+			ebp.value = svgdom::enable_background::new_;
 		}catch(malformed_svg_error&){
-			ret.enable_background.value = svgdom::enable_background::accumulate; // default value
+			ebp.value = svgdom::enable_background::accumulate; // default value
 		}
 	}else{
-		ret.enable_background.value = svgdom::enable_background::accumulate; // default value
+		ebp.value = svgdom::enable_background::accumulate; // default value
 	}
 	
-	ret.type_ = style_value::type::normal;
-	
-	return ret;
+	return style_value(ebp);
 }
 
-std::string style_value::enable_background_to_string()const{
-	switch(this->enable_background.value){
+std::string svgdom::enable_background_to_string(const style_value& v){
+	const std::string& default_value = "accumulate";
+
+	if(!std::holds_alternative<svgdom::enable_background_property>(v)){
+		return default_value;
+	}
+
+	auto ebp = std::get<svgdom::enable_background_property>(v);
+
+	switch(ebp.value){
 		default:
 		case svgdom::enable_background::accumulate:
-			return "accumulate";
+			return default_value;
 		case svgdom::enable_background::new_:
 			{
 				std::stringstream ss;
 				
 				ss << "new";
 				
-				if(this->enable_background.is_rect_specified()){
-					ss << " " << this->enable_background.x;
-					ss << " " << this->enable_background.y;
-					ss << " " << this->enable_background.width;
-					ss << " " << this->enable_background.height;
+				if(ebp.is_rect_specified()){
+					ss << " " << ebp.rect.p.x();
+					ss << " " << ebp.rect.p.y();
+					ss << " " << ebp.rect.d.x();
+					ss << " " << ebp.rect.d.y();
 				}
 				
 				return ss.str();
@@ -883,35 +904,33 @@ uint32_t hslToRgb(real h, real s, real l){
 }
 
 // 'str' should have no leading and/or trailing white spaces.
-style_value style_value::parse_paint(const std::string& str){
-	style_value ret;
-	
-	if(str.size() == 0){
-		ret.type_ = style_value::type::none;
-		return ret;
+style_value svgdom::parse_paint(const std::string& str){
+	// TRACE(<< "parse_paint(): str = " << str << std::endl)
+	if(str.empty()){
+		return style_value(style_value_special::none);
 	}
 	
 	ASSERT(!std::isspace(str[0])) // leading spaces should be skept already	
 	
 	{
-		ret = style_value::parse_url(str);
-		if(ret.is_valid()){
+		auto ret = parse_url(str);
+		if(is_valid(ret)){
+			// TRACE(<< "parsed as URL: " << std::get<std::string>(ret) << std::endl)
 			return ret;
 		}
 	}
 	
 	if(str == "none"){
-		ret.type_ = style_value::type::none;
-		return ret;
+		return style_value(style_value_special::none);
 	}
 	
 	if(str == "currentColor"){
-		ret.type_ = style_value::type::current_color;
-		return ret;
+		return style_value(style_value_special::current_color);
 	}
 	
-	// check if # notation
+	// check if #-notation
 	if(str[0] == '#'){
+		// TRACE(<< "#-notation" << std::endl)
 		std::istringstream s(str.substr(1, 6));
 		
 		std::array<uint8_t, 6> d;
@@ -932,24 +951,25 @@ style_value style_value::parse_paint(const std::string& str){
 		}
 		switch(numDigits){
 			case 3:
-				ret.color = (uint32_t(d[0]) << 4) | (uint32_t(d[0]))
-						| (uint32_t(d[1]) << 12) | (uint32_t(d[1]) << 8)
-						| (uint32_t(d[2]) << 20) | (uint32_t(d[2]) << 16);
-				ret.type_ = style_value::type::normal;
-				break;
+				{
+					auto color = (uint32_t(d[0]) << 4) | (uint32_t(d[0]))
+							| (uint32_t(d[1]) << 12) | (uint32_t(d[1]) << 8)
+							| (uint32_t(d[2]) << 20) | (uint32_t(d[2]) << 16);
+
+					return style_value(color);
+				}
 			case 6:
-				ret.color = (uint32_t(d[0]) << 4) | (uint32_t(d[1]))
-						| (uint32_t(d[2]) << 12) | (uint32_t(d[3]) << 8)
-						| (uint32_t(d[4]) << 20) | (uint32_t(d[5]) << 16);
-				ret.type_ = style_value::type::normal;
-				break;
+				{
+					// TRACE(<< "6 digit color" << std::endl)
+					auto color = (uint32_t(d[0]) << 4) | (uint32_t(d[1]))
+							| (uint32_t(d[2]) << 12) | (uint32_t(d[3]) << 8)
+							| (uint32_t(d[4]) << 20) | (uint32_t(d[5]) << 16);
+					
+					return style_value(color);
+				}
 			default:
-				ret.type_ = style_value::type::none;
-				break;
+				return style_value(style_value_special::none);
 		}
-		
-//		TRACE(<< "# color read = " << std::hex << ret.integer << std::endl)
-		return ret;
 	}
 	
 	// check if rgb() or RGB() notation
@@ -974,15 +994,16 @@ style_value style_value::parse_paint(const std::string& str){
 			skipWhitespaces(s);
 			
 			if(s.get() == ')'){
-				ret.color = r | (g << 8) | (b << 16);
-				ret.type_ = style_value::type::normal;
+				auto color = r | (g << 8) | (b << 16);
+				return style_value(color);
 			}
-			return ret;
+			return style_value(style_value_special::none);
 		}
 	}
 	
 	// check if hsl() notation
 	{
+		// TRACE(<< "hsl()-notation" << std::endl)
 		const std::string hsl = "hsl(";
 		if(hsl == str.substr(0, hsl.length())){
 			std::istringstream ss(str);
@@ -999,20 +1020,20 @@ style_value style_value::parse_paint(const std::string& str){
 			skipWhitespacesAndOrComma(ss);
 			ss >> s;
 			if(ss.get() != '%'){
-				return ret;
+				return style_value(style_value_special::none);
 			}
 			skipWhitespacesAndOrComma(ss);
 			ss >> l;
 			if(ss.get() != '%'){
-				return ret;
+				return style_value(style_value_special::none);
 			}
 			skipWhitespaces(ss);
 			
 			if(ss.get() == ')'){
-				ret.color = hslToRgb(real(h), real(s) / real(100), real(l) / real(100));
-				ret.type_ = style_value::type::normal;
+				auto color = hslToRgb(real(h), real(s) / real(100), real(l) / real(100));
+				return style_value(color);
 			}
-			return ret;
+			return style_value(style_value_special::none);
 		}
 	}
 	
@@ -1025,59 +1046,56 @@ style_value style_value::parse_paint(const std::string& str){
 		auto i = color_name_to_color_map.find(name);
 		if(i != color_name_to_color_map.end()){
 			ASSERT(i->first == name)
-			ret.color = i->second;
-			ret.type_ = style_value::type::normal;
-			return ret;
+			return style_value(i->second);
 		}
 	}
 	
-	return ret;
+	return style_value(style_value_special::none);
 }
 
-std::string style_value::paint_to_string()const{
-	switch(this->type_){
-		default:
-		case style_value::type::none:
-			return "none";
-		case style_value::type::inherit:
-			return "inherit";
-		case style_value::type::current_color:
-			return "currentColor";
-		case style_value::type::normal:
-			{
-				auto i = color_to_color_name_map.find(this->color);
-				if(i != color_to_color_name_map.end()){
-					// color name
+std::string svgdom::paint_to_string(const style_value& v){
+	if(std::holds_alternative<style_value_special>(v)){ // special value
+		switch(std::get<style_value_special>(v)){
+			case style_value_special::none:
+				return "none";
+			case style_value_special::inherit: // TODO: isn't it already handled in styleable::style_value_to_string()?
+				return "inherit";
+			case style_value_special::current_color:
+				return "currentColor";
+			default:
+				return std::string();
+		}
+	}else if(std::holds_alternative<std::string>(v)){ // URL
+		std::stringstream ss;
+		ss << "url(" << std::get<std::string>(v) << ")";
+		return ss.str();
+	}else if(std::holds_alternative<uint32_t>(v)){
+		auto i = color_to_color_name_map.find(std::get<uint32_t>(v));
+		if(i != color_to_color_name_map.end()){
+			// color name
 
-					return i->second;
-				}else{
-					// #-notation
+			return i->second;
+		}else{
+			// #-notation
 
-					std::stringstream s;
-					s << std::hex;
-					s << "#";
-					s << ((this->color >> 4) & 0xf);
-					s << ((this->color) & 0xf);
-					s << ((this->color >> 12) & 0xf);
-					s << ((this->color >> 8) & 0xf);
-					s << ((this->color >> 20) & 0xf);
-					s << ((this->color >> 16) & 0xf);
-					return s.str();
-				}
-			}
-
-		case style_value::type::url:
-			{
-				std::stringstream ss;
-				ss << "url(" << this->url << ")";
-				return ss.str();
-			}
+			std::stringstream s;
+			s << std::hex;
+			s << "#";
+			s << ((std::get<uint32_t>(v) >> 4) & 0xf);
+			s << ((std::get<uint32_t>(v)) & 0xf);
+			s << ((std::get<uint32_t>(v) >> 12) & 0xf);
+			s << ((std::get<uint32_t>(v) >> 8) & 0xf);
+			s << ((std::get<uint32_t>(v) >> 20) & 0xf);
+			s << ((std::get<uint32_t>(v) >> 16) & 0xf);
+			return s.str();
+		}
 	}
+	return std::string();
 }
 
-std::string style_value::get_local_id_from_iri()const{
-	if(!this->is_url()){
+std::string svgdom::get_local_id_from_iri(const style_value& v){
+	if(!std::holds_alternative<std::string>(v)){
 		return std::string();
 	}
-	return iriToLocalId(this->url);
+	return iriToLocalId(std::get<std::string>(v));
 }
