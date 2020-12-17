@@ -1,3 +1,9 @@
+libsvgdom (0.3.50) unstable; urgency=medium
+
+  * stroke-dasharray and stroke-dashoffset style properties
+
+ -- Ivan Gagis <igagis@gmail.com>  Fri, 18 Dec 2020 00:50:38 +0200
+
 libsvgdom (0.3.49) unstable; urgency=medium
 
   * github actions
