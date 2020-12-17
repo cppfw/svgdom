@@ -5,5 +5,5 @@
 using namespace svgdom;
 
 std::string referencing::get_local_id_from_iri() const {
-	return iriToLocalId(this->iri);
+	return iri_to_local_id(this->iri);
 }

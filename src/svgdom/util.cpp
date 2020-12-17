@@ -6,7 +6,7 @@
 using namespace svgdom;
 
 
-void svgdom::skipWhitespaces(std::istream& s){
+void svgdom::skip_whitespaces(std::istream& s){
 	while(!s.eof()){
 		if(!std::isspace(s.peek())){
 			break;
@@ -15,7 +15,7 @@ void svgdom::skipWhitespaces(std::istream& s){
 	}
 }
 
-void svgdom::skipWhitespacesAndOrComma(std::istream& s){
+void svgdom::skip_whitespaces_and_comma(std::istream& s){
 	bool commaSkipped = false;
 	while(!s.eof()){
 		if(std::isspace(s.peek())){
@@ -32,7 +32,7 @@ void svgdom::skipWhitespacesAndOrComma(std::istream& s){
 	}
 }
 
-void svgdom::skipTillCharInclusive(std::istream& s, char c){
+void svgdom::skip_till_char_inclusive(std::istream& s, char c){
 	while(!s.eof()){
 		if(s.get() == c){
 			break;
@@ -40,7 +40,7 @@ void svgdom::skipTillCharInclusive(std::istream& s, char c){
 	}
 }
 
-std::string svgdom::readTillChar(std::istream& s, char c){
+std::string svgdom::read_till_char(std::istream& s, char c){
 	std::stringstream ss;
 	while(!s.eof()){
 		if(s.peek() == c || s.peek() == std::char_traits<char>::eof()){
@@ -51,7 +51,7 @@ std::string svgdom::readTillChar(std::istream& s, char c){
 	return ss.str();
 }
 
-std::string svgdom::readTillCharOrWhitespace(std::istream& s, char c){
+std::string svgdom::read_till_char_or_whitespace(std::istream& s, char c){
 	std::stringstream ss;
 	while(!s.eof()){
 		if(std::isspace(s.peek()) || s.peek() == c || s.peek() == std::char_traits<char>::eof()){
@@ -137,8 +137,8 @@ std::string readInNumberString(std::istream& s){
 }
 
 
-real svgdom::readInReal(std::istream& s) {
-	skipWhitespaces(s);
+real svgdom::read_in_real(std::istream& s) {
+	skip_whitespaces(s);
 	
 	//On MacOS reading in the number which is terminated by non-number and non-whitespace character,
 	//e.g. "0c" will result in stream error, i.e. s.fail() will return true and stream will be in unreadable state.
@@ -159,7 +159,7 @@ real svgdom::readInReal(std::istream& s) {
 	return real(x);
 }
 
-std::string svgdom::trimTail(const std::string& s){
+std::string svgdom::trim_tail(const std::string& s){
 	const auto t = s.find_last_not_of(" \t\n\r");
 	if(t == std::string::npos){
 		return s;
@@ -168,7 +168,7 @@ std::string svgdom::trimTail(const std::string& s){
 	return s.substr(0, t + 1);
 }
 
-std::string svgdom::iriToLocalId(const std::string& iri){
+std::string svgdom::iri_to_local_id(const std::string& iri){
 	if(iri.length() != 0 && iri[0] == '#'){
 		return iri.substr(1, iri.length() - 1);
 	}
@@ -176,7 +176,7 @@ std::string svgdom::iriToLocalId(const std::string& iri){
 }
 
 
-coordinate_units svgdom::parseCoordinateUnits(const std::string& s){
+coordinate_units svgdom::parse_coordinate_units(const std::string& s){
 	if(s == "userSpaceOnUse"){
 		return coordinate_units::user_space_on_use;
 	}else if(s == "objectBoundingBox"){
@@ -186,7 +186,7 @@ coordinate_units svgdom::parseCoordinateUnits(const std::string& s){
 }
 
 
-std::string svgdom::coordinateUnitsToString(coordinate_units u){
+std::string svgdom::coordinate_units_to_string(coordinate_units u){
 	switch(u){
 		default:
 			return std::string();
@@ -198,30 +198,30 @@ std::string svgdom::coordinateUnitsToString(coordinate_units u){
 }
 
 
-r4::vector2<real> svgdom::parseNumberOptionalNumber(const std::string& s, r4::vector2<real> defaults){
+r4::vector2<real> svgdom::parse_number_and_optional_number(const std::string& s, r4::vector2<real> defaults){
 	r4::vector2<real> ret;
 	
 	std::istringstream ss(s);
-	skipWhitespaces(ss);
-	ret[0] = readInReal(ss);
+	skip_whitespaces(ss);
+	ret[0] = read_in_real(ss);
 	if(ss.fail()){
 		return defaults;
 	}
-	skipWhitespacesAndOrComma(ss);
+	skip_whitespaces_and_comma(ss);
 
 	if(ss.eof()){
 		ret[1] = defaults[1];
 		return ret;
 	}
 	
-	ret[1] = readInReal(ss);
+	ret[1] = read_in_real(ss);
 	if(ss.fail()){
 		ret[1] = defaults[1];
 	}
 	return ret;
 }
 
-std::string svgdom::numberOptionalNumberToString(std::array<real, 2> non, real optionalNumberDefault){
+std::string svgdom::number_and_optional_number_to_string(std::array<real, 2> non, real optionalNumberDefault){
 	std::stringstream ss;
 	
 	ss << non[0];

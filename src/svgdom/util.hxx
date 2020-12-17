@@ -10,28 +10,28 @@
 
 namespace svgdom{
 
-void skipWhitespaces(std::istream& s);
+void skip_whitespaces(std::istream& s);
 
-void skipWhitespacesAndOrComma(std::istream& s);
+void skip_whitespaces_and_comma(std::istream& s);
 
-void skipTillCharInclusive(std::istream& s, char c);
+void skip_till_char_inclusive(std::istream& s, char c);
 
-std::string readTillChar(std::istream& s, char c);
+std::string read_till_char(std::istream& s, char c);
 
-std::string readTillCharOrWhitespace(std::istream& s, char c);
+std::string read_till_char_or_whitespace(std::istream& s, char c);
 
-real readInReal(std::istream& s);
+real read_in_real(std::istream& s);
 
-std::string trimTail(const std::string& s);
+std::string trim_tail(const std::string& s);
 
-std::string iriToLocalId(const std::string& iri);
+std::string iri_to_local_id(const std::string& iri);
 
-coordinate_units parseCoordinateUnits(const std::string& s);
+coordinate_units parse_coordinate_units(const std::string& s);
 
-std::string coordinateUnitsToString(coordinate_units u);
+std::string coordinate_units_to_string(coordinate_units u);
 
-r4::vector2<real> parseNumberOptionalNumber(const std::string& s, r4::vector2<real> defaults);
+r4::vector2<real> parse_number_and_optional_number(const std::string& s, r4::vector2<real> defaults);
 
-std::string numberOptionalNumberToString(std::array<real, 2> non, real optionalNumberDefault);
+std::string number_and_optional_number_to_string(std::array<real, 2> non, real optionalNumberDefault);
 
 }

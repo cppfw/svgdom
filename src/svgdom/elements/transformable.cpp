@@ -65,12 +65,12 @@ decltype(transformable::transformations) transformable::parse(const std::string&
 
 	s >> std::skipws;
 
-	skipWhitespaces(s);
+	skip_whitespaces(s);
 
 	decltype(transformable::transformations) ret;
 
 	while(!s.eof()){
-		std::string transform = readTillCharOrWhitespace(s, '(');
+		std::string transform = read_till_char_or_whitespace(s, '(');
 
 //		TRACE(<< "transform = " << transform << std::endl)
 
@@ -92,58 +92,58 @@ decltype(transformable::transformations) transformable::parse(const std::string&
 			return ret; // unknown transformation, stop parsing
 		}
 
-		skipWhitespaces(s);
+		skip_whitespaces(s);
 
 		if(s.get() != '('){
 //			TRACE(<< "error: expected '('" << std::endl)
 			return ret; // expected (
 		}
 
-		skipWhitespaces(s);
+		skip_whitespaces(s);
 
 		switch(t.type_){
 			default:
 				ASSERT(false)
 				break;
 			case transformation::type::matrix:
-				t.a = readInReal(s);
+				t.a = read_in_real(s);
 				if(s.fail()){
 					return ret;
 				}
-				skipWhitespacesAndOrComma(s);
-				t.b = readInReal(s);
+				skip_whitespaces_and_comma(s);
+				t.b = read_in_real(s);
 				if(s.fail()){
 					return ret;
 				}
-				skipWhitespacesAndOrComma(s);
-				t.c = readInReal(s);
+				skip_whitespaces_and_comma(s);
+				t.c = read_in_real(s);
 				if(s.fail()){
 					return ret;
 				}
-				skipWhitespacesAndOrComma(s);
-				t.d = readInReal(s);
+				skip_whitespaces_and_comma(s);
+				t.d = read_in_real(s);
 				if(s.fail()){
 					return ret;
 				}
-				skipWhitespacesAndOrComma(s);
-				t.e = readInReal(s);
+				skip_whitespaces_and_comma(s);
+				t.e = read_in_real(s);
 				if(s.fail()){
 					return ret;
 				}
-				skipWhitespacesAndOrComma(s);
-				t.f = readInReal(s);
+				skip_whitespaces_and_comma(s);
+				t.f = read_in_real(s);
 				if(s.fail()){
 					return ret;
 				}
 				break;
 			case transformation::type::translate:
-				t.x = readInReal(s);
+				t.x = read_in_real(s);
 				if(s.fail()){
 //					TRACE(<< "failed to read in x translation" << std::endl)
 					return ret;
 				}
-				skipWhitespacesAndOrComma(s);
-				t.y = readInReal(s);
+				skip_whitespaces_and_comma(s);
+				t.y = read_in_real(s);
 				if(s.fail()){
 //					TRACE(<< "failed to read in y translation" << std::endl)
 					s.clear();
@@ -152,31 +152,31 @@ decltype(transformable::transformations) transformable::parse(const std::string&
 //				TRACE(<< "translation read: x,y = " << t.x << ", " << t.y << std::endl)
 				break;
 			case transformation::type::scale:
-				t.x = readInReal(s);
+				t.x = read_in_real(s);
 				if(s.fail()){
 					return ret;
 				}
-				skipWhitespacesAndOrComma(s);
-				t.y = readInReal(s);
+				skip_whitespaces_and_comma(s);
+				t.y = read_in_real(s);
 				if(s.fail()){
 					s.clear();
 					t.y = t.x;
 				}
 				break;
 			case transformation::type::rotate:
-				t.angle = readInReal(s);
+				t.angle = read_in_real(s);
 				if(s.fail()){
 					return ret;
 				}
-				skipWhitespacesAndOrComma(s);
-				t.x = readInReal(s);
+				skip_whitespaces_and_comma(s);
+				t.x = read_in_real(s);
 				if(s.fail()){
 					s.clear();
 					t.x = 0;
 					t.y = 0;
 				}else{
-					skipWhitespacesAndOrComma(s);
-					t.y = readInReal(s);
+					skip_whitespaces_and_comma(s);
+					t.y = read_in_real(s);
 					if(s.fail()){
 						return ret; // malformed rotate transformation
 					}
@@ -184,14 +184,14 @@ decltype(transformable::transformations) transformable::parse(const std::string&
 				break;
 			case transformation::type::skewy:
 			case transformation::type::skewx:
-				t.angle = readInReal(s);
+				t.angle = read_in_real(s);
 				if(s.fail()){
 					return ret;
 				}
 				break;
 		}
 
-		skipWhitespaces(s);
+		skip_whitespaces(s);
 
 		if(s.get() != ')'){
 			return ret; // expected )
@@ -199,7 +199,7 @@ decltype(transformable::transformations) transformable::parse(const std::string&
 
 		ret.push_back(t);
 
-		skipWhitespacesAndOrComma(s);
+		skip_whitespaces_and_comma(s);
 	}
 
 	return ret;

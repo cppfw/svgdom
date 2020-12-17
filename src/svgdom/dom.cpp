@@ -20,7 +20,7 @@ std::unique_ptr<svg_element> svgdom::load(const papki::file& f){
 			if(res == 0){
 				break;
 			}
-			parser.feed(utki::make_span(&*buf.begin(), res));
+			parser.feed(utki::make_span(buf.data(), res));
 		}
 		parser.end();
 	}

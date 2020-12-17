@@ -150,7 +150,7 @@ void stream_writer::add_gradient_attributes(const gradient& e){
 	}
 	
 	if(e.units != coordinate_units::unknown){
-		this->add_attribute("gradientUnits", coordinateUnitsToString(e.units));
+		this->add_attribute("gradientUnits", coordinate_units_to_string(e.units));
 	}
 	
 	if(e.transformations.size() != 0){
@@ -416,11 +416,11 @@ void stream_writer::visit(const mask_element& e) {
 	this->add_styleable_attributes(e);
 	
 	if(e.mask_units != coordinate_units::object_bounding_box && e.mask_units != coordinate_units::unknown){
-		this->add_attribute("maskUnits", coordinateUnitsToString(e.mask_units));
+		this->add_attribute("maskUnits", coordinate_units_to_string(e.mask_units));
 	}
 	
 	if(e.mask_content_units != coordinate_units::user_space_on_use && e.mask_content_units != coordinate_units::unknown){
-		this->add_attribute("maskContentUnits", coordinateUnitsToString(e.mask_content_units));
+		this->add_attribute("maskContentUnits", coordinate_units_to_string(e.mask_content_units));
 	}
 	
 	this->write(&e);
@@ -505,11 +505,11 @@ void stream_writer::visit(const filter_element& e){
 	this->add_referencing_attributes(e);
 	
 	if(e.filter_units != coordinate_units::unknown && e.filter_units != coordinate_units::object_bounding_box){
-		this->add_attribute("filterUnits", coordinateUnitsToString(e.filter_units));
+		this->add_attribute("filterUnits", coordinate_units_to_string(e.filter_units));
 	}
 
 	if(e.primitive_units != coordinate_units::unknown && e.primitive_units != coordinate_units::user_space_on_use){
-		this->add_attribute("primitiveUnits", coordinateUnitsToString(e.primitive_units));
+		this->add_attribute("primitiveUnits", coordinate_units_to_string(e.primitive_units));
 	}
 	
 	this->write(&e);
@@ -522,7 +522,7 @@ void stream_writer::visit(const fe_gaussian_blur_element& e){
 	this->add_inputable_attributes(e);
 	
 	if(e.is_std_deviation_specified()){
-		this->add_attribute("stdDeviation", numberOptionalNumberToString(e.std_deviation, -1));
+		this->add_attribute("stdDeviation", number_and_optional_number_to_string(e.std_deviation, -1));
 	}
 	this->write();
 }

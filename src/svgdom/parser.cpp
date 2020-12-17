@@ -88,7 +88,7 @@ void parser::popNamespaces(){
 
 void parser::parse_element(){
 	auto nsn = this->getNamespace(this->cur_element);
-//	TRACE(<< "nsn.name = " << nsn.name << std::endl)
+	// TRACE(<< "nsn.name = " << nsn.name << std::endl)
 	switch(nsn.ns){
 		case XmlNamespace_e::SVG:
 			if(nsn.name == svg_element::tag){
@@ -234,7 +234,7 @@ void parser::fillGradient(gradient& g){
 		g.transformations = transformable::parse(*a);
 	}
 	if(auto a = this->findAttributeOfNamespace(XmlNamespace_e::SVG, "gradientUnits")){
-		g.units = parseCoordinateUnits(*a);
+		g.units = parse_coordinate_units(*a);
 	}
 }
 
@@ -405,11 +405,11 @@ void parser::parseMaskElement(){
 	this->fillStyleable(*ret);
 
 	if(auto a = this->findAttributeOfNamespace(XmlNamespace_e::SVG, "maskUnits")){
-		ret->mask_units = parseCoordinateUnits(*a);
+		ret->mask_units = parse_coordinate_units(*a);
 	}
 	
 	if(auto a = this->findAttributeOfNamespace(XmlNamespace_e::SVG, "maskContentUnits")){
-		ret->mask_content_units = parseCoordinateUnits(*a);
+		ret->mask_content_units = parse_coordinate_units(*a);
 	}
 	
 	this->addElement(std::move(ret));
@@ -546,10 +546,10 @@ void parser::parseFilterElement(){
 	this->fillReferencing(*ret);
 	
 	if(auto a = this->findAttributeOfNamespace(XmlNamespace_e::SVG, "filterUnits")){
-		ret->filter_units = svgdom::parseCoordinateUnits(*a);
+		ret->filter_units = svgdom::parse_coordinate_units(*a);
 	}
 	if(auto a = this->findAttributeOfNamespace(XmlNamespace_e::SVG, "primitiveUnits")){
-		ret->primitive_units = svgdom::parseCoordinateUnits(*a);
+		ret->primitive_units = svgdom::parse_coordinate_units(*a);
 	}
 	
 	this->addElement(std::move(ret));
@@ -587,7 +587,7 @@ void parser::parseFeGaussianBlurElement(){
 	this->fillInputable(*ret);
 
 	if(auto a = this->findAttributeOfNamespace(XmlNamespace_e::SVG, "stdDeviation")){
-		ret->std_deviation = parseNumberOptionalNumber(*a, {{-1, -1}});
+		ret->std_deviation = parse_number_and_optional_number(*a, {{-1, -1}});
 	}
 	
 	this->addElement(std::move(ret));
@@ -625,11 +625,11 @@ void parser::parseFeColorMatrixElement(){
 					std::istringstream ss(*a);
 					
 					for(unsigned i = 0; i != 20; ++i){
-						ret->values[i] = readInReal(ss);
+						ret->values[i] = read_in_real(ss);
 						if(ss.fail()){
 							throw malformed_svg_error("malformed 'values' string of 'feColorMatrix' element");
 						}
-						skipWhitespacesAndOrComma(ss);
+						skip_whitespaces_and_comma(ss);
 					}
 				}
 				break;
@@ -639,7 +639,7 @@ void parser::parseFeColorMatrixElement(){
 				// one value is expected
 				{
 					std::istringstream ss(*a);
-					ret->values[0] = readInReal(ss);
+					ret->values[0] = read_in_real(ss);
 					if(ss.fail()){
 						throw malformed_svg_error("malformed 'values' string of 'feColorMatrix' element");
 					}

@@ -97,7 +97,7 @@ decltype(path_element::path) path_element::parse(const std::string& str){
 	std::istringstream s(str);
 	s >> std::skipws;
 	
-	skipWhitespaces(s);
+	skip_whitespaces(s);
 	
 	step::type curType = step::type::unknown;
 	
@@ -120,7 +120,7 @@ decltype(path_element::path) path_element::parse(const std::string& str){
 			}
 		}
 		
-		skipWhitespaces(s);
+		skip_whitespaces(s);
 		
 		step cur_step;
 		cur_step.type_ = curType;
@@ -130,13 +130,13 @@ decltype(path_element::path) path_element::parse(const std::string& str){
 			case step::type::move_rel:
 			case step::type::line_abs:
 			case step::type::line_rel:
-				cur_step.x = readInReal(s);
+				cur_step.x = read_in_real(s);
 				if(s.fail()){
 					return ret;
 				}
 //				TRACE(<< "cur_step.x = " << cur_step.x << std::endl)
-				skipWhitespacesAndOrComma(s);
-				cur_step.y = readInReal(s);
+				skip_whitespaces_and_comma(s);
+				cur_step.y = read_in_real(s);
 				if(s.fail()){
 					return ret;
 				}
@@ -146,123 +146,123 @@ decltype(path_element::path) path_element::parse(const std::string& str){
 				break;
 			case step::type::horizontal_line_abs:
 			case step::type::horizontal_line_rel:
-				cur_step.x = readInReal(s);
+				cur_step.x = read_in_real(s);
 				if(s.fail()){
 					return ret;
 				}
 				break;
 			case step::type::vertical_line_abs:
 			case step::type::vertical_line_rel:
-				cur_step.y = readInReal(s);
+				cur_step.y = read_in_real(s);
 				if(s.fail()){
 					return ret;
 				}
 				break;
 			case step::type::cubic_abs:
 			case step::type::cubic_rel:
-				cur_step.x1 = readInReal(s);
+				cur_step.x1 = read_in_real(s);
 				if(s.fail()){
 					return ret;
 				}
-				skipWhitespacesAndOrComma(s);
-				cur_step.y1 = readInReal(s);
+				skip_whitespaces_and_comma(s);
+				cur_step.y1 = read_in_real(s);
 				if(s.fail()){
 					return ret;
 				}
-				skipWhitespacesAndOrComma(s);
-				cur_step.x2 = readInReal(s);
+				skip_whitespaces_and_comma(s);
+				cur_step.x2 = read_in_real(s);
 				if(s.fail()){
 					return ret;
 				}
-				skipWhitespacesAndOrComma(s);
-				cur_step.y2 = readInReal(s);
+				skip_whitespaces_and_comma(s);
+				cur_step.y2 = read_in_real(s);
 				if(s.fail()){
 					return ret;
 				}
-				skipWhitespacesAndOrComma(s);
-				cur_step.x = readInReal(s);
+				skip_whitespaces_and_comma(s);
+				cur_step.x = read_in_real(s);
 				if(s.fail()){
 					return ret;
 				}
-				skipWhitespacesAndOrComma(s);
-				cur_step.y = readInReal(s);
+				skip_whitespaces_and_comma(s);
+				cur_step.y = read_in_real(s);
 				if(s.fail()){
 					return ret;
 				}
 				break;
 			case step::type::cubic_smooth_abs:
 			case step::type::cubic_smooth_rel:
-				cur_step.x2 = readInReal(s);
+				cur_step.x2 = read_in_real(s);
 				if(s.fail()){
 					return ret;
 				}
-				skipWhitespacesAndOrComma(s);
-				cur_step.y2 = readInReal(s);
+				skip_whitespaces_and_comma(s);
+				cur_step.y2 = read_in_real(s);
 				if(s.fail()){
 					return ret;
 				}
-				skipWhitespacesAndOrComma(s);
-				cur_step.x = readInReal(s);
+				skip_whitespaces_and_comma(s);
+				cur_step.x = read_in_real(s);
 				if(s.fail()){
 					return ret;
 				}
-				skipWhitespacesAndOrComma(s);
-				cur_step.y = readInReal(s);
+				skip_whitespaces_and_comma(s);
+				cur_step.y = read_in_real(s);
 				if(s.fail()){
 					return ret;
 				}
 				break;
 			case step::type::quadratic_abs:
 			case step::type::quadratic_rel:
-				cur_step.x1 = readInReal(s);
+				cur_step.x1 = read_in_real(s);
 				if(s.fail()){
 					return ret;
 				}
-				skipWhitespacesAndOrComma(s);
-				cur_step.y1 = readInReal(s);
+				skip_whitespaces_and_comma(s);
+				cur_step.y1 = read_in_real(s);
 				if(s.fail()){
 					return ret;
 				}
-				skipWhitespacesAndOrComma(s);
-				cur_step.x = readInReal(s);
+				skip_whitespaces_and_comma(s);
+				cur_step.x = read_in_real(s);
 				if(s.fail()){
 					return ret;
 				}
-				skipWhitespacesAndOrComma(s);
-				cur_step.y = readInReal(s);
+				skip_whitespaces_and_comma(s);
+				cur_step.y = read_in_real(s);
 				if(s.fail()){
 					return ret;
 				}
 				break;
 			case step::type::quadratic_smooth_abs:
 			case step::type::quadratic_smooth_rel:
-				cur_step.x = readInReal(s);
+				cur_step.x = read_in_real(s);
 				if(s.fail()){
 					return ret;
 				}
-				skipWhitespacesAndOrComma(s);
-				cur_step.y = readInReal(s);
+				skip_whitespaces_and_comma(s);
+				cur_step.y = read_in_real(s);
 				if(s.fail()){
 					return ret;
 				}
 				break;
 			case step::type::arc_abs:
 			case step::type::arc_rel:
-				cur_step.rx = readInReal(s);
+				cur_step.rx = read_in_real(s);
 				if(s.fail()){
 					return ret;
 				}
-				skipWhitespacesAndOrComma(s);
-				cur_step.ry = readInReal(s);
+				skip_whitespaces_and_comma(s);
+				cur_step.ry = read_in_real(s);
 				if(s.fail()){
 					return ret;
 				}
-				skipWhitespacesAndOrComma(s);
-				cur_step.x_axis_rotation = readInReal(s);
+				skip_whitespaces_and_comma(s);
+				cur_step.x_axis_rotation = read_in_real(s);
 				if(s.fail()){
 					return ret;
 				}
-				skipWhitespacesAndOrComma(s);
+				skip_whitespaces_and_comma(s);
 				{
 					char f;
 					s >> f;
@@ -271,7 +271,7 @@ decltype(path_element::path) path_element::parse(const std::string& str){
 					}
 					cur_step.flags.large_arc = (f != '0');
 				}
-				skipWhitespacesAndOrComma(s);
+				skip_whitespaces_and_comma(s);
 				{
 					char f;
 					s >> f;
@@ -280,13 +280,13 @@ decltype(path_element::path) path_element::parse(const std::string& str){
 					}
 					cur_step.flags.sweep = (f != '0');
 				}
-				skipWhitespacesAndOrComma(s);
-				cur_step.x = readInReal(s);
+				skip_whitespaces_and_comma(s);
+				cur_step.x = read_in_real(s);
 				if(s.fail()){
 					return ret;
 				}
-				skipWhitespacesAndOrComma(s);
-				cur_step.y = readInReal(s);
+				skip_whitespaces_and_comma(s);
+				cur_step.y = read_in_real(s);
 				if(s.fail()){
 					return ret;
 				}
@@ -298,7 +298,7 @@ decltype(path_element::path) path_element::parse(const std::string& str){
 		
 		ret.push_back(cur_step);
 		
-		skipWhitespacesAndOrComma(s);
+		skip_whitespaces_and_comma(s);
 	}
 	
 	return ret;
@@ -507,13 +507,13 @@ decltype(polyline_shape::points) polyline_shape::parse(const std::string& str) {
 	std::istringstream s(str);
 	s >> std::skipws;
 	
-	skipWhitespaces(s);
+	skip_whitespaces(s);
 	
 	while(!s.eof()){
 		decltype(ret)::value_type p;
-		p[0] = readInReal(s);
-		skipWhitespacesAndOrComma(s);
-		p[1] = readInReal(s);
+		p[0] = read_in_real(s);
+		skip_whitespaces_and_comma(s);
+		p[1] = read_in_real(s);
 		
 		if(s.fail()){
 			break;
@@ -521,7 +521,7 @@ decltype(polyline_shape::points) polyline_shape::parse(const std::string& str) {
 		
 		ret.push_back(p);
 		
-		skipWhitespacesAndOrComma(s);
+		skip_whitespaces_and_comma(s);
 	}
 	
 	return ret;

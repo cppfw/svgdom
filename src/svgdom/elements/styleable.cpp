@@ -15,9 +15,72 @@
 
 using namespace svgdom;
 
+namespace{
+const char* none_word = "none";
+const char* inherit_word = "inherit";
+const char* current_color_word = "currentColor";
+}
+
+namespace{
+std::string stroke_dasharray_to_string(const style_value& v){
+	// special values must be already handled by styleable::style_value_to_string() at this point
+	ASSERT_INFO(!std::holds_alternative<style_value_special>(v), "v = " << unsigned(*std::get_if<style_value_special>(&v)))
+
+	if(!std::holds_alternative<std::vector<length>>(v)){
+		return std::string();
+	}
+
+	std::stringstream ss;
+
+	auto dasharray = *std::get_if<std::vector<length>>(&v);
+
+	for(auto i = dasharray.begin(); i != dasharray.end(); ++i){
+		if(i != dasharray.begin()){
+			ss << " ";
+		}
+		ss << (*i);
+	}
+
+	return ss.str();
+}
+}
+
+namespace{
+style_value parse_stroke_dasharray(const std::string& str){
+	// the "inherit" case is handled already by styleable::parse_style_property_value()
+	if(str == none_word){
+		return style_value(style_value_special::none);
+	}
+
+	std::istringstream iss(str);
+
+	std::vector<length> dasharray;
+
+	skip_whitespaces(iss);
+
+	while(!iss.eof()){
+		auto len_str = read_till_char_or_whitespace(iss, ',');
+		auto l = length::parse(len_str);
+		dasharray.push_back(l);
+
+		skip_whitespaces_and_comma(iss);
+	}
+
+	return style_value(std::move(dasharray));
+}
+}
+
 std::string styleable::style_value_to_string(style_property p, const style_value& v){
+	if(!is_valid(v)){
+		return std::string();
+	}
+
 	if(is_inherit(v)){
-		return "inherit";
+		return inherit_word;
+	}else if(is_none(v)){
+		return none_word;
+	}else if(is_current_color(v)){
+		return current_color_word;
 	}
 
 	std::stringstream s;
@@ -113,6 +176,9 @@ std::string styleable::style_value_to_string(style_property p, const style_value
 		case style_property::visibility:
 			s << visibility_to_string(v);
 			break;
+		case style_property::stroke_dasharray:
+			s << stroke_dasharray_to_string(v);
+			break;
 	}
 	return s.str();
 }
@@ -153,7 +219,7 @@ std::string styleable::classes_to_string()const{
 
 // input parameter 'str' should have no leading or trailing white spaces
 style_value styleable::parse_style_property_value(style_property type, const std::string& str){
-	if(str == "inherit"){
+	if(str == inherit_word){
 		return style_value(style_value_special::inherit);
 	}
 
@@ -166,7 +232,7 @@ style_value styleable::parse_style_property_value(style_property type, const std
 		case style_property::stroke_miterlimit:
 			{
 				std::stringstream iss(str);
-				real miterlimit = readInReal(iss);
+				real miterlimit = read_in_real(iss);
 				using std::max;
 				miterlimit = max(miterlimit, real(1)); // minimal value is 1
 				return style_value(miterlimit);
@@ -178,7 +244,7 @@ style_value styleable::parse_style_property_value(style_property type, const std
 		case style_property::fill_opacity:
 			{
 				std::istringstream iss(str);
-				real opacity = readInReal(iss);
+				real opacity = read_in_real(iss);
 				using std::min;
 				using std::max;
 				opacity = max(real(0), min(opacity, real(1))); // clamp to [0:1]
@@ -243,6 +309,8 @@ style_value styleable::parse_style_property_value(style_property type, const std
 			return parse_enable_background(str);
 		case style_property::visibility:
 			return parse_visibility(str);
+		case style_property::stroke_dasharray:
+			return parse_stroke_dasharray(str);
 	}
 }
 
@@ -254,16 +322,16 @@ style_value svgdom::parse_url(const std::string& str){
 	}
 	
 	std::istringstream s(str);
-	skipWhitespaces(s);
+	skip_whitespaces(s);
 	
 	std::string tmpStr;
 	s >> std::setw(int(url.length())) >> tmpStr >> std::setw(0);
 	ASSERT(tmpStr == url)
 
-	skipWhitespaces(s);
-	tmpStr = readTillCharOrWhitespace(s, ')');
+	skip_whitespaces(s);
+	tmpStr = read_till_char_or_whitespace(s, ')');
 
-	skipWhitespaces(s);
+	skip_whitespaces(s);
 	if(s.get() == ')'){
 		return style_value(tmpStr);
 	}
@@ -273,9 +341,9 @@ style_value svgdom::parse_url(const std::string& str){
 
 namespace{
 style_value parseStylePropertyValue(style_property type, std::istream& s){
-	skipWhitespaces(s);
-	std::string str = readTillChar(s, ';');
-	str = trimTail(str);
+	skip_whitespaces(s);
+	std::string str = read_till_char(s, ';');
+	str = trim_tail(str);
 	return styleable::parse_style_property_value(type, str);
 }
 }
@@ -283,12 +351,12 @@ style_value parseStylePropertyValue(style_property type, std::istream& s){
 decltype(styleable::styles) styleable::parse(const std::string& str){
 	std::istringstream s(str);
 	
-	skipWhitespaces(s);
+	skip_whitespaces(s);
 
 	decltype(styleable::styles) ret;
 	
 	while(!s.eof()){
-		std::string property = readTillCharOrWhitespace(s, ':');
+		std::string property = read_till_char_or_whitespace(s, ':');
 		
 		style_property type = styleable::string_to_property(property);
 		
@@ -297,11 +365,11 @@ decltype(styleable::styles) styleable::parse(const std::string& str){
 			TRACE(<< "Unknown style property: " << property << std::endl)
 			TRACE(<< "str = " << str << std::endl)
 			TRACE(<< "ret.size() = " << ret.size() << std::endl)
-			skipTillCharInclusive(s, ';');
+			skip_till_char_inclusive(s, ';');
 			continue;
 		}
 		
-		skipWhitespaces(s);
+		skip_whitespaces(s);
 		
 		if(s.get() != ':'){
 			return ret; // expected colon
@@ -309,7 +377,7 @@ decltype(styleable::styles) styleable::parse(const std::string& str){
 		
 		style_value v = ::parseStylePropertyValue(type, s);
 		
-		skipWhitespaces(s);
+		skip_whitespaces(s);
 		
 		if(!s.eof() && s.get() != ';'){
 			return ret; // expected semicolon
@@ -317,7 +385,7 @@ decltype(styleable::styles) styleable::parse(const std::string& str){
 		
 		ret[type] = std::move(v);
 		
-		skipWhitespaces(s);
+		skip_whitespaces(s);
 	}
 	
 	return ret;
@@ -656,7 +724,7 @@ std::map<std::string, display> string_to_display_map = {
 	{"table-column", svgdom::display::table_column},
 	{"table-cell", svgdom::display::table_cell},
 	{"table-caption", svgdom::display::table_caption},
-	{"none", svgdom::display::none}
+	{none_word, svgdom::display::none}
 };
 }
 
@@ -770,31 +838,31 @@ enable_background_property parseEnableBackgroundNewRect(const std::string& str){
 	enable_background_property ret;
 	
 	std::istringstream s(str);
-	skipTillCharInclusive(s, ' '); // skip 'new'
+	skip_till_char_inclusive(s, ' '); // skip 'new'
 
-	skipWhitespaces(s);
+	skip_whitespaces(s);
 	
 	if(s.eof()){
 		ret.rect.d.x() = -1; // indicate that rectangle is not specified
 		return ret;
 	}
 	
-	ret.rect.p.x() = readInReal(s);
+	ret.rect.p.x() = read_in_real(s);
 	if(s.fail()){
 		throw malformed_svg_error("malformed 'enable-background NEW' string");
 	}
 	
-	ret.rect.p.y() = readInReal(s);
+	ret.rect.p.y() = read_in_real(s);
 	if(s.fail()){
 		throw malformed_svg_error("malformed 'enable-background NEW' string");
 	}
 	
-	ret.rect.d.x() = readInReal(s);
+	ret.rect.d.x() = read_in_real(s);
 	if(s.fail()){
 		throw malformed_svg_error("malformed enable-background NEW string");
 	}
 	
-	ret.rect.d.y() = readInReal(s);
+	ret.rect.d.y() = read_in_real(s);
 	if(s.fail()){
 		throw malformed_svg_error("malformed enable-background NEW string");
 	}
@@ -920,11 +988,11 @@ style_value svgdom::parse_paint(const std::string& str){
 		}
 	}
 	
-	if(str == "none"){
+	if(str == none_word){
 		return style_value(style_value_special::none);
 	}
 	
-	if(str == "currentColor"){
+	if(str == current_color_word){
 		return style_value(style_value_special::current_color);
 	}
 	
@@ -985,13 +1053,13 @@ style_value svgdom::parse_paint(const std::string& str){
 			
 			uint32_t r, g, b;
 			
-			skipWhitespaces(s);
+			skip_whitespaces(s);
 			s >> r;
-			skipWhitespacesAndOrComma(s);
+			skip_whitespaces_and_comma(s);
 			s >> g;
-			skipWhitespacesAndOrComma(s);
+			skip_whitespaces_and_comma(s);
 			s >> b;
-			skipWhitespaces(s);
+			skip_whitespaces(s);
 			
 			if(s.get() == ')'){
 				auto color = r | (g << 8) | (b << 16);
@@ -1015,19 +1083,19 @@ style_value svgdom::parse_paint(const std::string& str){
 			
 			uint32_t h, s, l;
 			
-			skipWhitespaces(ss);
+			skip_whitespaces(ss);
 			ss >> h;
-			skipWhitespacesAndOrComma(ss);
+			skip_whitespaces_and_comma(ss);
 			ss >> s;
 			if(ss.get() != '%'){
 				return style_value(style_value_special::none);
 			}
-			skipWhitespacesAndOrComma(ss);
+			skip_whitespaces_and_comma(ss);
 			ss >> l;
 			if(ss.get() != '%'){
 				return style_value(style_value_special::none);
 			}
-			skipWhitespaces(ss);
+			skip_whitespaces(ss);
 			
 			if(ss.get() == ')'){
 				auto color = hslToRgb(real(h), real(s) / real(100), real(l) / real(100));
@@ -1057,11 +1125,11 @@ std::string svgdom::paint_to_string(const style_value& v){
 	if(std::holds_alternative<style_value_special>(v)){ // special value
 		switch(*std::get_if<style_value_special>(&v)){
 			case style_value_special::none:
-				return "none";
+				return none_word;
 			case style_value_special::inherit: // TODO: isn't it already handled in styleable::style_value_to_string()?
-				return "inherit";
+				return inherit_word;
 			case style_value_special::current_color:
-				return "currentColor";
+				return current_color_word;
 			default:
 				return std::string();
 		}
@@ -1097,5 +1165,5 @@ std::string svgdom::get_local_id_from_iri(const style_value& v){
 	if(!std::holds_alternative<std::string>(v)){
 		return std::string();
 	}
-	return iriToLocalId(*std::get_if<std::string>(&v));
+	return iri_to_local_id(*std::get_if<std::string>(&v));
 }
