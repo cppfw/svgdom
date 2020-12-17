@@ -105,6 +105,7 @@ std::string styleable::style_value_to_string(style_property p, const style_value
 		case style_property::stroke:
 			s << paint_to_string(v);
 			break;
+		case style_property::stroke_dashoffset:
 		case style_property::stroke_width:
 			if(std::holds_alternative<length>(v)){
 				s << *std::get_if<length>(&v);
@@ -255,6 +256,7 @@ style_value styleable::parse_style_property_value(style_property type, const std
 		case style_property::fill:
 		case style_property::stroke:
 			return parse_paint(str);
+		case style_property::stroke_dashoffset:
 		case style_property::stroke_width:
 			return style_value(length::parse(str));
 		case style_property::stroke_linecap:
