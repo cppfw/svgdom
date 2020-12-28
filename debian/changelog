@@ -1,3 +1,9 @@
+libsvgdom (0.3.51) unstable; urgency=medium
+
+  * github actions build for raspbian
+
+ -- Ivan Gagis <igagis@gmail.com>  Mon, 28 Dec 2020 16:42:52 +0200
+
 libsvgdom (0.3.50) unstable; urgency=medium
 
   * stroke-dasharray and stroke-dashoffset style properties
