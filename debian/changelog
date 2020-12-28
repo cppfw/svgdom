@@ -1,3 +1,9 @@
+libsvgdom (0.3.52) unstable; urgency=medium
+
+  * github actions build for raspbian
+
+ -- Ivan Gagis <igagis@gmail.com>  Mon, 28 Dec 2020 17:30:50 +0200
+
 libsvgdom (0.3.51) unstable; urgency=medium
 
   * github actions build for raspbian
