@@ -1,13 +1,12 @@
 #include "../../src/svgdom/dom.hpp"
-#include "../../src/svgdom/visitor.hpp"
 #include "../../src/svgdom/cloner.hpp"
 
 #include <utki/debug.hpp>
 
 int main(int argc, char** argv){
-	std::unique_ptr<svgdom::svg_element> domOriginal = std::make_unique<svgdom::svg_element>();
+	auto domOriginal = std::make_unique<svgdom::svg_element>();
 	
-	std::unique_ptr<svgdom::path_element> path = std::make_unique<svgdom::path_element>();
+	auto path = std::make_unique<svgdom::path_element>();
 
 	svgdom::path_element::step step;
 
