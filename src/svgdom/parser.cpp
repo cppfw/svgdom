@@ -587,7 +587,7 @@ void parser::parseFeGaussianBlurElement(){
 	this->fillInputable(*ret);
 
 	if(auto a = this->findAttributeOfNamespace(XmlNamespace_e::SVG, "stdDeviation")){
-		ret->std_deviation = parse_number_and_optional_number(*a, {{-1, -1}});
+		ret->std_deviation = parse_number_and_optional_number(*a, {-1, -1});
 	}
 	
 	this->addElement(std::move(ret));
