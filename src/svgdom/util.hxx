@@ -3,7 +3,7 @@
 #include <istream>
 #include <array>
 
-#include <r4/vector2.hpp>
+#include <r4/vector.hpp>
 
 #include "config.hpp"
 #include "elements/coordinate_units.hpp"

@@ -9,7 +9,7 @@
 #include "container.hpp"
 #include "coordinate_units.hpp"
 
-#include <r4/vector2.hpp>
+#include <r4/vector.hpp>
 
 namespace svgdom{
 struct filter_element :
