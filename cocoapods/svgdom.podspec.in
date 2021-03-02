@@ -18,6 +18,6 @@ Pod::Spec.new do |s|
   s.dependency 'utki', '>= 1.1.111'
   s.dependency 'papki', '>= 1.0.91'
   s.dependency 'mikroxml', '>= 0.1.34'
-  s.dependency 'cssdom', '>= 0.1.14'
+  s.dependency 'cssdom', '>= 0.1.15'
   s.dependency 'r4', '>= 1.0.51'
 end

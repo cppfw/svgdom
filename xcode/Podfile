@@ -8,6 +8,6 @@ target "svgdom" do
 	pod 'utki', '>= 1.1.111'
 	pod 'papki', '>= 1.0.91'
 	pod 'mikroxml', '>= 0.1.34'
-	pod 'cssdom', '>= 0.1.14'
+	pod 'cssdom', '>= 0.1.15'
 	pod 'r4', '>= 1.0.51'
 end

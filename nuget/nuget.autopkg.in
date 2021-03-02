@@ -34,7 +34,7 @@ nuget{
 			libutki/1.1.111;
 			libpapki/1.0.91;
 			libmikroxml/0.1.34;
-			libcssdom/0.1.14;
+			libcssdom/0.1.15;
 			libr4/1.0.51;
 		};
 	}

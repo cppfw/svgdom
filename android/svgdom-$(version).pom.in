@@ -31,7 +31,7 @@
 	  <dependency>
 		  <groupId>io.github.cppfw</groupId>
 		  <artifactId>cssdom</artifactId>
-		  <version>[0.1.14,)</version>
+		  <version>[0.1.15,)</version>
 		  <type>aar</type>
 		  <scope>compile</scope>
 	  </dependency>
