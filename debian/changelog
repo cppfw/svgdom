@@ -1,3 +1,9 @@
+libsvgdom (0.3.58) unstable; urgency=medium
+
+  * msvs: disable whole program optimization
+
+ -- Ivan Gagis <igagis@gmail.com>  Wed, 17 Mar 2021 15:10:28 +0200
+
 libsvgdom (0.3.57) unstable; urgency=medium
 
   * remove console output
