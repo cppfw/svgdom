@@ -220,6 +220,9 @@ void parser::fillElement(element& e){
 	if(auto a = this->findAttributeOfNamespace(XmlNamespace_e::SVG, "id")){
 		e.id = *a;
 	}
+	if (auto a = this->findAttributeOfNamespace(XmlNamespace_e::SVG, "class")) {
+	    e.classes = utki::split(*a);
+	}
 }
 
 void parser::fillGradient(gradient& g){
@@ -280,9 +283,6 @@ void parser::fillStyleable(styleable& s){
 			case XmlNamespace_e::SVG:
 				if(nsn.name == "style"){
 					s.styles = styleable::parse(a.second);
-					break;
-				}else if(nsn.name == "class"){
-					s.classes = utki::split(a.second);
 					break;
 				}
 

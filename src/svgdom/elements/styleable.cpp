@@ -205,19 +205,6 @@ std::string styleable::styles_to_string()const{
 	return s.str();
 }
 
-std::string styleable::classes_to_string()const{
-	std::stringstream ss;
-
-	for(auto i = this->classes.begin(); i != this->classes.end(); ++i){
-		if(i != this->classes.begin()){
-			ss << " ";
-		}
-		ss << *i;
-	}
-
-	return ss.str();
-}
-
 // input parameter 'str' should have no leading or trailing white spaces
 style_value styleable::parse_style_property_value(style_property type, const std::string& str){
 	if(str == inherit_word){

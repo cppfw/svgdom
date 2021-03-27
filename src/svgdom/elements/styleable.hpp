@@ -247,19 +247,11 @@ struct styleable : public cssdom::styleable{
 	std::map<style_property, style_value> styles;
 	std::map<style_property, style_value> presentation_attributes;
 
-	std::vector<std::string> classes;
-
-	utki::span<const std::string> get_classes()const override{
-		return utki::make_span(this->classes);
-	}
-
 	virtual ~styleable()noexcept{}
 
 	const style_value* get_style_property(style_property p)const;
 
 	const style_value* get_presentation_attribute(style_property p)const;
-
-	std::string classes_to_string()const;
 
 	std::string styles_to_string()const;
 

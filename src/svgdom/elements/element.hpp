@@ -1,6 +1,7 @@
 #pragma once
 
 #include <ostream>
+#include <vector>
 
 namespace svgdom{
 
@@ -12,7 +13,11 @@ class const_visitor;
  */
 struct element{
 	std::string id;
-	
+
+	std::vector<std::string> classes;
+
+	std::string classes_to_string()const;
+
 	std::string to_string()const;
 
 	/**

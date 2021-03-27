@@ -20,6 +20,10 @@ struct shape :
 	const std::string& get_id()const override{
 		return this->id;
 	}
+
+	utki::span<const std::string> get_classes()const override{
+		return utki::make_span(this->classes);
+	}
 };
 
 struct path_element : public shape{

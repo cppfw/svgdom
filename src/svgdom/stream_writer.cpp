@@ -80,6 +80,9 @@ void stream_writer::add_element_attributes(const element& e){
 	if(e.id.length() != 0){
 		this->add_attribute("id", e.id);
 	}
+	if(!e.classes.empty()){
+		this->add_attribute("class", e.classes_to_string());
+	}
 }
 
 void stream_writer::add_transformable_attributes(const transformable& e){
@@ -98,9 +101,6 @@ void stream_writer::add_styleable_attributes(const styleable& e){
 			continue;
 		}
 		this->add_attribute(n, styleable::style_value_to_string(s.first, s.second));
-	}
-	if(!e.classes.empty()){
-		this->add_attribute("class", e.classes_to_string());
 	}
 }
 

@@ -23,6 +23,10 @@ struct image_element :
 		return this->id;
 	}
 
+	utki::span<const std::string> get_classes()const override{
+		return utki::make_span(this->classes);
+	}
+
 	static const std::string tag;
 
 	const std::string& get_tag()const override{

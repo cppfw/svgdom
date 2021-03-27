@@ -24,6 +24,10 @@ struct g_element :
 		return this->id;
 	}
 
+	utki::span<const std::string> get_classes()const override{
+		return utki::make_span(this->classes);
+	}
+
 	static const std::string tag;
 
 	const std::string& get_tag()const override{
@@ -42,6 +46,10 @@ struct defs_element :
 
 	const std::string& get_id()const override{
 		return this->id;
+	}
+
+	utki::span<const std::string> get_classes()const override{
+		return utki::make_span(this->classes);
 	}
 
 	static const std::string tag;
@@ -65,6 +73,10 @@ struct use_element :
 		return this->id;
 	}
 
+	utki::span<const std::string> get_classes()const override{
+		return utki::make_span(this->classes);
+	}
+
 	static const std::string tag;
 
 	const std::string& get_tag()const override{
@@ -85,6 +97,10 @@ struct svg_element :
 
 	const std::string& get_id()const override{
 		return this->id;
+	}
+
+	utki::span<const std::string> get_classes()const override{
+		return utki::make_span(this->classes);
 	}
 
 	static const std::string tag;
@@ -125,6 +141,10 @@ struct symbol_element :
 		return this->id;
 	}
 
+	utki::span<const std::string> get_classes()const override{
+		return utki::make_span(this->classes);
+	}
+
 	static const std::string tag;
 
 	const std::string& get_tag()const override{
@@ -147,6 +167,10 @@ struct mask_element :
 
 	const std::string& get_id()const override{
 		return this->id;
+	}
+
+	utki::span<const std::string> get_classes()const override{
+		return utki::make_span(this->classes);
 	}
 
 	static const std::string tag;
