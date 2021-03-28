@@ -5,7 +5,7 @@
 
 #include <papki/vector_file.hpp>
 
-#include "util.hxx"
+#include "../util.hxx"
 
 using namespace svgdom;
 

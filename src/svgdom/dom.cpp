@@ -1,6 +1,5 @@
 #include "dom.hpp"
 #include "config.hpp"
-#include "util.hxx"
 
 #include "parser.hxx"
 

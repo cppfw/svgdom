@@ -4,8 +4,8 @@
 
 #include <cssdom/dom.hpp>
 
-#include "elements/styleable.hpp"
-#include "elements/container.hpp"
+#include "../elements/styleable.hpp"
+#include "../elements/container.hpp"
 
 namespace svgdom{
 class style_stack{

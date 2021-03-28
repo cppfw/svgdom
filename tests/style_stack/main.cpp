@@ -1,6 +1,6 @@
 #include "../../src/svgdom/dom.hpp"
 #include "../../src/svgdom/visitor.hpp"
-#include "../../src/svgdom/style_stack.hpp"
+#include "../../src/svgdom/util/style_stack.hpp"
 
 #include <utki/debug.hpp>
 

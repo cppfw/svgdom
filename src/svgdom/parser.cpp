@@ -1,7 +1,7 @@
 #include "parser.hxx"
 #include "util.hxx"
 #include "malformed_svg_error.hpp"
-#include "casters.hpp"
+#include "util/casters.hpp"
 
 #include <utki/debug.hpp>
 #include <utki/util.hpp>
@@ -30,7 +30,7 @@ gradient::spread_method gradientStringToSpreadMethod(const std::string& str){
 }
 
 void parser::pushNamespaces(){
-	//parse default namespace
+	// parse default namespace
 	{
 		auto i = this->attributes.find("xmlns");
 		if(i != this->attributes.end()){
