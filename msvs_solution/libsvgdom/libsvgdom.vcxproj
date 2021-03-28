@@ -610,64 +610,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\src\svgdom\cloner.cpp" />
-    <ClCompile Include="..\..\src\svgdom\dom.cpp" />
-    <ClCompile Include="..\..\src\svgdom\elements\aspect_ratioed.cpp" />
-    <ClCompile Include="..\..\src\svgdom\elements\element.cpp" />
-    <ClCompile Include="..\..\src\svgdom\elements\filter.cpp" />
-    <ClCompile Include="..\..\src\svgdom\elements\gradients.cpp" />
-    <ClCompile Include="..\..\src\svgdom\elements\image_element.cpp" />
-    <ClCompile Include="..\..\src\svgdom\elements\rectangle.cpp" />
-    <ClCompile Include="..\..\src\svgdom\elements\referencing.cpp" />
-    <ClCompile Include="..\..\src\svgdom\elements\shapes.cpp" />
-    <ClCompile Include="..\..\src\svgdom\elements\structurals.cpp" />
-    <ClCompile Include="..\..\src\svgdom\elements\style.cpp" />
-    <ClCompile Include="..\..\src\svgdom\elements\styleable.cpp" />
-    <ClCompile Include="..\..\src\svgdom\elements\text_element.cpp" />
-    <ClCompile Include="..\..\src\svgdom\elements\transformable.cpp" />
-    <ClCompile Include="..\..\src\svgdom\elements\view_boxed.cpp" />
-    <ClCompile Include="..\..\src\svgdom\finder.cpp" />
-    <ClCompile Include="..\..\src\svgdom\length.cpp" />
-    <ClCompile Include="..\..\src\svgdom\Parser.cpp" />
-    <ClCompile Include="..\..\src\svgdom\stream_writer.cpp" />
-    <ClCompile Include="..\..\src\svgdom\style_stack.cpp" />
-    <ClCompile Include="..\..\src\svgdom\util.cpp" />
-    <ClCompile Include="..\..\src\svgdom\visitor.cpp" />
+    <ClCompile Include="..\..\src\**\*.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\src\svgdom\caster.hpp" />
-    <ClInclude Include="..\..\src\svgdom\cloner.hpp" />
-    <ClInclude Include="..\..\src\svgdom\config.hpp" />
-    <ClInclude Include="..\..\src\svgdom\dom.hpp" />
-    <ClInclude Include="..\..\src\svgdom\elements\AspectRatioed.hpp" />
-    <ClInclude Include="..\..\src\svgdom\elements\aspect_ratioed.hpp" />
-    <ClInclude Include="..\..\src\svgdom\elements\container.hpp" />
-    <ClInclude Include="..\..\src\svgdom\elements\CoordinateUnits.hpp" />
-    <ClInclude Include="..\..\src\svgdom\elements\coordinate_units.hpp" />
-    <ClInclude Include="..\..\src\svgdom\elements\element.hpp" />
-    <ClInclude Include="..\..\src\svgdom\elements\filter.hpp" />
-    <ClInclude Include="..\..\src\svgdom\elements\gradients.hpp" />
-    <ClInclude Include="..\..\src\svgdom\elements\ImageElement.hpp" />
-    <ClInclude Include="..\..\src\svgdom\elements\image_element.hpp" />
-    <ClInclude Include="..\..\src\svgdom\elements\rectangle.hpp" />
-    <ClInclude Include="..\..\src\svgdom\elements\referencing.hpp" />
-    <ClInclude Include="..\..\src\svgdom\elements\shapes.hpp" />
-    <ClInclude Include="..\..\src\svgdom\elements\structurals.hpp" />
-    <ClInclude Include="..\..\src\svgdom\elements\style.hpp" />
-    <ClInclude Include="..\..\src\svgdom\elements\styleable.hpp" />
-    <ClInclude Include="..\..\src\svgdom\elements\TextElement.hpp" />
-    <ClInclude Include="..\..\src\svgdom\elements\text_element.hpp" />
-    <ClInclude Include="..\..\src\svgdom\elements\transformable.hpp" />
-    <ClInclude Include="..\..\src\svgdom\elements\ViewBoxed.hpp" />
-    <ClInclude Include="..\..\src\svgdom\elements\view_boxed.hpp" />
-    <ClInclude Include="..\..\src\svgdom\finder.hpp" />
-    <ClInclude Include="..\..\src\svgdom\length.hpp" />
-    <ClInclude Include="..\..\src\svgdom\malformed_svg_error.hpp" />
-    <ClInclude Include="..\..\src\svgdom\StreamWriter.hpp" />
-    <ClInclude Include="..\..\src\svgdom\stream_writer.hpp" />
-    <ClInclude Include="..\..\src\svgdom\StyleStack.hpp" />
-    <ClInclude Include="..\..\src\svgdom\style_stack.hpp" />
-    <ClInclude Include="..\..\src\svgdom\visitor.hpp" />
+    <ClInclude Include="..\..\src\**\*.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
