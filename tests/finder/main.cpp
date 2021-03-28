@@ -1,5 +1,6 @@
 #include "../../src/svgdom/dom.hpp"
 #include "../../src/svgdom/finder.hpp"
+#include "../../src/svgdom/visitor.hpp"
 
 #include <chrono>
 
@@ -28,12 +29,6 @@ int main(int argc, char** argv){
 		void visit(const svgdom::use_element& e)override{
 			ASSERT_INFO_ALWAYS(this->finder.find_by_id(e.get_local_id_from_iri()), "element not found for id = " << e.get_local_id_from_iri());
 		}
-		
-		void visit(const svgdom::svg_element& e)override{this->relay_accept(e);}
-		void visit(const svgdom::defs_element& e)override{this->relay_accept(e);}
-		void visit(const svgdom::radial_gradient_element& e)override{this->relay_accept(e);}
-		void visit(const svgdom::linear_gradient_element& e)override{this->relay_accept(e);}
-		void visit(const svgdom::g_element& e)override{this->relay_accept(e);}
 	} visitor(*dom);
 	
 	dom->accept(visitor);

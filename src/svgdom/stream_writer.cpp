@@ -9,11 +9,11 @@
 
 using namespace svgdom;
 
-void stream_writer::set_name(const std::string& name) {
+void stream_writer::set_name(const std::string& name){
 	this->name = name;
 }
 
-void stream_writer::add_attribute(const std::string& name, const std::string& value) {
+void stream_writer::add_attribute(const std::string& name, const std::string& value){
 	this->attributes.push_back(std::make_pair(name, value));
 }
 
@@ -30,7 +30,7 @@ void stream_writer::add_attribute(const std::string& name, real value){
 }
 
 void stream_writer::write(const container* children, const std::string& content){
-	auto ind = indent_str();
+	auto ind = this->indent_str();
 
 	auto tag = std::move(this->name);
 	
@@ -48,7 +48,7 @@ void stream_writer::write(const container* children, const std::string& content)
 	}else{
 		this->s << ">" << std::endl;
 		if(children){
-			this->childrenToStream(*children);
+			this->children_to_stream(*children);
 		}
 		this->s << content;
 		this->s << ind << "</" << tag << ">";
@@ -66,12 +66,12 @@ std::string stream_writer::indent_str(){
 	return ss.str();
 }
 
-void stream_writer::childrenToStream(const container& e){
+void stream_writer::children_to_stream(const container& e){
 	++this->indent;
 	utki::scope_exit scope_exit([this](){
 		--this->indent;
 	});
-	for (auto& c : e.children) {
+	for (auto& c : e.children){
 		c->accept(*this);
 	}
 }
@@ -158,7 +158,7 @@ void stream_writer::add_gradient_attributes(const gradient& e){
 	}
 }
 
-void stream_writer::add_filter_primitive_attributes(const filter_primitive& e) {
+void stream_writer::add_filter_primitive_attributes(const filter_primitive& e){
 	this->add_element_attributes(e);
 	this->add_styleable_attributes(e);
 	this->add_rectangle_attributes(e);
@@ -168,31 +168,29 @@ void stream_writer::add_filter_primitive_attributes(const filter_primitive& e) {
 	}
 }
 
-void stream_writer::add_inputable_attributes(const inputable& e) {
+void stream_writer::add_inputable_attributes(const inputable& e){
 	if(e.in.length() != 0){
 		this->add_attribute("in", e.in);
 	}
 }
 
-void stream_writer::add_second_inputable_attributes(const second_inputable& e) {
+void stream_writer::add_second_inputable_attributes(const second_inputable& e){
 	if(e.in2.length() != 0){
 		this->add_attribute("in2", e.in2);
 	}
 }
 
-void stream_writer::add_text_positioning_attributes(const text_positioning& e) {
-	//TODO: add missing attributes
+void stream_writer::add_text_positioning_attributes(const text_positioning& e){
+	// TODO: add missing attributes
 }
 
-
-void stream_writer::add_shape_attributes(const shape& e) {
+void stream_writer::add_shape_attributes(const shape& e){
 	this->add_element_attributes(e);
 	this->add_transformable_attributes(e);
 	this->add_styleable_attributes(e);
 }
 
-
-void stream_writer::visit(const g_element& e) {
+void stream_writer::visit(const g_element& e){
 	this->set_name(g_element::tag);
 	this->add_element_attributes(e);
 	this->add_transformable_attributes(e);
@@ -200,7 +198,7 @@ void stream_writer::visit(const g_element& e) {
 	this->write(&e);
 }
 
-void stream_writer::visit(const svg_element& e) {
+void stream_writer::visit(const svg_element& e){
 	this->set_name(svg_element::tag);
 	
 	if(this->indent == 0){ // if outermost "svg" element
@@ -237,7 +235,7 @@ void stream_writer::visit(const image_element& e){
 	this->write();
 }
 
-void stream_writer::visit(const line_element& e) {
+void stream_writer::visit(const line_element& e){
 	this->set_name(line_element::tag);
 	this->add_shape_attributes(e);
 	
@@ -260,7 +258,7 @@ void stream_writer::visit(const line_element& e) {
 	this->write();
 }
 
-void stream_writer::visit(const rect_element& e) {
+void stream_writer::visit(const rect_element& e){
 	this->set_name(rect_element::tag);
 	this->add_shape_attributes(e);
 	this->add_rectangle_attributes(e, rect_element::rectangle_default_values());
@@ -276,7 +274,7 @@ void stream_writer::visit(const rect_element& e) {
 	this->write();
 }
 
-void stream_writer::visit(const ellipse_element& e) {
+void stream_writer::visit(const ellipse_element& e){
 	this->set_name(ellipse_element::tag);
 	this->add_shape_attributes(e);
 	
@@ -299,7 +297,7 @@ void stream_writer::visit(const ellipse_element& e) {
 	this->write();
 }
 
-void stream_writer::visit(const polygon_element& e) {
+void stream_writer::visit(const polygon_element& e){
 	this->set_name(polygon_element::tag);
 	this->add_shape_attributes(e);
 	if(e.points.size() != 0){
@@ -308,7 +306,7 @@ void stream_writer::visit(const polygon_element& e) {
 	this->write();
 }
 
-void stream_writer::visit(const polyline_element& e) {
+void stream_writer::visit(const polyline_element& e){
 	this->set_name(polyline_element::tag);
 	this->add_shape_attributes(e);
 	if(e.points.size() != 0){
@@ -317,7 +315,7 @@ void stream_writer::visit(const polyline_element& e) {
 	this->write();
 }
 
-void stream_writer::visit(const circle_element& e) {
+void stream_writer::visit(const circle_element& e){
 	this->set_name(circle_element::tag);
 	this->add_shape_attributes(e);
 	
@@ -344,7 +342,7 @@ void stream_writer::visit(const path_element& e){
 	this->write();
 }
 
-void stream_writer::visit(const use_element& e) {
+void stream_writer::visit(const use_element& e){
 	this->set_name(use_element::tag);
 	this->add_element_attributes(e);
 	this->add_transformable_attributes(e);
@@ -354,7 +352,7 @@ void stream_writer::visit(const use_element& e) {
 	this->write();
 }
 
-void stream_writer::visit(const gradient::stop_element& e) {
+void stream_writer::visit(const gradient::stop_element& e){
 	this->set_name(gradient::stop_element::tag);
 	this->add_attribute("offset", e.offset);
 	this->add_element_attributes(e);
@@ -362,7 +360,7 @@ void stream_writer::visit(const gradient::stop_element& e) {
 	this->write();
 }
 
-void stream_writer::visit(const radial_gradient_element& e) {
+void stream_writer::visit(const radial_gradient_element& e){
 	this->set_name(radial_gradient_element::tag);
 	this->add_gradient_attributes(e);
 	if(e.cx.unit != length_unit::percent || e.cx.value != 50){
@@ -383,7 +381,7 @@ void stream_writer::visit(const radial_gradient_element& e) {
 	this->write(&e);
 }
 
-void stream_writer::visit(const linear_gradient_element& e) {
+void stream_writer::visit(const linear_gradient_element& e){
 	this->set_name(linear_gradient_element::tag);
 	this->add_gradient_attributes(e);
 	if(e.x1.unit != length_unit::percent || e.x1.value != 0){
@@ -401,7 +399,7 @@ void stream_writer::visit(const linear_gradient_element& e) {
 	this->write(&e);
 }
 
-void stream_writer::visit(const defs_element& e) {
+void stream_writer::visit(const defs_element& e){
 	this->set_name(defs_element::tag);
 	this->add_element_attributes(e);
 	this->add_transformable_attributes(e);
@@ -409,7 +407,7 @@ void stream_writer::visit(const defs_element& e) {
 	this->write(&e);
 }
 
-void stream_writer::visit(const mask_element& e) {
+void stream_writer::visit(const mask_element& e){
 	this->set_name(mask_element::tag);
 	this->add_element_attributes(e);
 	this->add_rectangle_attributes(e);
@@ -435,7 +433,7 @@ void stream_writer::visit(const style_element& e){
 	this->set_name(style_element::tag);
 	this->add_element_attributes(e);
 
-	//TODO: add style element specific attributes
+	// TODO: add style element specific attributes
 
 	++this->indent;
 	auto ind = this->indent_str();
@@ -475,12 +473,12 @@ void stream_writer::visit(const text_element& e){
 	this->add_styleable_attributes(e);
 	this->add_text_positioning_attributes(e);
 	
-	//TODO: add text element attributes
+	// TODO: add text element attributes
 	
 	this->write(&e);
 }
 
-void stream_writer::visit(const symbol_element& e) {
+void stream_writer::visit(const symbol_element& e){
 	this->set_name(symbol_element::tag);
 	this->add_element_attributes(e);
 	this->add_styleable_attributes(e);
@@ -591,7 +589,6 @@ void stream_writer::visit(const fe_color_matrix_element& e){
 	
 	this->write();
 }
-
 
 void stream_writer::visit(const fe_blend_element& e){
 	this->set_name(fe_blend_element::tag);

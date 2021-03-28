@@ -18,14 +18,14 @@ public:
 	* @brief Clone root element as T.
 	* @return std::unique<T> where T is element type of root.
 	*/
-	template <class T> std::unique_ptr<T> get_clone_as() {
-		if (root.children.size() != 1) {
+	template <class T> std::unique_ptr<T> get_clone_as(){
+		if(root.children.size() != 1){
 			return nullptr;
 		}
 		auto ret = std::unique_ptr<T>(dynamic_cast<T*>(root.children.back().get()));
-	  if(ret){
+		if(ret){
 			root.children.back().release();
-	  }
+		}
 		root.children.clear();
 		return ret;
 	}

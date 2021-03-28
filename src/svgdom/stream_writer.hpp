@@ -6,12 +6,12 @@ namespace svgdom{
 
 class stream_writer : virtual public const_visitor{
 private:
-	void childrenToStream(const container& e);
+	void children_to_stream(const container& e);
 	
 	std::string name;
 	std::vector<std::pair<std::string, std::string>> attributes;
 protected:
-	// s, indent, and indentStr() are made protected to allow writing arbitrary content to stream for those who extend the class, as this was needed in some projects.
+	// s, indent, and indent_str() are made protected to allow writing arbitrary content to stream for those who extend the class, as this was needed in some projects.
 	std::ostream& s;
 	unsigned indent = 0;
 	std::string indent_str();

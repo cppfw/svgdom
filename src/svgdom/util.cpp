@@ -5,7 +5,6 @@
 
 using namespace svgdom;
 
-
 void svgdom::skip_whitespaces(std::istream& s){
 	while(!s.eof()){
 		if(!std::isspace(s.peek())){
