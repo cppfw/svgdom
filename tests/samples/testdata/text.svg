@@ -6,7 +6,7 @@
   <desc>Example tspan01 - using tspan to change visual attributes</desc>
 
   <g font-family="Verdana" font-size="45" >
-    <text x="200" y="150" fill="blue" >
+    <text id="id1" class="class1 class2" x="200" y="150" fill="blue" >
       You are
         <tspan font-weight="bold" fill="red" >not</tspan>
       a banana.

@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="10cm" height="3cm" viewBox="0 0 1000 300">
 	<g font-family="" font-size="">
-		<text fill="blue"/>
+		<text id="id1" class="class1 class2" fill="blue"/>
 	</g>
 	<rect fill="none" stroke="blue" stroke-width="2" x="1" y="1" width="998" height="298"/>
 </svg>
