@@ -1,3 +1,39 @@
+libsvgdom (0.3.58) unstable; urgency=medium
+
+  * msvs: disable whole program optimization
+
+ -- Ivan Gagis <igagis@gmail.com>  Wed, 17 Mar 2021 15:10:28 +0200
+
+libsvgdom (0.3.57) unstable; urgency=medium
+
+  * remove console output
+
+ -- Ivan Gagis <igagis@gmail.com>  Wed, 03 Mar 2021 00:12:04 +0200
+
+libsvgdom (0.3.56) unstable; urgency=medium
+
+  * update dependency versions
+
+ -- Ivan Gagis <igagis@gmail.com>  Wed, 10 Feb 2021 14:01:03 +0200
+
+libsvgdom (0.3.55) unstable; urgency=medium
+
+  * update to latest r4
+
+ -- Ivan Gagis <igagis@gmail.com>  Sun, 31 Jan 2021 13:32:38 +0200
+
+libsvgdom (0.3.54) unstable; urgency=medium
+
+  * update to latest r4
+
+ -- Ivan Gagis <igagis@gmail.com>  Sat, 30 Jan 2021 22:23:45 +0200
+
+libsvgdom (0.3.53) unstable; urgency=medium
+
+  * relink
+
+ -- Ivan Gagis <igagis@gmail.com>  Sat, 30 Jan 2021 20:49:13 +0200
+
 libsvgdom (0.3.52) unstable; urgency=medium
 
   * github actions build for raspbian

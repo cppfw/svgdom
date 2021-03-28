@@ -17,9 +17,9 @@ const cssdom::styleable& style_stack::crawler::get(){
 }
 
 bool style_stack::crawler::move_up(){
-	TRACE(<< "crawler::move_up(): stack.size() = " << this->stack.size() << std::endl)
+	// TRACE(<< "crawler::move_up(): stack.size() = " << this->stack.size() << std::endl)
 	if(std::distance(this->iter, this->stack.rend()) == 1){
-		TRACE(<< "crawler::move_up(): at root node" << std::endl)
+		// TRACE(<< "crawler::move_up(): at root node" << std::endl)
 		return false;
 	}
 	++this->iter;
@@ -27,12 +27,12 @@ bool style_stack::crawler::move_up(){
 }
 
 bool style_stack::crawler::move_left(){
-	TRACE(<< "crawler::move_left(): NOT SUPPORTED!!!" << std::endl)
+	// TRACE(<< "crawler::move_left(): NOT SUPPORTED!!!" << std::endl)
 	return false;
 }
 
 void style_stack::crawler::reset(){
-	TRACE(<< "crawler::reset(): invoked" << std::endl)
+	// TRACE(<< "crawler::reset(): invoked" << std::endl)
 	if(this->stack.empty()){
 		throw std::logic_error("style_stack::crawler::reset(): stack is empty");
 	}

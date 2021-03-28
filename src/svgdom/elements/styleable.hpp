@@ -6,7 +6,7 @@
 
 #include <cssdom/dom.hpp>
 
-#include <r4/vector3.hpp>
+#include <r4/vector.hpp>
 #include <r4/rectangle.hpp>
 
 #include "../config.hpp"
