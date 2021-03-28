@@ -10,10 +10,6 @@
 
 namespace svgdom{
 
-class abstract_visitor{
-
-};
-
 /**
  * @brief Visitor interface.
  * A visitor interface which allows traversing of the SVG element tree.
@@ -24,8 +20,8 @@ class abstract_visitor{
  */
 class visitor{
 private:
-	container* curParent_v = nullptr;
-	decltype(container::children)::iterator curIter_v;
+	container* cur_parent_container = nullptr;
+	decltype(container::children)::iterator cur_iterator;
 	
 protected:
 	/**
@@ -33,12 +29,12 @@ protected:
 	 * @return Pointer to current traversed container.
 	 * @return nullptr if root SVG element is being visited.
 	 */
-	decltype(curParent_v) cur_parent()const{
-		return this->curParent_v;
+	decltype(cur_parent_container) cur_parent()const{
+		return this->cur_parent_container;
 	}
 	
 	/**
-	 * @brief Get iterator if current visited child element.
+	 * @brief Get iterator of current visited child element.
 	 * Returns iterator into the parent container of the currently visited child element.
 	 * Note, that removing the visited element from its parent during the element is visited will
 	 * lead to undefined behavior. Instead, one should store the iterators until the whole SVG tree
@@ -46,7 +42,7 @@ protected:
 	 * @return Iterator of currently visited child element.
 	 */
 	decltype(container::children)::iterator cur_iter()const{
-		return this->curIter_v;
+		return this->cur_iterator;
 	}
 	
 	/**

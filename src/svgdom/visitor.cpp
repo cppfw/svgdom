@@ -104,15 +104,15 @@ void visitor::default_visit(element& e, container& c){
 }
 
 void visitor::relay_accept(container& c){
-	auto oldParent = this->curParent_v;
-	auto oldIter = this->curIter_v;
-	this->curParent_v = &c;
+	auto oldParent = this->cur_parent_container;
+	auto oldIter = this->cur_iterator;
+	this->cur_parent_container = &c;
 	for(auto i = c.children.begin(), e = c.children.end(); i != e; ++i){
-		this->curIter_v = i;
+		this->cur_iterator = i;
 		(*i)->accept(*this);
 	}
-	this->curIter_v = oldIter;
-	this->curParent_v = oldParent;
+	this->cur_iterator = oldIter;
+	this->cur_parent_container = oldParent;
 }
 
 void const_visitor::visit(const path_element& e) {
