@@ -1,6 +1,6 @@
 #pragma once
 
-#include <map>
+#include <unordered_map>
 
 #include "../elements/element.hpp"
 
@@ -34,7 +34,7 @@ public:
 	}
 
 private:
-	std::map<std::string, element_info> cache;
+	std::unordered_map<std::string, element_info> cache;
 };
 
 }

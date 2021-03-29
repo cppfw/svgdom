@@ -9,7 +9,7 @@ using namespace svgdom;
 namespace{
 class CacheCreator : virtual public svgdom::const_visitor{
 public:
-	std::map<std::string, finder::element_info> cache;
+	std::unordered_map<std::string, finder::element_info> cache;
 	
 	style_stack styleStack;
 	
