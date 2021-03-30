@@ -139,6 +139,7 @@ finder::finder(const svgdom::element& root){
 
 	element_by_id_cache = std::move(cc.element_by_id_cache);
 	elements_by_class_name_cache = std::move(cc.elements_by_class_name_cache);
+	elements_by_tag_name_cache = std::move(cc.elements_by_tag_name_cache);
 	style_stack_by_id_cache = std::move(cc.style_stack_by_id_cache);
 }
 
