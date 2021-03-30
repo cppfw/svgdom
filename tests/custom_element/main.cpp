@@ -8,7 +8,14 @@ struct CustomElement : public svgdom::element{
 	void accept(svgdom::const_visitor& visitor) const override;
 	void accept(svgdom::visitor& visitor) override;
 
+	static const std::string tag;
+
+	const std::string& get_tag()const override{
+		return tag;
+	}
 };
+
+const std::string CustomElement::tag = "custom_element";
 
 class CustomVisitor : virtual public svgdom::const_visitor{
 public:
