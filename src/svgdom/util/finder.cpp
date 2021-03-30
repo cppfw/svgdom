@@ -12,7 +12,7 @@ public:
 	std::unordered_map<std::string, const element*> element_by_id_cache;
 	std::unordered_map<std::string, std::list<const element*>> elements_by_class_name_cache;
 	std::unordered_map<std::string, std::list< const element*>> elements_by_tag_name_cache;
-	std::unordered_map<std::string, finder::element_info> style_stack_by_id_cache;
+	std::unordered_map<std::string, style_stack> style_stack_by_id_cache;
 	
 	style_stack styleStack;
 
@@ -50,7 +50,7 @@ public:
 
 	void addToStyleStackByIdCache(const svgdom::element& e){
 		if(!e.id.empty()){
-			this->style_stack_by_id_cache.insert(std::make_pair(e.id, finder::element_info(e, this->styleStack)));
+			this->style_stack_by_id_cache.insert(std::make_pair(e.id, this->styleStack));
 		}
 	}
 	
@@ -182,7 +182,7 @@ const std::list<const svgdom::element*> finder::find_elements_by_tag_name(const 
 	return i->second;
 }
 
-const finder::element_info* finder::find_style_stack_by_id(const std::string& id)const{
+const style_stack* finder::find_style_stack_by_id(const std::string& id)const{
 	if(id.length() == 0){
 		return nullptr;
 	}
