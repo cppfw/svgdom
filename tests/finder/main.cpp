@@ -27,7 +27,7 @@ int main(int argc, char** argv){
 		TraverseVisitor(const svgdom::element& root) : finder(root){}
 		
 		void visit(const svgdom::use_element& e)override{
-			ASSERT_INFO_ALWAYS(this->finder.find_by_id(e.get_local_id_from_iri()), "element not found for id = " << e.get_local_id_from_iri());
+			ASSERT_INFO_ALWAYS(this->finder.find_style_stack_by_id(e.get_local_id_from_iri()), "element not found for id = " << e.get_local_id_from_iri());
 		}
 	} visitor(*dom);
 	

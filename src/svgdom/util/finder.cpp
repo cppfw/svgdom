@@ -182,7 +182,7 @@ const std::list<const svgdom::element*> finder::find_elements_by_tag_name(const 
 	return i->second;
 }
 
-const finder::element_info* finder::find_by_id(const std::string& id)const{
+const finder::element_info* finder::find_style_stack_by_id(const std::string& id)const{
 	if(id.length() == 0){
 		return nullptr;
 	}

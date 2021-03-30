@@ -26,7 +26,7 @@ public:
 	const element* find_element_by_id(const std::string& id)const;
 	const std::list<const element*> find_elements_by_class_name(const std::string& cls)const;
 	const std::list<const element*> find_elements_by_tag_name(const std::string& tag_name)const;
-	const element_info* find_by_id(const std::string& id)const;
+	const element_info* find_style_stack_by_id(const std::string& id)const;
 
 	/**
 	 * @brief Get element-by-id cache size.
