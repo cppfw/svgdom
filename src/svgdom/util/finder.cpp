@@ -7,7 +7,7 @@
 using namespace svgdom;
 
 namespace{
-class CacheCreator : virtual public svgdom::const_visitor{
+class cache_creator : virtual public svgdom::const_visitor{
 public:
 	std::unordered_map<std::string, const element*> element_by_id_cache;
 	std::unordered_map<std::string, std::list<const element*>> elements_by_class_name_cache;
@@ -16,13 +16,13 @@ public:
 	
 	style_stack styleStack;
 
-	void addToElementByIdCache(const svgdom::element& e){
+	void add_to_element_by_id_cache(const svgdom::element& e){
 		if(!e.id.empty()){
 			this->element_by_id_cache.insert(std::make_pair(e.id, &e));
 		}
 	}
 
-	void addToElementsByClassNameCache(const svgdom::element& e, const svgdom::styleable& s){
+	void add_to_elements_by_class_name_cache(const svgdom::element& e, const svgdom::styleable& s){
 		for (const auto& class_name : s.classes) {
 			auto it = elements_by_class_name_cache.find(class_name);
 
@@ -35,7 +35,7 @@ public:
 		}
 	}
 
-	void addToElementsByTagNameCache(const svgdom::element& e, const svgdom::styleable& s){
+	void add_to_elements_by_tag_name_cache(const svgdom::element& e, const svgdom::styleable& s){
 		if (!s.get_tag().empty()) {
 			auto it = elements_by_tag_name_cache.find(s.get_tag());
 
@@ -48,93 +48,93 @@ public:
 		}
 	}
 
-	void addToStyleStackByIdCache(const svgdom::element& e){
+	void add_to_style_stack_by_id_cache(const svgdom::element& e){
 		if(!e.id.empty()){
 			this->style_stack_by_id_cache.insert(std::make_pair(e.id, this->styleStack));
 		}
 	}
 	
-	void visitContainer(const svgdom::element& e, const svgdom::container& c, const svgdom::styleable& s){
+	void visit_container(const svgdom::element& e, const svgdom::container& c, const svgdom::styleable& s){
 		style_stack::push push(this->styleStack, s);
-		this->addToElementByIdCache(e);
-		this->addToElementsByClassNameCache(e,s);
-		this->addToElementsByTagNameCache(e,s);
-		this->addToStyleStackByIdCache(e);
+		this->add_to_element_by_id_cache(e);
+		this->add_to_elements_by_class_name_cache(e, s);
+		this->add_to_elements_by_tag_name_cache(e, s);
+		this->add_to_style_stack_by_id_cache(e);
 		this->relay_accept(c);
 	}
-	void visitElement(const svgdom::element& e, const svgdom::styleable& s){
+	void visit_element(const svgdom::element& e, const svgdom::styleable& s){
 		style_stack::push push(this->styleStack, s);
-		this->addToElementByIdCache(e);
-		this->addToElementsByClassNameCache(e,s);
-		this->addToElementsByTagNameCache(e,s);
-		this->addToStyleStackByIdCache(e);
+		this->add_to_element_by_id_cache(e);
+		this->add_to_elements_by_class_name_cache(e, s);
+		this->add_to_elements_by_tag_name_cache(e, s);
+		this->add_to_style_stack_by_id_cache(e);
 	}
 	
 	void default_visit(const svgdom::element& e)override{
-		this->addToStyleStackByIdCache(e);
-		this->addToElementByIdCache(e);
+		this->add_to_style_stack_by_id_cache(e);
+		this->add_to_element_by_id_cache(e);
 	}
 	
 	void visit(const svgdom::g_element& e) override{
-		this->visitContainer(e, e, e);
+		this->visit_container(e, e, e);
 	}
 	void visit(const svgdom::symbol_element& e) override{
-		this->visitContainer(e, e, e);
+		this->visit_container(e, e, e);
 	}
 	void visit(const svgdom::svg_element& e) override{
-		this->visitContainer(e, e, e);
+		this->visit_container(e, e, e);
 	}
 	void visit(const svgdom::radial_gradient_element& e) override{
-		this->visitContainer(e, e, e);
+		this->visit_container(e, e, e);
 	}
 	void visit(const svgdom::linear_gradient_element& e) override{
-		this->visitContainer(e, e, e);
+		this->visit_container(e, e, e);
 	}
 	void visit(const svgdom::defs_element& e) override{
-		this->visitContainer(e, e, e);
+		this->visit_container(e, e, e);
 	}
 	void visit(const svgdom::filter_element& e) override{
-		this->visitContainer(e, e, e);
+		this->visit_container(e, e, e);
 	}
 	
 	void visit(const svgdom::polyline_element& e) override{
-		this->visitElement(e, e);
+		this->visit_element(e, e);
 	}
 	void visit(const svgdom::circle_element& e) override{
-		this->visitElement(e, e);
+		this->visit_element(e, e);
 	}
 	void visit(const svgdom::use_element& e) override{
-		this->visitElement(e, e);
+		this->visit_element(e, e);
 	}
 	void visit(const svgdom::gradient::stop_element& e) override{
-		this->visitElement(e, e);
+		this->visit_element(e, e);
 	}
 	void visit(const svgdom::path_element& e) override{
-		this->visitElement(e, e);
+		this->visit_element(e, e);
 	}
 	void visit(const svgdom::rect_element& e) override{
-		this->visitElement(e, e);
+		this->visit_element(e, e);
 	}
 	void visit(const svgdom::line_element& e) override{
-		this->visitElement(e, e);
+		this->visit_element(e, e);
 	}
 	void visit(const svgdom::ellipse_element& e) override{
-		this->visitElement(e, e);
+		this->visit_element(e, e);
 	}
 	void visit(const svgdom::polygon_element& e) override{
-		this->visitElement(e, e);
+		this->visit_element(e, e);
 	}	
 	void visit(const svgdom::fe_gaussian_blur_element& e) override{
-		this->visitElement(e, e);
+		this->visit_element(e, e);
 	}
 	void visit(const image_element& e) override{
-		this->visitElement(e, e);
+		this->visit_element(e, e);
 	}
 };
 }
 
 finder::finder(const svgdom::element& root){
-	CacheCreator cc;
+	cache_creator cc;
 	root.accept(cc);
 
 	element_by_id_cache = std::move(cc.element_by_id_cache);
