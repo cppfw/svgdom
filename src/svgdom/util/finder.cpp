@@ -10,8 +10,8 @@ namespace{
 class cache_creator : virtual public svgdom::const_visitor{
 public:
 	std::unordered_map<std::string, const element*> element_by_id_cache;
-	std::unordered_map<std::string, std::list<const element*>> elements_by_class_name_cache;
-	std::unordered_map<std::string, std::list< const element*>> elements_by_tag_name_cache;
+	std::unordered_map<std::string, std::vector<const element*>> elements_by_class_name_cache;
+	std::unordered_map<std::string, std::vector< const element*>> elements_by_tag_name_cache;
 	std::unordered_map<std::string, style_stack> style_stack_by_id_cache;
 	
 	style_stack styleStack;
@@ -29,7 +29,7 @@ public:
 			if (it != elements_by_class_name_cache.end()) {
 				it->second.push_back(&e);
 			} else {
-				std::list<const element*> elements = {&e};
+				std::vector<const element*> elements = {&e};
 				elements_by_class_name_cache.insert(std::make_pair(class_name, elements));
 			}
 		}
@@ -42,7 +42,7 @@ public:
 			if (it != elements_by_tag_name_cache.end()) {
 				it->second.push_back(&e);
 			} else {
-				std::list<const element*> elements = {&e};
+				std::vector<const element*> elements = {&e};
 				elements_by_tag_name_cache.insert(std::make_pair(s.get_tag(), elements));
 			}
 		}
@@ -157,7 +157,7 @@ const svgdom::element* finder::find_element_by_id(const std::string& id)const{
 	return i->second;
 }
 
-const std::list<const svgdom::element*> finder::find_elements_by_class_name(const std::string& class_name)const{
+const std::vector<const svgdom::element*> finder::find_elements_by_class_name(const std::string& class_name)const{
 	if(class_name.length() == 0){
 		return {};
 	}
@@ -170,7 +170,7 @@ const std::list<const svgdom::element*> finder::find_elements_by_class_name(cons
 	return i->second;
 }
 
-const std::list<const svgdom::element*> finder::find_elements_by_tag_name(const std::string& tag_name)const{
+const std::vector<const svgdom::element*> finder::find_elements_by_tag_name(const std::string& tag_name)const{
 	if(tag_name.length() == 0){
 		return {};
 	}

@@ -14,8 +14,8 @@ public:
 	finder(const svgdom::element& root);
 
 	const element* find_element_by_id(const std::string& id)const;
-	const std::list<const element*> find_elements_by_class_name(const std::string& cls)const;
-	const std::list<const element*> find_elements_by_tag_name(const std::string& tag_name)const;
+	const std::vector<const element*> find_elements_by_class_name(const std::string& cls)const;
+	const std::vector<const element*> find_elements_by_tag_name(const std::string& tag_name)const;
 	const style_stack* find_style_stack_by_id(const std::string& id)const;
 
 	/**
@@ -52,8 +52,8 @@ public:
 
 private:
 	std::unordered_map<std::string, const element*> element_by_id_cache;
-	std::unordered_map<std::string, std::list< const element*>> elements_by_class_name_cache;
-	std::unordered_map<std::string, std::list< const element*>> elements_by_tag_name_cache;
+	std::unordered_map<std::string, std::vector< const element*>> elements_by_class_name_cache;
+	std::unordered_map<std::string, std::vector< const element*>> elements_by_tag_name_cache;
 	std::unordered_map<std::string, style_stack> style_stack_by_id_cache;
 };
 
