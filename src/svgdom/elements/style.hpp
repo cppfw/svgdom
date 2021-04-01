@@ -18,6 +18,10 @@ struct style_element : public element{
 
 	static const std::string tag;
 
+	const std::string& get_tag()const override{
+		return tag;
+	}
+
 	void accept(visitor& v) override;
 	void accept(const_visitor& v) const override;
 };

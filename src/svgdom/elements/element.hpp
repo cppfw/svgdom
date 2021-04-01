@@ -25,7 +25,13 @@ struct element{
 	 * @brief Accept method for visitor pattern.
 	 * @param v - constant visitor to accept.
 	 */
-	virtual void accept(const_visitor& v) const = 0;
+	virtual void accept(const_visitor& v)const = 0;
+
+	/**
+	 * @brief Get tag name of the element.
+	 * @return Tag name of the element.
+	 */
+	virtual const std::string& get_tag()const = 0;
 
 	virtual ~element()noexcept{}
 };
