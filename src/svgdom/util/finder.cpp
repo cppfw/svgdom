@@ -30,7 +30,7 @@ public:
 				it->second.push_back(&e);
 			} else {
 				std::vector<const element*> elements = {&e};
-				elements_by_class_name_cache.insert(std::make_pair(class_name, elements));
+				elements_by_class_name_cache.insert(std::make_pair(class_name, std::move(elements)));
 			}
 		}
 	}
@@ -43,7 +43,7 @@ public:
 				it->second.push_back(&e);
 			} else {
 				std::vector<const element*> elements = {&e};
-				elements_by_tag_name_cache.insert(std::make_pair(s.get_tag(), elements));
+				elements_by_tag_name_cache.insert(std::make_pair(s.get_tag(), std::move(elements)));
 			}
 		}
 	}
