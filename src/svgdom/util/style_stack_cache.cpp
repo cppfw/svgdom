@@ -8,24 +8,25 @@ using namespace svgdom;
 
 namespace{
 class cache_creator : virtual public svgdom::const_visitor{
+private:
+	void add_to_cache(const svgdom::element& e){
+		if(!e.id.empty()){
+			this->cache.insert(std::make_pair(e.id, this->current_style_stack));
+		}
+	}
+
+	style_stack current_style_stack;
+
 public:
 	std::unordered_map<std::string, style_stack> cache;
 	
-	style_stack style_stack;
-
-	void add_to_cache(const svgdom::element& e){
-		if(!e.id.empty()){
-			this->cache.insert(std::make_pair(e.id, this->style_stack));
-		}
-	}
-	
 	void visit_container(const svgdom::element& e, const svgdom::container& c, const svgdom::styleable& s){
-		style_stack::push push(this->style_stack, s);
+		style_stack::push push(this->current_style_stack, s);
 		this->add_to_cache(e);
 		this->relay_accept(c);
 	}
 	void visit_element(const svgdom::element& e, const svgdom::styleable& s){
-		style_stack::push push(this->style_stack, s);
+		style_stack::push push(this->current_style_stack, s);
 		this->add_to_cache(e);
 	}
 	
