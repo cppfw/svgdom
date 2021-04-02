@@ -11,25 +11,25 @@ class cache_creator : virtual public svgdom::const_visitor{
 public:
 	std::unordered_map<std::string, std::vector< const element*>> cache;
 
-	void add_to_cache(const svgdom::element& e, const svgdom::styleable& s){
-		if (!s.get_tag().empty()) {
-			auto it = cache.find(s.get_tag());
+	void add_to_cache(const svgdom::element& e){
+		if (!e.get_tag().empty()) {
+			auto it = cache.find(e.get_tag());
 
 			if (it != cache.end()) {
 				it->second.push_back(&e);
 			} else {
 				std::vector<const element*> elements = {&e};
-				cache.insert(std::make_pair(s.get_tag(), std::move(elements)));
+				cache.insert(std::make_pair(e.get_tag(), std::move(elements)));
 			}
 		}
 	}
 	
 	void visit_container(const svgdom::element& e, const svgdom::container& c, const svgdom::styleable& s){
-		this->add_to_cache(e, s);
+		this->add_to_cache(e);
 		this->relay_accept(c);
 	}
 	void visit_element(const svgdom::element& e, const svgdom::styleable& s){
-		this->add_to_cache(e, s);
+		this->add_to_cache(e);
 	}
 	
 	void visit(const svgdom::g_element& e) override{
