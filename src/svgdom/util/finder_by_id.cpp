@@ -1,4 +1,4 @@
-#include "element_by_id_finder.hpp"
+#include "finder_by_id.hpp"
 
 #include <utki/debug.hpp>
 
@@ -24,7 +24,7 @@ public:
 };
 }
 
-element_by_id_finder::element_by_id_finder(const svgdom::element& root) :
+finder_by_id::finder_by_id(const svgdom::element& root) :
 	cache([&root](){
 		cache_creator cc;
 
@@ -34,7 +34,7 @@ element_by_id_finder::element_by_id_finder(const svgdom::element& root) :
 	}())
 {}
 
-const svgdom::element* element_by_id_finder::find(const std::string& id)const{
+const svgdom::element* finder_by_id::find(const std::string& id)const{
 	if(id.length() == 0){
 		return nullptr;
 	}

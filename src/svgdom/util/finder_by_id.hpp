@@ -8,10 +8,10 @@
 
 namespace svgdom{
 
-class element_by_id_finder{
+class finder_by_id{
 public:
 
-	element_by_id_finder(const svgdom::element& root);
+	finder_by_id(const svgdom::element& root);
 
 	const element* find(const std::string& id)const;
 

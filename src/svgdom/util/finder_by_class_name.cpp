@@ -1,4 +1,4 @@
-#include "elements_by_class_name_finder.hpp"
+#include "finder_by_class_name.hpp"
 
 #include <utki/debug.hpp>
 
@@ -91,7 +91,7 @@ public:
 };
 }
 
-elements_by_class_name_finder::elements_by_class_name_finder(const svgdom::element& root) :
+finder_by_class_name::finder_by_class_name(const svgdom::element& root) :
 	cache([&root](){
 		cache_creator cc;
 
@@ -101,7 +101,7 @@ elements_by_class_name_finder::elements_by_class_name_finder(const svgdom::eleme
 	}())
 {}
 
-const std::vector<const svgdom::element*> elements_by_class_name_finder::find(const std::string& class_name)const{
+const std::vector<const svgdom::element*> finder_by_class_name::find(const std::string& class_name)const{
 	if(class_name.length() == 0){
 		return {};
 	}
