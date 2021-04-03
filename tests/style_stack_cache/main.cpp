@@ -1,5 +1,5 @@
 #include "../../src/svgdom/dom.hpp"
-#include "../../src/svgdom/util/finder.hpp"
+#include "../../src/svgdom/util/style_stack_cache.hpp"
 #include "../../src/svgdom/visitor.hpp"
 
 #include <chrono>
@@ -13,6 +13,7 @@ int main(int argc, char** argv){
 	auto loadStart = utki::get_ticks_ms();
 	
 	auto dom = svgdom::load(papki::fs_file("../samples/testdata/back.svg"));
+
 	ASSERT_ALWAYS(dom)
 	ASSERT_ALWAYS(dom->children.size() != 0)
 	
@@ -22,12 +23,12 @@ int main(int argc, char** argv){
 	
 	class TraverseVisitor : public svgdom::const_visitor{
 	public:
-		svgdom::finder finder;
+		svgdom::style_stack_cache style_stack_cache;
 		
-		TraverseVisitor(const svgdom::element& root) : finder(root){}
+		TraverseVisitor(const svgdom::element& root) : style_stack_cache(root){}
 		
 		void visit(const svgdom::use_element& e)override{
-			ASSERT_INFO_ALWAYS(this->finder.find_by_id(e.get_local_id_from_iri()), "element not found for id = " << e.get_local_id_from_iri());
+			ASSERT_INFO_ALWAYS(this->style_stack_cache.find(e.get_local_id_from_iri()), "element not found for id = " << e.get_local_id_from_iri());
 		}
 	} visitor(*dom);
 	
@@ -39,5 +40,5 @@ int main(int argc, char** argv){
 	
 	TRACE_ALWAYS(<< "SVG searched in " << float(searchDuration) / 1000.0f << " sec." << std::endl)
 	
-	ASSERT_INFO_ALWAYS(visitor.finder.size() == 17763, "visitor.finder.cacheSize() = " << visitor.finder.size())
+	ASSERT_INFO_ALWAYS(visitor.style_stack_cache.size() == 17763, "visitor.style_stack_cache.size() = " << visitor.style_stack_cache.size())
 }
