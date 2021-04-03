@@ -13,7 +13,7 @@ public:
 
 	finder_by_tag_name(const svgdom::element& root);
 
-	const std::vector<const element*>& find(const std::string& tag_name)const noexcept;
+	const std::vector<const element*> find(const std::string& tag_name)const noexcept;
 
 	/**
 	 * @brief Get elements-by-tag-name cache size.

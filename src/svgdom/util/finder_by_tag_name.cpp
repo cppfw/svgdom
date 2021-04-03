@@ -41,7 +41,7 @@ finder_by_tag_name::finder_by_tag_name(const svgdom::element& root) :
 		}())
 {}
 
-const std::vector<const svgdom::element*>& finder_by_tag_name::find(const std::string& tag_name)const noexcept{
+const std::vector<const svgdom::element*> finder_by_tag_name::find(const std::string& tag_name)const noexcept{
 	if(tag_name.length() == 0){
 		return {};
 	}
