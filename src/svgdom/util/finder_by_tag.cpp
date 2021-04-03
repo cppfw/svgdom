@@ -41,16 +41,15 @@ finder_by_tag::finder_by_tag(const svgdom::element& root) :
 		}())
 {}
 
-const std::vector<const svgdom::element*> finder_by_tag::find(const std::string& tag_name)const noexcept{
+utki::span<const svgdom::element* const> finder_by_tag::find(const std::string& tag_name)const noexcept{
 	if(tag_name.length() == 0){
-		return {};
+		return nullptr;
 	}
 
 	auto i = this->cache.find(tag_name);
 	if(i == this->cache.end()){
-		return {};
+		return nullptr;
 	}
 
-	return i->second;
+	return utki::make_span(i->second);
 }
-

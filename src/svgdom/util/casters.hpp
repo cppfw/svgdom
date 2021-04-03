@@ -6,6 +6,7 @@
 
 namespace svgdom{
 
+// TODO: doxygen all
 template <class T> class element_caster :
 		public std::conditional<std::is_const<T>::value, const_visitor, visitor>::type
 {
@@ -53,6 +54,24 @@ public:
 
 typedef container_caster_template<true> const_container_caster;
 typedef container_caster_template<false> container_caster;
+
+inline container* cast_to_container(element* e){
+	if(!e){
+		return nullptr;
+	}
+	container_caster caster;
+	e->accept(caster);
+	return caster.pointer;
+}
+
+inline const container* cast_to_container(const element* e){
+	if(!e){
+		return nullptr;
+	}
+	const_container_caster caster;
+	e->accept(caster);
+	return caster.pointer;
+}
 
 template <bool Const> class styleable_caster_template :
 		public std::conditional<Const, const_visitor, visitor>::type
@@ -133,5 +152,23 @@ public:
 
 typedef styleable_caster_template<true> const_styleable_caster;
 typedef styleable_caster_template<false> styleable_caster;
+
+inline styleable* cast_to_styleable(element* e){
+	if(!e){
+		return nullptr;
+	}
+	styleable_caster caster;
+	e->accept(caster);
+	return caster.pointer;
+}
+
+inline const styleable* cast_to_styleable(const element* e){
+	if(!e){
+		return nullptr;
+	}
+	const_styleable_caster caster;
+	e->accept(caster);
+	return caster.pointer;
+}
 
 }

@@ -101,16 +101,16 @@ finder_by_class::finder_by_class(const svgdom::element& root) :
 	}())
 {}
 
-const std::vector<const svgdom::element*> finder_by_class::find(const std::string& class_name)const noexcept{
+utki::span<const svgdom::element* const> finder_by_class::find(const std::string& class_name)const noexcept{
 	if(class_name.length() == 0){
-		return {};
+		return nullptr;
 	}
 
 	auto i = this->cache.find(class_name);
 	if(i == this->cache.end()){
-		return {};
+		return nullptr;
 	}
 
-	return i->second;
+	return utki::make_span(i->second);
 }
 

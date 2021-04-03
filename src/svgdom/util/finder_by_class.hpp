@@ -2,6 +2,8 @@
 
 #include <unordered_map>
 
+#include <utki/span.hpp>
+
 #include "../elements/element.hpp"
 
 #include "style_stack.hpp"
@@ -13,7 +15,7 @@ public:
 
 	finder_by_class(const svgdom::element& root);
 
-	const std::vector<const element*> find(const std::string& cls)const noexcept;
+	utki::span<const element* const> find(const std::string& cls)const noexcept;
 
 	/**
 	 * @brief Get elements-by-class-name cache size.
