@@ -41,7 +41,7 @@ int main(int argc, char** argv){
 			ASSERT_ALWAYS(elements_by_class_name.size() == 1)
 
 			// check that found element is styleable and it has the searched class
-			auto s = svgdom::cast_to_styleable(elements_by_class_name[0]);
+			auto s = svgdom::cast_to_styleable(elements_by_class_name.front());
 			ASSERT_ALWAYS(s)
 			auto& c = s->classes;
 			ASSERT_ALWAYS(std::find(c.begin(), c.end(), cls) != c.end())
@@ -59,7 +59,7 @@ int main(int argc, char** argv){
 			auto elements_by_tag_name = finder_by_tag_name.find(t);
 			ASSERT_INFO_ALWAYS(!elements_by_tag_name.empty(), "elements-by-tag not found")
 			ASSERT_ALWAYS(elements_by_tag_name.size() == 1)
-			ASSERT_ALWAYS(elements_by_tag_name[0]->get_tag() == t)
+			ASSERT_ALWAYS(elements_by_tag_name.front()->get_tag() == t)
 		}
 
 		ASSERT_ALWAYS(finder_by_tag_name.find("non_existent_tag").empty())

@@ -4,7 +4,7 @@ Priority: extra
 Maintainer: Ivan Gagis <igagis@gmail.com>
 Build-Depends: debhelper (>= 9), prorab, prorab-extra, myci,
 		libc6-dev,
-		libutki-dev,
+		libutki-dev (>= 1.1.117),
 		libpapki-dev,
 		libmikroxml-dev,
 		libcssdom-dev (>= 0.1.15),

@@ -31,7 +31,7 @@ nuget{
 	}
 	dependencies {
 		packages : {
-			libutki/1.1.111;
+			libutki/1.1.117;
 			libpapki/1.0.91;
 			libmikroxml/0.1.34;
 			libcssdom/0.1.15;
