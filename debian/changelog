@@ -1,3 +1,9 @@
+libsvgdom (0.3.59) unstable; urgency=medium
+
+  * add finder_by_* classes
+
+ -- Ivan Gagis <igagis@gmail.com>  Sat, 03 Apr 2021 15:34:47 +0300
+
 libsvgdom (0.3.58) unstable; urgency=medium
 
   * msvs: disable whole program optimization
