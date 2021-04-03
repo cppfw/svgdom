@@ -13,7 +13,7 @@ public:
 
 	finder_by_id(const svgdom::element& root);
 
-	const element* find(const std::string& id)const;
+	const element* find(const std::string& id)const noexcept;
 
 	/**
 	 * @brief Get element-by-id cache size.

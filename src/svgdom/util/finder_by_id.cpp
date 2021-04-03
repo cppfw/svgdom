@@ -34,7 +34,7 @@ finder_by_id::finder_by_id(const svgdom::element& root) :
 	}())
 {}
 
-const svgdom::element* finder_by_id::find(const std::string& id)const{
+const svgdom::element* finder_by_id::find(const std::string& id)const noexcept{
 	if(id.length() == 0){
 		return nullptr;
 	}

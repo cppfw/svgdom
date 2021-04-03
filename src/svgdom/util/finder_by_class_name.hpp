@@ -13,7 +13,7 @@ public:
 
 	finder_by_class_name(const svgdom::element& root);
 
-	const std::vector<const element*> find(const std::string& cls)const;
+	const std::vector<const element*>& find(const std::string& cls)const noexcept;
 
 	/**
 	 * @brief Get elements-by-class-name cache size.

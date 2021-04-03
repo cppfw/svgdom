@@ -101,7 +101,7 @@ finder_by_class_name::finder_by_class_name(const svgdom::element& root) :
 	}())
 {}
 
-const std::vector<const svgdom::element*> finder_by_class_name::find(const std::string& class_name)const{
+const std::vector<const svgdom::element*>& finder_by_class_name::find(const std::string& class_name)const noexcept{
 	if(class_name.length() == 0){
 		return {};
 	}

@@ -102,7 +102,7 @@ style_stack_cache::style_stack_cache(const svgdom::element& root) :
 	}())
 {}
 
-const style_stack* style_stack_cache::find(const std::string& id)const{
+const style_stack* style_stack_cache::find(const std::string& id)const noexcept{
 	if(id.length() == 0){
 		return nullptr;
 	}

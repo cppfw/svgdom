@@ -13,7 +13,7 @@ public:
 
 	style_stack_cache(const svgdom::element& root);
 
-	const style_stack* find(const std::string& id)const;
+	const style_stack* find(const std::string& id)const noexcept;
 
 	/**
 	 * @brief Get style-stack-by-id cache size.
