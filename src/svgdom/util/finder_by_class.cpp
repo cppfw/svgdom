@@ -1,4 +1,4 @@
-#include "finder_by_class_name.hpp"
+#include "finder_by_class.hpp"
 
 #include <utki/debug.hpp>
 
@@ -91,7 +91,7 @@ public:
 };
 }
 
-finder_by_class_name::finder_by_class_name(const svgdom::element& root) :
+finder_by_class::finder_by_class(const svgdom::element& root) :
 	cache([&root](){
 		cache_creator cc;
 
@@ -101,7 +101,7 @@ finder_by_class_name::finder_by_class_name(const svgdom::element& root) :
 	}())
 {}
 
-const std::vector<const svgdom::element*> finder_by_class_name::find(const std::string& class_name)const noexcept{
+const std::vector<const svgdom::element*> finder_by_class::find(const std::string& class_name)const noexcept{
 	if(class_name.length() == 0){
 		return {};
 	}

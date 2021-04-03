@@ -8,10 +8,10 @@
 
 namespace svgdom{
 
-class finder_by_tag_name{
+class finder_by_tag{
 public:
 
-	finder_by_tag_name(const svgdom::element& root);
+	finder_by_tag(const svgdom::element& root);
 
 	const std::vector<const element*> find(const std::string& tag_name)const noexcept;
 

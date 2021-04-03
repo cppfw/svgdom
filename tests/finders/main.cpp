@@ -1,7 +1,7 @@
 #include "../../src/svgdom/dom.hpp"
 #include "../../src/svgdom/util/finder_by_id.hpp"
-#include "../../src/svgdom/util/finder_by_class_name.hpp"
-#include "../../src/svgdom/util/finder_by_tag_name.hpp"
+#include "../../src/svgdom/util/finder_by_class.hpp"
+#include "../../src/svgdom/util/finder_by_tag.hpp"
 #include "../../src/svgdom/visitor.hpp"
 
 #include <utki/debug.hpp>
@@ -24,7 +24,7 @@ int main(int argc, char** argv){
 	ASSERT_INFO_ALWAYS(finder_by_id.size() == 2, "finder_by_id size = " << finder_by_id.size())
 
 	// Test elements-by-class-name finder
-	svgdom::finder_by_class_name finder_by_class_name(*dom);
+	svgdom::finder_by_class finder_by_class_name(*dom);
 
 	auto elements_by_class_name = finder_by_class_name.find("class1");
 
@@ -33,7 +33,7 @@ int main(int argc, char** argv){
 	ASSERT_INFO_ALWAYS(finder_by_class_name.size() == 2, "finder_by_class_name size = " << finder_by_class_name.size())
 
 	// Test elements-by-tag-name finder
-	svgdom::finder_by_tag_name finder_by_tag_name(*dom);
+	svgdom::finder_by_tag finder_by_tag_name(*dom);
 
 	auto elements_by_tag_name = finder_by_tag_name.find("circle");
 
