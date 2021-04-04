@@ -53,7 +53,7 @@ dependencies {
     implementation 'io.github.cppfw:utki:+'
     implementation 'io.github.cppfw:papki:+'
     implementation 'io.github.cppfw:mikroxml:+'
-    implementation 'io.github.cppfw:cssdom:+'
+    implementation 'io.github.cppfw:cssom:+'
     implementation 'io.github.cppfw:r4:+'
 }
 

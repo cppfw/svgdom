@@ -941,12 +941,12 @@ public:
 	}
 
 	void visit(style_element& e)override{
-		e.css.append(cssdom::read(
+		e.css.append(cssom::read(
 				papki::span_file(this->content),
 				[](const std::string& name) -> uint32_t{
 					return uint32_t(styleable::string_to_property(name));
 				},
-				[](uint32_t id, std::string&& v) -> std::unique_ptr<cssdom::property_value_base>{
+				[](uint32_t id, std::string&& v) -> std::unique_ptr<cssom::property_value_base>{
 					auto sp = style_property(id);
 					if(sp == style_property::unknown){
 						return nullptr;

@@ -4,7 +4,7 @@
 #include <vector>
 #include <variant>
 
-#include <cssdom/dom.hpp>
+#include <cssom/om.hpp>
 
 #include <r4/vector.hpp>
 #include <r4/rectangle.hpp>
@@ -243,7 +243,7 @@ style_value make_style_value(const r4::vector3<real>& rgb);
 /**
  * @brief An element which has 'style' attribute or can be styled.
  */
-struct styleable : public cssdom::styleable{
+struct styleable : public cssom::styleable{
 	std::map<style_property, style_value> styles;
 	std::map<style_property, style_value> presentation_attributes;
 

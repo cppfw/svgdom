@@ -3,16 +3,16 @@
 #include "element.hpp"
 #include "styleable.hpp"
 
-#include <cssdom/dom.hpp>
+#include <cssom/om.hpp>
 
 #include <string>
 
 namespace svgdom{
 
 struct style_element : public element{
-	cssdom::document css;
+	cssom::sheet css;
 
-	struct css_style_value : public cssdom::property_value_base{
+	struct css_style_value : public cssom::property_value_base{
 		style_value value;
 	};
 

@@ -445,7 +445,7 @@ void stream_writer::visit(const style_element& e){
 			[](uint32_t id) -> std::string{
 				return styleable::property_to_string(style_property(id));
 			},
-			[](uint32_t id, const cssdom::property_value_base& value) -> std::string{
+			[](uint32_t id, const cssom::property_value_base& value) -> std::string{
 				return styleable::style_value_to_string(
 						style_property(id),
 						static_cast<const style_element::css_style_value&>(value).value

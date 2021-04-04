@@ -8,7 +8,7 @@ this_soname := $(shell cat $(d)soname.txt)
 
 this_srcs := $(call prorab-src-dir,.)
 
-this_ldlibs += -lcssdom -lpapki -lmikroxml -lutki -lstdc++ -lm
+this_ldlibs += -lcssom -lpapki -lmikroxml -lutki -lstdc++ -lm
 
 ifeq ($(os),linux)
     this_cxxflags += -fPIC # Since we are building shared library, we need Position-Independend Code

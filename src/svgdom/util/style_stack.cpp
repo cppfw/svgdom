@@ -10,7 +10,7 @@ style_stack::crawler::crawler(decltype(stack) stack) :
 		stack(stack)
 {}
 
-const cssdom::styleable& style_stack::crawler::get(){
+const cssom::styleable& style_stack::crawler::get(){
 	ASSERT(!this->stack.empty())
 	
 	return this->iter->get();
@@ -78,7 +78,7 @@ style_stack::push::~push()noexcept{
 	this->ss.stack.pop_back();
 }
 
-void style_stack::add_css(const cssdom::document& css_doc){
+void style_stack::add_css(const cssom::sheet& css_doc){
 	this->css.push_back(css_doc);
 }
 
