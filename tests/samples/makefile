@@ -6,17 +6,8 @@ this_name := parsesvg
 
 this_srcs += main.cpp
 
-this_ldlibs += -lsvgdom -lpapki -lstdc++
+this_ldlibs += -lsvgdom -lpapki -lutki
 this_ldflags += -L$(d)../../src/out/$(c)
-
-ifeq ($(os), linux)
-    this_cxxflags += -fPIC
-    this_ldlibs +=
-else ifeq ($(os), macosx)
-    this_cxxflags += -stdlib=libc++ # this is needed to be able to use c++11 std lib
-    this_ldlibs += -lc++
-else ifeq ($(os),windows)
-endif
 
 this_no_install := true
 

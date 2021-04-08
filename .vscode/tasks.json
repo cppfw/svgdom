@@ -45,7 +45,7 @@
         {
             "label": "test",
             "type": "shell",
-            "command": "make test",
+            "command": "make test autojobs=true",
             "problemMatcher": [],
             "dependsOn": "build",
             "group": "build"
@@ -53,7 +53,7 @@
         {
             "label": "test_debug",
             "type": "shell",
-            "command": "make test config=dbg",
+            "command": "make test config=dbg autojobs=true",
             "problemMatcher": [],
             "dependsOn": "build_debug",
             "group": "build"
@@ -61,7 +61,7 @@
         {
             "label": "test_style_stack_debug",
             "type": "shell",
-            "command": "make -C tests/style_stack test config=dbg",
+            "command": "make -C tests/style_stack test config=dbg autojobs=true",
             "problemMatcher": [],
             "dependsOn": "build_debug",
             "group": "build"
