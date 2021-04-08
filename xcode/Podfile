@@ -5,9 +5,9 @@ project 'svgdom/svgdom.xcodeproj'
 platform :ios, '8.0'
 
 target "svgdom" do
-	pod 'utki', '>= 1.1.117'
-	pod 'papki', '>= 1.0.91'
-	pod 'mikroxml', '>= 0.1.34'
-	pod 'cssom', '>= 0.1.18'
-	pod 'r4', '>= 1.0.51'
+	pod 'utki', '>= 1.1.123'
+	pod 'papki', '>= 1.0.93'
+	pod 'mikroxml', '>= 0.1.36'
+	pod 'cssom', '>= 0.1.19'
+	pod 'r4', '>= 1.0.53'
 end

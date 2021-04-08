@@ -31,8 +31,8 @@ nuget{
 	}
 	dependencies {
 		packages : {
-			libutki/1.1.117;
-			libpapki/1.0.91;
+			libutki/1.1.123;
+			libpapki/1.0.93;
 			libmikroxml/0.1.34;
 			libcssom/0.1.18;
 			libr4/1.0.51;

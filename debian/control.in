@@ -4,10 +4,10 @@ Priority: extra
 Maintainer: Ivan Gagis <igagis@gmail.com>
 Build-Depends: debhelper (>= 9), prorab, prorab-extra, myci,
 		libc6-dev,
-		libutki-dev (>= 1.1.117),
+		libutki-dev (>= 1.1.123),
 		libpapki-dev,
 		libmikroxml-dev,
-		libcssom-dev (>= 0.1.18),
+		libcssom-dev (>= 0.1.19),
 		libr4-dev
 Build-Depends-Indep: doxygen
 Standards-Version: 3.9.2
