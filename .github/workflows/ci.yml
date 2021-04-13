@@ -175,6 +175,8 @@ jobs:
     - name: add cppfw pacman ${{ matrix.repo }} repo
       uses: myci-actions/add-pacman-repo@master
       with: {name: 'cppfw_${{ matrix.repo }}', url: 'https://cppfw.jfrog.io/artifactory/msys2/${{ matrix.repo }}', shell: 'msys2 {0}'}
+    - name: upgrade msys2
+      run: pacman -Syu --noconfirm
     - name: install ci tools
       run: pacman -Sy --noconfirm myci
     - name: prepare pacman package
