@@ -53,6 +53,7 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           check_name: "test report: ${{ github.job }} - ${{ matrix.image_owner }}${{ matrix.os }}:${{ matrix.codename }}"
           fail_on_failure: true
+        if: ${{ matrix.labels == '' }}
       - name: deploy deb packages
         run: myci-deploy-debian-jfrog.sh --domain cppfw --repo ${{ matrix.os }} --distro ${{ matrix.codename }} --component main ../lib${PACKAGE_NAME}*_${PACKAGE_VERSION}_*.deb
         if: matrix.package_type == 'deb' && startsWith(github.ref, 'refs/tags/')
