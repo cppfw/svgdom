@@ -8,7 +8,8 @@ Build-Depends: debhelper (>= 9), prorab, prorab-extra, myci,
 		libpapki-dev,
 		libmikroxml-dev,
 		libcssom-dev (>= 0.1.19),
-		libr4-dev
+		libr4-dev,
+		libtst-dev
 Build-Depends-Indep: doxygen
 Standards-Version: 3.9.2
 

@@ -13,7 +13,7 @@
             "group": "build"
         },
         {
-            "label": "build_debug",
+            "label": "build_dbg",
             "type": "shell",
             "command": "make autojobs=true config=dbg",
             "problemMatcher": [
@@ -36,7 +36,7 @@
             "group": "build"
         },
         {
-            "label": "clean_debug",
+            "label": "clean_dbg",
             "type": "shell",
             "command": "make clean config=dbg",
             "problemMatcher": [],
@@ -51,19 +51,27 @@
             "group": "build"
         },
         {
-            "label": "test_debug",
+            "label": "test_dbg",
             "type": "shell",
             "command": "make test config=dbg autojobs=true",
             "problemMatcher": [],
-            "dependsOn": "build_debug",
+            "dependsOn": "build_dbg",
             "group": "build"
         },
         {
-            "label": "test_style_stack_debug",
+            "label": "test_style_stack_dbg",
             "type": "shell",
             "command": "make -C tests/style_stack test config=dbg autojobs=true",
             "problemMatcher": [],
-            "dependsOn": "build_debug",
+            "dependsOn": "build_dbg",
+            "group": "build"
+        },
+		{
+            "label": "test_tst_dbg",
+            "type": "shell",
+            "command": "make -C tests/tst test config=dbg autojobs=true",
+            "problemMatcher": [],
+            "dependsOn": "build_dbg",
             "group": "build"
         }
     ]
