@@ -13,7 +13,7 @@ else
 endif
 
 this_ldflags += -L $(d)../../src/out/$(c)
-this_ldlibs += -ltst -lsvgdom -lutki
+this_ldlibs += -lsvgdom -ltst -lutki
 
 $(eval $(prorab-build-app))
 
