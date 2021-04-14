@@ -185,6 +185,8 @@ jobs:
       run: |
         cd msys2
         PKGEXT='.pkg.tar.xz' autojobs=true makepkg-mingw --syncdeps --noconfirm --skipinteg
+    - name: list
+      run: ls tests/tst/out/rel
     - name: publish test report
       uses: mikepenz/action-junit-report@v2.2.2
       with:
