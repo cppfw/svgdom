@@ -184,7 +184,7 @@ jobs:
       env: {MINGW_ARCH: '${{ matrix.repo }}'}
       run: |
         cd msys2
-        PKGEXT='.pkg.tar.xz' makepkg-mingw --syncdeps --noconfirm --skipinteg
+        PKGEXT='.pkg.tar.xz' autojobs=true makepkg-mingw --syncdeps --noconfirm --skipinteg
     - name: publish test report
       uses: mikepenz/action-junit-report@v2.2.2
       with:
