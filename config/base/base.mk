@@ -1,4 +1,5 @@
 this_cxxflags += -Wall # enable all warnings
+this_cxxflags += -Werror=no-comment # no errors about multi-line comments
 this_cxxflags += -Wnon-virtual-dtor # warn if base class has non-virtual destructor
 this_cxxflags += -Werror # treat warnings as errors
 # this_cxxflags += -Wfatal-errors # stop on first error encountered
