@@ -16,7 +16,7 @@ else
 endif
 
 this_ldflags += -L $(d)../../src/out/$(c)
-this_ldlibs += -ltst -lutki -lsvgdom -lcssom -lpapki
+this_ldlibs += -ltst -lutki -lsvgdom -lcssom -lpapki -lmikroxml
 
 this_cxxflags += $(addprefix -I,$(CONAN_INCLUDE_DIRS))
 this_ldflags += $(addprefix -L,$(CONAN_LIB_DIRS))
