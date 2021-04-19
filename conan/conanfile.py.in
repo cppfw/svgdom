@@ -11,7 +11,7 @@ class SvgdomConan(ConanFile):
 	settings = "os", "compiler", "build_type", "arch"
 	options = {"shared": [True, False], "fPIC": [True, False]}
 	default_options = {"shared": False, "fPIC": True}
-	requires = "utki/[>=0.0.0]", "mikroxml/[>=0.0.0]", "cssom/[>=0.0.0]", "r4/[>=0.0.0]"
+	requires = "utki/[>=0.0.0]", "mikroxml/[>=0.0.0]", "cssom/[>=0.0.0]", "r4/[>=0.0.0]", "tst/[>=0.0.0]"
 	generators = "make"
 
 	def config_options(self):
