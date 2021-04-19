@@ -10,7 +10,7 @@ $(eval $(call prorab-config, ../../config))
 
 this_srcs += main.cpp
 
-this_ldlibs += -lsvgdom -lpapki -lutki
+this_ldlibs += -lsvgdom -lpapki -lutki -lcssom
 this_ldflags += -L$(d)../../src/out/$(c)
 
 this_cxxflags += $(addprefix -I,$(CONAN_INCLUDE_DIRS))
