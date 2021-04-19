@@ -27,7 +27,7 @@ $(prorab_this_name): $(abspath $(d)../../src/out/$(c)/libsvgdom$(dot_so))
 
 this_test_cmd := echo "" | $(prorab_this_name) --jobs=$(prorab_nproc) --junit-out=junit.xml
 this_test_deps := $(prorab_this_name)
-this_test_ld_path := ../../src/out/$(c)
+this_test_ld_path := ../../src/out/$(c) $(CONAN_LIB_DIRS)
 
 $(eval $(prorab-test))
 
