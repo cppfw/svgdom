@@ -1,5 +1,8 @@
 include prorab.mk
 include prorab-test.mk
+include myci.mk
+
+$(eval $(call myci-try-include, $(CONANBUILDINFO_DIR)conanbuildinfo.mak))
 
 $(eval $(call prorab-config, ../../config))
 
@@ -14,6 +17,9 @@ endif
 
 this_ldflags += -L $(d)../../src/out/$(c)
 this_ldlibs += -ltst -lutki -lsvgdom
+
+this_cxxflags += $(addprefix -I,$(CONAN_INCLUDE_DIRS))
+this_ldflags += $(addprefix -L,$(CONAN_LIB_DIRS))
 
 $(eval $(prorab-build-app))
 
