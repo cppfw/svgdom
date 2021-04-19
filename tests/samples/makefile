@@ -10,7 +10,7 @@ this_name := parsesvg
 
 this_srcs += main.cpp
 
-this_ldlibs += -lsvgdom -lpapki -lutki -lcssom -lmikroxml
+this_ldlibs += -lsvgdom -lpapki -lutki $(addprefix -l,$(CONAN_LIBS))
 this_ldflags += -L$(d)../../src/out/$(c)
 
 this_cxxflags += $(addprefix -I,$(CONAN_INCLUDE_DIRS))

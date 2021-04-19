@@ -16,15 +16,15 @@ else
 endif
 
 this_ldflags += -L $(d)../../src/out/$(c)
-this_ldlibs += -ltst -lutki -lsvgdom -lpapki
+this_ldlibs += -ltst -lutki -lsvgdom -lpapki $(addprefix -l,$(CONAN_LIBS))
 
 this_cxxflags += $(addprefix -I,$(CONAN_INCLUDE_DIRS))
 this_ldflags += $(addprefix -L,$(CONAN_LIB_DIRS))
-ifeq ($(filter clang,$(this_ld)),) # if not clang linker
-    this_ldflags += -Wl,--unresolved-symbols=ignore-in-shared-libs
-else
-    this_ldflags += -Wl,-undefined,dynamic_lookup
-endif
+# ifeq ($(filter clang,$(this_ld)),) # if not clang linker
+#     this_ldflags += -Wl,--unresolved-symbols=ignore-in-shared-libs
+# else
+#     this_ldflags += -Wl,-undefined,dynamic_lookup
+# endif
 
 $(eval $(prorab-build-app))
 
