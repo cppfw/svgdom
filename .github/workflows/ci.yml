@@ -284,7 +284,10 @@ jobs:
           brew tap cppfw/tap
           brew update
       - name: install ci tools
-        run: brew install myci prorab prorab-extra conan
+        run: brew install myci prorab prorab-extra conan make
+      - name: set PATH
+        uses: myci-actions/export-env-var@master
+        with: {name: PATH, value: "/usr/local/opt/make/libexec/gnubin:$PATH"}
       - name: set PACKAGE_VERSION
         uses: myci-actions/export-env-var@master
         with: {name: PACKAGE_VERSION, value: $(myci-deb-version.sh debian/changelog)}
