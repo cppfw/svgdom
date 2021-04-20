@@ -53,7 +53,7 @@ tst::set set("finders", [](auto& suite){
 			tst::check(std::find(c.begin(), c.end(), cls) != c.end(), SL);
 		}
 
-		tst::check(finder_by_class_name.find("nono_existent_class").empty(), SL);
+		tst::check(finder_by_class_name.find("non_existent_class").empty(), SL);
 	});
 
 	suite.add("finder_by_tag", [](){
