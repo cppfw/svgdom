@@ -1,10 +1,11 @@
-#include "../../src/svgdom/dom.hpp"
-#include "../../src/svgdom/visitor.hpp"
-#include "../../src/svgdom/util/style_stack.hpp"
-
-#include <utki/debug.hpp>
+#include <tst/set.hpp>
+#include <tst/check.hpp>
 
 #include <papki/span_file.hpp>
+
+#include "../../src/svgdom/visitor.hpp"
+#include "../../src/svgdom/util/style_stack.hpp"
+#include "../../src/svgdom/dom.hpp"
 
 namespace{
 auto svg = R"qwertyuiop(
@@ -62,7 +63,7 @@ public:
 		svgdom::style_stack::push ss_push(this->ss, e);
 
 		auto sp = this->ss.get_style_property(svgdom::style_property::stroke);
-		ASSERT_INFO_ALWAYS(sp, "no stroke style property defined for circle with id=" << e.id)
+		tst::check(sp, [&](auto&o){o << "no stroke style property defined for circle with id=" << e.id;}, SL);
 
 		auto blue = svgdom::parse_paint("blue");
 		auto green = svgdom::parse_paint("green");
@@ -77,19 +78,23 @@ public:
 		};
 		
 		auto i = id_to_expected_stroke_map.find(e.id);
-		ASSERT_INFO_ALWAYS(i != id_to_expected_stroke_map.end(), "circle with id=" << e.id <<" not found in expected values map")
+		tst::check(i != id_to_expected_stroke_map.end(), [&](auto&o){o << "circle with id=" << e.id <<" not found in expected values map";}, SL);
 
-		ASSERT_INFO_ALWAYS(*std::get_if<uint32_t>(sp) == i->second, "expected stroke=0x" << std::hex << i->second <<", got stroke=0x" << *std::get_if<uint32_t>(sp) << " for circle with id=" << e.id)
+		tst::check(*std::get_if<uint32_t>(sp) == i->second, [&](auto&o){o << "expected stroke=0x" << std::hex << i->second <<", got stroke=0x" << *std::get_if<uint32_t>(sp) << " for circle with id=" << e.id;}, SL);
 	}
 };
 }
 
-int main(int argc, char** argv){
-	auto dom = svgdom::load(papki::span_file(utki::make_span(svg)));
-	ASSERT_ALWAYS(dom)
-	ASSERT_ALWAYS(dom->children.size() != 0)
-	
-	traverse_visitor v;
+namespace{
+tst::set set("style_stack", [](auto& suite){
+	suite.add("basic_test", [](){
+		auto dom = svgdom::load(papki::span_file(utki::make_span(svg)));
+		ASSERT_ALWAYS(dom)
+		ASSERT_ALWAYS(dom->children.size() != 0)
+		
+		traverse_visitor v;
 
-	dom->accept(v);
+		dom->accept(v);
+	});
+});
 }
