@@ -6,6 +6,8 @@ $(eval $(call myci-try-include, $(CONANBUILDINFO_DIR)conanbuildinfo.mak))
 
 $(eval $(call prorab-config, ../../config))
 
+this_no_install := true
+
 this_name := parsesvg
 
 this_srcs += main.cpp
@@ -15,8 +17,6 @@ this_ldflags += -L$(d)../../src/out/$(c)
 
 this_cxxflags += $(addprefix -I,$(CONAN_INCLUDE_DIRS))
 this_ldflags += $(addprefix -L,$(CONAN_LIB_DIRS))
-
-this_no_install := true
 
 $(eval $(prorab-build-app))
 

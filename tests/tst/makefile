@@ -6,6 +6,8 @@ $(eval $(call myci-try-include, $(CONANBUILDINFO_DIR)conanbuildinfo.mak))
 
 $(eval $(call prorab-config, ../../config))
 
+this_no_install := true
+
 this_name := tests
 
 this_srcs := $(call prorab-src-dir, .)
