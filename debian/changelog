@@ -1,3 +1,9 @@
+libsvgdom (0.3.63) unstable; urgency=medium
+
+  * do not install test app
+
+ -- Ivan Gagis <igagis@gmail.com>  Tue, 11 May 2021 16:13:09 +0300
+
 libsvgdom (0.3.62) unstable; urgency=medium
 
   * deploy to conan
