@@ -1,3 +1,9 @@
+libsvgdom (0.3.65) unstable; urgency=medium
+
+  * replink to latest utki
+
+ -- Ivan Gagis <igagis@gmail.com>  Sun, 30 May 2021 11:51:36 +0300
+
 libsvgdom (0.3.64) unstable; urgency=medium
 
   * rebuild against latest libs
