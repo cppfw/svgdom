@@ -1,8 +1,7 @@
 #include "length.hpp"
 
-#include <sstream>
-#include <iomanip>
 #include <cmath>
+#include <string_view>
 
 #include "util.hxx"
 
@@ -11,35 +10,35 @@ using namespace svgdom;
 length length::parse(const std::string& str){
 	length ret;
 
-	std::istringstream ss(str);
+	auto r = parse_real(str);
+
+	ret.value = r.number;
+
+	using std::min;
+	auto unit = std::string_view(
+			str.c_str() + r.stop_pos,
+			min(size_t(2), str.size() - r.stop_pos)
+		);
 	
-	ss >> std::skipws;
-	
-	ret.value = read_in_real(ss);
-	
-	std::string u;
-	
-	ss >> std::setw(2) >> u >> std::setw(0);
-	
-	if(u.empty()){
+	if(unit.empty()){
 		ret.unit = length_unit::number;
-	}else if(u == "%"){
+	}else if(unit == "%"){
 		ret.unit = length_unit::percent;
-	}else if(u == "em"){
+	}else if(unit == "em"){
 		ret.unit = length_unit::em;
-	}else if(u == "ex"){
+	}else if(unit == "ex"){
 		ret.unit = length_unit::ex;
-	}else if(u == "px"){
+	}else if(unit == "px"){
 		ret.unit = length_unit::px;
-	}else if(u == "cm"){
+	}else if(unit == "cm"){
 		ret.unit = length_unit::cm;
-	}else if(u == "mm"){
+	}else if(unit == "mm"){
 		ret.unit = length_unit::mm;
-	}else if(u == "in"){
+	}else if(unit == "in"){
 		ret.unit = length_unit::in;
-	}else if(u == "pt"){
+	}else if(unit == "pt"){
 		ret.unit = length_unit::pt;
-	}else if(u == "pc"){
+	}else if(unit == "pc"){
 		ret.unit = length_unit::pc;
 	}else{
 		ret.unit = length_unit::unknown;

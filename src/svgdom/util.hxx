@@ -23,7 +23,7 @@ std::string read_till_char_or_whitespace(std::istream& s, char c);
 real read_in_real(std::istream& s);
 
 struct parse_real_result{
-    real num;
+    real number;
     size_t stop_pos;
 };
 

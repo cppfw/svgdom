@@ -164,7 +164,7 @@ real svgdom::read_in_real(std::istream& s){
 	// To workaround this, need to read in the number to a separate string and parse it from there.
 	auto str = read_in_number_string(s);
 	
-	return parse_real(str).num;
+	return parse_real(str).number;
 }
 
 std::string svgdom::trim_tail(const std::string& s){
