@@ -126,7 +126,7 @@ void parser::parse_element(){
 			}else if(nsn.name == fe_gaussian_blur_element::tag){
 				this->parse_fe_gaussian_blur_element();
 			}else if(nsn.name == fe_color_matrix_element::tag){
-				this->parseFeColorMatrixElement();
+				this->parse_fe_color_matrix_element();
 			}else if(nsn.name == fe_blend_element::tag){
 				this->parseFeBlendElement();
 			}else if(nsn.name == fe_composite_element::tag){
@@ -593,7 +593,7 @@ void parser::parse_fe_gaussian_blur_element(){
 	this->add_element(std::move(ret));
 }
 
-void parser::parseFeColorMatrixElement(){
+void parser::parse_fe_color_matrix_element(){
 	ASSERT(this->get_namespace(this->cur_element).ns == xml_namespace::svg)
 	ASSERT(this->get_namespace(this->cur_element).name == fe_color_matrix_element::tag)
 	
