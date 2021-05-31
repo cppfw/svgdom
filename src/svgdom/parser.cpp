@@ -77,7 +77,7 @@ void parser::push_namespaces(){
 	}
 }
 
-void parser::popNamespaces(){
+void parser::pop_namespaces(){
 	ASSERT(this->namespace_stack.size() != 0)
 	this->namespace_stack.pop_back();
 	ASSERT(this->default_namespace_stack.size() != 0)
@@ -908,7 +908,7 @@ void parser::on_element_start(utki::span<const char> name){
 }
 
 void parser::on_element_end(utki::span<const char> name){
-	this->popNamespaces();
+	this->pop_namespaces();
 	this->element_stack.pop_back();
 }
 
