@@ -122,7 +122,7 @@ void parser::parse_element(){
 			}else if(nsn.name == polygon_element::tag){
 				this->parse_polygon_element();
 			}else if(nsn.name == filter_element::tag){
-				this->parseFilterElement();
+				this->parse_filter_element();
 			}else if(nsn.name == fe_gaussian_blur_element::tag){
 				this->parseFeGaussianBlurElement();
 			}else if(nsn.name == fe_color_matrix_element::tag){
@@ -526,7 +526,7 @@ void parser::parse_line_element(){
 	this->add_element(std::move(ret));
 }
 
-void parser::parseFilterElement(){
+void parser::parse_filter_element(){
 	ASSERT(this->get_namespace(this->cur_element).ns == xml_namespace::svg)
 	ASSERT(this->get_namespace(this->cur_element).name == filter_element::tag)
 	

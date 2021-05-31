@@ -110,7 +110,7 @@ class parser : public mikroxml::parser{
 	void parse_ellipse_element();
 	void parse_linear_gradient_element();
 	void parse_radial_gradient_element();
-	void parseFilterElement();
+	void parse_filter_element();
 	void parseFeGaussianBlurElement();
 	void parseFeColorMatrixElement();
 	void parseFeBlendElement();
