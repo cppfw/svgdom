@@ -18,6 +18,17 @@ void svgdom::skip_whitespaces(std::istream& s){
 	}
 }
 
+std::string_view svgdom::skip_whitespaces(std::string_view s){
+	size_t pos = 0;
+	for(char c : s){
+		if(!std::isspace(c)){
+			break;
+		}
+		++pos;
+	}
+	return s.substr(pos);
+}
+
 void svgdom::skip_whitespaces_and_comma(std::istream& s){
 	bool commaSkipped = false;
 	while(!s.eof()){
@@ -180,6 +191,23 @@ parse_real_result svgdom::parse_real(std::string_view str){
 	if(end == str.data()){
 		ret.error = true;
 	}
+
+	return ret;
+}
+
+read_word_result svgdom::read_word(std::string_view str){
+	read_word_result ret;
+
+	for(auto i = str.begin(); i != str.end(); ++i){
+		if(std::isspace(*i)){
+			auto dist = std::distance(str.begin(), i);
+			ret.word = str.substr(0, dist);
+			ret.view = str.substr(dist);
+			return ret;
+		}
+	}
+
+	ret.word = str;
 
 	return ret;
 }

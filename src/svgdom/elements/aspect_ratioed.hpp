@@ -23,7 +23,7 @@ struct aspect_ratioed{
 		bool slice = false;
 
 		std::string to_string()const;
-		void parse(const std::string& str);
+		void parse(std::string_view str);
 	} preserve_aspect_ratio;
 };
 

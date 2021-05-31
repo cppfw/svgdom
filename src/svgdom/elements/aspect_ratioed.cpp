@@ -2,10 +2,12 @@
 
 #include <sstream>
 
+#include "../util.hxx"
+
 using namespace svgdom;
 
 namespace{
-aspect_ratioed::aspect_ratio_preservation string_to_preserve_aspect_ratio(const std::string& str){
+aspect_ratioed::aspect_ratio_preservation string_to_preserve_aspect_ratio(std::string_view str){
 	if(str == "none"){
 		return aspect_ratioed::aspect_ratio_preservation::none;
 	}else if(str == "xMinYMin"){
@@ -31,39 +33,35 @@ aspect_ratioed::aspect_ratio_preservation string_to_preserve_aspect_ratio(const 
 }
 }
 
-void aspect_ratioed::aspect_ratio_preservation_value::parse(const std::string& str){
-	std::istringstream s(str);
+void aspect_ratioed::aspect_ratio_preservation_value::parse(std::string_view s){
+	s = skip_whitespaces(s);
+
+	auto w = read_word(s);
+	s = w.view;
+
+	s = skip_whitespaces(s);
 	
-	s >> std::skipws;
-	
-	std::string tmp;
-	
-	s >> tmp;
-	
-	if(s.fail()){
-		return;
-	}
-	
-	if(tmp == "defer"){
+	if(w.word == "defer"){
 		this->defer = true;
-		s >> tmp;
-		if(s.fail()){
+		w = read_word(s);
+		if(w.word.empty()){
 			return;
 		}
+		s = w.view;
 	}else{
 		this->defer = false;
 	}
-	
-	this->preserve = string_to_preserve_aspect_ratio(tmp);
-	
-	s >> tmp;
-	if(s.fail()){
+
+	this->preserve = string_to_preserve_aspect_ratio(w.word);
+
+	w = read_word(s);
+	if(w.word.empty()){
 		return;
 	}
-	
-	if(tmp == "meet"){
+
+	if(w.word == "meet"){
 		this->slice = false;
-	}else if(tmp == "slice"){
+	}else if(w.word == "slice"){
 		this->slice = true;
 	}
 }

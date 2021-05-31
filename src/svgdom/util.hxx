@@ -13,6 +13,8 @@ namespace svgdom{
 
 void skip_whitespaces(std::istream& s);
 
+std::string_view skip_whitespaces(std::string_view s);
+
 void skip_whitespaces_and_comma(std::istream& s);
 
 std::string_view skip_whitespaces_and_comma(std::string_view str);
@@ -24,6 +26,13 @@ std::string read_till_char(std::istream& s, char c);
 std::string read_till_char_or_whitespace(std::istream& s, char c);
 
 real read_in_real(std::istream& s);
+
+struct read_word_result{
+	std::string_view word;
+	std::string_view view;
+};
+
+read_word_result read_word(std::string_view str);
 
 struct parse_real_result{
     real number;
