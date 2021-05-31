@@ -222,7 +222,7 @@ void parser::fill_element(element& e){
 	}
 }
 
-void parser::fillGradient(gradient& g){
+void parser::fill_gradient(gradient& g){
 	this->fill_element(g);
 	this->fill_referencing(g);
 	this->fill_styleable(g);
@@ -732,7 +732,7 @@ void parser::parseLinearGradientElement(){
 
 	auto ret = std::make_unique<linear_gradient_element>();
 
-	this->fillGradient(*ret);
+	this->fill_gradient(*ret);
 
 	if(auto a = this->find_attribute_of_namespace(xml_namespace::svg, "x1")){
 		ret->x1 = length::parse(*a);
@@ -801,7 +801,7 @@ void parser::parseRadialGradientElement(){
 
 	auto ret = std::make_unique<radial_gradient_element>();
 
-	this->fillGradient(*ret);
+	this->fill_gradient(*ret);
 
 	if(auto a = this->find_attribute_of_namespace(xml_namespace::svg, "cx")){
 		ret->cx = length::parse(*a);
