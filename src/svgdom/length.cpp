@@ -8,7 +8,7 @@
 
 using namespace svgdom;
 
-length length::parse(const std::string& str) {
+length length::parse(const std::string& str){
 	length ret;
 
 	std::istringstream ss(str);
@@ -21,7 +21,7 @@ length length::parse(const std::string& str) {
 	
 	ss >> std::setw(2) >> u >> std::setw(0);
 	
-	if(u.length() == 0){
+	if(u.empty()){
 		ret.unit = length_unit::number;
 	}else if(u == "%"){
 		ret.unit = length_unit::percent;
