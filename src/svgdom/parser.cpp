@@ -640,13 +640,7 @@ void parser::parse_fe_color_matrix_element(){
 				// fall-through
 			case fe_color_matrix_element::type::saturate:
 				// one value is expected
-				{
-					std::istringstream ss(*a);
-					ret->values[0] = read_in_real(ss);
-					if(ss.fail()){
-						throw malformed_svg_error("malformed 'values' string of 'feColorMatrix' element");
-					}
-				}
+				ret->values[0] = parse_real(*a).number;
 				break;
 			case fe_color_matrix_element::type::luminance_to_alpha:
 				// no values are expected
