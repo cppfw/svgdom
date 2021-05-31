@@ -7,7 +7,7 @@
 using namespace svgdom;
 
 
-std::string transformable::transformations_to_string() const {
+std::string transformable::transformations_to_string() const{
 	std::stringstream s;
 
 	bool isFirst = true;

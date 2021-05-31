@@ -232,7 +232,7 @@ style_value styleable::parse_style_property_value(style_property type, const std
 			return parse_color_interpolation(str);
 		case style_property::stroke_miterlimit:
 			{
-				std::stringstream iss(str);
+				std::istringstream iss(str);
 				real miterlimit = read_in_real(iss);
 				using std::max;
 				miterlimit = max(miterlimit, real(1)); // minimal value is 1

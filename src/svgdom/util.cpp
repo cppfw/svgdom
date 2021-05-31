@@ -43,30 +43,29 @@ void svgdom::skip_till_char_inclusive(std::istream& s, char c){
 }
 
 std::string svgdom::read_till_char(std::istream& s, char c){
-	std::stringstream ss;
+	std::vector<char> ss;
 	while(!s.eof()){
 		if(s.peek() == c || s.peek() == std::char_traits<char>::eof()){
 			break;
 		}
-		ss << char(s.get());
+		ss.push_back(char(s.get()));
 	}
-	return ss.str();
+	return utki::make_string(ss);
 }
 
 std::string svgdom::read_till_char_or_whitespace(std::istream& s, char c){
-	std::stringstream ss;
+	std::vector<char> ss;
 	while(!s.eof()){
 		if(std::isspace(s.peek()) || s.peek() == c || s.peek() == std::char_traits<char>::eof()){
 			break;
 		}
-		ss << char(s.get());
+		ss.push_back(char(s.get()));
 	}
-	return ss.str();
+	return utki::make_string(ss);
 }
 
-
 namespace{
-std::string readInNumberString(std::istream& s){
+std::string read_in_number_string(std::istream& s){
 	std::vector<char> ss;
 	
 	bool sign = false;
@@ -144,7 +143,7 @@ real svgdom::read_in_real(std::istream& s){
 	// On MacOS reading in the number which is terminated by non-number and non-whitespace character,
 	// e.g. "0c" will result in stream error, i.e. s.fail() will return true and stream will be in unreadable state.
 	// To workaround this, need to read in the number to a separate string and parse it from there.
-	auto str = readInNumberString(s);
+	auto str = read_in_number_string(s);
 	
 	if(str.length() == 0){
 		return 0;
