@@ -63,7 +63,7 @@
             "type": "shell",
             "command": "make test autojobs=true",
             "problemMatcher": [],
-            "dependsOn": "build_dbg",
+            "dependsOn": "build",
             "group": "build"
         },
         {
@@ -87,7 +87,7 @@
             "type": "shell",
             "command": "make -C tests/unit test autojobs=true",
             "problemMatcher": [],
-            "dependsOn": "build_dbg",
+            "dependsOn": "build",
             "group": "build"
         }
     ]
