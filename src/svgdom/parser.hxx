@@ -55,7 +55,7 @@ class parser : public mikroxml::parser{
 	
 	const std::string* find_attribute_of_namespace(xml_namespace ns, const std::string& name);
 
-	void pushNamespaces();
+	void push_namespaces();
 	void popNamespaces();
 	
 	std::string cur_element;

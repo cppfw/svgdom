@@ -29,7 +29,7 @@ gradient::spread_method gradientStringToSpreadMethod(const std::string& str){
 }
 }
 
-void parser::pushNamespaces(){
+void parser::push_namespaces(){
 	// parse default namespace
 	{
 		auto i = this->attributes.find("xmlns");
@@ -920,7 +920,7 @@ void parser::on_attribute_parsed(utki::span<const char> name, utki::span<const c
 void parser::on_attributes_end(bool is_empty_element){
 //	TRACE(<< "this->cur_element = " << this->cur_element << std::endl)
 //	TRACE(<< "this->element_stack.size() = " << this->element_stack.size() << std::endl)
-	this->pushNamespaces();
+	this->push_namespaces();
 
 	this->parse_element();
 
