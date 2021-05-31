@@ -175,7 +175,6 @@ std::string svgdom::iri_to_local_id(const std::string& iri){
 	return std::string();
 }
 
-
 coordinate_units svgdom::parse_coordinate_units(const std::string& s){
 	if(s == "userSpaceOnUse"){
 		return coordinate_units::user_space_on_use;
@@ -184,7 +183,6 @@ coordinate_units svgdom::parse_coordinate_units(const std::string& s){
 	}
 	return coordinate_units::unknown;
 }
-
 
 std::string svgdom::coordinate_units_to_string(coordinate_units u){
 	switch(u){
@@ -196,7 +194,6 @@ std::string svgdom::coordinate_units_to_string(coordinate_units u){
 			return "userSpaceOnUse";
 	}
 }
-
 
 r4::vector2<real> svgdom::parse_number_and_optional_number(const std::string& s, r4::vector2<real> defaults){
 	r4::vector2<real> ret;

@@ -25,9 +25,7 @@ class parser : public mikroxml::parser{
 	enum class xml_namespace{
 		unknown,
 		svg,
-		xlink,
-		
-		enum_size
+		xlink
 	};
 	
 	std::vector<

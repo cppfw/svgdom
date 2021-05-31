@@ -19,7 +19,6 @@ namespace svgdom{
  * to implement their own operation to perform on each SVG element.
  */
 class visitor{
-private:
 	container* cur_parent_container = nullptr;
 	decltype(container::children)::iterator cur_iterator;
 	
