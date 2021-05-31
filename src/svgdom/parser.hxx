@@ -72,7 +72,7 @@ class parser : public mikroxml::parser{
 	void on_attributes_end(bool is_empty_element) override;
 	void on_content_parsed(utki::span<const char> str) override;
 
-	void fillElement(element& e);
+	void fill_element(element& e);
 	void fillReferencing(referencing& e);
 	void fillRectangle(
 			rectangle& r,
