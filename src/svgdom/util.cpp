@@ -1,7 +1,10 @@
 #include "util.hxx"
 
+#include <utki/string.hpp>
+
 #include <sstream>
 #include <cctype>
+#include <vector>
 
 using namespace svgdom;
 
@@ -64,7 +67,7 @@ std::string svgdom::read_till_char_or_whitespace(std::istream& s, char c){
 
 namespace{
 std::string readInNumberString(std::istream& s){
-	std::stringstream ss;
+	std::vector<char> ss;
 	
 	bool sign = false;
 	bool expSign = false;
@@ -96,11 +99,11 @@ std::string readInNumberString(std::istream& s){
 			case '-':
 				if(sign){
 					if(expSign){
-						return ss.str();
+						return utki::make_string(ss);
 					}
 					expSign = true;
 					if(!exponent){
-						return ss.str();
+						return utki::make_string(ss);
 					}
 				}
 				sign = true;
@@ -109,39 +112,38 @@ std::string readInNumberString(std::istream& s){
 			case 'E':
 				sign = true;
 				if(exponent){
-					return ss.str();
+					return utki::make_string(ss);
 				}
 				exponent = true;
 				break;
 			case '.':
 				if(dot || exponent){
-					return ss.str();
+					return utki::make_string(ss);
 				}
 				sign = true;
 				dot = true;
 				break;
 			default:
 				if(!validNumber){
-					//WORKAROUND: if no valid number was read then we need to leave stream in failed state
-					//to do that, try to read in the float number (we know it should fail since no valid number detected on stream).
+					// WORKAROUND: if no valid number was read then we need to leave stream in failed state
+					// to do that, try to read in the float number (we know it should fail since no valid number detected on stream).
 					float x;
 					s >> x;
 				}
-				return ss.str();
+				return utki::make_string(ss);
 		}
-		ss << char(s.get());
+		ss.push_back(char(s.get()));
 	}
-	return ss.str();
+	return utki::make_string(ss);
 }
 }
 
-
-real svgdom::read_in_real(std::istream& s) {
+real svgdom::read_in_real(std::istream& s){
 	skip_whitespaces(s);
 	
-	//On MacOS reading in the number which is terminated by non-number and non-whitespace character,
-	//e.g. "0c" will result in stream error, i.e. s.fail() will return true and stream will be in unreadable state.
-	//To workaround this, need to read in the number to a separate string and parse it from there.
+	// On MacOS reading in the number which is terminated by non-number and non-whitespace character,
+	// e.g. "0c" will result in stream error, i.e. s.fail() will return true and stream will be in unreadable state.
+	// To workaround this, need to read in the number to a separate string and parse it from there.
 	auto str = readInNumberString(s);
 	
 	if(str.length() == 0){
@@ -150,9 +152,9 @@ real svgdom::read_in_real(std::istream& s) {
 	
 	std::istringstream iss(str);
 	
-	//Visual Studio standard library fails to parse numbers to 'float' if it does not actually fit into 'float',
-	//for example, parsing of "5.47382e-48" to float fails instead of giving 0.
-	//To workaround this read in to the biggest precision type 'long double'.
+	// Visual Studio standard library fails to parse numbers to 'float' if it does not actually fit into 'float',
+	// for example, parsing of "5.47382e-48" to float fails instead of giving 0.
+	// To workaround this read in to the biggest precision type 'long double'.
 	long double x;
 	iss >> x;
 	return real(x);
