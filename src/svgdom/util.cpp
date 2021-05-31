@@ -252,9 +252,9 @@ r4::vector2<real> svgdom::parse_number_and_optional_number(std::string_view s, r
 		auto r = parse_real(s);
 		if(r.stop_pos == 0){
 			ret[1] = defaults[1];
+		}else{
+			ret[1] = r.number;
 		}
-
-		ret[1] = r.number;
 	}
 
 	return ret;
