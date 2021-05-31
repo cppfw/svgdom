@@ -307,7 +307,7 @@ void parser::fillTransformable(transformable& t){
 	}
 }
 
-void parser::fillViewBoxed(view_boxed& v){
+void parser::fill_view_boxed(view_boxed& v){
 	if(auto a = this->find_attribute_of_namespace(xml_namespace::svg, "viewBox")){
 		v.view_box = svg_element::parse_view_box(*a);
 	}
@@ -850,7 +850,7 @@ void parser::parseSvgElement(){
 	this->fill_element(*ret);
 	this->fillStyleable(*ret);
 	this->fill_rectangle(*ret);
-	this->fillViewBoxed(*ret);
+	this->fill_view_boxed(*ret);
 	this->fillAspectRatioed(*ret);
 	
 	this->add_element(std::move(ret));
@@ -882,7 +882,7 @@ void parser::parseSymbolElement(){
 
 	this->fill_element(*ret);
 	this->fillStyleable(*ret);
-	this->fillViewBoxed(*ret);
+	this->fill_view_boxed(*ret);
 	this->fillAspectRatioed(*ret);
 
 	this->add_element(std::move(ret));
