@@ -106,7 +106,7 @@ void parser::parse_element(){
 			}else if(nsn.name == linear_gradient_element::tag){
 				this->parse_linear_gradient_element();
 			}else if(nsn.name == radial_gradient_element::tag){
-				this->parseRadialGradientElement();
+				this->parse_radial_gradient_element();
 			}else if(nsn.name == gradient::stop_element::tag){
 				this->parse_gradient_stop_element();
 			}else if(nsn.name == rect_element::tag){
@@ -795,7 +795,7 @@ void parser::parse_polyline_element(){
 	this->add_element(std::move(ret));
 }
 
-void parser::parseRadialGradientElement(){
+void parser::parse_radial_gradient_element(){
 	ASSERT(this->get_namespace(this->cur_element).ns == xml_namespace::svg)
 	ASSERT(this->get_namespace(this->cur_element).name == radial_gradient_element::tag)
 
