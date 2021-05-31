@@ -14,12 +14,8 @@ length length::parse(const std::string& str){
 
 	ret.value = r.number;
 
-	using std::min;
-	auto unit = std::string_view(
-			str.c_str() + r.stop_pos,
-			min(size_t(2), str.size() - r.stop_pos)
-		);
-	
+	auto unit = r.view;
+
 	if(unit.empty()){
 		ret.unit = length_unit::number;
 	}else if(unit == "%"){

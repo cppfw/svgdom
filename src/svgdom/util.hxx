@@ -15,7 +15,7 @@ void skip_whitespaces(std::istream& s);
 
 void skip_whitespaces_and_comma(std::istream& s);
 
-size_t skip_whitespaces_and_comma(const std::string_view str);
+std::string_view skip_whitespaces_and_comma(std::string_view str);
 
 void skip_till_char_inclusive(std::istream& s, char c);
 
@@ -27,7 +27,8 @@ real read_in_real(std::istream& s);
 
 struct parse_real_result{
     real number;
-    size_t stop_pos; // set to 0 if no valid number string found
+    std::string_view view; // view after parsing
+	bool error = false;
 };
 
 parse_real_result parse_real(std::string_view str);

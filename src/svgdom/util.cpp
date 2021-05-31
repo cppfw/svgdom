@@ -35,24 +35,24 @@ void svgdom::skip_whitespaces_and_comma(std::istream& s){
 	}
 }
 
-size_t svgdom::skip_whitespaces_and_comma(const std::string_view str){
-	size_t ret = 0;
+std::string_view svgdom::skip_whitespaces_and_comma(std::string_view str){
+	size_t pos = 0;
 
 	bool comma_skipped = false;
 	for(char c : str){
 		if(std::isspace(c)){
-			++ret;
+			++pos;
 		}else if(c == ','){
 			if(comma_skipped){
 				break;
 			}
-			++ret;
+			++pos;
 			comma_skipped = true;
 		}else{
 			break;
 		}
 	}
-	return ret;
+	return str.substr(pos);
 }
 
 void svgdom::skip_till_char_inclusive(std::istream& s, char c){
@@ -159,7 +159,7 @@ std::string read_in_number_string(std::istream& s){
 }
 
 parse_real_result svgdom::parse_real(std::string_view str){
-	if(str.length() == 0){
+	if(str.empty()){
 		return {0, 0};
 	}
 	
@@ -175,7 +175,11 @@ parse_real_result svgdom::parse_real(std::string_view str){
 		ret.number = real(std::strtold(str.data(), &end));
 	}
 
-	ret.stop_pos = end - str.data();
+	ret.view = std::string_view(end, str.data() + str.size() - end);
+
+	if(end == str.data()){
+		ret.error = true;
+	}
 
 	return ret;
 }
@@ -232,16 +236,16 @@ r4::vector2<real> svgdom::parse_number_and_optional_number(std::string_view s, r
 
 	{
 		auto r = parse_real(s);
-		if(r.stop_pos == 0){
+		if(r.error){
 			return defaults;
 		}
 
 		ret[0] = r.number;
 
-		s = s.substr(r.stop_pos);
+		s = r.view;
 	}
 
-	s = s.substr(skip_whitespaces_and_comma(s));
+	s = skip_whitespaces_and_comma(s);
 
 	if(s.empty()){
 		ret[1] = defaults[1];
@@ -250,7 +254,7 @@ r4::vector2<real> svgdom::parse_number_and_optional_number(std::string_view s, r
 
 	{
 		auto r = parse_real(s);
-		if(r.stop_pos == 0){
+		if(r.error){
 			ret[1] = defaults[1];
 		}else{
 			ret[1] = r.number;

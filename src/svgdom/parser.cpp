@@ -495,7 +495,7 @@ void parser::parse_gradient_stop_element(){
 	if(auto a = this->find_attribute_of_namespace(xml_namespace::svg, "offset")){
 		auto r = parse_real(*a);
 		ret->offset = r.number;
-		if(r.stop_pos < a->size() && a->operator[](r.stop_pos) == '%'){
+		if(!r.view.empty() && r.view.front() == '%'){
 			ret->offset /= 100;
 		}
 	}
@@ -624,15 +624,13 @@ void parser::parse_fe_color_matrix_element(){
 			case fe_color_matrix_element::type::matrix:
 				// 20 values expected
 				{
-					size_t pos = 0;
+					std::string_view v(*a);
 					for(unsigned i = 0; i != 20; ++i){
-						auto v = std::string_view(*a).substr(pos);
-
 						auto r = parse_real(v);
-						pos += r.stop_pos;
+						v = r.view;
 
 						ret->values[i] = r.number;
-						pos += skip_whitespaces_and_comma(v);
+						v = skip_whitespaces_and_comma(v);
 					}
 				}
 				break;

@@ -5,7 +5,7 @@
 using namespace svgdom;
 
 namespace{
-aspect_ratioed::aspect_ratio_preservation stringToPreserveAspectRatio(const std::string& str){
+aspect_ratioed::aspect_ratio_preservation string_to_preserve_aspect_ratio(const std::string& str){
 	if(str == "none"){
 		return aspect_ratioed::aspect_ratio_preservation::none;
 	}else if(str == "xMinYMin"){
@@ -54,7 +54,7 @@ void aspect_ratioed::aspect_ratio_preservation_value::parse(const std::string& s
 		this->defer = false;
 	}
 	
-	this->preserve = stringToPreserveAspectRatio(tmp);
+	this->preserve = string_to_preserve_aspect_ratio(tmp);
 	
 	s >> tmp;
 	if(s.fail()){
