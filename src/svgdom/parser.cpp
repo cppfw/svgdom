@@ -321,7 +321,7 @@ void parser::fill_style(style_element& e){
 	// TODO: parse missing attributes
 }
 
-void parser::fillAspectRatioed(aspect_ratioed& e){
+void parser::fill_aspect_ratioed(aspect_ratioed& e){
 	if(auto a = this->find_attribute_of_namespace(xml_namespace::svg, "preserveAspectRatio")){
 		e.preserve_aspect_ratio.parse(*a);
 	}
@@ -851,7 +851,7 @@ void parser::parseSvgElement(){
 	this->fillStyleable(*ret);
 	this->fill_rectangle(*ret);
 	this->fill_view_boxed(*ret);
-	this->fillAspectRatioed(*ret);
+	this->fill_aspect_ratioed(*ret);
 	
 	this->add_element(std::move(ret));
 }
@@ -867,7 +867,7 @@ void parser::parseImageElement(){
 	this->fillTransformable(*ret);
 	this->fill_rectangle(*ret);
 	this->fill_referencing(*ret);
-	this->fillAspectRatioed(*ret);
+	this->fill_aspect_ratioed(*ret);
 
 	this->add_element(std::move(ret));
 }
@@ -883,7 +883,7 @@ void parser::parseSymbolElement(){
 	this->fill_element(*ret);
 	this->fillStyleable(*ret);
 	this->fill_view_boxed(*ret);
-	this->fillAspectRatioed(*ret);
+	this->fill_aspect_ratioed(*ret);
 
 	this->add_element(std::move(ret));
 }
