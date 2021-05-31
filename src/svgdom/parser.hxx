@@ -74,7 +74,7 @@ class parser : public mikroxml::parser{
 
 	void fill_element(element& e);
 	void fill_referencing(referencing& e);
-	void fillRectangle(
+	void fill_rectangle(
 			rectangle& r,
 			const rectangle& defaultValues = rectangle(
 					length(0, length_unit::percent),

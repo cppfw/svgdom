@@ -238,7 +238,7 @@ void parser::fillGradient(gradient& g){
 	}
 }
 
-void parser::fillRectangle(rectangle& r, const rectangle& defaultValues){
+void parser::fill_rectangle(rectangle& r, const rectangle& defaultValues){
 	r = defaultValues;
 	
 	if(auto a = this->find_attribute_of_namespace(xml_namespace::svg, "x")){
@@ -401,7 +401,7 @@ void parser::parseMaskElement(){
 	auto ret = std::make_unique<mask_element>();
 
 	this->fill_element(*ret);
-	this->fillRectangle(*ret);
+	this->fill_rectangle(*ret);
 	this->fillStyleable(*ret);
 
 	if(auto a = this->find_attribute_of_namespace(xml_namespace::svg, "maskUnits")){
@@ -534,7 +534,7 @@ void parser::parseFilterElement(){
 	
 	this->fill_element(*ret);
 	this->fillStyleable(*ret);
-	this->fillRectangle(
+	this->fill_rectangle(
 			*ret,
 			rectangle(
 					length(-10, length_unit::percent),
@@ -557,7 +557,7 @@ void parser::parseFilterElement(){
 
 void parser::fillFilterPrimitive(filter_primitive& p){
 	this->fill_element(p);
-	this->fillRectangle(p);
+	this->fill_rectangle(p);
 	this->fillStyleable(p);
 
 	if(auto a = this->find_attribute_of_namespace(xml_namespace::svg, "result")){
@@ -829,7 +829,7 @@ void parser::parseRectElement(){
 	auto ret = std::make_unique<rect_element>();
 
 	this->fillShape(*ret);
-	this->fillRectangle(*ret, rect_element::rectangle_default_values());
+	this->fill_rectangle(*ret, rect_element::rectangle_default_values());
 
 	if(auto a = this->find_attribute_of_namespace(xml_namespace::svg, "rx")){
 		ret->rx = length::parse(*a);
@@ -849,7 +849,7 @@ void parser::parseSvgElement(){
 
 	this->fill_element(*ret);
 	this->fillStyleable(*ret);
-	this->fillRectangle(*ret);
+	this->fill_rectangle(*ret);
 	this->fillViewBoxed(*ret);
 	this->fillAspectRatioed(*ret);
 	
@@ -865,7 +865,7 @@ void parser::parseImageElement(){
 	this->fill_element(*ret);
 	this->fillStyleable(*ret);
 	this->fillTransformable(*ret);
-	this->fillRectangle(*ret);
+	this->fill_rectangle(*ret);
 	this->fill_referencing(*ret);
 	this->fillAspectRatioed(*ret);
 
@@ -898,7 +898,7 @@ void parser::parseUseElement(){
 	this->fillTransformable(*ret);
 	this->fillStyleable(*ret);
 	this->fill_referencing(*ret);
-	this->fillRectangle(*ret);
+	this->fill_rectangle(*ret);
 
 	this->add_element(std::move(ret));
 }
