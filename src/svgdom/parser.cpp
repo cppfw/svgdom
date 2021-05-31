@@ -136,7 +136,7 @@ void parser::parse_element(){
 			}else if(nsn.name == mask_element::tag){
 				this->parse_mask_element();
 			}else if(nsn.name == text_element::tag){
-				this->parseTextElement();
+				this->parse_text_element();
 			}else if(nsn.name == style_element::tag){
 				this->parse_style_element();
 			}else{
@@ -415,7 +415,7 @@ void parser::parse_mask_element(){
 	this->add_element(std::move(ret));
 }
 
-void parser::parseTextElement(){
+void parser::parse_text_element(){
 	ASSERT(this->get_namespace(this->cur_element).ns == xml_namespace::svg)
 	ASSERT(this->get_namespace(this->cur_element).name == text_element::tag)
 
