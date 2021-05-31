@@ -193,7 +193,7 @@ parser::namespace_name_pair parser::get_namespace(const std::string& xmlName){
 	return ret;
 }
 
-const std::string* parser::findAttribute(const std::string& name){
+const std::string* parser::find_attribute(const std::string& name){
 	auto i = this->attributes.find(name);
 	if(i != this->attributes.end()){
 		return &i->second;
@@ -203,13 +203,13 @@ const std::string* parser::findAttribute(const std::string& name){
 
 const std::string* parser::findAttributeOfNamespace(xml_namespace ns, const std::string& name){
 	if(this->default_namespace_stack.back() == ns){
-		if(auto a = this->findAttribute(name)){
+		if(auto a = this->find_attribute(name)){
 			return a;
 		}
 	}
 	
 	if(auto prefix = this->find_flipped_namespace(ns)){
-		if(auto a = this->findAttribute(*prefix + ":" + name)){
+		if(auto a = this->find_attribute(*prefix + ":" + name)){
 			return a;
 		}
 	}
