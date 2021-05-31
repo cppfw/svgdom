@@ -110,7 +110,7 @@ void parser::parse_element(){
 			}else if(nsn.name == gradient::stop_element::tag){
 				this->parse_gradient_stop_element();
 			}else if(nsn.name == rect_element::tag){
-				this->parseRectElement();
+				this->parse_rect_element();
 			}else if(nsn.name == circle_element::tag){
 				this->parseCircleElement();
 			}else if(nsn.name == ellipse_element::tag){
@@ -822,7 +822,7 @@ void parser::parseRadialGradientElement(){
 	this->add_element(std::move(ret));
 }
 
-void parser::parseRectElement(){
+void parser::parse_rect_element(){
 	ASSERT(this->get_namespace(this->cur_element).ns == xml_namespace::svg)
 	ASSERT(this->get_namespace(this->cur_element).name == rect_element::tag)
 
