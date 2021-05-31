@@ -112,7 +112,7 @@ void parser::parse_element(){
 			}else if(nsn.name == rect_element::tag){
 				this->parse_rect_element();
 			}else if(nsn.name == circle_element::tag){
-				this->parseCircleElement();
+				this->parse_circle_element();
 			}else if(nsn.name == ellipse_element::tag){
 				this->parseEllipseElement();
 			}else if(nsn.name == line_element::tag){
@@ -360,7 +360,7 @@ void parser::add_element(std::unique_ptr<element> e){
 	this->element_stack.push_back(elem);
 }
 
-void parser::parseCircleElement(){
+void parser::parse_circle_element(){
 	ASSERT(this->get_namespace(this->cur_element).ns == xml_namespace::svg)
 	ASSERT(this->get_namespace(this->cur_element).name == circle_element::tag)
 
