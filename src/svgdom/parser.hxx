@@ -33,7 +33,7 @@ class parser : public mikroxml::parser{
 	
 	std::vector<
 			std::map<std::string, XmlNamespace_e>
-		> namespacesStack;
+		> namespace_stack;
 	std::vector<
 			std::map<XmlNamespace_e, std::string>
 		> flippedNamespacesStack;
@@ -42,14 +42,14 @@ class parser : public mikroxml::parser{
 	
 	
 	XmlNamespace_e find_namespace(const std::string& ns);
-	const std::string* findFlippedNamespace(XmlNamespace_e ns);
+	const std::string* find_flipped_namespace(XmlNamespace_e ns);
 	
-	struct NamespaceNamePair{
+	struct namespace_name_pair{
 		XmlNamespace_e ns;
 		std::string name;
 	};
 	
-	NamespaceNamePair getNamespace(const std::string& xmlName);
+	namespace_name_pair getNamespace(const std::string& xmlName);
 	
 	const std::string* findAttribute(const std::string& name);
 	

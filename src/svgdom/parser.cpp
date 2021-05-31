@@ -54,7 +54,7 @@ void parser::pushNamespaces(){
 	{
 		std::string xmlns = "xmlns:";
 		
-		this->namespacesStack.push_back(decltype(this->namespacesStack)::value_type());
+		this->namespace_stack.push_back(decltype(this->namespace_stack)::value_type());
 		
 		for(auto& e : this->attributes){
 			const auto& attr = e.first;
@@ -67,19 +67,19 @@ void parser::pushNamespaces(){
 			auto nsName = attr.substr(xmlns.length(), attr.length() - xmlns.length());
 			
 			if(e.second == DSvgNamespace){
-				this->namespacesStack.back()[nsName] = XmlNamespace_e::SVG;
+				this->namespace_stack.back()[nsName] = XmlNamespace_e::SVG;
 			}else if(e.second == DXlinkNamespace){
-				this->namespacesStack.back()[nsName] = XmlNamespace_e::XLINK;
+				this->namespace_stack.back()[nsName] = XmlNamespace_e::XLINK;
 			}
 		}
 		
-		this->flippedNamespacesStack.push_back(utki::flip_map(this->namespacesStack.back()));
+		this->flippedNamespacesStack.push_back(utki::flip_map(this->namespace_stack.back()));
 	}
 }
 
 void parser::popNamespaces(){
-	ASSERT(this->namespacesStack.size() != 0)
-	this->namespacesStack.pop_back();
+	ASSERT(this->namespace_stack.size() != 0)
+	this->namespace_stack.pop_back();
 	ASSERT(this->defaultNamespaceStack.size() != 0)
 	this->defaultNamespaceStack.pop_back();
 	ASSERT(this->flippedNamespacesStack.size() != 0)
@@ -152,7 +152,7 @@ void parser::parse_element(){
 }
 
 parser::XmlNamespace_e parser::find_namespace(const std::string& ns){
-	for(auto i = this->namespacesStack.rbegin(), e = this->namespacesStack.rend(); i != e; ++i){
+	for(auto i = this->namespace_stack.rbegin(), e = this->namespace_stack.rend(); i != e; ++i){
 		auto iter = i->find(ns);
 		if(iter == i->end()){
 			continue;
@@ -163,7 +163,7 @@ parser::XmlNamespace_e parser::find_namespace(const std::string& ns){
 	return XmlNamespace_e::UNKNOWN;
 }
 
-const std::string* parser::findFlippedNamespace(XmlNamespace_e ns){
+const std::string* parser::find_flipped_namespace(XmlNamespace_e ns){
 	for(auto i = this->flippedNamespacesStack.rbegin(), e = this->flippedNamespacesStack.rend(); i != e; ++i){
 		auto iter = i->find(ns);
 		if(iter == i->end()){
@@ -175,8 +175,8 @@ const std::string* parser::findFlippedNamespace(XmlNamespace_e ns){
 	return nullptr;
 }
 
-parser::NamespaceNamePair parser::getNamespace(const std::string& xmlName){
-	NamespaceNamePair ret;
+parser::namespace_name_pair parser::getNamespace(const std::string& xmlName){
+	namespace_name_pair ret;
 
 	auto colonIndex = xmlName.find_first_of(':');
 	if(colonIndex == std::string::npos){
@@ -208,7 +208,7 @@ const std::string* parser::findAttributeOfNamespace(XmlNamespace_e ns, const std
 		}
 	}
 	
-	if(auto prefix = this->findFlippedNamespace(ns)){
+	if(auto prefix = this->find_flipped_namespace(ns)){
 		if(auto a = this->findAttribute(*prefix + ":" + name)){
 			return a;
 		}
