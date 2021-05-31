@@ -313,7 +313,7 @@ void parser::fill_view_boxed(view_boxed& v){
 	}
 }
 
-void parser::fillTextPositioning(text_positioning& p){
+void parser::fill_text_positioning(text_positioning& p){
 	// TODO: parse missing attributes
 }
 
@@ -424,7 +424,7 @@ void parser::parseTextElement(){
 	this->fill_element(*ret);
 	this->fill_styleable(*ret);
 	this->fill_transformable(*ret);
-	this->fillTextPositioning(*ret);
+	this->fill_text_positioning(*ret);
 	
 	//TODO: parse missing text element attributes
 	
