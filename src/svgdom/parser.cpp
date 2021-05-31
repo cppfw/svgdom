@@ -571,7 +571,7 @@ void parser::fill_inputable(inputable& p){
 	}
 }
 
-void parser::fillSecondInputable(second_inputable& p){
+void parser::fill_second_inputable(second_inputable& p){
 	if(auto a = this->find_attribute_of_namespace(xml_namespace::svg, "in2")){
 		p.in2 = *a;
 	}
@@ -662,7 +662,7 @@ void parser::parseFeBlendElement(){
 	
 	this->fill_filter_primitive(*ret);
 	this->fill_inputable(*ret);
-	this->fillSecondInputable(*ret);
+	this->fill_second_inputable(*ret);
 	
 	if(auto a = this->find_attribute_of_namespace(xml_namespace::svg, "mode")){
 		if(*a == "normal"){
@@ -689,7 +689,7 @@ void parser::parseFeCompositeElement(){
 	
 	this->fill_filter_primitive(*ret);
 	this->fill_inputable(*ret);
-	this->fillSecondInputable(*ret);
+	this->fill_second_inputable(*ret);
 	
 	if(auto a = this->find_attribute_of_namespace(xml_namespace::svg, "operator")){
 		if(*a == "over"){
