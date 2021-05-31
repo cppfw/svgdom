@@ -130,7 +130,7 @@ void parser::parse_element(){
 			}else if(nsn.name == fe_blend_element::tag){
 				this->parse_fe_blend_element();
 			}else if(nsn.name == fe_composite_element::tag){
-				this->parseFeCompositeElement();
+				this->parse_fe_composite_element();
 			}else if(nsn.name == image_element::tag){
 				this->parseImageElement();
 			}else if(nsn.name == mask_element::tag){
@@ -681,7 +681,7 @@ void parser::parse_fe_blend_element(){
 	this->add_element(std::move(ret));
 }
 
-void parser::parseFeCompositeElement(){
+void parser::parse_fe_composite_element(){
 	ASSERT(this->get_namespace(this->cur_element).ns == xml_namespace::svg)
 	ASSERT(this->get_namespace(this->cur_element).name == fe_composite_element::tag)
 	
