@@ -149,14 +149,17 @@ real svgdom::read_in_real(std::istream& s){
 		return 0;
 	}
 	
-	std::istringstream iss(str);
-	
-	// Visual Studio standard library fails to parse numbers to 'float' if it does not actually fit into 'float',
-	// for example, parsing of "5.47382e-48" to float fails instead of giving 0.
-	// To workaround this read in to the biggest precision type 'long double'.
-	long double x;
-	iss >> x;
-	return real(x);
+	try{
+		if constexpr (std::is_same<real, float>::value){
+			return std::stof(str);
+		}else if constexpr (std::is_same<real, double>::value){
+			return std::stod(str);
+		}else{
+			return real(std::stold(str));
+		}
+	}catch(...){
+		return 0;
+	}
 }
 
 std::string svgdom::trim_tail(const std::string& s){
