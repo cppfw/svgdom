@@ -268,7 +268,7 @@ void parser::fill_referencing(referencing& e){
 void parser::fillShape(shape& s){
 	this->fill_element(s);
 	this->fillStyleable(s);
-	this->fillTransformable(s);
+	this->fill_transformable(s);
 }
 
 void parser::fillStyleable(styleable& s){
@@ -300,7 +300,7 @@ void parser::fillStyleable(styleable& s){
 	}
 }
 
-void parser::fillTransformable(transformable& t){
+void parser::fill_transformable(transformable& t){
 	ASSERT(t.transformations.size() == 0)
 	if(auto a = this->find_attribute_of_namespace(xml_namespace::svg, "transform")){
 		t.transformations = transformable::parse(*a);
@@ -388,7 +388,7 @@ void parser::parseDefsElement(){
 	auto ret = std::make_unique<defs_element>();
 
 	this->fill_element(*ret);
-	this->fillTransformable(*ret);
+	this->fill_transformable(*ret);
 	this->fillStyleable(*ret);
 
 	this->add_element(std::move(ret));
@@ -423,7 +423,7 @@ void parser::parseTextElement(){
 
 	this->fill_element(*ret);
 	this->fillStyleable(*ret);
-	this->fillTransformable(*ret);
+	this->fill_transformable(*ret);
 	this->fillTextPositioning(*ret);
 	
 	//TODO: parse missing text element attributes
@@ -476,7 +476,7 @@ void parser::parseGElement(){
 	auto ret = std::make_unique<g_element>();
 
 	this->fill_element(*ret);
-	this->fillTransformable(*ret);
+	this->fill_transformable(*ret);
 	this->fillStyleable(*ret);
 
 	this->add_element(std::move(ret));
@@ -864,7 +864,7 @@ void parser::parseImageElement(){
 
 	this->fill_element(*ret);
 	this->fillStyleable(*ret);
-	this->fillTransformable(*ret);
+	this->fill_transformable(*ret);
 	this->fill_rectangle(*ret);
 	this->fill_referencing(*ret);
 	this->fill_aspect_ratioed(*ret);
@@ -895,7 +895,7 @@ void parser::parseUseElement(){
 	auto ret = std::make_unique<use_element>();
 
 	this->fill_element(*ret);
-	this->fillTransformable(*ret);
+	this->fill_transformable(*ret);
 	this->fillStyleable(*ret);
 	this->fill_referencing(*ret);
 	this->fill_rectangle(*ret);
