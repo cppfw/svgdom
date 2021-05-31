@@ -49,7 +49,7 @@ class parser : public mikroxml::parser{
 		std::string name;
 	};
 	
-	namespace_name_pair getNamespace(const std::string& xmlName);
+	namespace_name_pair get_namespace(const std::string& xmlName);
 	
 	const std::string* findAttribute(const std::string& name);
 	
