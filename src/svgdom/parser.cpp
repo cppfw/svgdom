@@ -102,7 +102,7 @@ void parser::parse_element(){
 			}else if(nsn.name == use_element::tag){
 				this->parse_use_element();
 			}else if(nsn.name == path_element::tag){
-				this->parsePathElement();
+				this->parse_path_element();
 			}else if(nsn.name == linear_gradient_element::tag){
 				this->parseLinearGradientElement();
 			}else if(nsn.name == radial_gradient_element::tag){
@@ -750,7 +750,7 @@ void parser::parseLinearGradientElement(){
 	this->add_element(std::move(ret));
 }
 
-void parser::parsePathElement(){
+void parser::parse_path_element(){
 	ASSERT(this->get_namespace(this->cur_element).ns == xml_namespace::svg)
 	ASSERT(this->get_namespace(this->cur_element).name == path_element::tag)
 
