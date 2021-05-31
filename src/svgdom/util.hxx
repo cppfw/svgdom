@@ -27,10 +27,10 @@ real read_in_real(std::istream& s);
 
 struct parse_real_result{
     real number;
-    size_t stop_pos;
+    size_t stop_pos; // set to 0 if no valid number string found
 };
 
-parse_real_result parse_real(const std::string_view str);
+parse_real_result parse_real(std::string_view str);
 
 std::string trim_tail(const std::string& s);
 
@@ -40,7 +40,7 @@ coordinate_units parse_coordinate_units(const std::string& s);
 
 std::string coordinate_units_to_string(coordinate_units u);
 
-r4::vector2<real> parse_number_and_optional_number(const std::string& s, r4::vector2<real> defaults);
+r4::vector2<real> parse_number_and_optional_number(std::string_view s, r4::vector2<real> defaults);
 
 std::string number_and_optional_number_to_string(std::array<real, 2> non, real optionalNumberDefault);
 

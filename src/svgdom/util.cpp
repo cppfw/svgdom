@@ -158,7 +158,7 @@ std::string read_in_number_string(std::istream& s){
 }
 }
 
-parse_real_result svgdom::parse_real(const std::string_view str){
+parse_real_result svgdom::parse_real(std::string_view str){
 	if(str.length() == 0){
 		return {0, 0};
 	}
@@ -174,7 +174,7 @@ parse_real_result svgdom::parse_real(const std::string_view str){
 	}else{
 		ret.number = real(std::strtold(str.data(), &end));
 	}
-	
+
 	ret.stop_pos = end - str.data();
 
 	return ret;
@@ -227,26 +227,36 @@ std::string svgdom::coordinate_units_to_string(coordinate_units u){
 	}
 }
 
-r4::vector2<real> svgdom::parse_number_and_optional_number(const std::string& s, r4::vector2<real> defaults){
+r4::vector2<real> svgdom::parse_number_and_optional_number(std::string_view s, r4::vector2<real> defaults){
 	r4::vector2<real> ret;
-	
-	std::istringstream ss(s);
-	skip_whitespaces(ss);
-	ret[0] = read_in_real(ss);
-	if(ss.fail()){
-		return defaults;
-	}
-	skip_whitespaces_and_comma(ss);
 
-	if(ss.eof()){
+	{
+		auto r = parse_real(s);
+		if(r.stop_pos == 0){
+			return defaults;
+		}
+
+		ret[0] = r.number;
+
+		s = s.substr(r.stop_pos);
+	}
+
+	s = s.substr(skip_whitespaces_and_comma(s));
+
+	if(s.empty()){
 		ret[1] = defaults[1];
 		return ret;
 	}
-	
-	ret[1] = read_in_real(ss);
-	if(ss.fail()){
-		ret[1] = defaults[1];
+
+	{
+		auto r = parse_real(s);
+		if(r.stop_pos == 0){
+			ret[1] = defaults[1];
+		}
+
+		ret[1] = r.number;
 	}
+
 	return ret;
 }
 
