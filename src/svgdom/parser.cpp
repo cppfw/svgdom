@@ -35,15 +35,15 @@ void parser::pushNamespaces(){
 		auto i = this->attributes.find("xmlns");
 		if(i != this->attributes.end()){
 			if(i->second == DSvgNamespace){
-				this->defaultNamespaceStack.push_back(xml_namespace::SVG);
+				this->defaultNamespaceStack.push_back(xml_namespace::svg);
 			}else if(i->second == DXlinkNamespace){
-				this->defaultNamespaceStack.push_back(xml_namespace::XLINK);
+				this->defaultNamespaceStack.push_back(xml_namespace::xlink);
 			}else{
-				this->defaultNamespaceStack.push_back(xml_namespace::UNKNOWN);
+				this->defaultNamespaceStack.push_back(xml_namespace::unknown);
 			}
 		}else{
 			if(this->defaultNamespaceStack.size() == 0){
-				this->defaultNamespaceStack.push_back(xml_namespace::UNKNOWN);
+				this->defaultNamespaceStack.push_back(xml_namespace::unknown);
 			}else{
 				this->defaultNamespaceStack.push_back(this->defaultNamespaceStack.back());
 			}
@@ -67,9 +67,9 @@ void parser::pushNamespaces(){
 			auto nsName = attr.substr(xmlns.length(), attr.length() - xmlns.length());
 			
 			if(e.second == DSvgNamespace){
-				this->namespace_stack.back()[nsName] = xml_namespace::SVG;
+				this->namespace_stack.back()[nsName] = xml_namespace::svg;
 			}else if(e.second == DXlinkNamespace){
-				this->namespace_stack.back()[nsName] = xml_namespace::XLINK;
+				this->namespace_stack.back()[nsName] = xml_namespace::xlink;
 			}
 		}
 		
@@ -90,7 +90,7 @@ void parser::parse_element(){
 	auto nsn = this->getNamespace(this->cur_element);
 	// TRACE(<< "nsn.name = " << nsn.name << std::endl)
 	switch(nsn.ns){
-		case xml_namespace::SVG:
+		case xml_namespace::svg:
 			if(nsn.name == svg_element::tag){
 				this->parseSvgElement();
 			}else if(nsn.name == symbol_element::tag){
@@ -160,7 +160,7 @@ parser::xml_namespace parser::find_namespace(const std::string& ns){
 		ASSERT(ns == iter->first)
 		return iter->second;
 	}
-	return xml_namespace::UNKNOWN;
+	return xml_namespace::unknown;
 }
 
 const std::string* parser::find_flipped_namespace(xml_namespace ns){
@@ -217,7 +217,7 @@ const std::string* parser::findAttributeOfNamespace(xml_namespace ns, const std:
 }
 
 void parser::fillElement(element& e){
-	if(auto a = this->findAttributeOfNamespace(xml_namespace::SVG, "id")){
+	if(auto a = this->findAttributeOfNamespace(xml_namespace::svg, "id")){
 		e.id = *a;
 	}
 }
@@ -227,13 +227,13 @@ void parser::fillGradient(gradient& g){
 	this->fillReferencing(g);
 	this->fillStyleable(g);
 
-	if(auto a = this->findAttributeOfNamespace(xml_namespace::SVG, "spreadMethod")){
+	if(auto a = this->findAttributeOfNamespace(xml_namespace::svg, "spreadMethod")){
 		g.spread_method_ = gradientStringToSpreadMethod(*a);
 	}
-	if(auto a = this->findAttributeOfNamespace(xml_namespace::SVG, "gradientTransform")){
+	if(auto a = this->findAttributeOfNamespace(xml_namespace::svg, "gradientTransform")){
 		g.transformations = transformable::parse(*a);
 	}
-	if(auto a = this->findAttributeOfNamespace(xml_namespace::SVG, "gradientUnits")){
+	if(auto a = this->findAttributeOfNamespace(xml_namespace::svg, "gradientUnits")){
 		g.units = parse_coordinate_units(*a);
 	}
 }
@@ -241,24 +241,24 @@ void parser::fillGradient(gradient& g){
 void parser::fillRectangle(rectangle& r, const rectangle& defaultValues){
 	r = defaultValues;
 	
-	if(auto a = this->findAttributeOfNamespace(xml_namespace::SVG, "x")){
+	if(auto a = this->findAttributeOfNamespace(xml_namespace::svg, "x")){
 		r.x = length::parse(*a);
 	}
-	if(auto a = this->findAttributeOfNamespace(xml_namespace::SVG, "y")){
+	if(auto a = this->findAttributeOfNamespace(xml_namespace::svg, "y")){
 		r.y = length::parse(*a);
 	}
-	if(auto a = this->findAttributeOfNamespace(xml_namespace::SVG, "width")){
+	if(auto a = this->findAttributeOfNamespace(xml_namespace::svg, "width")){
 		r.width = length::parse(*a);
 	}
-	if(auto a = this->findAttributeOfNamespace(xml_namespace::SVG, "height")){
+	if(auto a = this->findAttributeOfNamespace(xml_namespace::svg, "height")){
 		r.height = length::parse(*a);
 	}
 }
 
 void parser::fillReferencing(referencing& e){
-	auto a = this->findAttributeOfNamespace(xml_namespace::XLINK, "href");
+	auto a = this->findAttributeOfNamespace(xml_namespace::xlink, "href");
 	if(!a){
-		a = this->findAttributeOfNamespace(xml_namespace::SVG, "href");//in some SVG documents the svg namespace is used instead of xlink, though this is against SVG spec we allow to do so.
+		a = this->findAttributeOfNamespace(xml_namespace::svg, "href");//in some SVG documents the svg namespace is used instead of xlink, though this is against SVG spec we allow to do so.
 	}
 	if(a){
 		e.iri = *a;
@@ -277,7 +277,7 @@ void parser::fillStyleable(styleable& s){
 	for(auto& a : this->attributes){
 		auto nsn = this->getNamespace(a.first);
 		switch (nsn.ns){
-			case xml_namespace::SVG:
+			case xml_namespace::svg:
 				if(nsn.name == "style"){
 					s.styles = styleable::parse(a.second);
 					break;
@@ -302,13 +302,13 @@ void parser::fillStyleable(styleable& s){
 
 void parser::fillTransformable(transformable& t){
 	ASSERT(t.transformations.size() == 0)
-	if(auto a = this->findAttributeOfNamespace(xml_namespace::SVG, "transform")){
+	if(auto a = this->findAttributeOfNamespace(xml_namespace::svg, "transform")){
 		t.transformations = transformable::parse(*a);
 	}
 }
 
 void parser::fillViewBoxed(view_boxed& v){
-	if(auto a = this->findAttributeOfNamespace(xml_namespace::SVG, "viewBox")){
+	if(auto a = this->findAttributeOfNamespace(xml_namespace::svg, "viewBox")){
 		v.view_box = svg_element::parse_view_box(*a);
 	}
 }
@@ -322,7 +322,7 @@ void parser::fill_style(style_element& e){
 }
 
 void parser::fillAspectRatioed(aspect_ratioed& e){
-	if(auto a = this->findAttributeOfNamespace(xml_namespace::SVG, "preserveAspectRatio")){
+	if(auto a = this->findAttributeOfNamespace(xml_namespace::svg, "preserveAspectRatio")){
 		e.preserve_aspect_ratio.parse(*a);
 	}
 }
@@ -361,20 +361,20 @@ void parser::addElement(std::unique_ptr<element> e){
 }
 
 void parser::parseCircleElement(){
-	ASSERT(this->getNamespace(this->cur_element).ns == xml_namespace::SVG)
+	ASSERT(this->getNamespace(this->cur_element).ns == xml_namespace::svg)
 	ASSERT(this->getNamespace(this->cur_element).name == circle_element::tag)
 
 	auto ret = std::make_unique<circle_element>();
 
 	this->fillShape(*ret);
 
-	if(auto a = this->findAttributeOfNamespace(xml_namespace::SVG, "cx")){
+	if(auto a = this->findAttributeOfNamespace(xml_namespace::svg, "cx")){
 		ret->cx = length::parse(*a);
 	}
-	if(auto a = this->findAttributeOfNamespace(xml_namespace::SVG, "cy")){
+	if(auto a = this->findAttributeOfNamespace(xml_namespace::svg, "cy")){
 		ret->cy = length::parse(*a);
 	}
-	if(auto a = this->findAttributeOfNamespace(xml_namespace::SVG, "r")){
+	if(auto a = this->findAttributeOfNamespace(xml_namespace::svg, "r")){
 		ret->r = length::parse(*a);
 	}
 
@@ -382,7 +382,7 @@ void parser::parseCircleElement(){
 }
 
 void parser::parseDefsElement(){
-	ASSERT(this->getNamespace(this->cur_element).ns == xml_namespace::SVG)
+	ASSERT(this->getNamespace(this->cur_element).ns == xml_namespace::svg)
 	ASSERT(this->getNamespace(this->cur_element).name == defs_element::tag)
 
 	auto ret = std::make_unique<defs_element>();
@@ -395,7 +395,7 @@ void parser::parseDefsElement(){
 }
 
 void parser::parseMaskElement(){
-	ASSERT(this->getNamespace(this->cur_element).ns == xml_namespace::SVG)
+	ASSERT(this->getNamespace(this->cur_element).ns == xml_namespace::svg)
 	ASSERT(this->getNamespace(this->cur_element).name == mask_element::tag)
 
 	auto ret = std::make_unique<mask_element>();
@@ -404,11 +404,11 @@ void parser::parseMaskElement(){
 	this->fillRectangle(*ret);
 	this->fillStyleable(*ret);
 
-	if(auto a = this->findAttributeOfNamespace(xml_namespace::SVG, "maskUnits")){
+	if(auto a = this->findAttributeOfNamespace(xml_namespace::svg, "maskUnits")){
 		ret->mask_units = parse_coordinate_units(*a);
 	}
 	
-	if(auto a = this->findAttributeOfNamespace(xml_namespace::SVG, "maskContentUnits")){
+	if(auto a = this->findAttributeOfNamespace(xml_namespace::svg, "maskContentUnits")){
 		ret->mask_content_units = parse_coordinate_units(*a);
 	}
 	
@@ -416,7 +416,7 @@ void parser::parseMaskElement(){
 }
 
 void parser::parseTextElement(){
-	ASSERT(this->getNamespace(this->cur_element).ns == xml_namespace::SVG)
+	ASSERT(this->getNamespace(this->cur_element).ns == xml_namespace::svg)
 	ASSERT(this->getNamespace(this->cur_element).name == text_element::tag)
 
 	auto ret = std::make_unique<text_element>();
@@ -432,7 +432,7 @@ void parser::parseTextElement(){
 }
 
 void parser::parse_style_element(){
-	ASSERT(this->getNamespace(this->cur_element).ns == xml_namespace::SVG)
+	ASSERT(this->getNamespace(this->cur_element).ns == xml_namespace::svg)
 	ASSERT(this->getNamespace(this->cur_element).name == style_element::tag)
 
 	auto ret = std::make_unique<style_element>();
@@ -446,23 +446,23 @@ void parser::parse_style_element(){
 }
 
 void parser::parseEllipseElement(){
-	ASSERT(this->getNamespace(this->cur_element).ns == xml_namespace::SVG)
+	ASSERT(this->getNamespace(this->cur_element).ns == xml_namespace::svg)
 	ASSERT(this->getNamespace(this->cur_element).name == ellipse_element::tag)
 
 	auto ret = std::make_unique<ellipse_element>();
 
 	this->fillShape(*ret);
 
-	if(auto a = this->findAttributeOfNamespace(xml_namespace::SVG, "cx")){
+	if(auto a = this->findAttributeOfNamespace(xml_namespace::svg, "cx")){
 		ret->cx = length::parse(*a);
 	}
-	if(auto a = this->findAttributeOfNamespace(xml_namespace::SVG, "cy")){
+	if(auto a = this->findAttributeOfNamespace(xml_namespace::svg, "cy")){
 		ret->cy = length::parse(*a);
 	}
-	if(auto a = this->findAttributeOfNamespace(xml_namespace::SVG, "rx")){
+	if(auto a = this->findAttributeOfNamespace(xml_namespace::svg, "rx")){
 		ret->rx = length::parse(*a);
 	}
-	if(auto a = this->findAttributeOfNamespace(xml_namespace::SVG, "ry")){
+	if(auto a = this->findAttributeOfNamespace(xml_namespace::svg, "ry")){
 		ret->ry = length::parse(*a);
 	}
 
@@ -470,7 +470,7 @@ void parser::parseEllipseElement(){
 }
 
 void parser::parseGElement(){
-	ASSERT(this->getNamespace(this->cur_element).ns == xml_namespace::SVG)
+	ASSERT(this->getNamespace(this->cur_element).ns == xml_namespace::svg)
 	ASSERT(this->getNamespace(this->cur_element).name == g_element::tag)
 
 	auto ret = std::make_unique<g_element>();
@@ -483,14 +483,14 @@ void parser::parseGElement(){
 }
 
 void parser::parseGradientStopElement(){
-	ASSERT(this->getNamespace(this->cur_element).ns == xml_namespace::SVG)
+	ASSERT(this->getNamespace(this->cur_element).ns == xml_namespace::svg)
 	ASSERT(this->getNamespace(this->cur_element).name == gradient::stop_element::tag)
 
 	auto ret = std::make_unique<gradient::stop_element>();
 	
 	this->fillStyleable(*ret);
 	
-	if(auto a = this->findAttributeOfNamespace(xml_namespace::SVG, "offset")){
+	if(auto a = this->findAttributeOfNamespace(xml_namespace::svg, "offset")){
 		std::istringstream s(*a);
 		s >> ret->offset;
 		if(!s.eof() && s.peek() == '%'){
@@ -502,23 +502,23 @@ void parser::parseGradientStopElement(){
 }
 
 void parser::parseLineElement(){
-	ASSERT(this->getNamespace(this->cur_element).ns == xml_namespace::SVG)
+	ASSERT(this->getNamespace(this->cur_element).ns == xml_namespace::svg)
 	ASSERT(this->getNamespace(this->cur_element).name == line_element::tag)
 
 	auto ret = std::make_unique<line_element>();
 
 	this->fillShape(*ret);
 	
-	if(auto a = this->findAttributeOfNamespace(xml_namespace::SVG, "x1")){
+	if(auto a = this->findAttributeOfNamespace(xml_namespace::svg, "x1")){
 		ret->x1 = length::parse(*a);
 	}
-	if(auto a = this->findAttributeOfNamespace(xml_namespace::SVG, "y1")){
+	if(auto a = this->findAttributeOfNamespace(xml_namespace::svg, "y1")){
 		ret->y1 = length::parse(*a);
 	}
-	if(auto a = this->findAttributeOfNamespace(xml_namespace::SVG, "x2")){
+	if(auto a = this->findAttributeOfNamespace(xml_namespace::svg, "x2")){
 		ret->x2 = length::parse(*a);
 	}
-	if(auto a = this->findAttributeOfNamespace(xml_namespace::SVG, "y2")){
+	if(auto a = this->findAttributeOfNamespace(xml_namespace::svg, "y2")){
 		ret->y2 = length::parse(*a);
 	}
 
@@ -527,7 +527,7 @@ void parser::parseLineElement(){
 }
 
 void parser::parseFilterElement(){
-	ASSERT(this->getNamespace(this->cur_element).ns == xml_namespace::SVG)
+	ASSERT(this->getNamespace(this->cur_element).ns == xml_namespace::svg)
 	ASSERT(this->getNamespace(this->cur_element).name == filter_element::tag)
 	
 	auto ret = std::make_unique<filter_element>();
@@ -545,10 +545,10 @@ void parser::parseFilterElement(){
 		);
 	this->fillReferencing(*ret);
 	
-	if(auto a = this->findAttributeOfNamespace(xml_namespace::SVG, "filterUnits")){
+	if(auto a = this->findAttributeOfNamespace(xml_namespace::svg, "filterUnits")){
 		ret->filter_units = svgdom::parse_coordinate_units(*a);
 	}
-	if(auto a = this->findAttributeOfNamespace(xml_namespace::SVG, "primitiveUnits")){
+	if(auto a = this->findAttributeOfNamespace(xml_namespace::svg, "primitiveUnits")){
 		ret->primitive_units = svgdom::parse_coordinate_units(*a);
 	}
 	
@@ -560,25 +560,25 @@ void parser::fillFilterPrimitive(filter_primitive& p){
 	this->fillRectangle(p);
 	this->fillStyleable(p);
 
-	if(auto a = this->findAttributeOfNamespace(xml_namespace::SVG, "result")){
+	if(auto a = this->findAttributeOfNamespace(xml_namespace::svg, "result")){
 		p.result = *a;
 	}
 }
 
 void parser::fillInputable(inputable& p){
-	if(auto a = this->findAttributeOfNamespace(xml_namespace::SVG, "in")){
+	if(auto a = this->findAttributeOfNamespace(xml_namespace::svg, "in")){
 		p.in = *a;
 	}
 }
 
 void parser::fillSecondInputable(second_inputable& p){
-	if(auto a = this->findAttributeOfNamespace(xml_namespace::SVG, "in2")){
+	if(auto a = this->findAttributeOfNamespace(xml_namespace::svg, "in2")){
 		p.in2 = *a;
 	}
 }
 
 void parser::parseFeGaussianBlurElement(){
-	ASSERT(this->getNamespace(this->cur_element).ns == xml_namespace::SVG)
+	ASSERT(this->getNamespace(this->cur_element).ns == xml_namespace::svg)
 	ASSERT(this->getNamespace(this->cur_element).name == fe_gaussian_blur_element::tag)
 	
 	auto ret = std::make_unique<fe_gaussian_blur_element>();
@@ -586,7 +586,7 @@ void parser::parseFeGaussianBlurElement(){
 	this->fillFilterPrimitive(*ret);
 	this->fillInputable(*ret);
 
-	if(auto a = this->findAttributeOfNamespace(xml_namespace::SVG, "stdDeviation")){
+	if(auto a = this->findAttributeOfNamespace(xml_namespace::svg, "stdDeviation")){
 		ret->std_deviation = parse_number_and_optional_number(*a, {-1, -1});
 	}
 	
@@ -594,7 +594,7 @@ void parser::parseFeGaussianBlurElement(){
 }
 
 void parser::parseFeColorMatrixElement(){
-	ASSERT(this->getNamespace(this->cur_element).ns == xml_namespace::SVG)
+	ASSERT(this->getNamespace(this->cur_element).ns == xml_namespace::svg)
 	ASSERT(this->getNamespace(this->cur_element).name == fe_color_matrix_element::tag)
 	
 	auto ret = std::make_unique<fe_color_matrix_element>();
@@ -602,7 +602,7 @@ void parser::parseFeColorMatrixElement(){
 	this->fillFilterPrimitive(*ret);
 	this->fillInputable(*ret);
 	
-	if(auto a = this->findAttributeOfNamespace(xml_namespace::SVG, "type")){
+	if(auto a = this->findAttributeOfNamespace(xml_namespace::svg, "type")){
 		if(*a == "saturate"){
 			ret->type_ = fe_color_matrix_element::type::saturate;
 		}else if(*a == "hueRotate"){
@@ -614,7 +614,7 @@ void parser::parseFeColorMatrixElement(){
 		}
 	}
 	
-	if(auto a = this->findAttributeOfNamespace(xml_namespace::SVG, "values")){
+	if(auto a = this->findAttributeOfNamespace(xml_namespace::svg, "values")){
 		switch(ret->type_){
 			default:
 				ASSERT(false) // should never get here, MATRIX should always be the default value
@@ -655,7 +655,7 @@ void parser::parseFeColorMatrixElement(){
 }
 
 void parser::parseFeBlendElement(){
-	ASSERT(this->getNamespace(this->cur_element).ns == xml_namespace::SVG)
+	ASSERT(this->getNamespace(this->cur_element).ns == xml_namespace::svg)
 	ASSERT(this->getNamespace(this->cur_element).name == fe_blend_element::tag)
 	
 	auto ret = std::make_unique<fe_blend_element>();
@@ -664,7 +664,7 @@ void parser::parseFeBlendElement(){
 	this->fillInputable(*ret);
 	this->fillSecondInputable(*ret);
 	
-	if(auto a = this->findAttributeOfNamespace(xml_namespace::SVG, "mode")){
+	if(auto a = this->findAttributeOfNamespace(xml_namespace::svg, "mode")){
 		if(*a == "normal"){
 			ret->mode_ = fe_blend_element::mode::normal;
 		}else if(*a == "multiply"){
@@ -682,7 +682,7 @@ void parser::parseFeBlendElement(){
 }
 
 void parser::parseFeCompositeElement(){
-	ASSERT(this->getNamespace(this->cur_element).ns == xml_namespace::SVG)
+	ASSERT(this->getNamespace(this->cur_element).ns == xml_namespace::svg)
 	ASSERT(this->getNamespace(this->cur_element).name == fe_composite_element::tag)
 	
 	auto ret = std::make_unique<fe_composite_element>();
@@ -691,7 +691,7 @@ void parser::parseFeCompositeElement(){
 	this->fillInputable(*ret);
 	this->fillSecondInputable(*ret);
 	
-	if(auto a = this->findAttributeOfNamespace(xml_namespace::SVG, "operator")){
+	if(auto a = this->findAttributeOfNamespace(xml_namespace::svg, "operator")){
 		if(*a == "over"){
 			ret->operator__ = fe_composite_element::operator_::over;
 		}else if(*a == "in"){
@@ -707,19 +707,19 @@ void parser::parseFeCompositeElement(){
 		}
 	}
 	
-	if(auto a = this->findAttributeOfNamespace(xml_namespace::SVG, "k1")){
+	if(auto a = this->findAttributeOfNamespace(xml_namespace::svg, "k1")){
 		ret->k1 = real(std::strtod(a->c_str(), nullptr));
 	}
 	
-	if(auto a = this->findAttributeOfNamespace(xml_namespace::SVG, "k2")){
+	if(auto a = this->findAttributeOfNamespace(xml_namespace::svg, "k2")){
 		ret->k2 = real(std::strtod(a->c_str(), nullptr));
 	}
 	
-	if(auto a = this->findAttributeOfNamespace(xml_namespace::SVG, "k3")){
+	if(auto a = this->findAttributeOfNamespace(xml_namespace::svg, "k3")){
 		ret->k3 = real(std::strtod(a->c_str(), nullptr));
 	}
 	
-	if(auto a = this->findAttributeOfNamespace(xml_namespace::SVG, "k4")){
+	if(auto a = this->findAttributeOfNamespace(xml_namespace::svg, "k4")){
 		ret->k4 = real(std::strtod(a->c_str(), nullptr));
 	}
 	
@@ -727,23 +727,23 @@ void parser::parseFeCompositeElement(){
 }
 
 void parser::parseLinearGradientElement(){
-	ASSERT(this->getNamespace(this->cur_element).ns == xml_namespace::SVG)
+	ASSERT(this->getNamespace(this->cur_element).ns == xml_namespace::svg)
 	ASSERT(this->getNamespace(this->cur_element).name == linear_gradient_element::tag)
 
 	auto ret = std::make_unique<linear_gradient_element>();
 
 	this->fillGradient(*ret);
 
-	if(auto a = this->findAttributeOfNamespace(xml_namespace::SVG, "x1")){
+	if(auto a = this->findAttributeOfNamespace(xml_namespace::svg, "x1")){
 		ret->x1 = length::parse(*a);
 	}
-	if(auto a = this->findAttributeOfNamespace(xml_namespace::SVG, "y1")){
+	if(auto a = this->findAttributeOfNamespace(xml_namespace::svg, "y1")){
 		ret->y1 = length::parse(*a);
 	}
-	if(auto a = this->findAttributeOfNamespace(xml_namespace::SVG, "x2")){
+	if(auto a = this->findAttributeOfNamespace(xml_namespace::svg, "x2")){
 		ret->x2 = length::parse(*a);
 	}
-	if(auto a = this->findAttributeOfNamespace(xml_namespace::SVG, "y2")){
+	if(auto a = this->findAttributeOfNamespace(xml_namespace::svg, "y2")){
 		ret->y2 = length::parse(*a);
 	}
 
@@ -751,14 +751,14 @@ void parser::parseLinearGradientElement(){
 }
 
 void parser::parsePathElement(){
-	ASSERT(this->getNamespace(this->cur_element).ns == xml_namespace::SVG)
+	ASSERT(this->getNamespace(this->cur_element).ns == xml_namespace::svg)
 	ASSERT(this->getNamespace(this->cur_element).name == path_element::tag)
 
 	auto ret = std::make_unique<path_element>();
 
 	this->fillShape(*ret);
 
-	if(auto a = this->findAttributeOfNamespace(xml_namespace::SVG, "d")){
+	if(auto a = this->findAttributeOfNamespace(xml_namespace::svg, "d")){
 		ret->path = path_element::parse(*a);
 	}
 	
@@ -766,14 +766,14 @@ void parser::parsePathElement(){
 }
 
 void parser::parsePolygonElement(){
-	ASSERT(this->getNamespace(this->cur_element).ns == xml_namespace::SVG)
+	ASSERT(this->getNamespace(this->cur_element).ns == xml_namespace::svg)
 	ASSERT(this->getNamespace(this->cur_element).name == polygon_element::tag)
 
 	auto ret = std::make_unique<polygon_element>();
 
 	this->fillShape(*ret);
 
-	if(auto a = this->findAttributeOfNamespace(xml_namespace::SVG, "points")){
+	if(auto a = this->findAttributeOfNamespace(xml_namespace::svg, "points")){
 		ret->points = ret->parse(*a);
 	}
 	
@@ -781,14 +781,14 @@ void parser::parsePolygonElement(){
 }
 
 void parser::parsePolylineElement(){
-	ASSERT(this->getNamespace(this->cur_element).ns == xml_namespace::SVG)
+	ASSERT(this->getNamespace(this->cur_element).ns == xml_namespace::svg)
 	ASSERT(this->getNamespace(this->cur_element).name == polyline_element::tag)
 
 	auto ret = std::make_unique<polyline_element>();
 
 	this->fillShape(*ret);
 
-	if(auto a = this->findAttributeOfNamespace(xml_namespace::SVG, "points")){
+	if(auto a = this->findAttributeOfNamespace(xml_namespace::svg, "points")){
 		ret->points = ret->parse(*a);
 	}
 	
@@ -796,26 +796,26 @@ void parser::parsePolylineElement(){
 }
 
 void parser::parseRadialGradientElement(){
-	ASSERT(this->getNamespace(this->cur_element).ns == xml_namespace::SVG)
+	ASSERT(this->getNamespace(this->cur_element).ns == xml_namespace::svg)
 	ASSERT(this->getNamespace(this->cur_element).name == radial_gradient_element::tag)
 
 	auto ret = std::make_unique<radial_gradient_element>();
 
 	this->fillGradient(*ret);
 
-	if(auto a = this->findAttributeOfNamespace(xml_namespace::SVG, "cx")){
+	if(auto a = this->findAttributeOfNamespace(xml_namespace::svg, "cx")){
 		ret->cx = length::parse(*a);
 	}
-	if(auto a = this->findAttributeOfNamespace(xml_namespace::SVG, "cy")){
+	if(auto a = this->findAttributeOfNamespace(xml_namespace::svg, "cy")){
 		ret->cy = length::parse(*a);
 	}
-	if(auto a = this->findAttributeOfNamespace(xml_namespace::SVG, "r")){
+	if(auto a = this->findAttributeOfNamespace(xml_namespace::svg, "r")){
 		ret->r = length::parse(*a);
 	}
-	if(auto a = this->findAttributeOfNamespace(xml_namespace::SVG, "fx")){
+	if(auto a = this->findAttributeOfNamespace(xml_namespace::svg, "fx")){
 		ret->fx = length::parse(*a);
 	}
-	if(auto a = this->findAttributeOfNamespace(xml_namespace::SVG, "fy")){
+	if(auto a = this->findAttributeOfNamespace(xml_namespace::svg, "fy")){
 		ret->fy = length::parse(*a);
 	}
 
@@ -823,7 +823,7 @@ void parser::parseRadialGradientElement(){
 }
 
 void parser::parseRectElement(){
-	ASSERT(this->getNamespace(this->cur_element).ns == xml_namespace::SVG)
+	ASSERT(this->getNamespace(this->cur_element).ns == xml_namespace::svg)
 	ASSERT(this->getNamespace(this->cur_element).name == rect_element::tag)
 
 	auto ret = std::make_unique<rect_element>();
@@ -831,10 +831,10 @@ void parser::parseRectElement(){
 	this->fillShape(*ret);
 	this->fillRectangle(*ret, rect_element::rectangle_default_values());
 
-	if(auto a = this->findAttributeOfNamespace(xml_namespace::SVG, "rx")){
+	if(auto a = this->findAttributeOfNamespace(xml_namespace::svg, "rx")){
 		ret->rx = length::parse(*a);
 	}
-	if(auto a = this->findAttributeOfNamespace(xml_namespace::SVG, "ry")){
+	if(auto a = this->findAttributeOfNamespace(xml_namespace::svg, "ry")){
 		ret->ry = length::parse(*a);
 	}
 
@@ -842,7 +842,7 @@ void parser::parseRectElement(){
 }
 
 void parser::parseSvgElement(){
-	ASSERT(this->getNamespace(this->cur_element).ns == xml_namespace::SVG)
+	ASSERT(this->getNamespace(this->cur_element).ns == xml_namespace::svg)
 	ASSERT(this->getNamespace(this->cur_element).name == svg_element::tag)
 
 	auto ret = std::make_unique<svg_element>();
@@ -857,7 +857,7 @@ void parser::parseSvgElement(){
 }
 
 void parser::parseImageElement(){
-	ASSERT(this->getNamespace(this->cur_element).ns == xml_namespace::SVG)
+	ASSERT(this->getNamespace(this->cur_element).ns == xml_namespace::svg)
 	ASSERT(this->getNamespace(this->cur_element).name == image_element::tag)
 
 	auto ret = std::make_unique<image_element>();
@@ -873,7 +873,7 @@ void parser::parseImageElement(){
 }
 
 void parser::parseSymbolElement(){
-	ASSERT(this->getNamespace(this->cur_element).ns == xml_namespace::SVG)
+	ASSERT(this->getNamespace(this->cur_element).ns == xml_namespace::svg)
 	ASSERT(this->getNamespace(this->cur_element).name == symbol_element::tag)
 
 	//		TRACE(<< "parseSymbolElement():" << std::endl)
@@ -889,7 +889,7 @@ void parser::parseSymbolElement(){
 }
 
 void parser::parseUseElement(){
-	ASSERT(this->getNamespace(this->cur_element).ns == xml_namespace::SVG)
+	ASSERT(this->getNamespace(this->cur_element).ns == xml_namespace::svg)
 	ASSERT(this->getNamespace(this->cur_element).name == use_element::tag)
 
 	auto ret = std::make_unique<use_element>();

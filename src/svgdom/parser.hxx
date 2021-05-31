@@ -23,17 +23,17 @@ namespace svgdom{
 
 class parser : public mikroxml::parser{
 	enum class xml_namespace{
-		ENUM_FIRST,
-		UNKNOWN = ENUM_FIRST,
-		SVG,
-		XLINK,
+		unknown,
+		svg,
+		xlink,
 		
-		ENUM_SIZE
+		enum_size
 	};
 	
 	std::vector<
 			std::map<std::string, xml_namespace>
 		> namespace_stack;
+	
 	std::vector<
 			std::map<xml_namespace, std::string>
 		> flippedNamespacesStack;
