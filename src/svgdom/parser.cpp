@@ -265,7 +265,7 @@ void parser::fill_referencing(referencing& e){
 	}
 }
 
-void parser::fillShape(shape& s){
+void parser::fill_shape(shape& s){
 	this->fill_element(s);
 	this->fill_styleable(s);
 	this->fill_transformable(s);
@@ -366,7 +366,7 @@ void parser::parseCircleElement(){
 
 	auto ret = std::make_unique<circle_element>();
 
-	this->fillShape(*ret);
+	this->fill_shape(*ret);
 
 	if(auto a = this->find_attribute_of_namespace(xml_namespace::svg, "cx")){
 		ret->cx = length::parse(*a);
@@ -451,7 +451,7 @@ void parser::parseEllipseElement(){
 
 	auto ret = std::make_unique<ellipse_element>();
 
-	this->fillShape(*ret);
+	this->fill_shape(*ret);
 
 	if(auto a = this->find_attribute_of_namespace(xml_namespace::svg, "cx")){
 		ret->cx = length::parse(*a);
@@ -507,7 +507,7 @@ void parser::parseLineElement(){
 
 	auto ret = std::make_unique<line_element>();
 
-	this->fillShape(*ret);
+	this->fill_shape(*ret);
 	
 	if(auto a = this->find_attribute_of_namespace(xml_namespace::svg, "x1")){
 		ret->x1 = length::parse(*a);
@@ -756,7 +756,7 @@ void parser::parsePathElement(){
 
 	auto ret = std::make_unique<path_element>();
 
-	this->fillShape(*ret);
+	this->fill_shape(*ret);
 
 	if(auto a = this->find_attribute_of_namespace(xml_namespace::svg, "d")){
 		ret->path = path_element::parse(*a);
@@ -771,7 +771,7 @@ void parser::parsePolygonElement(){
 
 	auto ret = std::make_unique<polygon_element>();
 
-	this->fillShape(*ret);
+	this->fill_shape(*ret);
 
 	if(auto a = this->find_attribute_of_namespace(xml_namespace::svg, "points")){
 		ret->points = ret->parse(*a);
@@ -786,7 +786,7 @@ void parser::parsePolylineElement(){
 
 	auto ret = std::make_unique<polyline_element>();
 
-	this->fillShape(*ret);
+	this->fill_shape(*ret);
 
 	if(auto a = this->find_attribute_of_namespace(xml_namespace::svg, "points")){
 		ret->points = ret->parse(*a);
@@ -828,7 +828,7 @@ void parser::parseRectElement(){
 
 	auto ret = std::make_unique<rect_element>();
 
-	this->fillShape(*ret);
+	this->fill_shape(*ret);
 	this->fill_rectangle(*ret, rect_element::rectangle_default_values());
 
 	if(auto a = this->find_attribute_of_namespace(xml_namespace::svg, "rx")){
