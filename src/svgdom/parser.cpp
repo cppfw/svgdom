@@ -128,7 +128,7 @@ void parser::parse_element(){
 			}else if(nsn.name == fe_color_matrix_element::tag){
 				this->parse_fe_color_matrix_element();
 			}else if(nsn.name == fe_blend_element::tag){
-				this->parseFeBlendElement();
+				this->parse_fe_blend_element();
 			}else if(nsn.name == fe_composite_element::tag){
 				this->parseFeCompositeElement();
 			}else if(nsn.name == image_element::tag){
@@ -654,7 +654,7 @@ void parser::parse_fe_color_matrix_element(){
 	this->add_element(std::move(ret));
 }
 
-void parser::parseFeBlendElement(){
+void parser::parse_fe_blend_element(){
 	ASSERT(this->get_namespace(this->cur_element).ns == xml_namespace::svg)
 	ASSERT(this->get_namespace(this->cur_element).name == fe_blend_element::tag)
 	

@@ -113,7 +113,7 @@ class parser : public mikroxml::parser{
 	void parse_filter_element();
 	void parse_fe_gaussian_blur_element();
 	void parse_fe_color_matrix_element();
-	void parseFeBlendElement();
+	void parse_fe_blend_element();
 	void parseFeCompositeElement();
 	void parseImageElement();
 	void parseMaskElement();
