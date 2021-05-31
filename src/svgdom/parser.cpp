@@ -73,7 +73,7 @@ void parser::pushNamespaces(){
 			}
 		}
 		
-		this->flippedNamespacesStack.push_back(utki::flip_map(this->namespace_stack.back()));
+		this->flipped_namespace_stack.push_back(utki::flip_map(this->namespace_stack.back()));
 	}
 }
 
@@ -82,8 +82,8 @@ void parser::popNamespaces(){
 	this->namespace_stack.pop_back();
 	ASSERT(this->defaultNamespaceStack.size() != 0)
 	this->defaultNamespaceStack.pop_back();
-	ASSERT(this->flippedNamespacesStack.size() != 0)
-	this->flippedNamespacesStack.pop_back();
+	ASSERT(this->flipped_namespace_stack.size() != 0)
+	this->flipped_namespace_stack.pop_back();
 }
 
 void parser::parse_element(){
@@ -164,7 +164,7 @@ parser::xml_namespace parser::find_namespace(const std::string& ns){
 }
 
 const std::string* parser::find_flipped_namespace(xml_namespace ns){
-	for(auto i = this->flippedNamespacesStack.rbegin(), e = this->flippedNamespacesStack.rend(); i != e; ++i){
+	for(auto i = this->flipped_namespace_stack.rbegin(), e = this->flipped_namespace_stack.rend(); i != e; ++i){
 		auto iter = i->find(ns);
 		if(iter == i->end()){
 			continue;

@@ -36,7 +36,7 @@ class parser : public mikroxml::parser{
 	
 	std::vector<
 			std::map<xml_namespace, std::string>
-		> flippedNamespacesStack;
+		> flipped_namespace_stack;
 	
 	std::vector<xml_namespace> defaultNamespaceStack;
 	
