@@ -224,7 +224,7 @@ void parser::fill_element(element& e){
 
 void parser::fillGradient(gradient& g){
 	this->fill_element(g);
-	this->fillReferencing(g);
+	this->fill_referencing(g);
 	this->fillStyleable(g);
 
 	if(auto a = this->find_attribute_of_namespace(xml_namespace::svg, "spreadMethod")){
@@ -255,7 +255,7 @@ void parser::fillRectangle(rectangle& r, const rectangle& defaultValues){
 	}
 }
 
-void parser::fillReferencing(referencing& e){
+void parser::fill_referencing(referencing& e){
 	auto a = this->find_attribute_of_namespace(xml_namespace::xlink, "href");
 	if(!a){
 		a = this->find_attribute_of_namespace(xml_namespace::svg, "href");//in some SVG documents the svg namespace is used instead of xlink, though this is against SVG spec we allow to do so.
@@ -543,7 +543,7 @@ void parser::parseFilterElement(){
 					length(120, length_unit::percent)
 				)
 		);
-	this->fillReferencing(*ret);
+	this->fill_referencing(*ret);
 	
 	if(auto a = this->find_attribute_of_namespace(xml_namespace::svg, "filterUnits")){
 		ret->filter_units = svgdom::parse_coordinate_units(*a);
@@ -866,7 +866,7 @@ void parser::parseImageElement(){
 	this->fillStyleable(*ret);
 	this->fillTransformable(*ret);
 	this->fillRectangle(*ret);
-	this->fillReferencing(*ret);
+	this->fill_referencing(*ret);
 	this->fillAspectRatioed(*ret);
 
 	this->add_element(std::move(ret));
@@ -897,7 +897,7 @@ void parser::parseUseElement(){
 	this->fill_element(*ret);
 	this->fillTransformable(*ret);
 	this->fillStyleable(*ret);
-	this->fillReferencing(*ret);
+	this->fill_referencing(*ret);
 	this->fillRectangle(*ret);
 
 	this->add_element(std::move(ret));
