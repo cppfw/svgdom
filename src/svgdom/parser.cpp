@@ -92,7 +92,7 @@ void parser::parse_element(){
 	switch(nsn.ns){
 		case xml_namespace::svg:
 			if(nsn.name == svg_element::tag){
-				this->parseSvgElement();
+				this->parse_svg_element();
 			}else if(nsn.name == symbol_element::tag){
 				this->parseSymbolElement();
 			}else if(nsn.name == g_element::tag){
@@ -841,7 +841,7 @@ void parser::parseRectElement(){
 	this->add_element(std::move(ret));
 }
 
-void parser::parseSvgElement(){
+void parser::parse_svg_element(){
 	ASSERT(this->get_namespace(this->cur_element).ns == xml_namespace::svg)
 	ASSERT(this->get_namespace(this->cur_element).name == svg_element::tag)
 
