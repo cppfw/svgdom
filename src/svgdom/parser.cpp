@@ -491,9 +491,9 @@ void parser::parse_gradient_stop_element(){
 	this->fill_styleable(*ret);
 	
 	if(auto a = this->find_attribute_of_namespace(xml_namespace::svg, "offset")){
-		std::istringstream s(*a);
-		s >> ret->offset;
-		if(!s.eof() && s.peek() == '%'){
+		auto r = parse_real(*a);
+		ret->offset = r.num;
+		if(r.stop_pos < a->size() && a->operator[](r.stop_pos) == '%'){
 			ret->offset /= 100;
 		}
 	}

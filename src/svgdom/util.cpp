@@ -137,6 +137,25 @@ std::string read_in_number_string(std::istream& s){
 }
 }
 
+parse_real_result svgdom::parse_real(const std::string& str){
+	if(str.length() == 0){
+		return {0, 0};
+	}
+	
+	try{
+		size_t pos;
+		if constexpr (std::is_same<real, float>::value){
+			return {real(std::stof(str, &pos)), pos};
+		}else if constexpr (std::is_same<real, double>::value){
+			return {real(std::stod(str, &pos)), pos};
+		}else{
+			return {real(std::stold(str, &pos)), pos};
+		}
+	}catch(...){
+		return {0, 0};
+	}
+}
+
 real svgdom::read_in_real(std::istream& s){
 	skip_whitespaces(s);
 	
@@ -145,21 +164,7 @@ real svgdom::read_in_real(std::istream& s){
 	// To workaround this, need to read in the number to a separate string and parse it from there.
 	auto str = read_in_number_string(s);
 	
-	if(str.length() == 0){
-		return 0;
-	}
-	
-	try{
-		if constexpr (std::is_same<real, float>::value){
-			return std::stof(str);
-		}else if constexpr (std::is_same<real, double>::value){
-			return std::stod(str);
-		}else{
-			return real(std::stold(str));
-		}
-	}catch(...){
-		return 0;
-	}
+	return parse_real(str).num;
 }
 
 std::string svgdom::trim_tail(const std::string& s){

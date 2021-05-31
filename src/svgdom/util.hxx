@@ -22,6 +22,13 @@ std::string read_till_char_or_whitespace(std::istream& s, char c);
 
 real read_in_real(std::istream& s);
 
+struct parse_real_result{
+    real num;
+    size_t stop_pos;
+};
+
+parse_real_result parse_real(const std::string& str);
+
 std::string trim_tail(const std::string& s);
 
 std::string iri_to_local_id(const std::string& iri);
