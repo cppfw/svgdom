@@ -98,7 +98,7 @@ void parser::parse_element(){
 			}else if(nsn.name == g_element::tag){
 				this->parse_g_element();
 			}else if(nsn.name == defs_element::tag){
-				this->parseDefsElement();
+				this->parse_defs_element();
 			}else if(nsn.name == use_element::tag){
 				this->parseUseElement();
 			}else if(nsn.name == path_element::tag){
@@ -381,7 +381,7 @@ void parser::parseCircleElement(){
 	this->add_element(std::move(ret));
 }
 
-void parser::parseDefsElement(){
+void parser::parse_defs_element(){
 	ASSERT(this->get_namespace(this->cur_element).ns == xml_namespace::svg)
 	ASSERT(this->get_namespace(this->cur_element).name == defs_element::tag)
 
