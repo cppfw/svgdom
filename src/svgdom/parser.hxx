@@ -22,7 +22,7 @@
 namespace svgdom{
 
 class parser : public mikroxml::parser{
-	enum class XmlNamespace_e{
+	enum class xml_namespace{
 		ENUM_FIRST,
 		UNKNOWN = ENUM_FIRST,
 		SVG,
@@ -32,20 +32,20 @@ class parser : public mikroxml::parser{
 	};
 	
 	std::vector<
-			std::map<std::string, XmlNamespace_e>
+			std::map<std::string, xml_namespace>
 		> namespace_stack;
 	std::vector<
-			std::map<XmlNamespace_e, std::string>
+			std::map<xml_namespace, std::string>
 		> flippedNamespacesStack;
 	
-	std::vector<XmlNamespace_e> defaultNamespaceStack;
+	std::vector<xml_namespace> defaultNamespaceStack;
 	
 	
-	XmlNamespace_e find_namespace(const std::string& ns);
-	const std::string* find_flipped_namespace(XmlNamespace_e ns);
+	xml_namespace find_namespace(const std::string& ns);
+	const std::string* find_flipped_namespace(xml_namespace ns);
 	
 	struct namespace_name_pair{
-		XmlNamespace_e ns;
+		xml_namespace ns;
 		std::string name;
 	};
 	
@@ -53,7 +53,7 @@ class parser : public mikroxml::parser{
 	
 	const std::string* findAttribute(const std::string& name);
 	
-	const std::string* findAttributeOfNamespace(XmlNamespace_e ns, const std::string& name);
+	const std::string* findAttributeOfNamespace(xml_namespace ns, const std::string& name);
 
 	void pushNamespaces();
 	void popNamespaces();
