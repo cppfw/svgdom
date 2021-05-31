@@ -5,6 +5,7 @@
 #include <sstream>
 #include <cctype>
 #include <vector>
+#include <charconv>
 
 using namespace svgdom;
 
@@ -32,6 +33,26 @@ void svgdom::skip_whitespaces_and_comma(std::istream& s){
 			break;
 		}
 	}
+}
+
+size_t svgdom::skip_whitespaces_and_comma(const std::string_view str){
+	size_t ret = 0;
+
+	bool comma_skipped = false;
+	for(char c : str){
+		if(std::isspace(c)){
+			++ret;
+		}else if(c == ','){
+			if(comma_skipped){
+				break;
+			}
+			++ret;
+			comma_skipped = true;
+		}else{
+			break;
+		}
+	}
+	return ret;
 }
 
 void svgdom::skip_till_char_inclusive(std::istream& s, char c){
@@ -137,23 +158,26 @@ std::string read_in_number_string(std::istream& s){
 }
 }
 
-parse_real_result svgdom::parse_real(const std::string& str){
+parse_real_result svgdom::parse_real(const std::string_view str){
 	if(str.length() == 0){
 		return {0, 0};
 	}
 	
-	try{
-		size_t pos;
-		if constexpr (std::is_same<real, float>::value){
-			return {real(std::stof(str, &pos)), pos};
-		}else if constexpr (std::is_same<real, double>::value){
-			return {real(std::stod(str, &pos)), pos};
-		}else{
-			return {real(std::stold(str, &pos)), pos};
-		}
-	}catch(...){
-		return {0, 0};
+	parse_real_result ret;
+
+	char* end;
+
+	if constexpr (std::is_same<real, float>::value){
+		ret.number = real(std::strtof(str.data(), &end));
+	}else if constexpr (std::is_same<real, double>::value){
+		ret.number = real(std::strtod(str.data(), &end));
+	}else{
+		ret.number = real(std::strtold(str.data(), &end));
 	}
+	
+	ret.stop_pos = end - str.data();
+
+	return ret;
 }
 
 real svgdom::read_in_real(std::istream& s){

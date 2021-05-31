@@ -9,6 +9,8 @@
 
 #include <papki/span_file.hpp>
 
+#include <string_view>
+
 using namespace svgdom;
 
 namespace{
@@ -622,14 +624,15 @@ void parser::parse_fe_color_matrix_element(){
 			case fe_color_matrix_element::type::matrix:
 				// 20 values expected
 				{
-					std::istringstream ss(*a);
-					
+					size_t pos = 0;
 					for(unsigned i = 0; i != 20; ++i){
-						ret->values[i] = read_in_real(ss);
-						if(ss.fail()){
-							throw malformed_svg_error("malformed 'values' string of 'feColorMatrix' element");
-						}
-						skip_whitespaces_and_comma(ss);
+						auto v = std::string_view(*a).substr(pos);
+
+						auto r = parse_real(v);
+						pos += r.stop_pos;
+
+						ret->values[i] = r.number;
+						pos += skip_whitespaces_and_comma(v);
 					}
 				}
 				break;

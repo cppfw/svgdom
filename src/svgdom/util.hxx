@@ -2,6 +2,7 @@
 
 #include <istream>
 #include <array>
+#include <string_view>
 
 #include <r4/vector.hpp>
 
@@ -13,6 +14,8 @@ namespace svgdom{
 void skip_whitespaces(std::istream& s);
 
 void skip_whitespaces_and_comma(std::istream& s);
+
+size_t skip_whitespaces_and_comma(const std::string_view str);
 
 void skip_till_char_inclusive(std::istream& s, char c);
 
@@ -27,7 +30,7 @@ struct parse_real_result{
     size_t stop_pos;
 };
 
-parse_real_result parse_real(const std::string& str);
+parse_real_result parse_real(const std::string_view str);
 
 std::string trim_tail(const std::string& s);
 
