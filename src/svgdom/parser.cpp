@@ -94,7 +94,7 @@ void parser::parse_element(){
 			if(nsn.name == svg_element::tag){
 				this->parse_svg_element();
 			}else if(nsn.name == symbol_element::tag){
-				this->parseSymbolElement();
+				this->parse_symbol_element();
 			}else if(nsn.name == g_element::tag){
 				this->parseGElement();
 			}else if(nsn.name == defs_element::tag){
@@ -872,11 +872,11 @@ void parser::parseImageElement(){
 	this->add_element(std::move(ret));
 }
 
-void parser::parseSymbolElement(){
+void parser::parse_symbol_element(){
 	ASSERT(this->get_namespace(this->cur_element).ns == xml_namespace::svg)
 	ASSERT(this->get_namespace(this->cur_element).name == symbol_element::tag)
 
-	//		TRACE(<< "parseSymbolElement():" << std::endl)
+	//		TRACE(<< "parse_symbol_element():" << std::endl)
 
 	auto ret = std::make_unique<symbol_element>();
 
