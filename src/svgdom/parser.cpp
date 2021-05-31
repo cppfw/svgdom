@@ -116,7 +116,7 @@ void parser::parse_element(){
 			}else if(nsn.name == ellipse_element::tag){
 				this->parseEllipseElement();
 			}else if(nsn.name == line_element::tag){
-				this->parseLineElement();
+				this->parse_line_element();
 			}else if(nsn.name == polyline_element::tag){
 				this->parsePolylineElement();
 			}else if(nsn.name == polygon_element::tag){
@@ -501,7 +501,7 @@ void parser::parse_gradient_stop_element(){
 	this->add_element(std::move(ret));
 }
 
-void parser::parseLineElement(){
+void parser::parse_line_element(){
 	ASSERT(this->get_namespace(this->cur_element).ns == xml_namespace::svg)
 	ASSERT(this->get_namespace(this->cur_element).name == line_element::tag)
 
