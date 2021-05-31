@@ -28,7 +28,7 @@ int main(int argc, char** argv){
 	auto str = dom->to_string();
 //	TRACE_ALWAYS(<< str << std::endl)
 	
-	papki::fs_file outFile("out.svg");
-	papki::file::guard fileGuard(outFile, papki::file::mode::create);
-	outFile.write(utki::make_span(str));
+	papki::fs_file out_file("out.svg");
+	papki::file::guard file_guard(out_file, papki::file::mode::create);
+	out_file.write(utki::make_span(str));
 }
