@@ -105,7 +105,7 @@ class parser : public mikroxml::parser{
 	void parse_rect_element();
 	void parse_circle_element();
 	void parse_line_element();
-	void parsePolylineElement();
+	void parse_polyline_element();
 	void parsePolygonElement();
 	void parseEllipseElement();
 	void parseLinearGradientElement();
