@@ -35,17 +35,17 @@ void parser::pushNamespaces(){
 		auto i = this->attributes.find("xmlns");
 		if(i != this->attributes.end()){
 			if(i->second == DSvgNamespace){
-				this->defaultNamespaceStack.push_back(xml_namespace::svg);
+				this->default_namespace_stack.push_back(xml_namespace::svg);
 			}else if(i->second == DXlinkNamespace){
-				this->defaultNamespaceStack.push_back(xml_namespace::xlink);
+				this->default_namespace_stack.push_back(xml_namespace::xlink);
 			}else{
-				this->defaultNamespaceStack.push_back(xml_namespace::unknown);
+				this->default_namespace_stack.push_back(xml_namespace::unknown);
 			}
 		}else{
-			if(this->defaultNamespaceStack.size() == 0){
-				this->defaultNamespaceStack.push_back(xml_namespace::unknown);
+			if(this->default_namespace_stack.size() == 0){
+				this->default_namespace_stack.push_back(xml_namespace::unknown);
 			}else{
-				this->defaultNamespaceStack.push_back(this->defaultNamespaceStack.back());
+				this->default_namespace_stack.push_back(this->default_namespace_stack.back());
 			}
 		}
 	}
@@ -80,8 +80,8 @@ void parser::pushNamespaces(){
 void parser::popNamespaces(){
 	ASSERT(this->namespace_stack.size() != 0)
 	this->namespace_stack.pop_back();
-	ASSERT(this->defaultNamespaceStack.size() != 0)
-	this->defaultNamespaceStack.pop_back();
+	ASSERT(this->default_namespace_stack.size() != 0)
+	this->default_namespace_stack.pop_back();
 	ASSERT(this->flipped_namespace_stack.size() != 0)
 	this->flipped_namespace_stack.pop_back();
 }
@@ -180,7 +180,7 @@ parser::namespace_name_pair parser::getNamespace(const std::string& xmlName){
 
 	auto colonIndex = xmlName.find_first_of(':');
 	if(colonIndex == std::string::npos){
-		ret.ns = this->defaultNamespaceStack.back();
+		ret.ns = this->default_namespace_stack.back();
 		ret.name = xmlName;
 		return ret;
 	}
@@ -202,7 +202,7 @@ const std::string* parser::findAttribute(const std::string& name){
 }
 
 const std::string* parser::findAttributeOfNamespace(xml_namespace ns, const std::string& name){
-	if(this->defaultNamespaceStack.back() == ns){
+	if(this->default_namespace_stack.back() == ns){
 		if(auto a = this->findAttribute(name)){
 			return a;
 		}
