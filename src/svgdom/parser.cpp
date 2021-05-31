@@ -124,7 +124,7 @@ void parser::parse_element(){
 			}else if(nsn.name == filter_element::tag){
 				this->parse_filter_element();
 			}else if(nsn.name == fe_gaussian_blur_element::tag){
-				this->parseFeGaussianBlurElement();
+				this->parse_fe_gaussian_blur_element();
 			}else if(nsn.name == fe_color_matrix_element::tag){
 				this->parseFeColorMatrixElement();
 			}else if(nsn.name == fe_blend_element::tag){
@@ -577,7 +577,7 @@ void parser::fill_second_inputable(second_inputable& p){
 	}
 }
 
-void parser::parseFeGaussianBlurElement(){
+void parser::parse_fe_gaussian_blur_element(){
 	ASSERT(this->get_namespace(this->cur_element).ns == xml_namespace::svg)
 	ASSERT(this->get_namespace(this->cur_element).name == fe_gaussian_blur_element::tag)
 	
