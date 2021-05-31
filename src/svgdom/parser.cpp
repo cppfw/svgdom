@@ -96,7 +96,7 @@ void parser::parse_element(){
 			}else if(nsn.name == symbol_element::tag){
 				this->parse_symbol_element();
 			}else if(nsn.name == g_element::tag){
-				this->parseGElement();
+				this->parse_g_element();
 			}else if(nsn.name == defs_element::tag){
 				this->parseDefsElement();
 			}else if(nsn.name == use_element::tag){
@@ -469,7 +469,7 @@ void parser::parseEllipseElement(){
 	this->add_element(std::move(ret));
 }
 
-void parser::parseGElement(){
+void parser::parse_g_element(){
 	ASSERT(this->get_namespace(this->cur_element).ns == xml_namespace::svg)
 	ASSERT(this->get_namespace(this->cur_element).name == g_element::tag)
 

@@ -98,7 +98,7 @@ class parser : public mikroxml::parser{
 	void parse_gradient_stop_element();
 	void parse_svg_element();
 	void parse_symbol_element();
-	void parseGElement();
+	void parse_g_element();
 	void parseDefsElement();
 	void parseUseElement();
 	void parsePathElement();
