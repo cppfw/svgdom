@@ -327,7 +327,7 @@ void parser::fillAspectRatioed(aspect_ratioed& e){
 	}
 }
 
-void parser::addElement(std::unique_ptr<element> e){
+void parser::add_element(std::unique_ptr<element> e){
 	ASSERT(e)
 	
 	auto elem = e.get();
@@ -378,7 +378,7 @@ void parser::parseCircleElement(){
 		ret->r = length::parse(*a);
 	}
 
-	this->addElement(std::move(ret));
+	this->add_element(std::move(ret));
 }
 
 void parser::parseDefsElement(){
@@ -391,7 +391,7 @@ void parser::parseDefsElement(){
 	this->fillTransformable(*ret);
 	this->fillStyleable(*ret);
 
-	this->addElement(std::move(ret));
+	this->add_element(std::move(ret));
 }
 
 void parser::parseMaskElement(){
@@ -412,7 +412,7 @@ void parser::parseMaskElement(){
 		ret->mask_content_units = parse_coordinate_units(*a);
 	}
 	
-	this->addElement(std::move(ret));
+	this->add_element(std::move(ret));
 }
 
 void parser::parseTextElement(){
@@ -428,7 +428,7 @@ void parser::parseTextElement(){
 	
 	//TODO: parse missing text element attributes
 	
-	this->addElement(std::move(ret));
+	this->add_element(std::move(ret));
 }
 
 void parser::parse_style_element(){
@@ -442,7 +442,7 @@ void parser::parse_style_element(){
 	
 	// TODO: parse missing style element attributes
 	
-	this->addElement(std::move(ret));
+	this->add_element(std::move(ret));
 }
 
 void parser::parseEllipseElement(){
@@ -466,7 +466,7 @@ void parser::parseEllipseElement(){
 		ret->ry = length::parse(*a);
 	}
 
-	this->addElement(std::move(ret));
+	this->add_element(std::move(ret));
 }
 
 void parser::parseGElement(){
@@ -479,7 +479,7 @@ void parser::parseGElement(){
 	this->fillTransformable(*ret);
 	this->fillStyleable(*ret);
 
-	this->addElement(std::move(ret));
+	this->add_element(std::move(ret));
 }
 
 void parser::parseGradientStopElement(){
@@ -498,7 +498,7 @@ void parser::parseGradientStopElement(){
 		}
 	}
 
-	this->addElement(std::move(ret));
+	this->add_element(std::move(ret));
 }
 
 void parser::parseLineElement(){
@@ -523,7 +523,7 @@ void parser::parseLineElement(){
 	}
 
 
-	this->addElement(std::move(ret));
+	this->add_element(std::move(ret));
 }
 
 void parser::parseFilterElement(){
@@ -552,7 +552,7 @@ void parser::parseFilterElement(){
 		ret->primitive_units = svgdom::parse_coordinate_units(*a);
 	}
 	
-	this->addElement(std::move(ret));
+	this->add_element(std::move(ret));
 }
 
 void parser::fillFilterPrimitive(filter_primitive& p){
@@ -590,7 +590,7 @@ void parser::parseFeGaussianBlurElement(){
 		ret->std_deviation = parse_number_and_optional_number(*a, {-1, -1});
 	}
 	
-	this->addElement(std::move(ret));
+	this->add_element(std::move(ret));
 }
 
 void parser::parseFeColorMatrixElement(){
@@ -651,7 +651,7 @@ void parser::parseFeColorMatrixElement(){
 		}
 	}
 	
-	this->addElement(std::move(ret));
+	this->add_element(std::move(ret));
 }
 
 void parser::parseFeBlendElement(){
@@ -678,7 +678,7 @@ void parser::parseFeBlendElement(){
 		}
 	}
 	
-	this->addElement(std::move(ret));
+	this->add_element(std::move(ret));
 }
 
 void parser::parseFeCompositeElement(){
@@ -723,7 +723,7 @@ void parser::parseFeCompositeElement(){
 		ret->k4 = real(std::strtod(a->c_str(), nullptr));
 	}
 	
-	this->addElement(std::move(ret));
+	this->add_element(std::move(ret));
 }
 
 void parser::parseLinearGradientElement(){
@@ -747,7 +747,7 @@ void parser::parseLinearGradientElement(){
 		ret->y2 = length::parse(*a);
 	}
 
-	this->addElement(std::move(ret));
+	this->add_element(std::move(ret));
 }
 
 void parser::parsePathElement(){
@@ -762,7 +762,7 @@ void parser::parsePathElement(){
 		ret->path = path_element::parse(*a);
 	}
 	
-	this->addElement(std::move(ret));
+	this->add_element(std::move(ret));
 }
 
 void parser::parsePolygonElement(){
@@ -777,7 +777,7 @@ void parser::parsePolygonElement(){
 		ret->points = ret->parse(*a);
 	}
 	
-	this->addElement(std::move(ret));
+	this->add_element(std::move(ret));
 }
 
 void parser::parsePolylineElement(){
@@ -792,7 +792,7 @@ void parser::parsePolylineElement(){
 		ret->points = ret->parse(*a);
 	}
 	
-	this->addElement(std::move(ret));
+	this->add_element(std::move(ret));
 }
 
 void parser::parseRadialGradientElement(){
@@ -819,7 +819,7 @@ void parser::parseRadialGradientElement(){
 		ret->fy = length::parse(*a);
 	}
 
-	this->addElement(std::move(ret));
+	this->add_element(std::move(ret));
 }
 
 void parser::parseRectElement(){
@@ -838,7 +838,7 @@ void parser::parseRectElement(){
 		ret->ry = length::parse(*a);
 	}
 
-	this->addElement(std::move(ret));
+	this->add_element(std::move(ret));
 }
 
 void parser::parseSvgElement(){
@@ -853,7 +853,7 @@ void parser::parseSvgElement(){
 	this->fillViewBoxed(*ret);
 	this->fillAspectRatioed(*ret);
 	
-	this->addElement(std::move(ret));
+	this->add_element(std::move(ret));
 }
 
 void parser::parseImageElement(){
@@ -869,7 +869,7 @@ void parser::parseImageElement(){
 	this->fillReferencing(*ret);
 	this->fillAspectRatioed(*ret);
 
-	this->addElement(std::move(ret));
+	this->add_element(std::move(ret));
 }
 
 void parser::parseSymbolElement(){
@@ -885,7 +885,7 @@ void parser::parseSymbolElement(){
 	this->fillViewBoxed(*ret);
 	this->fillAspectRatioed(*ret);
 
-	this->addElement(std::move(ret));
+	this->add_element(std::move(ret));
 }
 
 void parser::parseUseElement(){
@@ -900,7 +900,7 @@ void parser::parseUseElement(){
 	this->fillReferencing(*ret);
 	this->fillRectangle(*ret);
 
-	this->addElement(std::move(ret));
+	this->add_element(std::move(ret));
 }
 
 void parser::on_element_start(utki::span<const char> name){
