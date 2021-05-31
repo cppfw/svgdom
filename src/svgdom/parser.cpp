@@ -225,7 +225,7 @@ void parser::fill_element(element& e){
 void parser::fillGradient(gradient& g){
 	this->fill_element(g);
 	this->fill_referencing(g);
-	this->fillStyleable(g);
+	this->fill_styleable(g);
 
 	if(auto a = this->find_attribute_of_namespace(xml_namespace::svg, "spreadMethod")){
 		g.spread_method_ = gradientStringToSpreadMethod(*a);
@@ -267,11 +267,11 @@ void parser::fill_referencing(referencing& e){
 
 void parser::fillShape(shape& s){
 	this->fill_element(s);
-	this->fillStyleable(s);
+	this->fill_styleable(s);
 	this->fill_transformable(s);
 }
 
-void parser::fillStyleable(styleable& s){
+void parser::fill_styleable(styleable& s){
 	ASSERT(s.styles.size() == 0)
 
 	for(auto& a : this->attributes){
@@ -389,7 +389,7 @@ void parser::parseDefsElement(){
 
 	this->fill_element(*ret);
 	this->fill_transformable(*ret);
-	this->fillStyleable(*ret);
+	this->fill_styleable(*ret);
 
 	this->add_element(std::move(ret));
 }
@@ -402,7 +402,7 @@ void parser::parseMaskElement(){
 
 	this->fill_element(*ret);
 	this->fill_rectangle(*ret);
-	this->fillStyleable(*ret);
+	this->fill_styleable(*ret);
 
 	if(auto a = this->find_attribute_of_namespace(xml_namespace::svg, "maskUnits")){
 		ret->mask_units = parse_coordinate_units(*a);
@@ -422,7 +422,7 @@ void parser::parseTextElement(){
 	auto ret = std::make_unique<text_element>();
 
 	this->fill_element(*ret);
-	this->fillStyleable(*ret);
+	this->fill_styleable(*ret);
 	this->fill_transformable(*ret);
 	this->fillTextPositioning(*ret);
 	
@@ -477,7 +477,7 @@ void parser::parseGElement(){
 
 	this->fill_element(*ret);
 	this->fill_transformable(*ret);
-	this->fillStyleable(*ret);
+	this->fill_styleable(*ret);
 
 	this->add_element(std::move(ret));
 }
@@ -488,7 +488,7 @@ void parser::parseGradientStopElement(){
 
 	auto ret = std::make_unique<gradient::stop_element>();
 	
-	this->fillStyleable(*ret);
+	this->fill_styleable(*ret);
 	
 	if(auto a = this->find_attribute_of_namespace(xml_namespace::svg, "offset")){
 		std::istringstream s(*a);
@@ -533,7 +533,7 @@ void parser::parseFilterElement(){
 	auto ret = std::make_unique<filter_element>();
 	
 	this->fill_element(*ret);
-	this->fillStyleable(*ret);
+	this->fill_styleable(*ret);
 	this->fill_rectangle(
 			*ret,
 			rectangle(
@@ -558,7 +558,7 @@ void parser::parseFilterElement(){
 void parser::fillFilterPrimitive(filter_primitive& p){
 	this->fill_element(p);
 	this->fill_rectangle(p);
-	this->fillStyleable(p);
+	this->fill_styleable(p);
 
 	if(auto a = this->find_attribute_of_namespace(xml_namespace::svg, "result")){
 		p.result = *a;
@@ -848,7 +848,7 @@ void parser::parseSvgElement(){
 	auto ret = std::make_unique<svg_element>();
 
 	this->fill_element(*ret);
-	this->fillStyleable(*ret);
+	this->fill_styleable(*ret);
 	this->fill_rectangle(*ret);
 	this->fill_view_boxed(*ret);
 	this->fill_aspect_ratioed(*ret);
@@ -863,7 +863,7 @@ void parser::parseImageElement(){
 	auto ret = std::make_unique<image_element>();
 
 	this->fill_element(*ret);
-	this->fillStyleable(*ret);
+	this->fill_styleable(*ret);
 	this->fill_transformable(*ret);
 	this->fill_rectangle(*ret);
 	this->fill_referencing(*ret);
@@ -881,7 +881,7 @@ void parser::parseSymbolElement(){
 	auto ret = std::make_unique<symbol_element>();
 
 	this->fill_element(*ret);
-	this->fillStyleable(*ret);
+	this->fill_styleable(*ret);
 	this->fill_view_boxed(*ret);
 	this->fill_aspect_ratioed(*ret);
 
@@ -896,7 +896,7 @@ void parser::parseUseElement(){
 
 	this->fill_element(*ret);
 	this->fill_transformable(*ret);
-	this->fillStyleable(*ret);
+	this->fill_styleable(*ret);
 	this->fill_referencing(*ret);
 	this->fill_rectangle(*ret);
 
