@@ -836,7 +836,7 @@ std::string svgdom::color_interpolation_filters_to_string(const style_value& v){
 }
 
 namespace{
-enable_background_property parseEnableBackgroundNewRect(const std::string& str){
+enable_background_property parse_enable_background_new_rect(const std::string& str){
 	enable_background_property ret;
 	
 	std::istringstream s(str);
@@ -879,7 +879,7 @@ style_value svgdom::parse_enable_background(const std::string& str){
 	std::string newStr = "new";
 	if(str.substr(0, newStr.length()) == "new"){
 		try{
-			ebp = parseEnableBackgroundNewRect(str);
+			ebp = parse_enable_background_new_rect(str);
 			ebp.value = svgdom::enable_background::new_;
 		}catch(malformed_svg_error&){
 			ebp.value = svgdom::enable_background::accumulate; // default value
@@ -923,9 +923,11 @@ std::string svgdom::enable_background_to_string(const style_value& v){
 }
 
 namespace{
-uint32_t hslToRgb(real h, real s, real l){
-	real c = (real(1) - (std::abs(real(2) * l - real(1))) ) * s;
-	real x = c * (1 - (std::abs(std::fmod(h / real(60), real(2)) - 1)));
+uint32_t hsl_to_rgb(real h, real s, real l){
+	using std::abs;
+	using std::fmod;
+	real c = (real(1) - (abs(real(2) * l - real(1))) ) * s;
+	real x = c * (1 - (abs(fmod(h / real(60), real(2)) - 1)));
 	
 	real m = l - c / real(2);
 	
@@ -959,9 +961,9 @@ uint32_t hslToRgb(real h, real s, real l){
 	r += m;
 	g += m;
 	b += m;
-	r *= 255;
-	g *= 255;
-	b *= 255;
+	r *= 0xff;
+	g *= 0xff;
+	b *= 0xff;
 	
 	uint32_t ret = 0;
 	
@@ -1100,7 +1102,7 @@ style_value svgdom::parse_paint(const std::string& str){
 			skip_whitespaces(ss);
 			
 			if(ss.get() == ')'){
-				auto color = hslToRgb(real(h), real(s) / real(100), real(l) / real(100));
+				auto color = hsl_to_rgb(real(h), real(s) / real(100), real(l) / real(100));
 				return style_value(color);
 			}
 			return style_value(style_value_special::none);
