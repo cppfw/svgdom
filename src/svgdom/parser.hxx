@@ -89,7 +89,7 @@ class parser : public mikroxml::parser{
 	void fill_styleable(styleable& s);
 	void fill_gradient(gradient& g);
 	void fill_shape(shape& s);
-	void fillFilterPrimitive(filter_primitive& p);
+	void fill_filter_primitive(filter_primitive& p);
 	void fillInputable(inputable& p);
 	void fillSecondInputable(second_inputable& p);
 	void fillTextPositioning(text_positioning& p);

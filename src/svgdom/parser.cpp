@@ -555,7 +555,7 @@ void parser::parseFilterElement(){
 	this->add_element(std::move(ret));
 }
 
-void parser::fillFilterPrimitive(filter_primitive& p){
+void parser::fill_filter_primitive(filter_primitive& p){
 	this->fill_element(p);
 	this->fill_rectangle(p);
 	this->fill_styleable(p);
@@ -583,7 +583,7 @@ void parser::parseFeGaussianBlurElement(){
 	
 	auto ret = std::make_unique<fe_gaussian_blur_element>();
 	
-	this->fillFilterPrimitive(*ret);
+	this->fill_filter_primitive(*ret);
 	this->fillInputable(*ret);
 
 	if(auto a = this->find_attribute_of_namespace(xml_namespace::svg, "stdDeviation")){
@@ -599,7 +599,7 @@ void parser::parseFeColorMatrixElement(){
 	
 	auto ret = std::make_unique<fe_color_matrix_element>();
 	
-	this->fillFilterPrimitive(*ret);
+	this->fill_filter_primitive(*ret);
 	this->fillInputable(*ret);
 	
 	if(auto a = this->find_attribute_of_namespace(xml_namespace::svg, "type")){
@@ -660,7 +660,7 @@ void parser::parseFeBlendElement(){
 	
 	auto ret = std::make_unique<fe_blend_element>();
 	
-	this->fillFilterPrimitive(*ret);
+	this->fill_filter_primitive(*ret);
 	this->fillInputable(*ret);
 	this->fillSecondInputable(*ret);
 	
@@ -687,7 +687,7 @@ void parser::parseFeCompositeElement(){
 	
 	auto ret = std::make_unique<fe_composite_element>();
 	
-	this->fillFilterPrimitive(*ret);
+	this->fill_filter_primitive(*ret);
 	this->fillInputable(*ret);
 	this->fillSecondInputable(*ret);
 	
