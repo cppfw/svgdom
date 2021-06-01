@@ -510,11 +510,11 @@ decltype(polyline_shape::points) polyline_shape::parse(std::string_view s){
 		while(!s.empty()){
 			decltype(ret)::value_type point;
 
-			point[0] = p.read_real();
+			point[0] = p.read_real<real>();
 
 			p.skip_whitespaces_and_comma();
 
-			point[1] = p.read_real();
+			point[1] = p.read_real<real>();
 			
 			ret.push_back(point);
 			

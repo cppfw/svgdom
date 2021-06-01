@@ -12,7 +12,7 @@ length length::parse(const std::string& str){
 
 	string_parser p(str);
 
-	ret.value = p.read_real();
+	ret.value = p.read_real<real>();
 
 	auto unit = p.read_word();
 

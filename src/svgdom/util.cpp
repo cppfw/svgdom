@@ -79,28 +79,6 @@ std::string_view string_parser::read_chars(size_t n){
 	return ret;
 }
 
-real string_parser::read_real(){
-	real ret;
-
-	char* end;
-
-	if constexpr (std::is_same<real, float>::value){
-		ret = real(std::strtof(this->view.data(), &end));
-	}else if constexpr (std::is_same<real, double>::value){
-		ret = real(std::strtod(this->view.data(), &end));
-	}else{
-		ret = real(std::strtold(this->view.data(), &end));
-	}
-
-	if(end == this->view.data()){
-		throw std::invalid_argument("string_parser::read_real(): could not parse real number");
-	}
-
-	this->view = std::string_view(end, this->view.data() + this->view.size() - end);
-
-	return ret;
-}
-
 void svgdom::skip_whitespaces(std::istream& s){
 	while(!s.eof()){
 		if(!std::isspace(s.peek())){
@@ -239,7 +217,7 @@ real svgdom::read_in_real(std::istream& s){
 	auto str = read_in_number_string(s);
 	
 	try{
-		return string_parser(str).read_real();
+		return string_parser(str).read_real<real>();
 	}catch(...){
 		return 0;
 	}
@@ -287,7 +265,7 @@ r4::vector2<real> svgdom::parse_number_and_optional_number(std::string_view s, r
 	string_parser p(s);
 
 	try{
-		ret[0] = p.read_real();
+		ret[0] = p.read_real<real>();
 	}catch(std::invalid_argument& e){
 		return defaults;
 	}
@@ -295,7 +273,7 @@ r4::vector2<real> svgdom::parse_number_and_optional_number(std::string_view s, r
 	p.skip_whitespaces_and_comma();
 
 	try{
-		ret[1] = p.read_real();
+		ret[1] = p.read_real<real>();
 	}catch(std::invalid_argument& e){
 		ret[1] = defaults[1];
 	}

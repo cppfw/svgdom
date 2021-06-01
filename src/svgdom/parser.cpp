@@ -494,7 +494,7 @@ void parser::parse_gradient_stop_element(){
 	
 	if(auto a = this->find_attribute_of_namespace(xml_namespace::svg, "offset")){
 		string_parser p(*a);
-		ret->offset = p.read_real();
+		ret->offset = p.read_real<real>();
 		if(!p.empty() && p.read_char() == '%'){
 			ret->offset /= 100;
 		}
@@ -626,7 +626,7 @@ void parser::parse_fe_color_matrix_element(){
 				{
 					string_parser p(*a);
 					for(unsigned i = 0; i != 20; ++i){
-						ret->values[i] = p.read_real();
+						ret->values[i] = p.read_real<real>();
 						p.skip_whitespaces_and_comma();
 					}
 				}
@@ -635,7 +635,7 @@ void parser::parse_fe_color_matrix_element(){
 				// fall-through
 			case fe_color_matrix_element::type::saturate:
 				// one value is expected
-				ret->values[0] = string_parser(*a).read_real();
+				ret->values[0] = string_parser(*a).read_real<real>();
 				break;
 			case fe_color_matrix_element::type::luminance_to_alpha:
 				// no values are expected

@@ -13,6 +13,7 @@ namespace svgdom{
 
 class string_parser{
     std::string_view view;
+
 public:
     string_parser(std::string_view view) :
             view(view)
@@ -24,7 +25,28 @@ public:
     std::string_view read_word();
 
     // skips leading whitespaces
-    real read_real();
+    template <class real_type>
+    real_type read_real(){
+        real_type ret;
+
+        char* end;
+
+        if constexpr (std::is_same<real_type, float>::value){
+            ret = real_type(std::strtof(this->view.data(), &end));
+        }else if constexpr (std::is_same<real_type, double>::value){
+            ret = real_type(std::strtod(this->view.data(), &end));
+        }else{
+            ret = real_type(std::strtold(this->view.data(), &end));
+        }
+
+        if(end == this->view.data()){
+            throw std::invalid_argument("string_parser::read_real(): could not parse real number");
+        }
+
+        this->view = std::string_view(end, this->view.data() + this->view.size() - end);
+
+        return ret;
+    }
 
     char read_char();
 
