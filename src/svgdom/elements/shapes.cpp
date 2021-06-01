@@ -501,27 +501,35 @@ path_element::step::type path_element::step::char_to_type(char c){
 	}
 }
 
-decltype(polyline_shape::points) polyline_shape::parse(const std::string& str) {
+decltype(polyline_shape::points) polyline_shape::parse(std::string_view s){
 	decltype(polyline_shape::points) ret;
 	
-	std::istringstream s(str);
-	s >> std::skipws;
-	
-	skip_whitespaces(s);
-	
-	while(!s.eof()){
+	while(!s.empty()){
 		decltype(ret)::value_type p;
-		p[0] = read_in_real(s);
-		skip_whitespaces_and_comma(s);
-		p[1] = read_in_real(s);
-		
-		if(s.fail()){
+
+		auto r = parse_real(s);
+		s = r.view;
+
+		if(r.error){
 			break;
 		}
+
+		p[0] = r.number;
+
+		s = skip_whitespaces_and_comma(s);
+
+		r = parse_real(s);
+		s = r.view;
+
+		if(r.error){
+			break;
+		}
+
+		p[1] = r.number;
 		
 		ret.push_back(p);
 		
-		skip_whitespaces_and_comma(s);
+		s = skip_whitespaces_and_comma(s);
 	}
 	
 	return ret;

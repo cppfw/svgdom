@@ -173,7 +173,7 @@ struct polyline_shape : public shape{
 	
 	std::string points_to_string()const;
 
-	static decltype(points) parse(const std::string& str);
+	static decltype(points) parse(std::string_view s);
 };
 
 struct polyline_element : public polyline_shape{
