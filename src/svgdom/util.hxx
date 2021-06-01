@@ -46,7 +46,7 @@ public:
             throw std::invalid_argument("string_parser::read_real(): could not parse real number");
         }
 
-        this->view = std::string_view(end, this->view.data() + this->view.size() - end);
+        this->view = this->view.substr(end - this->view.data());
 
         return ret;
     }
@@ -76,7 +76,7 @@ public:
             throw std::invalid_argument("string_parser::read_integer(): could not parse integer number");
         }
 
-        this->view = std::string_view(end, this->view.data() + this->view.size() - end);
+        this->view = this->view.substr(end - this->view.data());
 
         return ret;
     }
