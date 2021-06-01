@@ -624,13 +624,10 @@ void parser::parse_fe_color_matrix_element(){
 			case fe_color_matrix_element::type::matrix:
 				// 20 values expected
 				{
-					std::string_view v(*a);
+					string_parser p(*a);
 					for(unsigned i = 0; i != 20; ++i){
-						auto r = parse_real(v);
-						v = r.view;
-
-						ret->values[i] = r.number;
-						v = skip_whitespaces_and_comma(v);
+						ret->values[i] = p.read_real();
+						p.skip_whitespaces_and_comma();
 					}
 				}
 				break;
@@ -638,7 +635,7 @@ void parser::parse_fe_color_matrix_element(){
 				// fall-through
 			case fe_color_matrix_element::type::saturate:
 				// one value is expected
-				ret->values[0] = parse_real(*a).number;
+				ret->values[0] = string_parser(*a).read_real();
 				break;
 			case fe_color_matrix_element::type::luminance_to_alpha:
 				// no values are expected
