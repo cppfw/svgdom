@@ -232,11 +232,10 @@ style_value styleable::parse_style_property_value(style_property type, const std
 			return parse_color_interpolation(str);
 		case style_property::stroke_miterlimit:
 			{
-				std::istringstream iss(str);
-				real miterlimit = read_in_real(iss);
+				real miter_limit = string_parser(str).read_real<real>();
 				using std::max;
-				miterlimit = max(miterlimit, real(1)); // minimal value is 1
-				return style_value(miterlimit);
+				miter_limit = max(miter_limit, real(1)); // minimal value is 1
+				return style_value(miter_limit);
 			}
 			break;
 		case style_property::stop_opacity:
@@ -244,8 +243,7 @@ style_value styleable::parse_style_property_value(style_property type, const std
 		case style_property::stroke_opacity:
 		case style_property::fill_opacity:
 			{
-				std::istringstream iss(str);
-				real opacity = read_in_real(iss);
+				real opacity = string_parser(str).read_real<real>();
 				using std::min;
 				using std::max;
 				opacity = max(real(0), min(opacity, real(1))); // clamp to [0:1]
@@ -317,25 +315,21 @@ style_value styleable::parse_style_property_value(style_property type, const std
 }
 
 style_value svgdom::parse_url(const std::string& str){
-	std::string url = "url(";
+	const static std::string url_word = "url(";
 	
-	if(url != str.substr(0, url.length())){
+	string_parser p(str);
+	p.skip_whitespaces();
+	
+	if(url_word != p.read_chars(url_word.size())){
 		return style_value(style_value_special::unknown);
 	}
-	
-	std::istringstream s(str);
-	skip_whitespaces(s);
-	
-	std::string tmpStr;
-	s >> std::setw(int(url.length())) >> tmpStr >> std::setw(0);
-	ASSERT(tmpStr == url)
 
-	skip_whitespaces(s);
-	tmpStr = read_till_char_or_whitespace(s, ')');
+	p.skip_whitespaces();
+	auto url = p.read_word(')');
 
-	skip_whitespaces(s);
-	if(s.get() == ')'){
-		return style_value(tmpStr);
+	p.skip_whitespaces();
+	if(p.read_char() == ')'){
+		return style_value(std::string(url));
 	}
 
 	return style_value(style_value_special::unknown);;
