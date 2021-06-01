@@ -1,3 +1,9 @@
+libsvgdom (0.3.66) unstable; urgency=medium
+
+  * performance improvement
+
+ -- Ivan Gagis <igagis@gmail.com>  Tue, 01 Jun 2021 17:38:19 +0300
+
 libsvgdom (0.3.65) unstable; urgency=medium
 
   * replink to latest utki
