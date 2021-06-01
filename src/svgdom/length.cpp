@@ -7,7 +7,7 @@
 
 using namespace svgdom;
 
-length length::parse(const std::string& str){
+length length::parse(std::string_view str){
 	length ret;
 
 	string_parser p(str);

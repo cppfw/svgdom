@@ -31,7 +31,7 @@ struct length{
 	real value;
 	length_unit unit;
 	
-	static length parse(const std::string& str);
+	static length parse(std::string_view str);
 	
 	length() = default;
 

@@ -57,6 +57,23 @@ std::string_view string_parser::read_word(){
 	return ret;
 }
 
+std::string_view string_parser::read_word(char until_char){
+	for(auto i = this->view.begin(); i != this->view.end(); ++i){
+		if(std::isspace(*i) || *i == until_char){
+			auto dist = std::distance(this->view.begin(), i);
+			auto ret = this->view.substr(0, dist);
+			this->view = this->view.substr(dist);
+			return ret;
+		}
+	}
+
+	auto ret = this->view;
+
+	this->view = std::string_view();
+
+	return ret;
+}
+
 void string_parser::throw_if_empty(){
 	if(this->view.empty()){
 		throw std::invalid_argument("string_parser string is empty");

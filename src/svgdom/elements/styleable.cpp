@@ -52,18 +52,18 @@ style_value parse_stroke_dasharray(const std::string& str){
 		return style_value(style_value_special::none);
 	}
 
-	std::istringstream iss(str);
-
 	std::vector<length> dasharray;
 
-	skip_whitespaces(iss);
+	string_parser p(str);
 
-	while(!iss.eof()){
-		auto len_str = read_till_char_or_whitespace(iss, ',');
+	p.skip_whitespaces();
+
+	while(!p.empty()){
+		auto len_str = p.read_word(',');
 		auto l = length::parse(len_str);
 		dasharray.push_back(l);
 
-		skip_whitespaces_and_comma(iss);
+		p.skip_whitespaces_and_comma();
 	}
 
 	return style_value(std::move(dasharray));

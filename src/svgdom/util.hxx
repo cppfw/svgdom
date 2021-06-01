@@ -24,6 +24,7 @@ public:
     void skip_whitespaces_and_comma();
 
     std::string_view read_word();
+    std::string_view read_word(char until_char);
 
     // skips leading whitespaces
     template <class real_type>
