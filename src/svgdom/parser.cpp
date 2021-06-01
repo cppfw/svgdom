@@ -493,9 +493,9 @@ void parser::parse_gradient_stop_element(){
 	this->fill_styleable(*ret);
 	
 	if(auto a = this->find_attribute_of_namespace(xml_namespace::svg, "offset")){
-		auto r = parse_real(*a);
-		ret->offset = r.number;
-		if(!r.view.empty() && r.view.front() == '%'){
+		string_parser p(*a);
+		ret->offset = p.read_real();
+		if(!p.empty() && p.get_view().front() == '%'){
 			ret->offset /= 100;
 		}
 	}

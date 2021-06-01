@@ -29,6 +29,10 @@ public:
     bool empty()const noexcept{
         return this->view.empty();
     }
+
+    std::string_view get_view()const noexcept{
+        return this->view;
+    }
 };
 
 void skip_whitespaces(std::istream& s);
