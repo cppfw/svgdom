@@ -1,6 +1,5 @@
 #pragma once
 
-#include <istream>
 #include <array>
 #include <string_view>
 
@@ -92,18 +91,6 @@ public:
         return this->view.empty();
     }
 };
-
-void skip_whitespaces(std::istream& s);
-
-void skip_whitespaces_and_comma(std::istream& s);
-
-void skip_till_char_inclusive(std::istream& s, char c);
-
-std::string read_till_char(std::istream& s, char c);
-
-std::string read_till_char_or_whitespace(std::istream& s, char c);
-
-real read_in_real(std::istream& s);
 
 std::string_view trim_tail(std::string_view s);
 
