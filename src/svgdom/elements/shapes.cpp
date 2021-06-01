@@ -92,213 +92,121 @@ std::string polyline_shape::points_to_string() const {
 decltype(path_element::path) path_element::parse(const std::string& str){
 	decltype(path_element::path) ret;
 	
-//	TRACE(<< "str = " << str << std::endl)
-	
-	std::istringstream s(str);
-	s >> std::skipws;
-	
-	skip_whitespaces(s);
-	
-	step::type curType = step::type::unknown;
-	
-	while(!s.eof()){
-		ASSERT(!std::isspace(s.peek()))//spaces should be skept
+	try{
+		string_parser p(str);
 		
-//		TRACE(<< "s.peek() = " << char(s.peek()) << std::endl)
+		p.skip_whitespaces();
 		
-		{
-			auto t = step::char_to_type(s.peek());
-			if(t != step::type::unknown){
-				curType = t;
-				s.get();
-			}else if(curType == step::type::unknown){
-				curType = step::type::move_abs;
-			}else if(curType == step::type::move_abs){
-				curType = step::type::line_abs;
-			}else if(curType == step::type::move_rel){
-				curType = step::type::line_rel;
+		step::type cur_step_type = step::type::unknown;
+		
+		while(!p.empty()){
+			ASSERT(!std::isspace(p.peek_char())) // spaces should be skept
+			
+			{
+				auto t = step::char_to_type(p.peek_char());
+				if(t != step::type::unknown){
+					cur_step_type = t;
+					p.read_char();
+				}else if(cur_step_type == step::type::unknown){
+					cur_step_type = step::type::move_abs;
+				}else if(cur_step_type == step::type::move_abs){
+					cur_step_type = step::type::line_abs;
+				}else if(cur_step_type == step::type::move_rel){
+					cur_step_type = step::type::line_rel;
+				}
 			}
+			
+			p.skip_whitespaces();
+			
+			step cur_step;
+			cur_step.type_ = cur_step_type;
+			
+			switch(cur_step.type_){
+				case step::type::move_abs:
+				case step::type::move_rel:
+				case step::type::line_abs:
+				case step::type::line_rel:
+					cur_step.x = p.read_real<real>();
+					p.skip_whitespaces_and_comma();
+					cur_step.y = p.read_real<real>();
+					break;
+				case step::type::close:
+					break;
+				case step::type::horizontal_line_abs:
+				case step::type::horizontal_line_rel:
+					cur_step.x = p.read_real<real>();
+					break;
+				case step::type::vertical_line_abs:
+				case step::type::vertical_line_rel:
+					cur_step.y = p.read_real<real>();
+					break;
+				case step::type::cubic_abs:
+				case step::type::cubic_rel:
+					cur_step.x1 = p.read_real<real>();
+					p.skip_whitespaces_and_comma();
+					cur_step.y1 = p.read_real<real>();
+					p.skip_whitespaces_and_comma();
+					cur_step.x2 = p.read_real<real>();
+					p.skip_whitespaces_and_comma();
+					cur_step.y2 = p.read_real<real>();
+					p.skip_whitespaces_and_comma();
+					cur_step.x = p.read_real<real>();
+					p.skip_whitespaces_and_comma();
+					cur_step.y = p.read_real<real>();
+					break;
+				case step::type::cubic_smooth_abs:
+				case step::type::cubic_smooth_rel:
+					cur_step.x2 = p.read_real<real>();
+					p.skip_whitespaces_and_comma();
+					cur_step.y2 = p.read_real<real>();
+					p.skip_whitespaces_and_comma();
+					cur_step.x = p.read_real<real>();
+					p.skip_whitespaces_and_comma();
+					cur_step.y = p.read_real<real>();
+					break;
+				case step::type::quadratic_abs:
+				case step::type::quadratic_rel:
+					cur_step.x1 = p.read_real<real>();
+					p.skip_whitespaces_and_comma();
+					cur_step.y1 = p.read_real<real>();
+					p.skip_whitespaces_and_comma();
+					cur_step.x = p.read_real<real>();					
+					p.skip_whitespaces_and_comma();
+					cur_step.y = p.read_real<real>();
+					break;
+				case step::type::quadratic_smooth_abs:
+				case step::type::quadratic_smooth_rel:
+					cur_step.x = p.read_real<real>();
+					p.skip_whitespaces_and_comma();
+					cur_step.y = p.read_real<real>();
+					break;
+				case step::type::arc_abs:
+				case step::type::arc_rel:
+					cur_step.rx = p.read_real<real>();
+					p.skip_whitespaces_and_comma();
+					cur_step.ry = p.read_real<real>();
+					p.skip_whitespaces_and_comma();
+					cur_step.x_axis_rotation = p.read_real<real>();
+					p.skip_whitespaces_and_comma();
+					cur_step.flags.large_arc = (p.read_char() != '0');
+					p.skip_whitespaces_and_comma();
+					cur_step.flags.sweep = (p.read_char() != '0');
+					p.skip_whitespaces_and_comma();
+					cur_step.x = p.read_real<real>();
+					p.skip_whitespaces_and_comma();
+					cur_step.y = p.read_real<real>();
+					break;
+				default:
+					ASSERT(false)
+					break;
+			}
+			
+			ret.push_back(cur_step);
+			
+			p.skip_whitespaces_and_comma();
 		}
-		
-		skip_whitespaces(s);
-		
-		step cur_step;
-		cur_step.type_ = curType;
-		
-		switch(cur_step.type_){
-			case step::type::move_abs:
-			case step::type::move_rel:
-			case step::type::line_abs:
-			case step::type::line_rel:
-				cur_step.x = read_in_real(s);
-				if(s.fail()){
-					return ret;
-				}
-//				TRACE(<< "cur_step.x = " << cur_step.x << std::endl)
-				skip_whitespaces_and_comma(s);
-				cur_step.y = read_in_real(s);
-				if(s.fail()){
-					return ret;
-				}
-//				TRACE(<< "cur_step.y = " << cur_step.y << std::endl)
-				break;
-			case step::type::close:
-				break;
-			case step::type::horizontal_line_abs:
-			case step::type::horizontal_line_rel:
-				cur_step.x = read_in_real(s);
-				if(s.fail()){
-					return ret;
-				}
-				break;
-			case step::type::vertical_line_abs:
-			case step::type::vertical_line_rel:
-				cur_step.y = read_in_real(s);
-				if(s.fail()){
-					return ret;
-				}
-				break;
-			case step::type::cubic_abs:
-			case step::type::cubic_rel:
-				cur_step.x1 = read_in_real(s);
-				if(s.fail()){
-					return ret;
-				}
-				skip_whitespaces_and_comma(s);
-				cur_step.y1 = read_in_real(s);
-				if(s.fail()){
-					return ret;
-				}
-				skip_whitespaces_and_comma(s);
-				cur_step.x2 = read_in_real(s);
-				if(s.fail()){
-					return ret;
-				}
-				skip_whitespaces_and_comma(s);
-				cur_step.y2 = read_in_real(s);
-				if(s.fail()){
-					return ret;
-				}
-				skip_whitespaces_and_comma(s);
-				cur_step.x = read_in_real(s);
-				if(s.fail()){
-					return ret;
-				}
-				skip_whitespaces_and_comma(s);
-				cur_step.y = read_in_real(s);
-				if(s.fail()){
-					return ret;
-				}
-				break;
-			case step::type::cubic_smooth_abs:
-			case step::type::cubic_smooth_rel:
-				cur_step.x2 = read_in_real(s);
-				if(s.fail()){
-					return ret;
-				}
-				skip_whitespaces_and_comma(s);
-				cur_step.y2 = read_in_real(s);
-				if(s.fail()){
-					return ret;
-				}
-				skip_whitespaces_and_comma(s);
-				cur_step.x = read_in_real(s);
-				if(s.fail()){
-					return ret;
-				}
-				skip_whitespaces_and_comma(s);
-				cur_step.y = read_in_real(s);
-				if(s.fail()){
-					return ret;
-				}
-				break;
-			case step::type::quadratic_abs:
-			case step::type::quadratic_rel:
-				cur_step.x1 = read_in_real(s);
-				if(s.fail()){
-					return ret;
-				}
-				skip_whitespaces_and_comma(s);
-				cur_step.y1 = read_in_real(s);
-				if(s.fail()){
-					return ret;
-				}
-				skip_whitespaces_and_comma(s);
-				cur_step.x = read_in_real(s);
-				if(s.fail()){
-					return ret;
-				}
-				skip_whitespaces_and_comma(s);
-				cur_step.y = read_in_real(s);
-				if(s.fail()){
-					return ret;
-				}
-				break;
-			case step::type::quadratic_smooth_abs:
-			case step::type::quadratic_smooth_rel:
-				cur_step.x = read_in_real(s);
-				if(s.fail()){
-					return ret;
-				}
-				skip_whitespaces_and_comma(s);
-				cur_step.y = read_in_real(s);
-				if(s.fail()){
-					return ret;
-				}
-				break;
-			case step::type::arc_abs:
-			case step::type::arc_rel:
-				cur_step.rx = read_in_real(s);
-				if(s.fail()){
-					return ret;
-				}
-				skip_whitespaces_and_comma(s);
-				cur_step.ry = read_in_real(s);
-				if(s.fail()){
-					return ret;
-				}
-				skip_whitespaces_and_comma(s);
-				cur_step.x_axis_rotation = read_in_real(s);
-				if(s.fail()){
-					return ret;
-				}
-				skip_whitespaces_and_comma(s);
-				{
-					char f;
-					s >> f;
-					if(s.fail()){
-						return ret;
-					}
-					cur_step.flags.large_arc = (f != '0');
-				}
-				skip_whitespaces_and_comma(s);
-				{
-					char f;
-					s >> f;
-					if(s.fail()){
-						return ret;
-					}
-					cur_step.flags.sweep = (f != '0');
-				}
-				skip_whitespaces_and_comma(s);
-				cur_step.x = read_in_real(s);
-				if(s.fail()){
-					return ret;
-				}
-				skip_whitespaces_and_comma(s);
-				cur_step.y = read_in_real(s);
-				if(s.fail()){
-					return ret;
-				}
-				break;
-			default:
-				ASSERT(false)
-				break;
-		}
-		
-		ret.push_back(cur_step);
-		
-		skip_whitespaces_and_comma(s);
+	}catch(std::invalid_argument& e){
+		// ignore
 	}
 	
 	return ret;
@@ -307,12 +215,12 @@ decltype(path_element::path) path_element::parse(const std::string& str){
 std::string path_element::path_to_string() const {
 	std::stringstream s;
 	
-	step::type curType = step::type::unknown;
+	step::type cur_step_type = step::type::unknown;
 
 	bool first = true;
 	
 	for(auto& cur_step : this->path){
-		if(curType == cur_step.type_){
+		if(cur_step_type == cur_step.type_){
 			s << " ";
 		}else{
 			if (first) {
@@ -322,7 +230,7 @@ std::string path_element::path_to_string() const {
 			}
 			
 			s << step::type_to_char(cur_step.type_);
-			curType = cur_step.type_;
+			cur_step_type = cur_step.type_;
 		}
 		
 		switch(cur_step.type_){

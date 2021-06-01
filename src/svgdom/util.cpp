@@ -57,16 +57,26 @@ std::string_view string_parser::read_word(){
 	return ret;
 }
 
-char string_parser::read_char(){
+void string_parser::throw_if_empty(){
 	if(this->view.empty()){
-		throw std::invalid_argument("string_parser::read_char(): could not read char, string is empty");
+		throw std::invalid_argument("string_parser string is empty");
 	}
+}
+
+char string_parser::read_char(){
+	this->throw_if_empty();
 
 	char ret = this->view.front();
 
 	this->view = this->view.substr(1);
 
 	return ret;
+}
+
+char string_parser::peek_char(){
+	this->throw_if_empty();
+
+	return this->view.front();
 }
 
 std::string_view string_parser::read_chars(size_t n){

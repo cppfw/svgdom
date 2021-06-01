@@ -14,6 +14,7 @@ namespace svgdom{
 class string_parser{
     std::string_view view;
 
+    void throw_if_empty();
 public:
     string_parser(std::string_view view) :
             view(view)
@@ -49,6 +50,8 @@ public:
     }
 
     char read_char();
+
+    char peek_char();
 
     std::string_view read_chars(size_t n);
 
