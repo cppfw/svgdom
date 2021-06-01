@@ -88,17 +88,6 @@ void svgdom::skip_whitespaces(std::istream& s){
 	}
 }
 
-std::string_view svgdom::skip_whitespaces(std::string_view s){
-	size_t pos = 0;
-	for(char c : s){
-		if(!std::isspace(c)){
-			break;
-		}
-		++pos;
-	}
-	return s.substr(pos);
-}
-
 void svgdom::skip_whitespaces_and_comma(std::istream& s){
 	bool commaSkipped = false;
 	while(!s.eof()){
@@ -114,26 +103,6 @@ void svgdom::skip_whitespaces_and_comma(std::istream& s){
 			break;
 		}
 	}
-}
-
-std::string_view svgdom::skip_whitespaces_and_comma(std::string_view str){
-	size_t pos = 0;
-
-	bool comma_skipped = false;
-	for(char c : str){
-		if(std::isspace(c)){
-			++pos;
-		}else if(c == ','){
-			if(comma_skipped){
-				break;
-			}
-			++pos;
-			comma_skipped = true;
-		}else{
-			break;
-		}
-	}
-	return str.substr(pos);
 }
 
 void svgdom::skip_till_char_inclusive(std::istream& s, char c){
@@ -237,33 +206,6 @@ std::string read_in_number_string(std::istream& s){
 	}
 	return utki::make_string(ss);
 }
-}
-
-parse_real_result svgdom::parse_real(std::string_view str){
-	parse_real_result ret;
-
-	if(str.empty()){
-		ret.number = 0;
-		return ret;
-	}
-
-	char* end;
-
-	if constexpr (std::is_same<real, float>::value){
-		ret.number = real(std::strtof(str.data(), &end));
-	}else if constexpr (std::is_same<real, double>::value){
-		ret.number = real(std::strtod(str.data(), &end));
-	}else{
-		ret.number = real(std::strtold(str.data(), &end));
-	}
-
-	ret.view = std::string_view(end, str.data() + str.size() - end);
-
-	if(end == str.data()){
-		ret.error = true;
-	}
-
-	return ret;
 }
 
 real svgdom::read_in_real(std::istream& s){

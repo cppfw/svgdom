@@ -37,11 +37,7 @@ public:
 
 void skip_whitespaces(std::istream& s);
 
-std::string_view skip_whitespaces(std::string_view s);
-
 void skip_whitespaces_and_comma(std::istream& s);
-
-std::string_view skip_whitespaces_and_comma(std::string_view str);
 
 void skip_till_char_inclusive(std::istream& s, char c);
 
@@ -50,19 +46,6 @@ std::string read_till_char(std::istream& s, char c);
 std::string read_till_char_or_whitespace(std::istream& s, char c);
 
 real read_in_real(std::istream& s);
-
-struct read_word_result{
-	std::string_view word;
-	std::string_view view;
-};
-
-struct parse_real_result{
-    real number;
-    std::string_view view; // view after parsing
-	bool error = false;
-};
-
-parse_real_result parse_real(std::string_view str);
 
 std::string trim_tail(const std::string& s);
 
