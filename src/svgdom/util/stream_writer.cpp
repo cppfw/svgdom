@@ -13,17 +13,17 @@ void stream_writer::set_name(const std::string& name){
 	this->name = name;
 }
 
-void stream_writer::add_attribute(const std::string& name, const std::string& value){
-	this->attributes.push_back(std::make_pair(name, value));
+void stream_writer::add_attribute(std::string_view name, const std::string& value){
+	this->attributes.push_back(std::make_pair(std::string(name), value));
 }
 
-void stream_writer::add_attribute(const std::string& name, const length& value){
+void stream_writer::add_attribute(std::string_view name, const length& value){
 	std::stringstream ss;
 	ss << value;
 	this->add_attribute(name, ss.str());
 }
 
-void stream_writer::add_attribute(const std::string& name, real value){
+void stream_writer::add_attribute(std::string_view name, real value){
 	std::stringstream ss;
 	ss << value;
 	this->add_attribute(name, ss.str());
@@ -443,7 +443,7 @@ void stream_writer::visit(const style_element& e){
 	e.css.write(
 			fi,
 			[](uint32_t id) -> std::string{
-				return styleable::property_to_string(style_property(id));
+				return std::string(styleable::property_to_string(style_property(id)));
 			},
 			[](uint32_t id, const cssom::property_value_base& value) -> std::string{
 				return styleable::style_value_to_string(

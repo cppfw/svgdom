@@ -17,9 +17,9 @@ protected:
 	std::string indent_str();
 	
 	void set_name(const std::string& name);
-	void add_attribute(const std::string& name, const std::string& value);
-	void add_attribute(const std::string& name, const length& value);
-	void add_attribute(const std::string& name, real value);
+	void add_attribute(std::string_view name, const std::string& value);
+	void add_attribute(std::string_view name, const length& value);
+	void add_attribute(std::string_view name, real value);
 	void write(const container* children = nullptr, const std::string& content = std::string());
 	
 	void add_element_attributes(const element& e);

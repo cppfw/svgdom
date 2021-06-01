@@ -61,145 +61,111 @@ std::string transformable::transformations_to_string() const{
 
 
 decltype(transformable::transformations) transformable::parse(const std::string& str){
-	std::istringstream s(str);
-
-	s >> std::skipws;
-
-	skip_whitespaces(s);
-
 	decltype(transformable::transformations) ret;
 
-	while(!s.eof()){
-		std::string transform = read_till_char_or_whitespace(s, '(');
+	try{
+		string_parser p(str);
+		p.skip_whitespaces();
 
-//		TRACE(<< "transform = " << transform << std::endl)
+		while(!p.empty()){
+			auto transform = p.read_word_until('(');
 
-		transformation t;
+	//		TRACE(<< "transform = " << transform << std::endl)
 
-		if(transform == "matrix"){
-			t.type_ = transformation::type::matrix;
-		}else if(transform == "translate"){
-			t.type_ = transformation::type::translate;
-		}else if(transform == "scale"){
-			t.type_ = transformation::type::scale;
-		}else if(transform == "rotate"){
-			t.type_ = transformation::type::rotate;
-		}else if(transform == "skewX"){
-			t.type_ = transformation::type::skewx;
-		}else if(transform == "skewY"){
-			t.type_ = transformation::type::skewy;
-		}else{
-			return ret; // unknown transformation, stop parsing
-		}
+			transformation t;
 
-		skip_whitespaces(s);
+			if(transform == "matrix"){
+				t.type_ = transformation::type::matrix;
+			}else if(transform == "translate"){
+				t.type_ = transformation::type::translate;
+			}else if(transform == "scale"){
+				t.type_ = transformation::type::scale;
+			}else if(transform == "rotate"){
+				t.type_ = transformation::type::rotate;
+			}else if(transform == "skewX"){
+				t.type_ = transformation::type::skewx;
+			}else if(transform == "skewY"){
+				t.type_ = transformation::type::skewy;
+			}else{
+				return ret; // unknown transformation, stop parsing
+			}
 
-		if(s.get() != '('){
-//			TRACE(<< "error: expected '('" << std::endl)
-			return ret; // expected (
-		}
+			p.skip_whitespaces();
 
-		skip_whitespaces(s);
+			if(p.read_char() != '('){
+	//			TRACE(<< "error: expected '('" << std::endl)
+				return ret; // expected (
+			}
 
-		switch(t.type_){
-			default:
-				ASSERT(false)
-				break;
-			case transformation::type::matrix:
-				t.a = read_in_real(s);
-				if(s.fail()){
-					return ret;
-				}
-				skip_whitespaces_and_comma(s);
-				t.b = read_in_real(s);
-				if(s.fail()){
-					return ret;
-				}
-				skip_whitespaces_and_comma(s);
-				t.c = read_in_real(s);
-				if(s.fail()){
-					return ret;
-				}
-				skip_whitespaces_and_comma(s);
-				t.d = read_in_real(s);
-				if(s.fail()){
-					return ret;
-				}
-				skip_whitespaces_and_comma(s);
-				t.e = read_in_real(s);
-				if(s.fail()){
-					return ret;
-				}
-				skip_whitespaces_and_comma(s);
-				t.f = read_in_real(s);
-				if(s.fail()){
-					return ret;
-				}
-				break;
-			case transformation::type::translate:
-				t.x = read_in_real(s);
-				if(s.fail()){
-//					TRACE(<< "failed to read in x translation" << std::endl)
-					return ret;
-				}
-				skip_whitespaces_and_comma(s);
-				t.y = read_in_real(s);
-				if(s.fail()){
-//					TRACE(<< "failed to read in y translation" << std::endl)
-					s.clear();
-					t.y = 0;
-				}
-//				TRACE(<< "translation read: x,y = " << t.x << ", " << t.y << std::endl)
-				break;
-			case transformation::type::scale:
-				t.x = read_in_real(s);
-				if(s.fail()){
-					return ret;
-				}
-				skip_whitespaces_and_comma(s);
-				t.y = read_in_real(s);
-				if(s.fail()){
-					s.clear();
-					t.y = t.x;
-				}
-				break;
-			case transformation::type::rotate:
-				t.angle = read_in_real(s);
-				if(s.fail()){
-					return ret;
-				}
-				skip_whitespaces_and_comma(s);
-				t.x = read_in_real(s);
-				if(s.fail()){
-					s.clear();
-					t.x = 0;
-					t.y = 0;
-				}else{
-					skip_whitespaces_and_comma(s);
-					t.y = read_in_real(s);
-					if(s.fail()){
-						return ret; // malformed rotate transformation
+			p.skip_whitespaces();
+
+			switch(t.type_){
+				default:
+					ASSERT(false)
+					break;
+				case transformation::type::matrix:
+					t.a = p.read_real<real>();
+					p.skip_whitespaces_and_comma();
+					t.b = p.read_real<real>();
+					p.skip_whitespaces_and_comma();
+					t.c = p.read_real<real>();
+					p.skip_whitespaces_and_comma();
+					t.d = p.read_real<real>();
+					p.skip_whitespaces_and_comma();
+					t.e = p.read_real<real>();
+					p.skip_whitespaces_and_comma();
+					t.f = p.read_real<real>();
+					break;
+				case transformation::type::translate:
+					t.x = p.read_real<real>();					
+					p.skip_whitespaces_and_comma();
+					try{
+						t.y = p.read_real<real>();
+					}catch(std::invalid_argument& e){
+						t.y = 0;
 					}
-				}
-				break;
-			case transformation::type::skewy:
-			case transformation::type::skewx:
-				t.angle = read_in_real(s);
-				if(s.fail()){
-					return ret;
-				}
-				break;
+					break;
+				case transformation::type::scale:
+					t.x = p.read_real<real>();
+					p.skip_whitespaces_and_comma();
+					try{
+						t.y = p.read_real<real>();
+					}catch(std::invalid_argument& e){
+						t.y = t.x;
+					}
+					break;
+				case transformation::type::rotate:
+					t.angle = p.read_real<real>();
+					p.skip_whitespaces_and_comma();
+					try{
+						t.x = p.read_real<real>();
+					}catch(std::invalid_argument& e){
+						t.x = 0;
+						t.y = 0;
+						break;
+					}
+					
+					p.skip_whitespaces_and_comma();
+					t.y = p.read_real<real>();
+					break;
+				case transformation::type::skewy:
+				case transformation::type::skewx:
+					t.angle = p.read_real<real>();
+					break;
+			}
+
+			p.skip_whitespaces();
+
+			if(p.read_char() != ')'){
+				return ret; // expected )
+			}
+
+			ret.push_back(t);
+
+			p.skip_whitespaces_and_comma();
 		}
-
-		skip_whitespaces(s);
-
-		if(s.get() != ')'){
-			return ret; // expected )
-		}
-
-		ret.push_back(t);
-
-		skip_whitespaces_and_comma(s);
+	}catch(std::invalid_argument& e){
+		// ignore
 	}
 
 	return ret;

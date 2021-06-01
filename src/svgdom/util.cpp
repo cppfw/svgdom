@@ -40,6 +40,15 @@ void string_parser::skip_whitespaces_and_comma(){
 	this->view = this->view.substr(pos);
 }
 
+void string_parser::skip_inclusive_until(char c){
+	for(; !this->view.empty(); this->view = this->view.substr(1)){
+		if(this->view.front() == c){
+			this->view = this->view.substr(1);
+			break;
+		}
+	}
+}
+
 std::string_view string_parser::read_word(){
 	for(auto i = this->view.begin(); i != this->view.end(); ++i){
 		if(std::isspace(*i)){
@@ -57,7 +66,7 @@ std::string_view string_parser::read_word(){
 	return ret;
 }
 
-std::string_view string_parser::read_word(char until_char){
+std::string_view string_parser::read_word_until(char until_char){
 	for(auto i = this->view.begin(); i != this->view.end(); ++i){
 		if(std::isspace(*i) || *i == until_char){
 			auto dist = std::distance(this->view.begin(), i);
@@ -102,6 +111,23 @@ std::string_view string_parser::read_chars(size_t n){
 	auto ret = std::string_view(this->view.data(), n);
 
 	this->view = this->view.substr(n);
+
+	return ret;
+}
+
+std::string_view string_parser::read_chars_until(char until_char){
+	for(auto i = this->view.begin(); i != this->view.end(); ++i){
+		if(*i == until_char){
+			auto dist = std::distance(this->view.begin(), i);
+			auto ret = this->view.substr(0, dist);
+			this->view = this->view.substr(dist);
+			return ret;
+		}
+	}
+
+	auto ret = this->view;
+
+	this->view = std::string_view();
 
 	return ret;
 }
@@ -250,7 +276,7 @@ real svgdom::read_in_real(std::istream& s){
 	}
 }
 
-std::string svgdom::trim_tail(const std::string& s){
+std::string_view svgdom::trim_tail(std::string_view s){
 	const auto t = s.find_last_not_of(" \t\n\r");
 	if(t == std::string::npos){
 		return s;

@@ -6,19 +6,18 @@
 
 using namespace svgdom;
 
-decltype(view_boxed::view_box) view_boxed::parse_view_box(const std::string& str){
-	std::istringstream s(str);
-	
-	s >> std::skipws;
-	
+decltype(view_boxed::view_box) view_boxed::parse_view_box(std::string_view str){
 	decltype(view_boxed::view_box) ret;
 	
-	for(unsigned i = 0; i != ret.size(); ++i){
-		skip_whitespaces_and_comma(s);
-		ret[i] = read_in_real(s);
-		if(s.fail()){
-			return {{-1, -1, -1, -1}};
+	try{
+		string_parser p(str);
+
+		for(unsigned i = 0; i != ret.size(); ++i){
+			p.skip_whitespaces_and_comma();
+			ret[i] = p.read_real<real>();
 		}
+	}catch(std::invalid_argument& e){
+		return {{-1, -1, -1, -1}};
 	}
 	
 	return ret;

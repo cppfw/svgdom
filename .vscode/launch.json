@@ -9,7 +9,7 @@
             "type": "cppdbg",
             "request": "launch",
             "program": "${workspaceFolder}/tests/samples/out/dbg/parsesvg",
-            "args": ["testdata/dasharray1.svg"],
+            "args": ["testdata/six_ball.svg"],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}/tests/samples/",
             "environment": [{"name": "LD_LIBRARY_PATH", "value":"${workspaceFolder}/src/out/dbg"}],
@@ -22,7 +22,7 @@
                     "ignoreFailures": true
                 }
             ],
-            "preLaunchTask": "build_debug"
+            "preLaunchTask": "build_dbg"
         }
     ]
 }

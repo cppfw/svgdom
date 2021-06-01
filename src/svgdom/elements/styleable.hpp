@@ -198,23 +198,23 @@ inline bool is_current_color(const style_value& v){
  */
 std::string get_local_id_from_iri(const style_value& v);
 
-style_value parse_paint(const std::string& str);
+style_value parse_paint(std::string_view str);
 std::string paint_to_string(const style_value& v);
 
-style_value parse_color_interpolation(const std::string& str);
+style_value parse_color_interpolation(std::string_view str);
 	
-style_value parse_display(const std::string& str);
-std::string display_to_string(const style_value& v);
+style_value parse_display(std::string_view& str);
+std::string_view display_to_string(const style_value& v);
 
-style_value parse_visibility(const std::string& str);
-std::string visibility_to_string(const style_value& v);
+style_value parse_visibility(std::string_view str);
+std::string_view visibility_to_string(const style_value& v);
 	
-style_value parse_enable_background(const std::string& str);
+style_value parse_enable_background(std::string_view str);
 std::string enable_background_to_string(const style_value& v);
 	
 std::string color_interpolation_filters_to_string(const style_value& v);
 
-style_value parse_url(const std::string& str);
+style_value parse_url(std::string_view str);
 
 /**
  * @brief get color as RGB.
@@ -267,12 +267,12 @@ struct styleable : public cssom::styleable{
 
 	static decltype(styles) parse(const std::string& str);
 
-	static style_value parse_style_property_value(style_property type, const std::string& str);
+	static style_value parse_style_property_value(style_property type, std::string_view str);
 
 	static bool is_inherited(style_property p);
 
-	static std::string property_to_string(style_property p);
-	static style_property string_to_property(std::string str);
+	static std::string_view property_to_string(style_property p);
+	static style_property string_to_property(std::string_view str);
 };
 
 }

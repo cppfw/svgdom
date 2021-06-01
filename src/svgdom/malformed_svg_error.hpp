@@ -4,10 +4,10 @@
 
 namespace svgdom{
 
-class malformed_svg_error : public std::logic_error{
+class malformed_svg_error : public std::invalid_argument{
 public:
 	malformed_svg_error(const std::string& message) :
-			std::logic_error(message)
+			std::invalid_argument(message)
 	{}
 };
 

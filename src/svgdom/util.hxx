@@ -22,9 +22,10 @@ public:
 
     void skip_whitespaces();
     void skip_whitespaces_and_comma();
+    void skip_inclusive_until(char c);
 
     std::string_view read_word();
-    std::string_view read_word(char until_char);
+    std::string_view read_word_until(char c);
 
     // skips leading whitespaces
     template <class real_type>
@@ -50,11 +51,42 @@ public:
         return ret;
     }
 
+    // skips leading whitespaces
+    template <class integer_type>
+    integer_type read_integer(){
+        integer_type ret;
+
+        char* end;
+
+        if constexpr (std::is_unsigned<integer_type>::value){
+            if constexpr (sizeof(integer_type) <= sizeof(unsigned long)){
+                ret = integer_type(std::strtoul(this->view.data(), &end, 0));
+            }else{
+                ret = integer_type(std::strtoull(this->view.data(), &end, 0));
+            }
+        }else{
+            if constexpr (sizeof(integer_type) <= sizeof(long)){
+                ret = integer_type(std::strtol(this->view.data(), &end, 0));
+            }else{
+                ret = integer_type(std::strtoll(this->view.data(), &end, 0));
+            }
+        }
+
+        if(end == this->view.data()){
+            throw std::invalid_argument("string_parser::read_integer(): could not parse integer number");
+        }
+
+        this->view = std::string_view(end, this->view.data() + this->view.size() - end);
+
+        return ret;
+    }
+
     char read_char();
 
     char peek_char();
 
     std::string_view read_chars(size_t n);
+    std::string_view read_chars_until(char c);
 
     bool empty()const noexcept{
         return this->view.empty();
@@ -73,7 +105,7 @@ std::string read_till_char_or_whitespace(std::istream& s, char c);
 
 real read_in_real(std::istream& s);
 
-std::string trim_tail(const std::string& s);
+std::string_view trim_tail(std::string_view s);
 
 std::string iri_to_local_id(const std::string& iri);
 

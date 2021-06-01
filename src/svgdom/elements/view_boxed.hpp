@@ -16,7 +16,7 @@ struct view_boxed{
 
 	std::string view_box_to_string()const;
 
-	static decltype(view_box) parse_view_box(const std::string& str);
+	static decltype(view_box) parse_view_box(std::string_view str);
 
 	bool is_view_box_specified()const{
 		return this->view_box[2] >= 0; // width is not negative
