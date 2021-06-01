@@ -170,11 +170,12 @@ std::string read_in_number_string(std::istream& s){
 }
 
 parse_real_result svgdom::parse_real(std::string_view str){
-	if(str.empty()){
-		return {0, 0};
-	}
-	
 	parse_real_result ret;
+
+	if(str.empty()){
+		ret.number = 0;
+		return ret;
+	}
 
 	char* end;
 
