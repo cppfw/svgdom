@@ -72,7 +72,7 @@ char string_parser::read_char(){
 std::string_view string_parser::read_chars(size_t n){
 	using std::min;
 	n = min(n, this->view.size());
-	auto ret = std::string(this->view.data(), n);
+	auto ret = std::string_view(this->view.data(), n);
 
 	this->view = this->view.substr(n);
 
