@@ -26,12 +26,12 @@ public:
     // skips leading whitespaces
     real read_real();
 
+    char read_char();
+
+    std::string_view read_chars(size_t n);
+
     bool empty()const noexcept{
         return this->view.empty();
-    }
-
-    std::string_view get_view()const noexcept{
-        return this->view;
     }
 };
 

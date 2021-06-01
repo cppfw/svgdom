@@ -495,7 +495,7 @@ void parser::parse_gradient_stop_element(){
 	if(auto a = this->find_attribute_of_namespace(xml_namespace::svg, "offset")){
 		string_parser p(*a);
 		ret->offset = p.read_real();
-		if(!p.empty() && p.get_view().front() == '%'){
+		if(!p.empty() && p.read_char() == '%'){
 			ret->offset /= 100;
 		}
 	}
