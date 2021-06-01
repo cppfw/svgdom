@@ -9,6 +9,76 @@
 
 using namespace svgdom;
 
+void string_parser::skip_whitespaces(){
+	size_t pos = 0;
+	for(char c : this->view){
+		if(!std::isspace(c)){
+			break;
+		}
+		++pos;
+	}
+	this->view = this->view.substr(pos);
+}
+
+void string_parser::skip_whitespaces_and_comma(){
+	size_t pos = 0;
+
+	bool comma_skipped = false;
+	for(char c : this->view){
+		if(std::isspace(c)){
+			++pos;
+		}else if(c == ','){
+			if(comma_skipped){
+				break;
+			}
+			++pos;
+			comma_skipped = true;
+		}else{
+			break;
+		}
+	}
+	this->view = this->view.substr(pos);
+}
+
+std::string_view string_parser::read_word(){
+	for(auto i = this->view.begin(); i != this->view.end(); ++i){
+		if(std::isspace(*i)){
+			auto dist = std::distance(this->view.begin(), i);
+			auto ret = this->view.substr(0, dist);
+			this->view = this->view.substr(dist);
+			return ret;
+		}
+	}
+
+	auto ret = this->view;
+
+	this->view = std::string_view();
+
+	return ret;
+}
+
+real string_parser::read_real(){
+	real ret;
+
+	char* end;
+
+	if constexpr (std::is_same<real, float>::value){
+		ret = real(std::strtof(this->view.data(), &end));
+	}else if constexpr (std::is_same<real, double>::value){
+		ret = real(std::strtod(this->view.data(), &end));
+	}else{
+		ret = real(std::strtold(this->view.data(), &end));
+	}
+
+	if(end == this->view.data()){
+		throw std::invalid_argument("string_parser::read_real(): could not parse real number");
+	}
+
+	this->view = std::string_view(end, this->view.data() + this->view.size() - end);
+
+	return ret;
+}
+
 void svgdom::skip_whitespaces(std::istream& s){
 	while(!s.eof()){
 		if(!std::isspace(s.peek())){
@@ -263,31 +333,20 @@ std::string svgdom::coordinate_units_to_string(coordinate_units u){
 r4::vector2<real> svgdom::parse_number_and_optional_number(std::string_view s, r4::vector2<real> defaults){
 	r4::vector2<real> ret;
 
-	{
-		auto r = parse_real(s);
-		if(r.error){
-			return defaults;
-		}
+	string_parser p(s);
 
-		ret[0] = r.number;
-
-		s = r.view;
+	try{
+		ret[0] = p.read_real();
+	}catch(std::invalid_argument& e){
+		return defaults;
 	}
 
-	s = skip_whitespaces_and_comma(s);
+	p.skip_whitespaces_and_comma();
 
-	if(s.empty()){
+	try{
+		ret[1] = p.read_real();
+	}catch(std::invalid_argument& e){
 		ret[1] = defaults[1];
-		return ret;
-	}
-
-	{
-		auto r = parse_real(s);
-		if(r.error){
-			ret[1] = defaults[1];
-		}else{
-			ret[1] = r.number;
-		}
 	}
 
 	return ret;

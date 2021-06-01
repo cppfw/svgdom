@@ -11,6 +11,26 @@
 
 namespace svgdom{
 
+class string_parser{
+    std::string_view view;
+public:
+    string_parser(std::string_view view) :
+            view(view)
+    {}
+
+    void skip_whitespaces();
+    void skip_whitespaces_and_comma();
+
+    std::string_view read_word();
+
+    // skips leading whitespaces
+    real read_real();
+
+    bool empty()const noexcept{
+        return this->view.empty();
+    }
+};
+
 void skip_whitespaces(std::istream& s);
 
 std::string_view skip_whitespaces(std::string_view s);
