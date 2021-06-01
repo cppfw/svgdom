@@ -34,34 +34,34 @@ aspect_ratioed::aspect_ratio_preservation string_to_preserve_aspect_ratio(std::s
 }
 
 void aspect_ratioed::aspect_ratio_preservation_value::parse(std::string_view s){
-	s = skip_whitespaces(s);
+	string_parser p(s);
 
-	auto w = read_word(s);
-	s = w.view;
+	p.skip_whitespaces();
 
-	s = skip_whitespaces(s);
+	auto w = p.read_word();
+
+	p.skip_whitespaces();
 	
-	if(w.word == "defer"){
+	if(w == "defer"){
 		this->defer = true;
-		w = read_word(s);
-		if(w.word.empty()){
+		w = p.read_word();
+		if(w.empty()){
 			return;
 		}
-		s = w.view;
 	}else{
 		this->defer = false;
 	}
 
-	this->preserve = string_to_preserve_aspect_ratio(w.word);
+	this->preserve = string_to_preserve_aspect_ratio(w);
 
-	w = read_word(s);
-	if(w.word.empty()){
+	w = p.read_word();
+	if(w.empty()){
 		return;
 	}
 
-	if(w.word == "meet"){
+	if(w == "meet"){
 		this->slice = false;
-	}else if(w.word == "slice"){
+	}else if(w == "slice"){
 		this->slice = true;
 	}
 }

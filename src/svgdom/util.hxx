@@ -52,8 +52,6 @@ struct read_word_result{
 	std::string_view view;
 };
 
-read_word_result read_word(std::string_view str);
-
 struct parse_real_result{
     real number;
     std::string_view view; // view after parsing

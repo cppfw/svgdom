@@ -266,23 +266,6 @@ parse_real_result svgdom::parse_real(std::string_view str){
 	return ret;
 }
 
-read_word_result svgdom::read_word(std::string_view str){
-	read_word_result ret;
-
-	for(auto i = str.begin(); i != str.end(); ++i){
-		if(std::isspace(*i)){
-			auto dist = std::distance(str.begin(), i);
-			ret.word = str.substr(0, dist);
-			ret.view = str.substr(dist);
-			return ret;
-		}
-	}
-
-	ret.word = str;
-
-	return ret;
-}
-
 real svgdom::read_in_real(std::istream& s){
 	skip_whitespaces(s);
 	
