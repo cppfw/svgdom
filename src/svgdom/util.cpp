@@ -141,14 +141,14 @@ std::string_view svgdom::trim_tail(std::string_view s){
 	return s.substr(0, t + 1);
 }
 
-std::string svgdom::iri_to_local_id(const std::string& iri){
-	if(iri.length() != 0 && iri[0] == '#'){
-		return iri.substr(1, iri.length() - 1);
+std::string svgdom::iri_to_local_id(std::string_view iri){
+	if(iri.size() != 0 && iri[0] == '#'){
+		return std::string(iri.substr(1));
 	}
 	return std::string();
 }
 
-coordinate_units svgdom::parse_coordinate_units(const std::string& s){
+coordinate_units svgdom::parse_coordinate_units(std::string_view s){
 	if(s == "userSpaceOnUse"){
 		return coordinate_units::user_space_on_use;
 	}else if(s == "objectBoundingBox"){
@@ -190,12 +190,12 @@ r4::vector2<real> svgdom::parse_number_and_optional_number(std::string_view s, r
 	return ret;
 }
 
-std::string svgdom::number_and_optional_number_to_string(std::array<real, 2> non, real optionalNumberDefault){
+std::string svgdom::number_and_optional_number_to_string(std::array<real, 2> non, real optional_number_default){
 	std::stringstream ss;
 	
 	ss << non[0];
 	
-	if(non[1] != optionalNumberDefault){
+	if(non[1] != optional_number_default){
 		ss << " " << non[1];
 	}
 	
