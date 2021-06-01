@@ -10,11 +10,11 @@ using namespace svgdom;
 length length::parse(const std::string& str){
 	length ret;
 
-	auto r = parse_real(str);
+	string_parser p(str);
 
-	ret.value = r.number;
+	ret.value = p.read_real();
 
-	auto unit = r.view;
+	auto unit = p.read_word();
 
 	if(unit.empty()){
 		ret.unit = length_unit::number;
