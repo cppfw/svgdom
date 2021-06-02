@@ -1,3 +1,9 @@
+libsvgdom (0.3.67) unstable; urgency=medium
+
+  * relink to latest libs
+
+ -- Ivan Gagis <igagis@gmail.com>  Wed, 02 Jun 2021 21:28:38 +0300
+
 libsvgdom (0.3.66) unstable; urgency=medium
 
   * performance improvement
