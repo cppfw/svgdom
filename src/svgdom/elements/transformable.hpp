@@ -45,7 +45,7 @@ struct transformable{
 	
 	std::string transformations_to_string()const;
 	
-	static decltype(transformable::transformations) parse(const std::string& str);
+	static decltype(transformable::transformations) parse(std::string_view str);
 };
 
 }

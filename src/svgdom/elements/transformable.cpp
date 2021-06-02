@@ -6,8 +6,7 @@
 
 using namespace svgdom;
 
-
-std::string transformable::transformations_to_string() const{
+std::string transformable::transformations_to_string()const{
 	std::stringstream s;
 
 	bool isFirst = true;
@@ -59,8 +58,7 @@ std::string transformable::transformations_to_string() const{
 	return s.str();
 }
 
-
-decltype(transformable::transformations) transformable::parse(const std::string& str){
+decltype(transformable::transformations) transformable::parse(std::string_view str){
 	decltype(transformable::transformations) ret;
 
 	try{
