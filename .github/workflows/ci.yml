@@ -48,6 +48,10 @@ jobs:
         run: myci-deb-prepare.sh
       - name: install deps
         run: myci-deb-install-build-deps.sh
+      - name: add DE locale
+        run: |
+          echo "de_DE.UTF-8 UTF-8" >> /etc/locale.gen
+          locale-gen
       - name: build
         run: dpkg-buildpackage --unsigned-source --unsigned-changes
       - name: publish test report
