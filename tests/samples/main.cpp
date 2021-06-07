@@ -23,7 +23,9 @@ int main(int argc, char** argv){
 
 	// make sure the locale does not affect parsing (decimal delimiter can be "." or "," in different locales)
 	// so, set DE locale which has "," to make sure it does not affect the parsing
-	std::setlocale(LC_ALL, "de_DE.UTF-8");
+	if(!std::setlocale(LC_ALL, "de_DE.UTF-8")){
+		utki::log([](auto& o){o << "WARNING: failed to set locale de_DE.UTF-8, perhaps the locale is not installed. Testing that locale does not affect parsing will not be done.";});
+	}
 	
 	auto dom = svgdom::load(papki::fs_file(filename));
 	
