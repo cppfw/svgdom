@@ -16,7 +16,7 @@ decltype(view_boxed::view_box) view_boxed::parse_view_box(std::string_view str){
 			p.skip_whitespaces_and_comma();
 			ret[i] = p.read_real<real>();
 		}
-	}catch(std::invalid_argument& e){
+	}catch(std::invalid_argument&){
 		return {{-1, -1, -1, -1}};
 	}
 	

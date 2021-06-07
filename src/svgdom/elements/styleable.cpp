@@ -848,7 +848,7 @@ enable_background_property parse_enable_background_new_rect(std::string_view str
 		ret.rect.p.y() = p.read_real<real>();
 		ret.rect.d.x() = p.read_real<real>();
 		ret.rect.d.y() = p.read_real<real>();
-	}catch(std::invalid_argument& e){
+	}catch(std::invalid_argument&){
 		throw malformed_svg_error("malformed enable-background NEW string");
 	}
 	

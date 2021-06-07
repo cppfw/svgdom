@@ -119,7 +119,7 @@ decltype(transformable::transformations) transformable::parse(std::string_view s
 					p.skip_whitespaces_and_comma();
 					try{
 						t.y = p.read_real<real>();
-					}catch(std::invalid_argument& e){
+					}catch(std::invalid_argument&){
 						t.y = 0;
 					}
 					break;
@@ -128,7 +128,7 @@ decltype(transformable::transformations) transformable::parse(std::string_view s
 					p.skip_whitespaces_and_comma();
 					try{
 						t.y = p.read_real<real>();
-					}catch(std::invalid_argument& e){
+					}catch(std::invalid_argument&){
 						t.y = t.x;
 					}
 					break;
@@ -137,7 +137,7 @@ decltype(transformable::transformations) transformable::parse(std::string_view s
 					p.skip_whitespaces_and_comma();
 					try{
 						t.x = p.read_real<real>();
-					}catch(std::invalid_argument& e){
+					}catch(std::invalid_argument&){
 						t.x = 0;
 						t.y = 0;
 						break;
