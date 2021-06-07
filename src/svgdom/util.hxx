@@ -35,6 +35,8 @@ public:
     // skips leading whitespaces
     template <class real_type>
     real_type read_real(){
+        this->skip_whitespaces();
+
         std::conditional_t<
                 std::is_same<real_type, float>::value || std::is_same<real_type, double>::value,
                 real_type,
@@ -58,6 +60,8 @@ public:
     // skips leading whitespaces
     template <class integer_type>
     integer_type read_integer(){
+        this->skip_whitespaces();
+
         integer_type ret = 0;
 
         auto res = std::from_chars(this->view.data(), this->view.data() + this->view.size(), ret);
