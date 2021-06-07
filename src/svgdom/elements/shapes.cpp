@@ -89,7 +89,7 @@ std::string polyline_shape::points_to_string() const {
 	return s.str();
 }
 
-decltype(path_element::path) path_element::parse(const std::string& str){
+decltype(path_element::path) path_element::parse(std::string_view str){
 	decltype(path_element::path) ret;
 	
 	try{

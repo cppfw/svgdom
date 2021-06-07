@@ -83,7 +83,7 @@ struct path_element : public shape{
 	
 	std::string path_to_string()const;
 	
-	static decltype(path) parse(const std::string& str);
+	static decltype(path) parse(std::string_view str);
 	
 	void accept(visitor& v)override;
 	void accept(const_visitor& v) const override;
