@@ -206,6 +206,7 @@ decltype(path_element::path) path_element::parse(std::string_view str){
 			p.skip_whitespaces_and_comma();
 		}
 	}catch(std::invalid_argument& e){
+		LOG([&](auto& o){o << "WARNING: path_element::parse(): std::invalid_argument exception caught, ignored." << '\n' << "e.what() = " << e.what();})
 		// ignore
 	}
 	
@@ -429,6 +430,7 @@ decltype(polyline_shape::points) polyline_shape::parse(std::string_view s){
 			p.skip_whitespaces_and_comma();
 		}
 	}catch(std::invalid_argument& e){
+		LOG([&](auto& o){o << "WARNING: polyline_shape::parse(): std::invalid_argument exception caught, ignored." << '\n' << "e.what() = " << e.what();})
 		// ignore
 	}
 	
