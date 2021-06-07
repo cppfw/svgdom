@@ -11,7 +11,7 @@ tst::set set("performance", [](auto& suite){
 	suite.add("basic_test", [](){
 		auto loadStart = utki::get_ticks_ms();
 	
-		auto buf = papki::fs_file("../samples/testdata/back.svg").load();
+		auto buf = papki::fs_file("samples_data/back.svg").load();
 		
 		utki::log([&](auto&o){o << "SVG loaded in " << float(utki::get_ticks_ms() - loadStart) / 1000.0f << " sec." << std::endl;});
 		

@@ -15,7 +15,7 @@ tst::set set("style_stack_cache", [](auto& suite){
 			[](){
 				auto loadStart = utki::get_ticks_ms();
 	
-				auto dom = svgdom::load(papki::fs_file("../samples/testdata/back.svg"));
+				auto dom = svgdom::load(papki::fs_file("samples_data/back.svg"));
 
 				tst::check(dom != nullptr, SL);
 				tst::check(dom->children.size() != 0, SL);
