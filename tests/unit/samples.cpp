@@ -5,6 +5,7 @@
 #include <papki/vector_file.hpp>
 
 #include <regex>
+#include <clocale>
 
 #include "../../src/svgdom/dom.hpp"
 
