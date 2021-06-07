@@ -49,6 +49,7 @@ jobs:
       - name: install deps
         run: myci-deb-install-build-deps.sh
       - name: add DE locale
+        # needed for testing that locale with "," as decimal delimiter does not break the SVG parsing
         run: |
           echo "de_DE.UTF-8 UTF-8" >> /etc/locale.gen
           locale-gen
