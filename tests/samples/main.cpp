@@ -1,5 +1,7 @@
 #include "../../src/svgdom/dom.hpp"
 
+#include <clocale>
+
 #include <utki/debug.hpp>
 
 #include <papki/fs_file.hpp>
