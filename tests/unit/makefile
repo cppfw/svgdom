@@ -12,11 +12,6 @@ this_name := tests
 
 this_srcs := $(call prorab-src-dir, .)
 
-ifeq ($(os), windows)
-else
-    # this_ldflags += -rdynamic
-endif
-
 this_ldflags += -L $(d)../../src/out/$(c)
 this_ldlibs += -ltst -lutki -lsvgdom -lpapki $(addprefix -l,$(CONAN_LIBS))
 
@@ -27,7 +22,7 @@ $(eval $(prorab-build-app))
 
 $(prorab_this_name): $(abspath $(d)../../src/out/$(c)/libsvgdom$(dot_so))
 
-this_test_cmd := echo "" | $(prorab_this_name) --jobs=$(prorab_nproc) --junit-out=junit.xml
+this_test_cmd := $(prorab_this_name) --jobs=$(prorab_nproc) --junit-out=junit.xml
 this_test_deps := $(prorab_this_name)
 this_test_ld_path := ../../src/out/$(c) $(CONAN_LIB_DIRS)
 
