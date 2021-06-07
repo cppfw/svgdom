@@ -162,7 +162,12 @@ decltype(transformable::transformations) transformable::parse(std::string_view s
 
 			p.skip_whitespaces_and_comma();
 		}
-	}catch(std::invalid_argument& e){
+	}catch(std::invalid_argument&
+#ifdef DEBUG
+			e
+#endif
+		)
+	{
 		LOG([&](auto& o){o << "WARNING: transformable::parse(): std::invalid_argument exception caught, ignored." << '\n' << "e.what() = " << e.what();})
 		// ignore
 	}
