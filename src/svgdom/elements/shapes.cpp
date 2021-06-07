@@ -100,7 +100,7 @@ decltype(path_element::path) path_element::parse(std::string_view str){
 		step::type cur_step_type = step::type::unknown;
 		
 		while(!p.empty()){
-			ASSERT(!std::isspace(p.peek_char())) // spaces should be skept
+			ASSERT(!string_parser::is_space(p.peek_char())) // spaces should be skept
 			
 			{
 				auto t = step::char_to_type(p.peek_char());

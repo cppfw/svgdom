@@ -9,10 +9,21 @@
 
 using namespace svgdom;
 
+bool string_parser::is_space(char c){
+	// space characters of the default locale
+	return
+			c == ' ' ||
+			c == '\n' ||
+			c == '\t' ||
+			c == '\r' ||
+			c == '\v' || // vertical tab
+			c == '\f'; // form feed
+}
+
 void string_parser::skip_whitespaces(){
 	size_t pos = 0;
 	for(char c : this->view){
-		if(!std::isspace(c)){
+		if(!string_parser::is_space(c)){
 			break;
 		}
 		++pos;
@@ -25,7 +36,7 @@ void string_parser::skip_whitespaces_and_comma(){
 
 	bool comma_skipped = false;
 	for(char c : this->view){
-		if(std::isspace(c)){
+		if(string_parser::is_space(c)){
 			++pos;
 		}else if(c == ','){
 			if(comma_skipped){
@@ -51,7 +62,7 @@ void string_parser::skip_inclusive_until(char c){
 
 std::string_view string_parser::read_word(){
 	for(auto i = this->view.begin(); i != this->view.end(); ++i){
-		if(std::isspace(*i)){
+		if(string_parser::is_space(*i)){
 			auto dist = std::distance(this->view.begin(), i);
 			auto ret = this->view.substr(0, dist);
 			this->view = this->view.substr(dist);
@@ -68,7 +79,7 @@ std::string_view string_parser::read_word(){
 
 std::string_view string_parser::read_word_until(char until_char){
 	for(auto i = this->view.begin(); i != this->view.end(); ++i){
-		if(std::isspace(*i) || *i == until_char){
+		if(string_parser::is_space(*i) || *i == until_char){
 			auto dist = std::distance(this->view.begin(), i);
 			auto ret = this->view.substr(0, dist);
 			this->view = this->view.substr(dist);

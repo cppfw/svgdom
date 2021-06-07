@@ -965,7 +965,7 @@ style_value svgdom::parse_paint(std::string_view str){
 		return style_value(style_value_special::none);
 	}
 	
-	ASSERT(!std::isspace(str[0])) // leading spaces should be skept already	
+	ASSERT(!string_parser::is_space(str[0])) // leading spaces should be skept already	
 	
 	{
 		auto ret = parse_url(str);

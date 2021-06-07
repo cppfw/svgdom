@@ -2,11 +2,14 @@
 
 #include <array>
 #include <string_view>
+#include <charconv>
 
 #include <r4/vector.hpp>
 
 #include "config.hpp"
 #include "elements/coordinate_units.hpp"
+
+#include "fast_float/fast_float.hxx"
 
 namespace svgdom{
 
@@ -14,7 +17,10 @@ class string_parser{
     std::string_view view;
 
     void throw_if_empty();
+
 public:
+    static bool is_space(char c);
+
     string_parser(std::string_view view) :
             view(view)
     {}
@@ -29,53 +35,40 @@ public:
     // skips leading whitespaces
     template <class real_type>
     real_type read_real(){
-        real_type ret;
+        std::conditional_t<
+                std::is_same<real_type, float>::value || std::is_same<real_type, double>::value,
+                real_type,
+                double // TODO: use long double when std::from_chars for floats is widely supported by C++17 compilers
+            > ret;
 
-        char* end;
+        // TODO: use std::from_chars for floats when it is widely supported by C++17 compilers
+        auto res = fast_float::from_chars(this->view.data(), this->view.data() + this->view.size(), ret);
 
-        if constexpr (std::is_same<real_type, float>::value){
-            ret = real_type(std::strtof(this->view.data(), &end));
-        }else if constexpr (std::is_same<real_type, double>::value){
-            ret = real_type(std::strtod(this->view.data(), &end));
-        }else{
-            ret = real_type(std::strtold(this->view.data(), &end));
-        }
-
-        if(end == this->view.data()){
+        if(res.ec == std::errc::invalid_argument){
             throw std::invalid_argument("string_parser::read_real(): could not parse real number");
         }
 
-        this->view = this->view.substr(end - this->view.data());
+        ASSERT(this->view.data() != res.ptr)
 
-        return ret;
+        this->view = this->view.substr(res.ptr - this->view.data());
+
+        return real_type(ret);
     }
 
     // skips leading whitespaces
     template <class integer_type>
     integer_type read_integer(){
-        integer_type ret;
+        integer_type ret = 0;
 
-        char* end;
+        auto res = std::from_chars(this->view.data(), this->view.data() + this->view.size(), ret);
 
-        if constexpr (std::is_unsigned<integer_type>::value){
-            if constexpr (sizeof(integer_type) <= sizeof(unsigned long)){
-                ret = integer_type(std::strtoul(this->view.data(), &end, 0));
-            }else{
-                ret = integer_type(std::strtoull(this->view.data(), &end, 0));
-            }
-        }else{
-            if constexpr (sizeof(integer_type) <= sizeof(long)){
-                ret = integer_type(std::strtol(this->view.data(), &end, 0));
-            }else{
-                ret = integer_type(std::strtoll(this->view.data(), &end, 0));
-            }
-        }
-
-        if(end == this->view.data()){
+        if(res.ec == std::errc::invalid_argument){
             throw std::invalid_argument("string_parser::read_integer(): could not parse integer number");
         }
 
-        this->view = this->view.substr(end - this->view.data());
+        ASSERT(this->view.data() != res.ptr)
+
+        this->view = this->view.substr(res.ptr - this->view.data());
 
         return ret;
     }
