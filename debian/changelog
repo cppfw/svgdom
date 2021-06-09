@@ -1,3 +1,9 @@
+libsvgdom (0.3.69) unstable; urgency=medium
+
+  * relink to latest libs
+
+ -- Ivan Gagis <igagis@gmail.com>  Thu, 10 Jun 2021 01:04:09 +0300
+
 libsvgdom (0.3.68) unstable; urgency=medium
 
   * use locale independent numbers parsing
