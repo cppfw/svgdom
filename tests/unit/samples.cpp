@@ -23,10 +23,10 @@ tst::set set("samples", [](tst::suite& suite){
 		utki::log([](auto& o){o << "WARNING: failed to set locale de_DE.UTF-8, perhaps the locale is not installed. Testing that locale does not affect parsing will not be done." << std::endl;});
 	}
 
-    const std::regex suffix_regex("^.*\\.svg$");
     std::vector<std::string> files = utki::linq(papki::fs_file(data_dir).list_dir())
             .where(
                     [&](const auto& f){
+                        static const std::regex suffix_regex("^.*\\.svg$");
                         return std::regex_match(f, suffix_regex);
                     }
                 )
