@@ -6,10 +6,10 @@
 
 #include <r4/vector.hpp>
 
+#include <utki/string.hpp>
+
 #include "config.hpp"
 #include "elements/coordinate_units.hpp"
-
-#include "fast_float/fast_float.hxx"
 
 namespace svgdom{
 
@@ -44,7 +44,7 @@ public:
             > ret;
 
         // TODO: use std::from_chars for floats when it is widely supported by C++17 compilers
-        auto res = fast_float::from_chars(this->view.data(), this->view.data() + this->view.size(), ret);
+        auto res = utki::from_chars(this->view.data(), this->view.data() + this->view.size(), ret);
 
         if(res.ec == std::errc::invalid_argument){
             throw std::invalid_argument("string_parser::read_real(): could not parse real number");
