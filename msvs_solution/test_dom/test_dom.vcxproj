@@ -294,6 +294,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalOptions>/Zc:__cplusplus %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -307,6 +308,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalOptions>/Zc:__cplusplus %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -321,6 +323,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <AdditionalOptions>/Zc:__cplusplus %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -336,6 +339,7 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <AdditionalOptions>/Zc:__cplusplus %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -349,6 +353,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalOptions>/Zc:__cplusplus %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -362,6 +367,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalOptions>/Zc:__cplusplus %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -376,6 +382,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <AdditionalOptions>/Zc:__cplusplus %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -391,6 +398,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <AdditionalOptions>/Zc:__cplusplus %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -406,6 +414,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalOptions>/Zc:__cplusplus %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -423,6 +432,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalOptions>/Zc:__cplusplus %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -441,6 +451,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <AdditionalOptions>/Zc:__cplusplus %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -460,6 +471,7 @@
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <AdditionalOptions>/Zc:__cplusplus %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -477,6 +489,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalOptions>/Zc:__cplusplus %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -494,6 +507,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalOptions>/Zc:__cplusplus %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -512,6 +526,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <AdditionalOptions>/Zc:__cplusplus %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -531,6 +546,7 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <AdditionalOptions>/Zc:__cplusplus %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -560,30 +576,30 @@
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
-    <Import Project="..\packages\libutki.1.1.147\build\native\libutki.targets" Condition="Exists('..\packages\libutki.1.1.147\build\native\libutki.targets')" />
-    <Import Project="..\packages\libmikroxml.0.1.40\build\native\libmikroxml.targets" Condition="Exists('..\packages\libmikroxml.0.1.40\build\native\libmikroxml.targets')" />
     <Import Project="..\packages\libr4.1.0.56\build\native\libr4.targets" Condition="Exists('..\packages\libr4.1.0.56\build\native\libr4.targets')" />
     <Import Project="..\packages\zlib_static.1.2.11.9\build\native\zlib_static.targets" Condition="Exists('..\packages\zlib_static.1.2.11.9\build\native\zlib_static.targets')" />
-    <Import Project="..\packages\libpapki.1.0.99\build\native\libpapki.targets" Condition="Exists('..\packages\libpapki.1.0.99\build\native\libpapki.targets')" />
-    <Import Project="..\packages\libcssom.0.1.23\build\native\libcssom.targets" Condition="Exists('..\packages\libcssom.0.1.23\build\native\libcssom.targets')" />
-    <Import Project="..\packages\libtst.0.3.2\build\native\libtst.targets" Condition="Exists('..\packages\libtst.0.3.2\build\native\libtst.targets')" />
-    <Import Project="..\packages\libclargs.0.2.25\build\native\libclargs.targets" Condition="Exists('..\packages\libclargs.0.2.25\build\native\libclargs.targets')" />
-    <Import Project="..\packages\libopros.1.0.52\build\native\libopros.targets" Condition="Exists('..\packages\libopros.1.0.52\build\native\libopros.targets')" />
-    <Import Project="..\packages\libnitki.1.0.46\build\native\libnitki.targets" Condition="Exists('..\packages\libnitki.1.0.46\build\native\libnitki.targets')" />
+    <Import Project="..\packages\libutki.1.1.149\build\native\libutki.targets" Condition="Exists('..\packages\libutki.1.1.149\build\native\libutki.targets')" />
+    <Import Project="..\packages\libclargs.0.2.26\build\native\libclargs.targets" Condition="Exists('..\packages\libclargs.0.2.26\build\native\libclargs.targets')" />
+    <Import Project="..\packages\libmikroxml.0.1.41\build\native\libmikroxml.targets" Condition="Exists('..\packages\libmikroxml.0.1.41\build\native\libmikroxml.targets')" />
+    <Import Project="..\packages\libopros.1.0.54\build\native\libopros.targets" Condition="Exists('..\packages\libopros.1.0.54\build\native\libopros.targets')" />
+    <Import Project="..\packages\libnitki.1.0.48\build\native\libnitki.targets" Condition="Exists('..\packages\libnitki.1.0.48\build\native\libnitki.targets')" />
+    <Import Project="..\packages\libtst.0.3.3\build\native\libtst.targets" Condition="Exists('..\packages\libtst.0.3.3\build\native\libtst.targets')" />
+    <Import Project="..\packages\libpapki.1.0.105\build\native\libpapki.targets" Condition="Exists('..\packages\libpapki.1.0.105\build\native\libpapki.targets')" />
+    <Import Project="..\packages\libcssom.0.1.24\build\native\libcssom.targets" Condition="Exists('..\packages\libcssom.0.1.24\build\native\libcssom.targets')" />
   </ImportGroup>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\packages\libutki.1.1.147\build\native\libutki.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\libutki.1.1.147\build\native\libutki.targets'))" />
-    <Error Condition="!Exists('..\packages\libmikroxml.0.1.40\build\native\libmikroxml.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\libmikroxml.0.1.40\build\native\libmikroxml.targets'))" />
     <Error Condition="!Exists('..\packages\libr4.1.0.56\build\native\libr4.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\libr4.1.0.56\build\native\libr4.targets'))" />
     <Error Condition="!Exists('..\packages\zlib_static.1.2.11.9\build\native\zlib_static.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\zlib_static.1.2.11.9\build\native\zlib_static.targets'))" />
-    <Error Condition="!Exists('..\packages\libpapki.1.0.99\build\native\libpapki.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\libpapki.1.0.99\build\native\libpapki.targets'))" />
-    <Error Condition="!Exists('..\packages\libcssom.0.1.23\build\native\libcssom.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\libcssom.0.1.23\build\native\libcssom.targets'))" />
-    <Error Condition="!Exists('..\packages\libtst.0.3.2\build\native\libtst.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\libtst.0.3.2\build\native\libtst.targets'))" />
-    <Error Condition="!Exists('..\packages\libclargs.0.2.25\build\native\libclargs.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\libclargs.0.2.25\build\native\libclargs.targets'))" />
-    <Error Condition="!Exists('..\packages\libopros.1.0.52\build\native\libopros.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\libopros.1.0.52\build\native\libopros.targets'))" />
-    <Error Condition="!Exists('..\packages\libnitki.1.0.46\build\native\libnitki.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\libnitki.1.0.46\build\native\libnitki.targets'))" />
+    <Error Condition="!Exists('..\packages\libutki.1.1.149\build\native\libutki.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\libutki.1.1.149\build\native\libutki.targets'))" />
+    <Error Condition="!Exists('..\packages\libclargs.0.2.26\build\native\libclargs.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\libclargs.0.2.26\build\native\libclargs.targets'))" />
+    <Error Condition="!Exists('..\packages\libmikroxml.0.1.41\build\native\libmikroxml.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\libmikroxml.0.1.41\build\native\libmikroxml.targets'))" />
+    <Error Condition="!Exists('..\packages\libopros.1.0.54\build\native\libopros.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\libopros.1.0.54\build\native\libopros.targets'))" />
+    <Error Condition="!Exists('..\packages\libnitki.1.0.48\build\native\libnitki.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\libnitki.1.0.48\build\native\libnitki.targets'))" />
+    <Error Condition="!Exists('..\packages\libtst.0.3.3\build\native\libtst.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\libtst.0.3.3\build\native\libtst.targets'))" />
+    <Error Condition="!Exists('..\packages\libpapki.1.0.105\build\native\libpapki.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\libpapki.1.0.105\build\native\libpapki.targets'))" />
+    <Error Condition="!Exists('..\packages\libcssom.0.1.24\build\native\libcssom.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\libcssom.0.1.24\build\native\libcssom.targets'))" />
   </Target>
 </Project>
