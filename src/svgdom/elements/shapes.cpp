@@ -126,75 +126,75 @@ decltype(path_element::path) path_element::parse(std::string_view str){
 				case step::type::move_rel:
 				case step::type::line_abs:
 				case step::type::line_rel:
-					cur_step.x = p.read_real<real>();
+					cur_step.x = p.read_number<real>();
 					p.skip_whitespaces_and_comma();
-					cur_step.y = p.read_real<real>();
+					cur_step.y = p.read_number<real>();
 					break;
 				case step::type::close:
 					break;
 				case step::type::horizontal_line_abs:
 				case step::type::horizontal_line_rel:
-					cur_step.x = p.read_real<real>();
+					cur_step.x = p.read_number<real>();
 					break;
 				case step::type::vertical_line_abs:
 				case step::type::vertical_line_rel:
-					cur_step.y = p.read_real<real>();
+					cur_step.y = p.read_number<real>();
 					break;
 				case step::type::cubic_abs:
 				case step::type::cubic_rel:
-					cur_step.x1 = p.read_real<real>();
+					cur_step.x1 = p.read_number<real>();
 					p.skip_whitespaces_and_comma();
-					cur_step.y1 = p.read_real<real>();
+					cur_step.y1 = p.read_number<real>();
 					p.skip_whitespaces_and_comma();
-					cur_step.x2 = p.read_real<real>();
+					cur_step.x2 = p.read_number<real>();
 					p.skip_whitespaces_and_comma();
-					cur_step.y2 = p.read_real<real>();
+					cur_step.y2 = p.read_number<real>();
 					p.skip_whitespaces_and_comma();
-					cur_step.x = p.read_real<real>();
+					cur_step.x = p.read_number<real>();
 					p.skip_whitespaces_and_comma();
-					cur_step.y = p.read_real<real>();
+					cur_step.y = p.read_number<real>();
 					break;
 				case step::type::cubic_smooth_abs:
 				case step::type::cubic_smooth_rel:
-					cur_step.x2 = p.read_real<real>();
+					cur_step.x2 = p.read_number<real>();
 					p.skip_whitespaces_and_comma();
-					cur_step.y2 = p.read_real<real>();
+					cur_step.y2 = p.read_number<real>();
 					p.skip_whitespaces_and_comma();
-					cur_step.x = p.read_real<real>();
+					cur_step.x = p.read_number<real>();
 					p.skip_whitespaces_and_comma();
-					cur_step.y = p.read_real<real>();
+					cur_step.y = p.read_number<real>();
 					break;
 				case step::type::quadratic_abs:
 				case step::type::quadratic_rel:
-					cur_step.x1 = p.read_real<real>();
+					cur_step.x1 = p.read_number<real>();
 					p.skip_whitespaces_and_comma();
-					cur_step.y1 = p.read_real<real>();
+					cur_step.y1 = p.read_number<real>();
 					p.skip_whitespaces_and_comma();
-					cur_step.x = p.read_real<real>();					
+					cur_step.x = p.read_number<real>();					
 					p.skip_whitespaces_and_comma();
-					cur_step.y = p.read_real<real>();
+					cur_step.y = p.read_number<real>();
 					break;
 				case step::type::quadratic_smooth_abs:
 				case step::type::quadratic_smooth_rel:
-					cur_step.x = p.read_real<real>();
+					cur_step.x = p.read_number<real>();
 					p.skip_whitespaces_and_comma();
-					cur_step.y = p.read_real<real>();
+					cur_step.y = p.read_number<real>();
 					break;
 				case step::type::arc_abs:
 				case step::type::arc_rel:
-					cur_step.rx = p.read_real<real>();
+					cur_step.rx = p.read_number<real>();
 					p.skip_whitespaces_and_comma();
-					cur_step.ry = p.read_real<real>();
+					cur_step.ry = p.read_number<real>();
 					p.skip_whitespaces_and_comma();
-					cur_step.x_axis_rotation = p.read_real<real>();
+					cur_step.x_axis_rotation = p.read_number<real>();
 					p.skip_whitespaces_and_comma();
 					cur_step.flags.large_arc = (p.read_char() != '0');
 					p.skip_whitespaces_and_comma();
 					cur_step.flags.sweep = (p.read_char() != '0');
 					p.skip_whitespaces_and_comma();
-					cur_step.x = p.read_real<real>();
+					cur_step.x = p.read_number<real>();
 					p.skip_whitespaces_and_comma();
-					cur_step.y = p.read_real<real>();
+					cur_step.y = p.read_number<real>();
 					break;
 				default:
 					ASSERT(false)
@@ -424,11 +424,11 @@ decltype(polyline_shape::points) polyline_shape::parse(std::string_view s){
 		while(!s.empty()){
 			decltype(ret)::value_type point;
 
-			point[0] = p.read_real<real>();
+			point[0] = p.read_number<real>();
 
 			p.skip_whitespaces_and_comma();
 
-			point[1] = p.read_real<real>();
+			point[1] = p.read_number<real>();
 			
 			ret.push_back(point);
 			

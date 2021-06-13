@@ -33,38 +33,21 @@ public:
     std::string_view read_word_until(char c);
 
     // skips leading whitespaces
-    template <class real_type>
-    real_type read_real(){
+    template <class number_type>
+    number_type read_number(){
         this->skip_whitespaces();
 
-        std::conditional_t<
-                std::is_same<real_type, float>::value || std::is_same<real_type, double>::value,
-                real_type,
-                double // TODO: use long double when std::from_chars for floats is widely supported by C++17 compilers
-            > ret;
+        number_type ret = 0;
 
-        // TODO: use std::from_chars for floats when it is widely supported by C++17 compilers
-        auto res = utki::from_chars(this->view.data(), this->view.data() + this->view.size(), ret);
+        std::from_chars_result res;
 
-        if(res.ec == std::errc::invalid_argument){
-            throw std::invalid_argument("string_parser::read_real(): could not parse real number");
+        if constexpr (std::is_floating_point<number_type>::value){
+            // TODO: use std::from_chars for floats when it is widely supported by C++17 compilers,
+            // so if constexpr will not be needed.
+            res = utki::from_chars(this->view.data(), this->view.data() + this->view.size(), ret);
+        }else{
+            res = std::from_chars(this->view.data(), this->view.data() + this->view.size(), ret);
         }
-
-        ASSERT(this->view.data() != res.ptr)
-
-        this->view = this->view.substr(res.ptr - this->view.data());
-
-        return real_type(ret);
-    }
-
-    // skips leading whitespaces
-    template <class integer_type>
-    integer_type read_integer(){
-        this->skip_whitespaces();
-
-        integer_type ret = 0;
-
-        auto res = std::from_chars(this->view.data(), this->view.data() + this->view.size(), ret);
 
         if(res.ec == std::errc::invalid_argument){
             throw std::invalid_argument("string_parser::read_integer(): could not parse integer number");

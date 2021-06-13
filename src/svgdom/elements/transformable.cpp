@@ -102,41 +102,41 @@ decltype(transformable::transformations) transformable::parse(std::string_view s
 					ASSERT(false)
 					break;
 				case transformation::type::matrix:
-					t.a = p.read_real<real>();
+					t.a = p.read_number<real>();
 					p.skip_whitespaces_and_comma();
-					t.b = p.read_real<real>();
+					t.b = p.read_number<real>();
 					p.skip_whitespaces_and_comma();
-					t.c = p.read_real<real>();
+					t.c = p.read_number<real>();
 					p.skip_whitespaces_and_comma();
-					t.d = p.read_real<real>();
+					t.d = p.read_number<real>();
 					p.skip_whitespaces_and_comma();
-					t.e = p.read_real<real>();
+					t.e = p.read_number<real>();
 					p.skip_whitespaces_and_comma();
-					t.f = p.read_real<real>();
+					t.f = p.read_number<real>();
 					break;
 				case transformation::type::translate:
-					t.x = p.read_real<real>();					
+					t.x = p.read_number<real>();					
 					p.skip_whitespaces_and_comma();
 					try{
-						t.y = p.read_real<real>();
+						t.y = p.read_number<real>();
 					}catch(std::invalid_argument&){
 						t.y = 0;
 					}
 					break;
 				case transformation::type::scale:
-					t.x = p.read_real<real>();
+					t.x = p.read_number<real>();
 					p.skip_whitespaces_and_comma();
 					try{
-						t.y = p.read_real<real>();
+						t.y = p.read_number<real>();
 					}catch(std::invalid_argument&){
 						t.y = t.x;
 					}
 					break;
 				case transformation::type::rotate:
-					t.angle = p.read_real<real>();
+					t.angle = p.read_number<real>();
 					p.skip_whitespaces_and_comma();
 					try{
-						t.x = p.read_real<real>();
+						t.x = p.read_number<real>();
 					}catch(std::invalid_argument&){
 						t.x = 0;
 						t.y = 0;
@@ -144,11 +144,11 @@ decltype(transformable::transformations) transformable::parse(std::string_view s
 					}
 					
 					p.skip_whitespaces_and_comma();
-					t.y = p.read_real<real>();
+					t.y = p.read_number<real>();
 					break;
 				case transformation::type::skewy:
 				case transformation::type::skewx:
-					t.angle = p.read_real<real>();
+					t.angle = p.read_number<real>();
 					break;
 			}
 

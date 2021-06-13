@@ -14,7 +14,7 @@ decltype(view_boxed::view_box) view_boxed::parse_view_box(std::string_view str){
 
 		for(unsigned i = 0; i != ret.size(); ++i){
 			p.skip_whitespaces_and_comma();
-			ret[i] = p.read_real<real>();
+			ret[i] = p.read_number<real>();
 		}
 	}catch(std::invalid_argument&){
 		return {{-1, -1, -1, -1}};

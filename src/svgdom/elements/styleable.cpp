@@ -232,7 +232,7 @@ style_value styleable::parse_style_property_value(style_property type, std::stri
 			return parse_color_interpolation(str);
 		case style_property::stroke_miterlimit:
 			{
-				real miter_limit = string_parser(str).read_real<real>();
+				real miter_limit = string_parser(str).read_number<real>();
 				using std::max;
 				miter_limit = max(miter_limit, real(1)); // minimal value is 1
 				return style_value(miter_limit);
@@ -243,7 +243,7 @@ style_value styleable::parse_style_property_value(style_property type, std::stri
 		case style_property::stroke_opacity:
 		case style_property::fill_opacity:
 			{
-				real opacity = string_parser(str).read_real<real>();
+				real opacity = string_parser(str).read_number<real>();
 				using std::min;
 				using std::max;
 				opacity = max(real(0), min(opacity, real(1))); // clamp to [0:1]
@@ -844,10 +844,10 @@ enable_background_property parse_enable_background_new_rect(std::string_view str
 			return ret;
 		}
 		
-		ret.rect.p.x() = p.read_real<real>();
-		ret.rect.p.y() = p.read_real<real>();
-		ret.rect.d.x() = p.read_real<real>();
-		ret.rect.d.y() = p.read_real<real>();
+		ret.rect.p.x() = p.read_number<real>();
+		ret.rect.p.y() = p.read_number<real>();
+		ret.rect.d.x() = p.read_number<real>();
+		ret.rect.d.y() = p.read_number<real>();
 	}catch(std::invalid_argument&){
 		throw malformed_svg_error("malformed enable-background NEW string");
 	}
@@ -1035,11 +1035,11 @@ style_value svgdom::parse_paint(std::string_view str){
 			uint32_t r, g, b;
 			
 			p.skip_whitespaces();
-			r = p.read_integer<uint32_t>();
+			r = p.read_number<uint32_t>();
 			p.skip_whitespaces_and_comma();
-			g = p.read_integer<uint32_t>();
+			g = p.read_number<uint32_t>();
 			p.skip_whitespaces_and_comma();
-			b = p.read_integer<uint32_t>();
+			b = p.read_number<uint32_t>();
 			p.skip_whitespaces();
 			
 			if(p.read_char() == ')'){
@@ -1060,14 +1060,14 @@ style_value svgdom::parse_paint(std::string_view str){
 			uint32_t h, s, l;
 			
 			p.skip_whitespaces();
-			h = p.read_integer<decltype(h)>();
+			h = p.read_number<decltype(h)>();
 			p.skip_whitespaces_and_comma();
-			s = p.read_integer<decltype(s)>();
+			s = p.read_number<decltype(s)>();
 			if(p.read_char() != '%'){
 				return style_value(style_value_special::none);
 			}
 			p.skip_whitespaces_and_comma();
-			l = p.read_integer<decltype(l)>();
+			l = p.read_number<decltype(l)>();
 			if(p.read_char() != '%'){
 				return style_value(style_value_special::none);
 			}

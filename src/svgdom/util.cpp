@@ -185,7 +185,7 @@ r4::vector2<real> svgdom::parse_number_and_optional_number(std::string_view s, r
 	string_parser p(s);
 
 	try{
-		ret[0] = p.read_real<real>();
+		ret[0] = p.read_number<real>();
 	}catch(std::invalid_argument&){
 		return defaults;
 	}
@@ -193,7 +193,7 @@ r4::vector2<real> svgdom::parse_number_and_optional_number(std::string_view s, r
 	p.skip_whitespaces_and_comma();
 
 	try{
-		ret[1] = p.read_real<real>();
+		ret[1] = p.read_number<real>();
 	}catch(std::invalid_argument&){
 		ret[1] = defaults[1];
 	}
