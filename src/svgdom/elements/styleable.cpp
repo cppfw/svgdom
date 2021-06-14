@@ -339,8 +339,7 @@ namespace{
 style_value parse_style_property_value(style_property type, utki::string_parser& p){
 	p.skip_whitespaces();
 	auto str = p.read_chars_until(';');
-	str = trim_tail(str);
-	return styleable::parse_style_property_value(type, str);
+	return styleable::parse_style_property_value(type, trim_tail(str));
 }
 }
 

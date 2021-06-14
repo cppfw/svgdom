@@ -13,7 +13,7 @@
 
 namespace svgdom{
 
-std::string_view trim_tail(std::string_view s);
+std::string trim_tail(std::string_view s);
 
 std::string iri_to_local_id(std::string_view iri);
 

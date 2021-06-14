@@ -9,13 +9,13 @@
 
 using namespace svgdom;
 
-std::string_view svgdom::trim_tail(std::string_view s){
+std::string svgdom::trim_tail(std::string_view s){
 	const auto t = s.find_last_not_of(" \t\n\r");
 	if(t == std::string::npos){
-		return s;
+		return std::string(s);
 	}
 	
-	return s.substr(0, t + 1);
+	return std::string(s.substr(0, t + 1));
 }
 
 std::string svgdom::iri_to_local_id(std::string_view iri){
