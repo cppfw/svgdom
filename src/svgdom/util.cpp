@@ -9,140 +9,6 @@
 
 using namespace svgdom;
 
-bool string_parser::is_space(char c){
-	// space characters of the default locale
-	return
-			c == ' ' ||
-			c == '\n' ||
-			c == '\t' ||
-			c == '\r' ||
-			c == '\v' || // vertical tab
-			c == '\f'; // form feed
-}
-
-void string_parser::skip_whitespaces(){
-	size_t pos = 0;
-	for(char c : this->view){
-		if(!string_parser::is_space(c)){
-			break;
-		}
-		++pos;
-	}
-	this->view = this->view.substr(pos);
-}
-
-void string_parser::skip_whitespaces_and_comma(){
-	size_t pos = 0;
-
-	bool comma_skipped = false;
-	for(char c : this->view){
-		if(string_parser::is_space(c)){
-			++pos;
-		}else if(c == ','){
-			if(comma_skipped){
-				break;
-			}
-			++pos;
-			comma_skipped = true;
-		}else{
-			break;
-		}
-	}
-	this->view = this->view.substr(pos);
-}
-
-void string_parser::skip_inclusive_until(char c){
-	for(; !this->view.empty(); this->view = this->view.substr(1)){
-		if(this->view.front() == c){
-			this->view = this->view.substr(1);
-			break;
-		}
-	}
-}
-
-std::string_view string_parser::read_word(){
-	for(auto i = this->view.begin(); i != this->view.end(); ++i){
-		if(string_parser::is_space(*i)){
-			auto dist = std::distance(this->view.begin(), i);
-			auto ret = this->view.substr(0, dist);
-			this->view = this->view.substr(dist);
-			return ret;
-		}
-	}
-
-	auto ret = this->view;
-
-	this->view = std::string_view();
-
-	return ret;
-}
-
-std::string_view string_parser::read_word_until(char until_char){
-	for(auto i = this->view.begin(); i != this->view.end(); ++i){
-		if(string_parser::is_space(*i) || *i == until_char){
-			auto dist = std::distance(this->view.begin(), i);
-			auto ret = this->view.substr(0, dist);
-			this->view = this->view.substr(dist);
-			return ret;
-		}
-	}
-
-	auto ret = this->view;
-
-	this->view = std::string_view();
-
-	return ret;
-}
-
-void string_parser::throw_if_empty(){
-	if(this->view.empty()){
-		throw std::invalid_argument("string_parser string is empty");
-	}
-}
-
-char string_parser::read_char(){
-	this->throw_if_empty();
-
-	char ret = this->view.front();
-
-	this->view = this->view.substr(1);
-
-	return ret;
-}
-
-char string_parser::peek_char(){
-	this->throw_if_empty();
-
-	return this->view.front();
-}
-
-std::string_view string_parser::read_chars(size_t n){
-	using std::min;
-	n = min(n, this->view.size());
-	auto ret = std::string_view(this->view.data(), n);
-
-	this->view = this->view.substr(n);
-
-	return ret;
-}
-
-std::string_view string_parser::read_chars_until(char until_char){
-	for(auto i = this->view.begin(); i != this->view.end(); ++i){
-		if(*i == until_char){
-			auto dist = std::distance(this->view.begin(), i);
-			auto ret = this->view.substr(0, dist);
-			this->view = this->view.substr(dist);
-			return ret;
-		}
-	}
-
-	auto ret = this->view;
-
-	this->view = std::string_view();
-
-	return ret;
-}
-
 std::string_view svgdom::trim_tail(std::string_view s){
 	const auto t = s.find_last_not_of(" \t\n\r");
 	if(t == std::string::npos){
@@ -182,7 +48,7 @@ std::string svgdom::coordinate_units_to_string(coordinate_units u){
 r4::vector2<real> svgdom::parse_number_and_optional_number(std::string_view s, r4::vector2<real> defaults){
 	r4::vector2<real> ret;
 
-	string_parser p(s);
+	utki::string_parser p(s);
 
 	try{
 		ret[0] = p.read_number<real>();

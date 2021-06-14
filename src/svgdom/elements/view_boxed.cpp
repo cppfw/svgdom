@@ -10,7 +10,7 @@ decltype(view_boxed::view_box) view_boxed::parse_view_box(std::string_view str){
 	decltype(view_boxed::view_box) ret;
 	
 	try{
-		string_parser p(str);
+		utki::string_parser p(str);
 
 		for(unsigned i = 0; i != ret.size(); ++i){
 			p.skip_whitespaces_and_comma();

@@ -62,7 +62,7 @@ decltype(transformable::transformations) transformable::parse(std::string_view s
 	decltype(transformable::transformations) ret;
 
 	try{
-		string_parser p(str);
+		utki::string_parser p(str);
 		p.skip_whitespaces();
 
 		while(!p.empty()){

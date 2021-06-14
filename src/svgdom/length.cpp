@@ -10,7 +10,7 @@ using namespace svgdom;
 length length::parse(std::string_view str){
 	length ret;
 
-	string_parser p(str);
+	utki::string_parser p(str);
 
 	ret.value = p.read_number<real>();
 

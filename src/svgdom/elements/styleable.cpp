@@ -54,7 +54,7 @@ style_value parse_stroke_dasharray(std::string_view str){
 
 	std::vector<length> dasharray;
 
-	string_parser p(str);
+	utki::string_parser p(str);
 
 	p.skip_whitespaces();
 
@@ -232,7 +232,7 @@ style_value styleable::parse_style_property_value(style_property type, std::stri
 			return parse_color_interpolation(str);
 		case style_property::stroke_miterlimit:
 			{
-				real miter_limit = string_parser(str).read_number<real>();
+				real miter_limit = utki::string_parser(str).read_number<real>();
 				using std::max;
 				miter_limit = max(miter_limit, real(1)); // minimal value is 1
 				return style_value(miter_limit);
@@ -243,7 +243,7 @@ style_value styleable::parse_style_property_value(style_property type, std::stri
 		case style_property::stroke_opacity:
 		case style_property::fill_opacity:
 			{
-				real opacity = string_parser(str).read_number<real>();
+				real opacity = utki::string_parser(str).read_number<real>();
 				using std::min;
 				using std::max;
 				opacity = max(real(0), min(opacity, real(1))); // clamp to [0:1]
@@ -317,7 +317,7 @@ style_value styleable::parse_style_property_value(style_property type, std::stri
 style_value svgdom::parse_url(std::string_view str){
 	const static std::string url_word = "url(";
 	
-	string_parser p(str);
+	utki::string_parser p(str);
 	p.skip_whitespaces();
 	
 	if(url_word != p.read_chars(url_word.size())){
@@ -336,7 +336,7 @@ style_value svgdom::parse_url(std::string_view str){
 }
 
 namespace{
-style_value parse_style_property_value(style_property type, string_parser& p){
+style_value parse_style_property_value(style_property type, utki::string_parser& p){
 	p.skip_whitespaces();
 	auto str = p.read_chars_until(';');
 	str = trim_tail(str);
@@ -345,7 +345,7 @@ style_value parse_style_property_value(style_property type, string_parser& p){
 }
 
 decltype(styleable::styles) styleable::parse(const std::string& str){
-	string_parser p(str);
+	utki::string_parser p(str);
 	
 	p.skip_whitespaces();
 
@@ -834,7 +834,7 @@ enable_background_property parse_enable_background_new_rect(std::string_view str
 	enable_background_property ret;
 	
 	try{
-		string_parser p(str);
+		utki::string_parser p(str);
 		p.skip_inclusive_until(' '); // skip 'new'
 
 		p.skip_whitespaces();
@@ -965,7 +965,7 @@ style_value svgdom::parse_paint(std::string_view str){
 		return style_value(style_value_special::none);
 	}
 	
-	ASSERT(!string_parser::is_space(str[0])) // leading spaces should be skept already	
+	ASSERT(!utki::string_parser::is_space(str[0])) // leading spaces should be skept already	
 	
 	{
 		auto ret = parse_url(str);
@@ -985,7 +985,7 @@ style_value svgdom::parse_paint(std::string_view str){
 	
 	// check if #-notation
 	if(str[0] == '#'){
-		string_parser p(str.substr(1, 6));
+		utki::string_parser p(str.substr(1, 6));
 		
 		std::array<uint8_t, 6> d;
 		unsigned num_digits = 0;
@@ -1029,7 +1029,7 @@ style_value svgdom::parse_paint(std::string_view str){
 	{
 		const static std::string rgb_word = "rgb(";
 
-		string_parser p(str);
+		utki::string_parser p(str);
 
 		if(rgb_word == p.read_chars(rgb_word.size())){
 			uint32_t r, g, b;
@@ -1054,7 +1054,7 @@ style_value svgdom::parse_paint(std::string_view str){
 	{
 		const static std::string hsl_word = "hsl(";
 
-		string_parser p(str);
+		utki::string_parser p(str);
 
 		if(hsl_word == p.read_chars(hsl_word.size())){
 			uint32_t h, s, l;
@@ -1083,7 +1083,7 @@ style_value svgdom::parse_paint(std::string_view str){
 	
 	// check if color name
 	{
-		string_parser p(str);
+		utki::string_parser p(str);
 		auto name = p.read_word();
 		
 		auto i = color_name_to_color_map.find(name);

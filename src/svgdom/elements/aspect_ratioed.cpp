@@ -34,7 +34,7 @@ aspect_ratioed::aspect_ratio_preservation string_to_preserve_aspect_ratio(std::s
 }
 
 void aspect_ratioed::aspect_ratio_preservation_value::parse(std::string_view s){
-	string_parser p(s);
+	utki::string_parser p(s);
 
 	p.skip_whitespaces();
 

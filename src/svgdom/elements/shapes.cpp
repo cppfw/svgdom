@@ -93,14 +93,14 @@ decltype(path_element::path) path_element::parse(std::string_view str){
 	decltype(path_element::path) ret;
 	
 	try{
-		string_parser p(str);
+		utki::string_parser p(str);
 		
 		p.skip_whitespaces();
 		
 		step::type cur_step_type = step::type::unknown;
 		
 		while(!p.empty()){
-			ASSERT(!string_parser::is_space(p.peek_char())) // spaces should be skept
+			ASSERT(!utki::string_parser::is_space(p.peek_char())) // spaces should be skept
 			
 			{
 				auto t = step::char_to_type(p.peek_char());
@@ -418,7 +418,7 @@ path_element::step::type path_element::step::char_to_type(char c){
 decltype(polyline_shape::points) polyline_shape::parse(std::string_view s){
 	decltype(polyline_shape::points) ret;
 	
-	string_parser p(s);
+	utki::string_parser p(s);
 
 	try{
 		while(!s.empty()){
