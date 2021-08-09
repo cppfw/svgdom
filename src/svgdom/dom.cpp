@@ -57,11 +57,14 @@ std::unique_ptr<svg_element> svgdom::load(const papki::file& f){
 std::unique_ptr<svg_element> svgdom::load(std::istream& s){
 	svgdom::parser parser;
 	
+	static const size_t chunk_size = 0x1000; // 4kb
+
 	while(!s.eof()){
 		std::vector<char> buf;
-		for(unsigned i = 0; i != 4096; ++i){
+		buf.reserve(chunk_size);
+		for(size_t i = 0; i != chunk_size; ++i){
 			char c;
-			s >> c;
+			c = s.get();
 			if(s.eof()){
 				break;
 			}

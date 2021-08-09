@@ -1,14 +1,1 @@
-debian/
-
-#*.[aod]
-obj_*/
-*.a
-*.so
-*.so.*
-*.dylib
-
-doc/doxygen/
-doc/doxygen.cfg
-
-nbproject/
-
+**/out/*
