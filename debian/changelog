@@ -1,3 +1,9 @@
+libsvgdom (0.3.72) unstable; urgency=medium
+
+  * conan minor mode of package id
+
+ -- Ivan Gagis <igagis@gmail.com>  Tue, 10 Aug 2021 00:13:50 +0300
+
 libsvgdom (0.3.71) unstable; urgency=medium
 
   * deploy to own repo
