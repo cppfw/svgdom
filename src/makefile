@@ -1,7 +1,7 @@
 include prorab.mk
-include myci.mk
+include prorab-license.mk
 
-$(eval $(call myci-try-include, $(CONANBUILDINFO_DIR)conanbuildinfo.mak))
+$(eval $(call prorab-try-simple-include, $(CONANBUILDINFO_DIR)conanbuildinfo.mak))
 
 $(eval $(call prorab-config, ../config))
 
@@ -18,3 +18,7 @@ this_ldflags += $(addprefix -L,$(CONAN_LIB_DIRS))
 this_ldlibs += -lcssom -lpapki -lmikroxml -lutki -lstdc++ -lm
 
 $(eval $(prorab-build-lib))
+
+this_src_dir := 
+this_license_file := ../LICENSE
+$(eval $(prorab-license))
