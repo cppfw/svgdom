@@ -1,3 +1,9 @@
+libsvgdom (0.3.73) unstable; urgency=medium
+
+  * use latest make in homebrew formulae
+
+ -- Ivan Gagis <igagis@gmail.com>  Thu, 12 Aug 2021 13:38:48 +0300
+
 libsvgdom (0.3.72) unstable; urgency=medium
 
   * conan minor mode of package id
