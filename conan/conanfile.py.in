@@ -52,3 +52,7 @@ class SvgdomConan(ConanFile):
 	# change package id only when minor or major version changes, i.e. when ABI breaks
 	def package_id(self):
 		self.info.requires.minor_mode()
+
+	# change package id only when minor or major version changes, i.e. when ABI breaks
+	def package_id(self):
+		self.info.requires.minor_mode()
