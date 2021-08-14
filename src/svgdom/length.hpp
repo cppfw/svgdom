@@ -48,7 +48,8 @@ enum class length_unit{
 	in,
 	pt,
 	pc,
-	mm
+	mm,
+	dip
 };
 
 /**

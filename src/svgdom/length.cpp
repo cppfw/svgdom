@@ -63,6 +63,8 @@ length length::parse(std::string_view str){
 		ret.unit = length_unit::pt;
 	}else if(unit == "pc"){
 		ret.unit = length_unit::pc;
+	}else if(unit == "dip"){
+		ret.unit = length_unit::dip;
 	}else{
 		ret.unit = length_unit::unknown;
 	}
@@ -91,6 +93,8 @@ real length::to_px(real dpi) const noexcept{
 		case svgdom::length_unit::ex:
 			// em and ex depend on the font size. Text is not supported by svgdom, so return 0 size.
 			return 0;
+		case svgdom::length_unit::dip: // 1 px = 1/96 of an inch
+			return std::ceil(this->value * (dpi / real(96)));
 	}
 }
 
@@ -128,6 +132,9 @@ std::ostream& operator<<(std::ostream& s, const length& l){
 			break;
 		case length_unit::pc:
 			s << "pc";
+			break;
+		case length_unit::dip:
+			s << "dip";
 			break;
 	}
 	
