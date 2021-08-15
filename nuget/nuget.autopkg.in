@@ -61,7 +61,7 @@ nuget{
 		}
 */
 		//==== v141 tools ====
-/*
+
 		[x86,v141,release] {
 			lib: ..\msvs_solution\v141_Release\libsvgdom.lib;
 		}
@@ -74,7 +74,7 @@ nuget{
 		[x64,v141,debug] {
 			lib: ..\msvs_solution\x64\v141_Debug\libsvgdom.lib;
 		}
-*/
+
 		//==== v142 tools ====
 
 		[x86,v142,release,MultiThreaded] {
