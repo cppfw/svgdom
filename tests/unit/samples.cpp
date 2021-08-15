@@ -1,3 +1,7 @@
+#include <utki/config.hpp>
+
+#if M_COMPILER != M_COMPILER_MSVC || M_COMPILER_MSVC_TOOLS_V >= 142
+
 #include <tst/set.hpp>
 #include <tst/check.hpp>
 
@@ -67,3 +71,5 @@ tst::set set("samples", [](tst::suite& suite){
     );
 });
 }
+
+#endif // ~ non-MSVC compiler or MSVC tools is v142+
