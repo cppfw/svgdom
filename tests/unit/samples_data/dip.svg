@@ -1,0 +1,7 @@
+<svg version="1.1" width="400dip" height="400dip" xmlns="http://www.w3.org/2000/svg">
+
+<circle class="class1" id="id1" cx="95dip" cy="45dip" r="25dip" fill="blue" />
+
+	<rect class="class2" id="id2" width="50dip" height="50dip" x="10dip" y="20dip" fill="red" />
+
+</svg>

@@ -49,6 +49,11 @@ enum class length_unit{
 	pt,
 	pc,
 	mm,
+/*
+	dip is device independent pixels - logical units,inspired by Sciter.
+	1dip = 1/96 of inch therefore on 96DPI display this will be one pixel. On high-dpi screens it will be resolved to larger number of physical pixels.
+	For example: 2dip will take 3px on 120DPI screen. On printer 'dip' and 'px' units are equivalent.
+*/
 	dip
 };
 
