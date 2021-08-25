@@ -65,7 +65,6 @@ class parser : public mikroxml::parser{
 	
 	std::vector<xml_namespace> default_namespace_stack;
 	
-	
 	xml_namespace find_namespace(const std::string& ns);
 	const std::string* find_flipped_namespace(xml_namespace ns);
 	
@@ -91,11 +90,11 @@ class parser : public mikroxml::parser{
 	
 	void add_element(std::unique_ptr<element> e);
 	
-	void on_element_start(utki::span<const char> name) override;
-	void on_element_end(utki::span<const char> name) override;
-	void on_attribute_parsed(utki::span<const char> name, utki::span<const char> value) override;
-	void on_attributes_end(bool is_empty_element) override;
-	void on_content_parsed(utki::span<const char> str) override;
+	void on_element_start(utki::span<const char> name)override;
+	void on_element_end(utki::span<const char> name)override;
+	void on_attribute_parsed(utki::span<const char> name, utki::span<const char> value)override;
+	void on_attributes_end(bool is_empty_element)override;
+	void on_content_parsed(utki::span<const char> str)override;
 
 	void fill_element(element& e);
 	void fill_referencing(referencing& e);

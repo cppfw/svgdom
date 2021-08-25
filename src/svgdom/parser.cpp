@@ -989,5 +989,8 @@ void parser::on_content_parsed(utki::span<const char> str){
 }
 
 std::unique_ptr<svg_element> parser::get_dom(){
+	if(!this->element_stack.empty()){
+		throw std::invalid_argument("malformed SVG content: unclosed XML tags");
+	}
 	return std::move(this->svg);
 }
