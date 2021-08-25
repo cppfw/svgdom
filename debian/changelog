@@ -1,3 +1,9 @@
+libsvgdom (0.3.75) unstable; urgency=medium
+
+  * add detection of unclosed XML tags
+
+ -- Ivan Gagis <igagis@gmail.com>  Wed, 25 Aug 2021 20:07:05 +0300
+
 libsvgdom (0.3.74) unstable; urgency=medium
 
   * msvs: build for v141 tools
