@@ -1,3 +1,9 @@
+libsvgdom (0.3.76) unstable; urgency=medium
+
+  * relink to latest utki
+
+ -- Ivan Gagis <igagis@gmail.com>  Fri, 27 Aug 2021 17:29:08 +0300
+
 libsvgdom (0.3.75) unstable; urgency=medium
 
   * add detection of unclosed XML tags
