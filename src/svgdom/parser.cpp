@@ -305,7 +305,7 @@ void parser::fill_styleable(styleable& s){
 
 	for(auto& a : this->attributes){
 		auto nsn = this->get_namespace(a.first);
-		switch (nsn.ns){
+		switch(nsn.ns){
 			case xml_namespace::svg:
 				if(nsn.name == "style"){
 					s.styles = styleable::parse(a.second);

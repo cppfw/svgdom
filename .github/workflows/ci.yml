@@ -36,7 +36,7 @@ jobs:
         with:
           repo: deb http://gagis.hopto.org/repo/cppfw/${{ matrix.os }} ${{ matrix.codename }} main
           repo-name: cppfw
-          key-server: http://gagis.hopto.org/repo/cppfw/pubkey.gpg
+          keys-asc: http://gagis.hopto.org/repo/cppfw/pubkey.gpg
           install: myci git locales
       - name: install ci tools
         run: |
@@ -270,7 +270,7 @@ jobs:
         with:
           repo: deb http://gagis.hopto.org/repo/cppfw/${{ matrix.os }} ${{ matrix.codename }} main
           repo-name: cppfw
-          key-server: http://gagis.hopto.org/repo/cppfw/pubkey.gpg
+          keys-asc: http://gagis.hopto.org/repo/cppfw/pubkey.gpg
           install: devscripts equivs myci prorab prorab-extra python3-pip cmake git
       - name: install conan
         run: |
