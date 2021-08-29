@@ -1,3 +1,9 @@
+libsvgdom (0.3.77) unstable; urgency=medium
+
+  * build for debian bullseye
+
+ -- Ivan Gagis <igagis@gmail.com>  Mon, 30 Aug 2021 00:43:35 +0300
+
 libsvgdom (0.3.76) unstable; urgency=medium
 
   * relink to latest utki
