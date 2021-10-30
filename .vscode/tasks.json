@@ -6,7 +6,7 @@
         {
             "label": "build",
             "type": "shell",
-            "command": "make autojobs=true",
+            "command": "make",
             "problemMatcher": [
                 "$gcc"
             ],
@@ -15,7 +15,7 @@
         {
             "label": "build_dbg",
             "type": "shell",
-            "command": "make autojobs=true config=dbg",
+            "command": "make config=dbg",
             "problemMatcher": [
                 "$gcc"
             ],
@@ -45,7 +45,7 @@
         {
             "label": "test",
             "type": "shell",
-            "command": "make test autojobs=true",
+            "command": "make test",
             "problemMatcher": [],
             "dependsOn": "build",
             "group": "build"
@@ -53,7 +53,7 @@
         {
             "label": "test_dbg",
             "type": "shell",
-            "command": "make test config=dbg autojobs=true",
+            "command": "make test config=dbg",
             "problemMatcher": [],
             "dependsOn": "build_dbg",
             "group": "build"
@@ -61,7 +61,7 @@
         {
             "label": "test_",
             "type": "shell",
-            "command": "make test autojobs=true",
+            "command": "make test",
             "problemMatcher": [],
             "dependsOn": "build",
             "group": "build"
@@ -69,7 +69,7 @@
         {
             "label": "test_style_stack_dbg",
             "type": "shell",
-            "command": "make -C tests/style_stack test config=dbg autojobs=true",
+            "command": "make -C tests/style_stack test config=dbg",
             "problemMatcher": [],
             "dependsOn": "build_dbg",
             "group": "build"
@@ -77,7 +77,7 @@
 		{
             "label": "test_unit_dbg",
             "type": "shell",
-            "command": "make -C tests/unit test config=dbg autojobs=true",
+            "command": "make -C tests/unit test config=dbg",
             "problemMatcher": [],
             "dependsOn": "build_dbg",
             "group": "build"
@@ -85,7 +85,7 @@
         {
             "label": "test_unit",
             "type": "shell",
-            "command": "make -C tests/unit test autojobs=true",
+            "command": "make -C tests/unit test",
             "problemMatcher": [],
             "dependsOn": "build",
             "group": "build"
