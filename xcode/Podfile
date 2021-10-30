@@ -2,10 +2,10 @@ source 'https://github.com/cppfw/cocoapods-repo.git'
 
 project 'svgdom/svgdom.xcodeproj'
 
-platform :ios, '8.0'
+platform :ios, '11.0'
 
 target "svgdom" do
-	pod 'utki', '>= 1.1.123'
+	pod 'utki', '>= 1.1.164'
 	pod 'papki', '>= 1.0.93'
 	pod 'mikroxml', '>= 0.1.36'
 	pod 'cssom', '>= 0.1.19'
