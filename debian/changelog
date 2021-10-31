@@ -1,3 +1,9 @@
+libsvgdom (0.3.79) unstable; urgency=medium
+
+  * build for ios 9.0
+
+ -- Ivan Gagis <igagis@gmail.com>  Sun, 31 Oct 2021 22:18:58 +0200
+
 libsvgdom (0.3.78) unstable; urgency=medium
 
   * ios: static framework
