@@ -1,3 +1,9 @@
+libsvgdom (0.3.80) unstable; urgency=medium
+
+  * build for raspbian bullseye
+
+ -- Ivan Gagis <igagis@gmail.com>  Mon, 08 Nov 2021 23:02:12 +0200
+
 libsvgdom (0.3.79) unstable; urgency=medium
 
   * build for ios 9.0
