@@ -16,19 +16,65 @@ env:
   CONAN_REVISIONS_ENABLED: 1
   CONAN_SCM_TO_CONANDATA: 1
 jobs:
+##### sanitizer #####
+  sanitizer:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - {os: debian, codename: bullseye, image_owner: , package_type: deb}
+          - {os: debian, codename: bullseye, image_owner: arm32v7/, package_type: deb, labels: [arm,docker]}
+    runs-on: ${{ (matrix.labels == '' && 'ubuntu-latest') || matrix.labels }}
+    container: ${{ matrix.image_owner }}${{ matrix.os }}:${{ matrix.codename }}
+    name: sanitizer - ${{ matrix.image_owner }}${{ matrix.os }}:${{ matrix.codename }}
+    steps:
+      - name: add cppfw deb repo
+        uses: myci-actions/add-deb-repo@master
+        with:
+          repo: deb http://gagis.hopto.org/repo/cppfw/${{ matrix.os }} ${{ matrix.codename }} main
+          repo-name: cppfw
+          keys-asc: http://gagis.hopto.org/repo/cppfw/pubkey.gpg
+          install: myci git locales
+      - name: install ci tools
+        run: |
+          apt install --assume-yes devscripts equivs
+      - name: git clone
+        uses: myci-actions/checkout@master
+      - name: prepare debian package
+        run: myci-deb-prepare.sh
+      - name: install deps
+        run: myci-deb-install-build-deps.sh
+      - name: add DE locale
+        # needed for testing that locale with "," as decimal delimiter does not break the SVG parsing
+        run: |
+          echo "de_DE.UTF-8 UTF-8" >> /etc/locale.gen
+          locale-gen
+      - name: build
+        run: make config=asan
+      - name: test
+        run: make config=asan test
+      - name: publish test report
+        uses: mikepenz/action-junit-report@v2.2.2
+        with:
+          report_paths: 'tests/*/junit.xml'
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          check_name: "test report: ${{ github.job }} - ${{ matrix.image_owner }}${{ matrix.os }}:${{ matrix.codename }}"
+          fail_on_failure: true
+        if: ${{ matrix.labels == '' }}
 ##### linux #####
   linux:
     strategy:
       fail-fast: false
       matrix:
         include:
-          - {os: debian, codename: buster, image_owner: , package_type: deb}
+          # - {os: debian, codename: buster, image_owner: , package_type: deb}
           # - {os: debian, codename: buster, image_owner: i386/, package_type: deb, labels: [i386,docker]}
-          - {os: debian, codename: buster, image_owner: arm32v7/, package_type: deb, labels: [arm,docker]}
+          # - {os: debian, codename: buster, image_owner: arm32v7/, package_type: deb, labels: [arm,docker]}
           - {os: debian, codename: bullseye, image_owner: , package_type: deb}
+          # - {os: debian, codename: bullseye, image_owner: i386/, package_type: deb, labels: [i386,docker]}
           - {os: debian, codename: bullseye, image_owner: arm32v7/, package_type: deb, labels: [arm,docker]}
           - {os: ubuntu, codename: focal, image_owner: , package_type: deb}
-          - {os: raspbian, codename: buster, image_owner: igagis/, package_type: deb, labels: [arm,docker]}
+          # - {os: raspbian, codename: buster, image_owner: igagis/, package_type: deb, labels: [arm,docker]}
           - {os: raspbian, codename: bullseye, image_owner: igagis/, package_type: deb, labels: [arm,docker]}
     runs-on: ${{ (matrix.labels == '' && 'ubuntu-latest') || matrix.labels }}
     container: ${{ matrix.image_owner }}${{ matrix.os }}:${{ matrix.codename }}
@@ -262,9 +308,9 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - {os: debian, codename: buster, image_owner: , arch: x86_64}
-          # - {os: debian, codename: buster, image_owner: i386/, arch: x86, labels: [i386,docker]}
-          # - {os: debian, codename: buster, image_owner: arm32v7/, arch: armhf, labels: [arm,docker]}
+          - {os: debian, codename: bullseye, image_owner: , arch: x86_64}
+          # - {os: debian, codename: bullseye, image_owner: i386/, arch: x86, labels: [i386,docker]}
+          # - {os: debian, codename: bullseye, image_owner: arm32v7/, arch: armhf, labels: [arm,docker]}
     runs-on: ${{ (matrix.labels == '' && 'ubuntu-latest') || matrix.labels }}
     container: ${{ matrix.image_owner }}${{ matrix.os }}:${{ matrix.codename }}
     name: conan - linux - ${{ matrix.arch }}
@@ -302,8 +348,14 @@ jobs:
         if: startsWith(github.ref, 'refs/tags/')
 ##### conan - macosx #####
   conan-macosx:
-    name: conan - macosx
-    runs-on: macos-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - macos-10.15
+          # - macos-11
+    name: conan - ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
     steps:
       - name: git clone
         uses: myci-actions/checkout@master

@@ -21,7 +21,7 @@ $(eval $(prorab-build-app))
 
 $(prorab_this_name): $(abspath $(d)../../src/out/$(c)/libsvgdom$(dot_so))
 
-this_test_cmd := $(prorab_this_name) --jobs=$(prorab_nproc) --junit-out=junit.xml
+this_test_cmd := $(prorab_this_name) --jobs=$(prorab_nproc) --junit-out=out/$(c)/junit.xml
 this_test_deps := $(prorab_this_name)
 this_test_ld_path := ../../src/out/$(c) $(CONAN_LIB_DIRS)
 
