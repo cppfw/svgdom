@@ -56,7 +56,7 @@ jobs:
       - name: publish test report
         uses: mikepenz/action-junit-report@v2.2.2
         with:
-          report_paths: 'tests/*/junit.xml'
+          report_paths: 'tests/*/out/asan/junit.xml'
           github_token: ${{ secrets.GITHUB_TOKEN }}
           check_name: "test report: ${{ github.job }} - ${{ matrix.image_owner }}${{ matrix.os }}:${{ matrix.codename }}"
           fail_on_failure: true
@@ -112,7 +112,7 @@ jobs:
       - name: publish test report
         uses: mikepenz/action-junit-report@v2.2.2
         with:
-          report_paths: 'tests/*/junit.xml'
+          report_paths: 'tests/*/out/rel/junit.xml'
           github_token: ${{ secrets.GITHUB_TOKEN }}
           check_name: "test report: ${{ github.job }} - ${{ matrix.image_owner }}${{ matrix.os }}:${{ matrix.codename }}"
           fail_on_failure: true
@@ -146,7 +146,7 @@ jobs:
     - name: publish test report
       uses: mikepenz/action-junit-report@v2.2.2
       with:
-        report_paths: 'tests/*/junit.xml'
+        report_paths: 'tests/*/out/rel/junit.xml'
         github_token: ${{ secrets.GITHUB_TOKEN }}
         check_name: "test report: ${{ github.job }}"
         fail_on_failure: true
@@ -266,7 +266,7 @@ jobs:
     - name: publish test report
       uses: mikepenz/action-junit-report@v2.2.2
       with:
-        report_paths: 'tests/*/junit.xml'
+        report_paths: 'tests/*/out/rel/junit.xml'
         github_token: ${{ secrets.GITHUB_TOKEN }}
         check_name: "test report: ${{ github.job }} - ${{ matrix.repo }}"
         fail_on_failure: true
