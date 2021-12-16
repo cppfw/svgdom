@@ -1,3 +1,9 @@
+libsvgdom (0.3.81) unstable; urgency=medium
+
+  * build conan for different macos versions
+
+ -- Ivan Gagis <igagis@gmail.com>  Fri, 17 Dec 2021 01:41:05 +0200
+
 libsvgdom (0.3.80) unstable; urgency=medium
 
   * build for raspbian bullseye
