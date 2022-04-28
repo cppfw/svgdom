@@ -29,7 +29,7 @@ tst::set set("finders", [](auto& suite){
 		for(const auto& id : {"id1", "id2"}){
 			auto element_by_id = finder_by_id.find(id);
 			tst::check(element_by_id != nullptr, [&](auto&o){o << "element-by-id not found, searched id = " << id;}, SL);
-			tst::check(element_by_id->id == id, SL);
+			tst::check(element_by_id->id == id, SL); // NOLINT(clang-analyzer-core.NonNullParamChecker): element_by_id is not nullptr as per previous check
 		}
 
 		tst::check(finder_by_id.find("non_existing_id") == nullptr, SL);
