@@ -1,3 +1,9 @@
+libsvgdom (0.3.82) unstable; urgency=medium
+
+  * test release
+
+ -- Ivan Gagis <igagis@gmail.com>  Thu, 28 Apr 2022 23:17:04 +0300
+
 libsvgdom (0.3.81) unstable; urgency=medium
 
   * build conan for different macos versions
