@@ -42,7 +42,7 @@ std::unique_ptr<svg_element> svgdom::load(const papki::file& f){
 
 		while(true){
 			auto res = f.read(utki::make_span(buf));
-			ASSERT_ALWAYS(res <= buf.size())
+			utki::assert(res <= buf.size(), SL);
 			if(res == 0){
 				break;
 			}

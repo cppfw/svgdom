@@ -89,8 +89,8 @@ namespace{
 tst::set set("style_stack", [](auto& suite){
 	suite.add("basic_test", [](){
 		auto dom = svgdom::load(papki::span_file(utki::make_span(svg)));
-		ASSERT_ALWAYS(dom)
-		ASSERT_ALWAYS(dom->children.size() != 0)
+		utki::assert(dom, SL);
+		utki::assert(dom->children.size() != 0, SL);
 		
 		traverse_visitor v;
 
