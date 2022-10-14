@@ -51,7 +51,10 @@ const char* current_color_word = "currentColor";
 namespace{
 std::string stroke_dasharray_to_string(const style_value& v){
 	// special values must be already handled by styleable::style_value_to_string() at this point
-	ASSERT_INFO(!std::holds_alternative<style_value_special>(v), "v = " << unsigned(*std::get_if<style_value_special>(&v)))
+	ASSERT(
+		!std::holds_alternative<style_value_special>(v),
+		[&](auto&o){o << "v = " << unsigned(*std::get_if<style_value_special>(&v));}
+	)
 
 	if(!std::holds_alternative<std::vector<length>>(v)){
 		return std::string();
@@ -841,7 +844,7 @@ std::string to_string(color_interpolation ci){
 		case color_interpolation::s_rgb:
 			return "sRGB";
 		default:
-			ASSERT_INFO(false, "ci = " << unsigned(ci))
+			ASSERT(false, [&](auto&o){o << "ci = " << unsigned(ci);})
 			return "";
 	}
 }
