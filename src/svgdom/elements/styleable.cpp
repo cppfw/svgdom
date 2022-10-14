@@ -116,7 +116,7 @@ std::string styleable::style_value_to_string(style_property p, const style_value
 	std::stringstream s;
 	switch(p){
 		default:
-			TRACE(<< "Unimplemented style property: " << styleable::property_to_string(p) << ", writing empty value." << std::endl)
+			LOG([&](auto&o){o << "Unimplemented style property: " << styleable::property_to_string(p) << ", writing empty value." << std::endl;})
 			break;
 		case style_property::color_interpolation_filters:
 			s << color_interpolation_filters_to_string(v);
@@ -256,7 +256,7 @@ style_value styleable::parse_style_property_value(style_property type, std::stri
 
 	switch(type){
 		default:
-			TRACE(<< "unimplemented style property encountered: " << styleable::property_to_string(type) << std::endl)
+			LOG([&](auto&o){o << "unimplemented style property encountered: " << styleable::property_to_string(type) << std::endl;})
 			return style_value(style_value_special::unknown);
 		case style_property::color_interpolation_filters:
 			return parse_color_interpolation(str);
@@ -297,7 +297,7 @@ style_value styleable::parse_style_property_value(style_property type, std::stri
 				}else if(str == "square"){
 					slc = stroke_line_cap::square;
 				}else{
-					TRACE(<< "unknown strokeLineCap value:" << str << std::endl)
+					LOG([&](auto&o){o << "unknown strokeLineCap value:" << str << std::endl;})
 					return style_value();
 				}
 				return style_value(slc);
@@ -312,7 +312,7 @@ style_value styleable::parse_style_property_value(style_property type, std::stri
 				}else if(str == "bevel"){
 					slj = stroke_line_join::bevel;
 				}else{
-					TRACE(<< "unknown strokeLineJoin value:" << str << std::endl)
+					LOG([&](auto&o){o << "unknown strokeLineJoin value:" << str << std::endl;})
 					return style_value();
 				}
 				return style_value(slj);
@@ -325,7 +325,7 @@ style_value styleable::parse_style_property_value(style_property type, std::stri
 				}else if(str == "evenodd"){
 					fr = fill_rule::evenodd;
 				}else{
-					TRACE(<< "unknown fill-rule value:" << str << std::endl)
+					LOG([&](auto&o){o << "unknown fill-rule value:" << str << std::endl;})
 					return style_value();
 				}
 				return style_value(fr);
@@ -387,9 +387,9 @@ decltype(styleable::styles) styleable::parse(const std::string& str){
 		
 		if(type == style_property::unknown){
 			// unknown style property, skip it
-			TRACE(<< "Unknown style property: " << property << std::endl)
-			TRACE(<< "str = " << str << std::endl)
-			TRACE(<< "ret.size() = " << ret.size() << std::endl)
+			LOG([&](auto&o){o << "Unknown style property: " << property << std::endl;})
+			LOG([&](auto&o){o << "str = " << str << std::endl;})
+			LOG([&](auto&o){o << "ret.size() = " << ret.size() << std::endl;})
 			p.skip_inclusive_until(';');
 			continue;
 		}
