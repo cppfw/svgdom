@@ -97,7 +97,7 @@ tst::set set("custom_element", [](auto& suite){
 		
 		auto str = ss.str();
 		
-		TRACE_ALWAYS(<< str << std::endl)
+		utki::log([&](auto&o){o << str << std::endl;});
 		
 		tst::check(str.find("xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" version=\"1.1\"") != std::string::npos, SL);
 		tst::check(str.find("<custom customAttrib1=\"value1\" customAttrib2=\"value2\"/>") != std::string::npos, SL);
