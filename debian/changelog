@@ -1,3 +1,9 @@
+libsvgdom (0.3.83) unstable; urgency=medium
+
+  * do not build for msys2 temporarily
+
+ -- Ivan Gagis <igagis@gmail.com>  Thu, 20 Oct 2022 00:00:11 +0300
+
 libsvgdom (0.3.82) unstable; urgency=medium
 
   * test release
