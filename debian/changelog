@@ -1,8 +1,8 @@
-libsvgdom (0.4.0) UNRELEASED; urgency=medium
+libsvgdom (0.4.0) unstable; urgency=medium
 
   * change std::list to std::vector in container
 
- -- Ivan Gagis <igagis@gmail.com>  Tue, 25 Oct 2022 22:57:17 +0300
+ -- Ivan Gagis <igagis@gmail.com>  Tue, 25 Oct 2022 22:59:28 +0300
 
 libsvgdom (0.3.84) unstable; urgency=medium
 
