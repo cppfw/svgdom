@@ -27,7 +27,7 @@ SOFTWARE.
 
 #pragma once
 
-#include <list>
+#include <vector>
 #include <memory>
 
 #include "element.hpp"
@@ -38,7 +38,7 @@ namespace svgdom{
  * @brief An element which can have child elements.
  */
 struct container{
-	std::list<std::unique_ptr<element>> children;
+	std::vector<std::unique_ptr<element>> children;
 	
 	container() = default;
 	
