@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="layer_1" viewBox="0 0 48 48">
+	<defs>
+		<style>
+			<![CDATA[
+			.cls-1,.cls-3 {
+				fill: none; 
+			}
+			.cls-2,.cls-4 {
+				fill: #47506a; 
+			}
+			.cls-3 {
+				stroke: #3866f0; stroke-width: 4px; 
+			}
+			.cls-4 {
+				fill-rule: evenodd; 
+			}
+			]]>
+		</style>
+	</defs>
+	<g id="main">
+		<g id="all tools">
+			<g id="group-13">
+				<g id="drive">
+					<rect id="rect-2" class="cls-2" x="12" y="32" width="24" height="4"/>
+				</g>
+			</g>
+		</g>
+	</g>
+</svg>

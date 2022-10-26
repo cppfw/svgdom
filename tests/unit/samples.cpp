@@ -55,7 +55,15 @@ tst::set set("samples", [](tst::suite& suite){
             
             auto out_data = out_file.reset_data();
 
-            auto cmp_data = papki::fs_file(in_file_name + ".cmp").load();
+            papki::fs_file cmp_file(in_file_name + ".cmp");
+
+            decltype(out_data) cmp_data;
+
+            try{
+                cmp_data = cmp_file.load();
+            }catch(std::system_error& e){
+                std::cout << "Failed to load '" << cmp_file.path() << "' file" << std::endl;
+            }
 
             if(out_data != cmp_data){
                 papki::fs_file failed_file(p + ".out");
