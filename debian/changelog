@@ -1,3 +1,9 @@
+libsvgdom (0.4.1) unstable; urgency=medium
+
+  * update to latest cssom
+
+ -- Ivan Gagis <igagis@gmail.com>  Sat, 29 Oct 2022 01:37:01 +0300
+
 libsvgdom (0.4.0) unstable; urgency=medium
 
   * change std::list to std::vector in container
