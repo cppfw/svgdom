@@ -30,10 +30,6 @@ SOFTWARE.
 
 #include "parser.hxx"
 
-#ifdef assert
-#	undef assert
-#endif
-
 using namespace svgdom;
 
 std::unique_ptr<svg_element> svgdom::load(const papki::file& f){
@@ -46,7 +42,7 @@ std::unique_ptr<svg_element> svgdom::load(const papki::file& f){
 
 		while(true){
 			auto res = f.read(utki::make_span(buf));
-			utki::assert(res <= buf.size(), SL);
+			ASSERT(res <= buf.size())
 			if(res == 0){
 				break;
 			}
