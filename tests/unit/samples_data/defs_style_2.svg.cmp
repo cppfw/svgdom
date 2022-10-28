@@ -2,10 +2,10 @@
 	<defs>
 		<style>
 			<![CDATA[
-			.cls-1,.cls-3 {
+			.cls-1, .cls-3 {
 				fill: none; 
 			}
-			.cls-2,.cls-4 {
+			.cls-2, .cls-4 {
 				fill: #47506a; 
 			}
 			.cls-3 {

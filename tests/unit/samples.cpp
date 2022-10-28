@@ -66,7 +66,7 @@ tst::set set("samples", [](tst::suite& suite){
             }
 
             if(out_data != cmp_data){
-                papki::fs_file failed_file(p + ".out");
+                papki::fs_file failed_file(in_file_name + ".out");
 
                 {
                     papki::file::guard file_guard(failed_file, papki::file::mode::create);

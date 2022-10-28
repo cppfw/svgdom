@@ -14,6 +14,7 @@ this_srcs := $(call prorab-src-dir, .)
 this_ldflags += -L $(d)../../src/out/$(c)
 this_ldlibs += -ltst -lutki -lsvgdom -lpapki $(addprefix -l,$(CONAN_LIBS))
 
+this_cxxflags += -I ../../src
 this_cxxflags += $(addprefix -I,$(CONAN_INCLUDE_DIRS))
 this_ldflags += $(addprefix -L,$(CONAN_LIB_DIRS))
 

@@ -5,9 +5,13 @@
 
 #include <papki/fs_file.hpp>
 
-#include "../../src/svgdom/dom.hpp"
+#include <svgdom/dom.hpp>
+#include <svgdom/util/style_stack.hpp>
+#include <svgdom/util/finder_by_id.hpp>
+#include <svgdom/elements/style.hpp>
 
 using namespace std::string_literals;
+using namespace std::string_view_literals;
 
 namespace{
 tst::set set("misc", [](tst::suite& suite){
@@ -46,5 +50,55 @@ tst::set set("misc", [](tst::suite& suite){
             }catch(std::invalid_argument& e){}
         }
     );
+
+    suite.add("issue_test_1", [](){
+        auto svg_str = R"qwertyuiop(
+            <?xml version="1.0" encoding="UTF-8"?>
+            <svg xmlns="http://www.w3.org/2000/svg" id="layer_1" data-name="layer 1" viewBox="0 0 48 48">
+            <defs>
+                <style id="css">.cls-1,.cls-3{fill:none;}.cls-2,.cls-4{fill:#47506a;}.cls-3{stroke:#3866f0;stroke-width:4px;}.cls-4{fill-rule:evenodd;}</style>
+            </defs>
+            <g id="main">
+                <g id="all tools">
+                    <g id="group-13">
+                        <g id="drive">
+                        <rect id="rect-2" data-name="rect" class="cls-2" x="12" y="32" width="24" height="4" />
+                        </g>
+                    </g>
+                </g>
+            </g>
+            </svg>
+        )qwertyuiop"sv;
+
+        auto dom = svgdom::load(utki::make_span(svg_str));
+        tst::check(dom, SL);
+
+        svgdom::style_stack style_stack;
+
+        svgdom::finder_by_id finder(*dom);
+
+        {
+            auto elem = finder.find("css");
+            tst::check(elem, SL);
+
+            auto style_elem = dynamic_cast<const svgdom::style_element*>(elem);
+            tst::check(style_elem, SL);
+
+            style_stack.add_css(style_elem->css);
+        }
+
+        auto elem = finder.find("rect-2");
+        tst::check(elem, SL);
+
+        auto styleable = dynamic_cast<const svgdom::styleable*>(elem);
+        tst::check(styleable, SL);
+
+        svgdom::style_stack::push style_push(style_stack, *styleable);
+
+        auto fill = style_stack.get_style_property(svgdom::style_property::fill);
+        tst::check(fill, SL);
+        tst::check(std::holds_alternative<uint32_t>(*fill), SL);
+        tst::check_eq(std::get<uint32_t>(*fill), 0x6a5047U, SL);
+    });
 });
 }

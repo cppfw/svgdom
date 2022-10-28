@@ -108,7 +108,7 @@ enum class style_property : uint32_t{
 	text_anchor,				// 60
 	writing_mode,
 	
-	ENUM_SIZE
+	enum_size
 };
 
 enum class stroke_line_cap{
