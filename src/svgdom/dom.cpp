@@ -30,6 +30,10 @@ SOFTWARE.
 
 #include "parser.hxx"
 
+#ifdef assert
+#	undef assert
+#endif
+
 using namespace svgdom;
 
 std::unique_ptr<svg_element> svgdom::load(const papki::file& f){
