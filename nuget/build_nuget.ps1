@@ -61,14 +61,14 @@ msbuild /m ../msvs_solution/msvs_solution.sln /t:Rebuild /p:Configuration=v143_R
 Push-Location
 cd ../tests/unit
 
-    ../../msvs_solution/v142_Debug_MD/test_dom.exe       --jobs=2 --junit-out=junit_x86_v142_debug_md.xml; If(!$?){exit 1}
-    ../../msvs_solution/v142_Debug_MT/test_dom.exe       --jobs=2 --junit-out=junit_x86_v142_debug_mt.xml; If(!$?){exit 1}
-    ../../msvs_solution/v142_Release_MD/test_dom.exe     --jobs=2 --junit-out=junit_x86_v142_release_md.xml; If(!$?){exit 1}
-    ../../msvs_solution/v142_Release_MT/test_dom.exe     --jobs=2 --junit-out=junit_x86_v142_release_mt.xml; If(!$?){exit 1}
-../../msvs_solution/x64/v142_Debug_MD/test_dom.exe       --jobs=2 --junit-out=junit_x64_v142_debug_md.xml; If(!$?){exit 1}
-../../msvs_solution/x64/v142_Debug_MT/test_dom.exe       --jobs=2 --junit-out=junit_x64_v142_debug_mt.xml; If(!$?){exit 1}
-../../msvs_solution/x64/v142_Release_MD/test_dom.exe     --jobs=2 --junit-out=junit_x64_v142_release_md.xml; If(!$?){exit 1}
-../../msvs_solution/x64/v142_Release_MT/test_dom.exe     --jobs=2 --junit-out=junit_x64_v142_release_mt.xml; If(!$?){exit 1}
+#     ../../msvs_solution/v142_Debug_MD/test_dom.exe       --jobs=2 --junit-out=junit_x86_v142_debug_md.xml; If(!$?){exit 1}
+#     ../../msvs_solution/v142_Debug_MT/test_dom.exe       --jobs=2 --junit-out=junit_x86_v142_debug_mt.xml; If(!$?){exit 1}
+#     ../../msvs_solution/v142_Release_MD/test_dom.exe     --jobs=2 --junit-out=junit_x86_v142_release_md.xml; If(!$?){exit 1}
+#     ../../msvs_solution/v142_Release_MT/test_dom.exe     --jobs=2 --junit-out=junit_x86_v142_release_mt.xml; If(!$?){exit 1}
+# ../../msvs_solution/x64/v142_Debug_MD/test_dom.exe       --jobs=2 --junit-out=junit_x64_v142_debug_md.xml; If(!$?){exit 1}
+# ../../msvs_solution/x64/v142_Debug_MT/test_dom.exe       --jobs=2 --junit-out=junit_x64_v142_debug_mt.xml; If(!$?){exit 1}
+# ../../msvs_solution/x64/v142_Release_MD/test_dom.exe     --jobs=2 --junit-out=junit_x64_v142_release_md.xml; If(!$?){exit 1}
+# ../../msvs_solution/x64/v142_Release_MT/test_dom.exe     --jobs=2 --junit-out=junit_x64_v142_release_mt.xml; If(!$?){exit 1}
 
     ../../msvs_solution/v143_Debug_MD/test_dom.exe       --jobs=2 --junit-out=junit_x86_v143_debug_md.xml; If(!$?){exit 1}
     ../../msvs_solution/v143_Debug_MT/test_dom.exe       --jobs=2 --junit-out=junit_x86_v143_debug_mt.xml; If(!$?){exit 1}
