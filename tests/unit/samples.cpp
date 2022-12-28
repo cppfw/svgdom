@@ -61,7 +61,7 @@ tst::set set("samples", [](tst::suite& suite){
 
             try{
                 cmp_data = cmp_file.load();
-            }catch(std::system_error& e){
+            }catch(std::system_error&){
                 std::cout << "Failed to load '" << cmp_file.path() << "' file" << std::endl;
             }
 
