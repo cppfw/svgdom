@@ -2,7 +2,7 @@ configurations {
 	UserPlatformToolset {
 		// Needed because autopackage lacks VS2015+ support
 		key = "PlatformToolset";
-		choices: "v140,v141,v142";
+		choices: "v140,v141,v142,v143";
 	};
 
 	RuntimeLibrary {
@@ -102,5 +102,31 @@ nuget{
 			lib: ..\msvs_solution\x64\v142_Debug_MD\libsvgdom.lib;
 		}
 
+		//==== v143 tools ====
+
+		[x86,v143,release,MultiThreaded] {
+			lib: ..\msvs_solution\v143_Release_MT\libsvgdom.lib;
+		}
+		[x86,v143,debug,MultiThreadedDebug] {
+			lib: ..\msvs_solution\v143_Debug_MT\libsvgdom.lib;
+		}
+		[x64,v143,release,MultiThreaded] {
+			lib: ..\msvs_solution\x64\v143_Release_MT\libsvgdom.lib;
+		}
+		[x64,v143,debug,MultiThreadedDebug] {
+			lib: ..\msvs_solution\x64\v143_Debug_MT\libsvgdom.lib;
+		}
+		[x86,v143,release,MultiThreadedDLL] {
+			lib: ..\msvs_solution\v143_Release_MD\libsvgdom.lib;
+		}
+		[x86,v143,debug,MultiThreadedDebugDLL] {
+			lib: ..\msvs_solution\v143_Debug_MD\libsvgdom.lib;
+		}
+		[x64,v143,release,MultiThreadedDLL] {
+			lib: ..\msvs_solution\x64\v143_Release_MD\libsvgdom.lib;
+		}
+		[x64,v143,debug,MultiThreadedDebugDLL] {
+			lib: ..\msvs_solution\x64\v143_Debug_MD\libsvgdom.lib;
+		}
 	}
 }
