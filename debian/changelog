@@ -1,3 +1,9 @@
+libsvgdom (0.4.2) unstable; urgency=medium
+
+  * msvs: build v143 configs
+
+ -- Ivan Gagis <igagis@gmail.com>  Wed, 28 Dec 2022 18:51:52 +0200
+
 libsvgdom (0.4.1) unstable; urgency=medium
 
   * update to latest cssom
