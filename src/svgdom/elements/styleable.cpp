@@ -1061,19 +1061,69 @@ style_value svgdom::parse_paint(std::string_view str){
 		utki::string_parser p(str);
 
 		if(rgb_word == p.read_chars(rgb_word.size())){
-			uint32_t r, g, b;
-			
-			p.skip_whitespaces();
-			r = p.read_number<uint32_t>();
-			p.skip_whitespaces_and_comma();
-			g = p.read_number<uint32_t>();
-			p.skip_whitespaces_and_comma();
-			b = p.read_number<uint32_t>();
-			p.skip_whitespaces();
-			
-			if(p.read_char() == ')'){
-				auto color = r | (g << 8) | (b << 16);
-				return style_value(color);
+			switch(utki::string_parser(p.get_view()).skip_inclusive_until_one_of(",%")){
+				// rgb() color values are given as percentages
+				case '%':
+				{
+					float r, g, b;
+
+					p.skip_whitespaces();
+					r = p.read_number<float>();
+					p.skip_whitespaces();
+					if(p.read_char() != '%'){
+						ASSERT(false)
+						break;
+					}
+					p.skip_whitespaces_and_comma();
+					g = p.read_number<float>();
+					p.skip_whitespaces();
+					if(p.read_char() != '%'){
+						ASSERT(false)
+						break;
+					}
+					p.skip_whitespaces_and_comma();
+					b = p.read_number<float>();
+					p.skip_whitespaces();
+					if(p.read_char() != '%'){
+						ASSERT(false, [&](auto&o){o << "str = " << str;})
+						break;
+					}
+					p.skip_whitespaces();
+					
+					if(p.read_char() != ')'){
+						// no expected closing ')'
+						break;
+					}
+
+					// std::cout << "r = " << r << ", g = " << g << ", b = " << b << std::endl;
+					auto color = uint32_t(r * 0xff / 100) | (uint32_t(g * 0xff / 100) << 8) | (uint32_t(b * 0xff / 100) << 16);
+					return style_value(color);
+				}
+				// rgb() color values are given as absolute values
+				case ',':
+				{
+					uint32_t r, g, b;
+					
+					p.skip_whitespaces();
+					r = p.read_number<uint32_t>();
+					p.skip_whitespaces_and_comma();
+					g = p.read_number<uint32_t>();
+					p.skip_whitespaces_and_comma();
+					b = p.read_number<uint32_t>();
+					p.skip_whitespaces();
+					
+					if(p.read_char() != ')'){
+						// no expected closing ')'
+						break;
+					}
+
+					auto color = r | (g << 8) | (b << 16);
+					return style_value(color);
+				}
+				// malformed rgb() paint specification
+				default:
+					ASSERT(false)
+					break;
 			}
 			return style_value(style_value_special::none);
 		}
