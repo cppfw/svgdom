@@ -1,7 +1,7 @@
 /*
 The MIT License (MIT)
 
-Copyright (c) 2015-2021 Ivan Gagis <igagis@gmail.com>
+Copyright (c) 2015-2023 Ivan Gagis <igagis@gmail.com>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -34,7 +34,8 @@ SOFTWARE.
 
 using namespace svgdom;
 
-length length::parse(std::string_view str){
+length length::parse(std::string_view str)
+{
 	length ret;
 
 	utki::string_parser p(str);
@@ -43,35 +44,36 @@ length length::parse(std::string_view str){
 
 	auto unit = p.read_word();
 
-	if(unit.empty()){
+	if (unit.empty()) {
 		ret.unit = length_unit::number;
-	}else if(unit == "%"){
+	} else if (unit == "%") {
 		ret.unit = length_unit::percent;
-	}else if(unit == "em"){
+	} else if (unit == "em") {
 		ret.unit = length_unit::em;
-	}else if(unit == "ex"){
+	} else if (unit == "ex") {
 		ret.unit = length_unit::ex;
-	}else if(unit == "px"){
+	} else if (unit == "px") {
 		ret.unit = length_unit::px;
-	}else if(unit == "cm"){
+	} else if (unit == "cm") {
 		ret.unit = length_unit::cm;
-	}else if(unit == "mm"){
+	} else if (unit == "mm") {
 		ret.unit = length_unit::mm;
-	}else if(unit == "in"){
+	} else if (unit == "in") {
 		ret.unit = length_unit::in;
-	}else if(unit == "pt"){
+	} else if (unit == "pt") {
 		ret.unit = length_unit::pt;
-	}else if(unit == "pc"){
+	} else if (unit == "pc") {
 		ret.unit = length_unit::pc;
-	}else{
+	} else {
 		ret.unit = length_unit::unknown;
 	}
-	
+
 	return ret;
 }
 
-real length::to_px(real dpi) const noexcept{
-	switch(this->unit){
+real length::to_px(real dpi) const noexcept
+{
+	switch (this->unit) {
 		default:
 			return 0;
 		case svgdom::length_unit::number:
@@ -94,10 +96,11 @@ real length::to_px(real dpi) const noexcept{
 	}
 }
 
-std::ostream& operator<<(std::ostream& s, const length& l){
+std::ostream& operator<<(std::ostream& s, const length& l)
+{
 	s << l.value;
-	
-	switch(l.unit){
+
+	switch (l.unit) {
 		case length_unit::unknown:
 		case length_unit::number:
 		default:
@@ -130,6 +133,6 @@ std::ostream& operator<<(std::ostream& s, const length& l){
 			s << "pc";
 			break;
 	}
-	
+
 	return s;
 }

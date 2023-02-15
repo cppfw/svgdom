@@ -1,7 +1,7 @@
 /*
 The MIT License (MIT)
 
-Copyright (c) 2015-2021 Ivan Gagis <igagis@gmail.com>
+Copyright (c) 2015-2023 Ivan Gagis <igagis@gmail.com>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -33,11 +33,13 @@ SOFTWARE.
 
 using namespace svgdom;
 
-namespace{
-class cache_creator : virtual public svgdom::const_visitor{
+namespace {
+class cache_creator : virtual public svgdom::const_visitor
+{
 private:
-	void add_to_cache(const svgdom::element& e){
-		if(!e.id.empty()){
+	void add_to_cache(const svgdom::element& e)
+	{
+		if (!e.id.empty()) {
 			this->cache.insert(std::make_pair(e.id, this->current_style_stack));
 		}
 	}
@@ -46,81 +48,119 @@ private:
 
 public:
 	std::unordered_map<std::string, style_stack> cache;
-	
-	void visit_container(const svgdom::element& e, const svgdom::container& c, const svgdom::styleable& s){
+
+	void visit_container(const svgdom::element& e, const svgdom::container& c, const svgdom::styleable& s)
+	{
 		style_stack::push push(this->current_style_stack, s);
 		this->add_to_cache(e);
 		this->relay_accept(c);
 	}
-	void visit_element(const svgdom::element& e, const svgdom::styleable& s){
+
+	void visit_element(const svgdom::element& e, const svgdom::styleable& s)
+	{
 		style_stack::push push(this->current_style_stack, s);
 		this->add_to_cache(e);
 	}
-	
-	void default_visit(const svgdom::element& e)override{
+
+	void default_visit(const svgdom::element& e) override
+	{
 		this->add_to_cache(e);
 	}
-	
-	void visit(const svgdom::g_element& e) override{
+
+	void visit(const svgdom::g_element& e) override
+	{
 		this->visit_container(e, e, e);
 	}
-	void visit(const svgdom::symbol_element& e) override{
+
+	void visit(const svgdom::symbol_element& e) override
+	{
 		this->visit_container(e, e, e);
 	}
-	void visit(const svgdom::svg_element& e) override{
+
+	void visit(const svgdom::svg_element& e) override
+	{
 		this->visit_container(e, e, e);
 	}
-	void visit(const svgdom::radial_gradient_element& e) override{
+
+	void visit(const svgdom::radial_gradient_element& e) override
+	{
 		this->visit_container(e, e, e);
 	}
-	void visit(const svgdom::linear_gradient_element& e) override{
+
+	void visit(const svgdom::linear_gradient_element& e) override
+	{
 		this->visit_container(e, e, e);
 	}
-	void visit(const svgdom::defs_element& e) override{
+
+	void visit(const svgdom::defs_element& e) override
+	{
 		this->visit_container(e, e, e);
 	}
-	void visit(const svgdom::filter_element& e) override{
+
+	void visit(const svgdom::filter_element& e) override
+	{
 		this->visit_container(e, e, e);
 	}
-	
-	void visit(const svgdom::polyline_element& e) override{
+
+	void visit(const svgdom::polyline_element& e) override
+	{
 		this->visit_element(e, e);
 	}
-	void visit(const svgdom::circle_element& e) override{
+
+	void visit(const svgdom::circle_element& e) override
+	{
 		this->visit_element(e, e);
 	}
-	void visit(const svgdom::use_element& e) override{
+
+	void visit(const svgdom::use_element& e) override
+	{
 		this->visit_element(e, e);
 	}
-	void visit(const svgdom::gradient::stop_element& e) override{
+
+	void visit(const svgdom::gradient::stop_element& e) override
+	{
 		this->visit_element(e, e);
 	}
-	void visit(const svgdom::path_element& e) override{
+
+	void visit(const svgdom::path_element& e) override
+	{
 		this->visit_element(e, e);
 	}
-	void visit(const svgdom::rect_element& e) override{
+
+	void visit(const svgdom::rect_element& e) override
+	{
 		this->visit_element(e, e);
 	}
-	void visit(const svgdom::line_element& e) override{
+
+	void visit(const svgdom::line_element& e) override
+	{
 		this->visit_element(e, e);
 	}
-	void visit(const svgdom::ellipse_element& e) override{
+
+	void visit(const svgdom::ellipse_element& e) override
+	{
 		this->visit_element(e, e);
 	}
-	void visit(const svgdom::polygon_element& e) override{
-		this->visit_element(e, e);
-	}	
-	void visit(const svgdom::fe_gaussian_blur_element& e) override{
+
+	void visit(const svgdom::polygon_element& e) override
+	{
 		this->visit_element(e, e);
 	}
-	void visit(const image_element& e) override{
+
+	void visit(const svgdom::fe_gaussian_blur_element& e) override
+	{
+		this->visit_element(e, e);
+	}
+
+	void visit(const image_element& e) override
+	{
 		this->visit_element(e, e);
 	}
 };
-}
+} // namespace
 
 style_stack_cache::style_stack_cache(const svgdom::element& root) :
-	cache([&root](){
+	cache([&root]() {
 		cache_creator cc;
 
 		root.accept(cc);
@@ -129,15 +169,16 @@ style_stack_cache::style_stack_cache(const svgdom::element& root) :
 	}())
 {}
 
-const style_stack* style_stack_cache::find(const std::string& id)const noexcept{
-	if(id.length() == 0){
+const style_stack* style_stack_cache::find(const std::string& id) const noexcept
+{
+	if (id.length() == 0) {
 		return nullptr;
 	}
-	
+
 	auto i = this->cache.find(id);
-	if(i == this->cache.end()){
+	if (i == this->cache.end()) {
 		return nullptr;
 	}
-	
+
 	return &i->second;
 }

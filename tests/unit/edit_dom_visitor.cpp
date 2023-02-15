@@ -4,15 +4,15 @@
 #include "../../src/svgdom/visitor.hpp"
 
 // visitor to remove all 'line' elements
-class EditingVisitor : public svgdom::visitor{
+class editing_visitor : public svgdom::visitor{
 	std::vector<std::pair<svgdom::container*, decltype(svgdom::container::children)::iterator>> elementsToRemove;
 	
-	void addToRemove(){
+	void add_to_remove(){
 		if(!this->cur_parent()){
 			// root element does not have parent, nowhere to remove it from
 			return;
 		}
-		this->elementsToRemove.push_back(std::make_pair(this->cur_parent(), this->cur_iter()));
+		this->elementsToRemove.emplace_back(this->cur_parent(), this->cur_iter());
 	}
 	
 public:
@@ -29,10 +29,10 @@ public:
 	}
 
 	void visit(svgdom::line_element& e) override{
-		this->addToRemove();
+		this->add_to_remove();
 	}
 	
-	void removeLines(){
+	void remove_lines(){
 		for(auto& p : this->elementsToRemove){
 			tst::check(p.first, SL);
 			p.first->children.erase(p.second);
@@ -70,7 +70,7 @@ tst::set set("edit_dom_visitor", [](auto& suite){
 			dom->children.push_back(std::move(g));
 		}
 		
-		EditingVisitor visitor;
+		editing_visitor visitor;
 		
 		dom->accept(visitor);
 		
@@ -84,7 +84,7 @@ tst::set set("edit_dom_visitor", [](auto& suite){
 				SL
 			);
 		
-		visitor.removeLines();
+		visitor.remove_lines();
 		
 		tst::check_eq(dom->children.size(), size_t(2), [&](auto&o){o << "dom->children.size() = " << dom->children.size();}, SL);
 		tst::check(dynamic_cast<svgdom::path_element*>(dom->children.begin()->get()), SL);

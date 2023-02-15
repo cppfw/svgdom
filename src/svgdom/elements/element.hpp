@@ -1,7 +1,7 @@
 /*
 The MIT License (MIT)
 
-Copyright (c) 2015-2021 Ivan Gagis <igagis@gmail.com>
+Copyright (c) 2015-2023 Ivan Gagis <igagis@gmail.com>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -29,7 +29,7 @@ SOFTWARE.
 
 #include <ostream>
 
-namespace svgdom{
+namespace svgdom {
 
 class visitor;
 class const_visitor;
@@ -37,30 +37,32 @@ class const_visitor;
 /**
  * @brief Base class for all SVG document elements.
  */
-struct element{
+// TODO: why lint complains here on macos?
+// NOLINTNEXTLINE(bugprone-exception-escape, "error: an exception may be thrown in function")
+struct element {
 	std::string id;
-	
-	std::string to_string()const;
+
+	std::string to_string() const;
 
 	/**
 	 * @brief Accept method for visitor pattern.
 	 * @param v - visitor to accept.
 	 */
 	virtual void accept(visitor& v) = 0;
-	
+
 	/**
 	 * @brief Accept method for visitor pattern.
 	 * @param v - constant visitor to accept.
 	 */
-	virtual void accept(const_visitor& v)const = 0;
+	virtual void accept(const_visitor& v) const = 0;
 
 	/**
 	 * @brief Get tag name of the element.
 	 * @return Tag name of the element.
 	 */
-	virtual const std::string& get_tag()const = 0;
+	virtual const std::string& get_tag() const = 0;
 
-	virtual ~element()noexcept{}
+	virtual ~element() noexcept = default;
 };
 
-}
+} // namespace svgdom

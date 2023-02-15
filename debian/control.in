@@ -8,6 +8,7 @@ Build-Depends:
 		prorab-extra,
 		myci,
 		clang-tidy,
+		clang-format,
 		libc6-dev,
 		libutki-dev (>= 1.1.150),
 		libpapki-dev,

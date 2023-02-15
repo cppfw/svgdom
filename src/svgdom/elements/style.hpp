@@ -1,7 +1,7 @@
 /*
 The MIT License (MIT)
 
-Copyright (c) 2015-2021 Ivan Gagis <igagis@gmail.com>
+Copyright (c) 2015-2023 Ivan Gagis <igagis@gmail.com>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -27,25 +27,28 @@ SOFTWARE.
 
 #pragma once
 
-#include "element.hpp"
-#include "styleable.hpp"
+#include <string>
 
 #include <cssom/om.hpp>
 
-#include <string>
+#include "element.hpp"
+#include "styleable.hpp"
 
-namespace svgdom{
+namespace svgdom {
 
-struct style_element : public element{
+// TODO: why lint complains here on macos?
+// NOLINTNEXTLINE(bugprone-exception-escape, "error: an exception may be thrown in function")
+struct style_element : public element {
 	cssom::sheet css;
 
-	struct css_style_value : public cssom::property_value_base{
+	struct css_style_value : public cssom::property_value_base {
 		style_value value;
 	};
 
 	static const std::string tag;
 
-	const std::string& get_tag()const override{
+	const std::string& get_tag() const override
+	{
 		return tag;
 	}
 
@@ -53,4 +56,4 @@ struct style_element : public element{
 	void accept(const_visitor& v) const override;
 };
 
-}
+} // namespace svgdom

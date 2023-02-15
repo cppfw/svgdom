@@ -1,7 +1,7 @@
 /*
 The MIT License (MIT)
 
-Copyright (c) 2015-2021 Ivan Gagis <igagis@gmail.com>
+Copyright (c) 2015-2023 Ivan Gagis <igagis@gmail.com>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -29,9 +29,9 @@ SOFTWARE.
 
 #include <string>
 
-namespace svgdom{
-struct aspect_ratioed{
-	enum class aspect_ratio_preservation{
+namespace svgdom {
+struct aspect_ratioed {
+	enum class aspect_ratio_preservation {
 		none,
 		x_min_y_min,
 		x_mid_y_min,
@@ -44,14 +44,14 @@ struct aspect_ratioed{
 		x_max_y_max
 	};
 
-	struct aspect_ratio_preservation_value{
+	struct aspect_ratio_preservation_value {
 		aspect_ratio_preservation preserve = aspect_ratio_preservation::none;
 		bool defer = false;
 		bool slice = false;
 
-		std::string to_string()const;
+		std::string to_string() const;
 		void parse(std::string_view str);
 	} preserve_aspect_ratio;
 };
 
-}
+} // namespace svgdom

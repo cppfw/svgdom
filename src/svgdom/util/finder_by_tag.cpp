@@ -1,7 +1,7 @@
 /*
 The MIT License (MIT)
 
-Copyright (c) 2015-2021 Ivan Gagis <igagis@gmail.com>
+Copyright (c) 2015-2023 Ivan Gagis <igagis@gmail.com>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -33,10 +33,12 @@ SOFTWARE.
 
 using namespace svgdom;
 
-namespace{
-class cache_creator : virtual public svgdom::const_visitor{
+namespace {
+class cache_creator : virtual public svgdom::const_visitor
+{
 private:
-	void add_to_cache(const svgdom::element& e){
+	void add_to_cache(const svgdom::element& e)
+	{
 		if (!e.get_tag().empty()) {
 			auto it = cache.find(e.get_tag());
 
@@ -50,31 +52,33 @@ private:
 	}
 
 public:
-	std::unordered_map<std::string, std::vector< const element*>> cache;
+	std::unordered_map<std::string, std::vector<const element*>> cache;
 
-	void default_visit(const element& e){
+	void default_visit(const element& e) override
+	{
 		this->add_to_cache(e);
 	}
 };
-}
+} // namespace
 
 finder_by_tag::finder_by_tag(const svgdom::element& root) :
-		cache([&root](){
-			cache_creator cc;
+	cache([&root]() {
+		cache_creator cc;
 
-			root.accept(cc);
+		root.accept(cc);
 
-			return std::move(cc.cache);
-		}())
+		return std::move(cc.cache);
+	}())
 {}
 
-utki::span<const svgdom::element* const> finder_by_tag::find(const std::string& tag_name)const noexcept{
-	if(tag_name.length() == 0){
+utki::span<const svgdom::element* const> finder_by_tag::find(const std::string& tag_name) const noexcept
+{
+	if (tag_name.length() == 0) {
 		return nullptr;
 	}
 
 	auto i = this->cache.find(tag_name);
-	if(i == this->cache.end()){
+	if (i == this->cache.end()) {
 		return nullptr;
 	}
 

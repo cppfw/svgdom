@@ -1,7 +1,7 @@
 /*
 The MIT License (MIT)
 
-Copyright (c) 2015-2021 Ivan Gagis <igagis@gmail.com>
+Copyright (c) 2015-2023 Ivan Gagis <igagis@gmail.com>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -26,6 +26,7 @@ SOFTWARE.
 /* ================ LICENSE END ================ */
 
 #include "filter.hpp"
+
 #include "../visitor.hpp"
 
 using namespace svgdom;
@@ -36,54 +37,65 @@ const std::string fe_color_matrix_element::tag = "feColorMatrix";
 const std::string fe_blend_element::tag = "feBlend";
 const std::string fe_composite_element::tag = "feComposite";
 
-void filter_element::accept(visitor& visitor){
+void filter_element::accept(visitor& visitor)
+{
 	visitor.visit(*this);
 }
 
-void filter_element::accept(const_visitor& visitor)const{
+void filter_element::accept(const_visitor& visitor) const
+{
 	visitor.visit(*this);
 }
 
-void fe_gaussian_blur_element::accept(visitor& visitor){
+void fe_gaussian_blur_element::accept(visitor& visitor)
+{
 	visitor.visit(*this);
 }
 
-void fe_gaussian_blur_element::accept(const_visitor& visitor)const{
+void fe_gaussian_blur_element::accept(const_visitor& visitor) const
+{
 	visitor.visit(*this);
 }
 
-void fe_color_matrix_element::accept(visitor& visitor){
+void fe_color_matrix_element::accept(visitor& visitor)
+{
 	visitor.visit(*this);
 }
 
-void fe_blend_element::accept(visitor& visitor){
+void fe_blend_element::accept(visitor& visitor)
+{
 	visitor.visit(*this);
 }
 
-void fe_composite_element::accept(visitor& visitor){
+void fe_composite_element::accept(visitor& visitor)
+{
 	visitor.visit(*this);
 }
 
-void fe_color_matrix_element::accept(const_visitor& visitor)const{
+void fe_color_matrix_element::accept(const_visitor& visitor) const
+{
 	visitor.visit(*this);
 }
 
-void fe_blend_element::accept(const_visitor& visitor)const{
+void fe_blend_element::accept(const_visitor& visitor) const
+{
 	visitor.visit(*this);
 }
 
-void fe_composite_element::accept(const_visitor& visitor)const{
+void fe_composite_element::accept(const_visitor& visitor) const
+{
 	visitor.visit(*this);
 }
 
-r4::vector2<real> fe_gaussian_blur_element::get_std_deviation()const noexcept{
-	if(!this->is_std_deviation_specified()){
+r4::vector2<real> fe_gaussian_blur_element::get_std_deviation() const noexcept
+{
+	if (!this->is_std_deviation_specified()) {
 		return 0;
 	}
-	
-	if(this->is_std_deviation_y_specified()){
+
+	if (this->is_std_deviation_y_specified()) {
 		return this->std_deviation;
 	}
-	
+
 	return this->std_deviation.x();
 }

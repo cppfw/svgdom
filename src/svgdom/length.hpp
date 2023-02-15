@@ -1,7 +1,7 @@
 /*
 The MIT License (MIT)
 
-Copyright (c) 2015-2021 Ivan Gagis <igagis@gmail.com>
+Copyright (c) 2015-2023 Ivan Gagis <igagis@gmail.com>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -35,9 +35,9 @@ SOFTWARE.
 #	undef IN
 #endif
 
-namespace svgdom{
+namespace svgdom {
 
-enum class length_unit{
+enum class length_unit {
 	unknown,
 	number,
 	percent,
@@ -54,34 +54,37 @@ enum class length_unit{
 /**
  * @brief SVG attribute value of type 'length'.
  */
-struct length{
+struct length {
 	real value;
 	length_unit unit;
-	
+
 	static length parse(std::string_view str);
-	
+
 	length() = default;
 
 	constexpr length(real value, length_unit unit = length_unit::number) :
-			value(value),
-			unit(unit)
+		value(value),
+		unit(unit)
 	{}
 
-	bool is_valid()const noexcept{
+	bool is_valid() const noexcept
+	{
 		return this->unit != length_unit::unknown;
 	}
 
-	bool is_percent()const noexcept{
+	bool is_percent() const noexcept
+	{
 		return this->unit == length_unit::percent;
 	}
-	
-	real to_px(real dpi)const noexcept;
-	
-	bool operator!=(const length& l)const{
+
+	real to_px(real dpi) const noexcept;
+
+	bool operator!=(const length& l) const
+	{
 		return this->value != l.value || (this->unit != l.unit && this->value != real(0));
 	}
 };
 
-}
+} // namespace svgdom
 
 std::ostream& operator<<(std::ostream& s, const svgdom::length& l);

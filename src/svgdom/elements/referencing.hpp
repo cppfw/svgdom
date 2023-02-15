@@ -1,7 +1,7 @@
 /*
 The MIT License (MIT)
 
-Copyright (c) 2015-2021 Ivan Gagis <igagis@gmail.com>
+Copyright (c) 2015-2023 Ivan Gagis <igagis@gmail.com>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -29,24 +29,26 @@ SOFTWARE.
 
 #include <string>
 
-namespace svgdom{
+namespace svgdom {
 
 /**
  * @brief an element which can reference another element.
  */
-struct referencing{
+// TODO: why lint complains here on macos?
+// NOLINTNEXTLINE(bugprone-exception-escape, "error: an exception may be thrown in function")
+struct referencing {
 	/**
 	 * @brief IRI reference.
 	 * This variable holds the IRI string.
 	 */
 	std::string iri;
-	
+
 	/**
 	 * @brief Get ID of the locally referenced element.
 	 * @return ID of the locally referenced element.
 	 * @return Empty string if this Referencing does not refer to any element or the reference is not local IRI.
 	 */
-	std::string get_local_id_from_iri()const;
+	std::string get_local_id_from_iri() const;
 };
 
-}
+} // namespace svgdom

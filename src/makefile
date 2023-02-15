@@ -1,5 +1,6 @@
 include prorab.mk
 include prorab-license.mk
+include prorab-clang-format.mk
 
 $(eval $(call prorab-try-simple-include, $(CONANBUILDINFO_DIR)conanbuildinfo.mak))
 
@@ -18,6 +19,8 @@ this_ldflags += $(addprefix -L,$(CONAN_LIB_DIRS))
 this_ldlibs += -lcssom -lpapki -lmikroxml -lutki -lstdc++ -lm
 
 $(eval $(prorab-build-lib))
+
+$(eval $(prorab-clang-format))
 
 this_src_dir := 
 this_license_file := ../LICENSE

@@ -1,7 +1,7 @@
 /*
 The MIT License (MIT)
 
-Copyright (c) 2015-2021 Ivan Gagis <igagis@gmail.com>
+Copyright (c) 2015-2023 Ivan Gagis <igagis@gmail.com>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -34,18 +34,20 @@ SOFTWARE.
 using namespace svgdom;
 
 style_stack::crawler::crawler(decltype(stack) stack) :
-		stack(stack)
+	stack(stack)
 {}
 
-const cssom::styleable& style_stack::crawler::get(){
+const cssom::styleable& style_stack::crawler::get()
+{
 	ASSERT(!this->stack.empty())
-	
+
 	return this->iter->get();
 }
 
-bool style_stack::crawler::move_up(){
+bool style_stack::crawler::move_up()
+{
 	// TRACE(<< "crawler::move_up(): stack.size() = " << this->stack.size() << std::endl)
-	if(std::distance(this->iter, this->stack.rend()) == 1){
+	if (std::distance(this->iter, this->stack.rend()) == 1) {
 		// TRACE(<< "crawler::move_up(): at root node" << std::endl)
 		return false;
 	}
@@ -53,31 +55,34 @@ bool style_stack::crawler::move_up(){
 	return true;
 }
 
-bool style_stack::crawler::move_left(){
+bool style_stack::crawler::move_left()
+{
 	// TRACE(<< "crawler::move_left(): NOT SUPPORTED!!!" << std::endl)
 	return false;
 }
 
-void style_stack::crawler::reset(){
+void style_stack::crawler::reset()
+{
 	// TRACE(<< "crawler::reset(): invoked" << std::endl)
-	if(this->stack.empty()){
+	if (this->stack.empty()) {
 		throw std::logic_error("style_stack::crawler::reset(): stack is empty");
 	}
 
 	this->iter = this->stack.rbegin();
 }
 
-const svgdom::style_value* style_stack::get_style_property(svgdom::style_property p)const{
+const svgdom::style_value* style_stack::get_style_property(svgdom::style_property p) const
+{
 	bool explicit_inherit = false;
 
-	for(auto i = this->stack.rbegin(); i != this->stack.rend(); ++i){
+	for (auto i = this->stack.rbegin(); i != this->stack.rend(); ++i) {
 		auto v = i->get().get_style_property(p);
-		if(!v){
+		if (!v) {
 			v = this->get_css_style_property(p);
-			if(!v){
+			if (!v) {
 				v = i->get().get_presentation_attribute(p);
-				if(!v){
-					if(!explicit_inherit && !svgdom::styleable::is_inherited(p)){
+				if (!v) {
+					if (!explicit_inherit && !svgdom::styleable::is_inherited(p)) {
 						return nullptr;
 					}
 					continue;
@@ -85,7 +90,7 @@ const svgdom::style_value* style_stack::get_style_property(svgdom::style_propert
 			}
 		}
 		ASSERT(v)
-		if(is_inherit(*v)){
+		if (is_inherit(*v)) {
 			explicit_inherit = true;
 			continue;
 		}
@@ -96,29 +101,32 @@ const svgdom::style_value* style_stack::get_style_property(svgdom::style_propert
 }
 
 style_stack::push::push(style_stack& ss, const svgdom::styleable& s) :
-		ss(ss)
+	ss(ss)
 {
-	this->ss.stack.push_back(s);
+	this->ss.stack.emplace_back(s);
 }
 
-style_stack::push::~push()noexcept{
+style_stack::push::~push() noexcept
+{
 	this->ss.stack.pop_back();
 }
 
-void style_stack::add_css(const cssom::sheet& css_doc){
-	this->css.push_back(css_doc);
+void style_stack::add_css(const cssom::sheet& css_doc)
+{
+	this->css.emplace_back(css_doc);
 }
 
-const style_value* style_stack::get_css_style_property(style_property p)const{
+const style_value* style_stack::get_css_style_property(style_property p) const
+{
 	crawler c(this->stack);
 	unsigned specificity = 0;
 	const style_value* ret = nullptr;
-	for(auto& ss : this->css){
+	for (auto& ss : this->css) {
 		auto r = ss.get().get_property_value(c, uint32_t(p));
-		if(!r.value){
+		if (!r.value) {
 			continue;
 		}
-		if(r.specificity < specificity){
+		if (r.specificity < specificity) {
 			continue;
 		}
 		specificity = r.specificity;

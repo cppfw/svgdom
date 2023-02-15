@@ -1,7 +1,7 @@
 /*
 The MIT License (MIT)
 
-Copyright (c) 2015-2021 Ivan Gagis <igagis@gmail.com>
+Copyright (c) 2015-2023 Ivan Gagis <igagis@gmail.com>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -29,29 +29,32 @@ SOFTWARE.
 
 #include "../visitor.hpp"
 
-namespace svgdom{
+namespace svgdom {
 /**
  * @brief clone visitor.
  * A visitor which allows cloning of Elements (and their children).
  */
-class cloner : virtual public svgdom::const_visitor{
+class cloner : virtual public svgdom::const_visitor
+{
 	svgdom::container root;
 	svgdom::container* cur_parent = &root;
 
-	void clone_children(const svgdom::container& e, svgdom::container& clone); 
-	
+	void clone_children(const svgdom::container& e, svgdom::container& clone);
+
 public:
 	/**
-	* @brief Clone root element as T.
-	* @return std::unique<T> where T is element type of root.
-	*/
-	template <class T> std::unique_ptr<T> get_clone_as(){
-		if(root.children.size() != 1){
+	 * @brief Clone root element as element_type.
+	 * @return std::unique<element_type> where element_type is element type of root.
+	 */
+	template <class element_type>
+	std::unique_ptr<element_type> get_clone_as()
+	{
+		if (root.children.size() != 1) {
 			return nullptr;
 		}
-		auto ret = std::unique_ptr<T>(dynamic_cast<T*>(root.children.back().get()));
-		if(ret){
-			root.children.back().release();
+		auto ret = std::unique_ptr<element_type>(dynamic_cast<element_type*>(root.children.back().get()));
+		if (ret) {
+			[[maybe_unused]] auto ptr = root.children.back().release();
 		}
 		root.children.clear();
 		return ret;
@@ -78,4 +81,4 @@ public:
 	void visit(const svgdom::style_element& e) override;
 };
 
-}
+} // namespace svgdom

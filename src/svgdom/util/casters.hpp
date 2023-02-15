@@ -1,7 +1,7 @@
 /*
 The MIT License (MIT)
 
-Copyright (c) 2015-2021 Ivan Gagis <igagis@gmail.com>
+Copyright (c) 2015-2023 Ivan Gagis <igagis@gmail.com>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -27,63 +27,61 @@ SOFTWARE.
 
 #pragma once
 
-#include "../visitor.hpp"
-
 #include <type_traits>
 
-namespace svgdom{
+#include "../visitor.hpp"
+
+namespace svgdom {
 
 // TODO: doxygen all
-template <class T> class element_caster :
-		public std::conditional<std::is_const<T>::value, const_visitor, visitor>::type
+template <class element_type>
+class element_caster : public std::conditional<std::is_const<element_type>::value, const_visitor, visitor>::type
 {
 	static_assert(
-			std::is_convertible<
-					T*,
-					typename std::conditional<
-							std::is_const<T>::value,
-							const element*,
-							element*
-						>::type
-				>::value,
-			"T must inherit element"
-		);
-public:
-	T* pointer = nullptr;
+		std::is_convertible<
+			element_type*,
+			typename std::conditional<std::is_const<element_type>::value, const element*, element*>::type>::value,
+		"element_type must inherit element"
+	);
 
-	void visit(T& e)override{
+public:
+	element_type* pointer = nullptr;
+
+	void visit(element_type& e) override
+	{
 		this->pointer = &e;
 	}
 
 	void default_visit(
-			typename std::conditional<std::is_const<T>::value, const element&, element&>::type e,
-			typename std::conditional<std::is_const<T>::value, const container&, container&>::type c
-		)override
+		typename std::conditional<std::is_const<element_type>::value, const element&, element&>::type e,
+		typename std::conditional<std::is_const<element_type>::value, const container&, container&>::type c
+	) override
 	{
 		// do nothing
 	}
 };
 
-template <bool Const> class container_caster_template :
-		public std::conditional<Const, const_visitor, visitor>::type
+template <bool is_const>
+class container_caster_template : public std::conditional<is_const, const_visitor, visitor>::type
 {
 public:
-	typename std::conditional<Const, const container*, container*>::type pointer = nullptr;
+	typename std::conditional<is_const, const container*, container*>::type pointer = nullptr;
 
 	void default_visit(
-			typename std::conditional<Const, const element&, element&>::type e,
-			typename std::conditional<Const, const container&, container&>::type c
-		)override
+		typename std::conditional<is_const, const element&, element&>::type e,
+		typename std::conditional<is_const, const container&, container&>::type c
+	) override
 	{
 		this->pointer = &c;
 	}
 };
 
-typedef container_caster_template<true> const_container_caster;
-typedef container_caster_template<false> container_caster;
+using const_container_caster = container_caster_template<true>;
+using container_caster = container_caster_template<false>;
 
-inline container* cast_to_container(element* e){
-	if(!e){
+inline container* cast_to_container(element* e)
+{
+	if (!e) {
 		return nullptr;
 	}
 	container_caster caster;
@@ -91,8 +89,9 @@ inline container* cast_to_container(element* e){
 	return caster.pointer;
 }
 
-inline const container* cast_to_container(const element* e){
-	if(!e){
+inline const container* cast_to_container(const element* e)
+{
+	if (!e) {
 		return nullptr;
 	}
 	const_container_caster caster;
@@ -100,88 +99,139 @@ inline const container* cast_to_container(const element* e){
 	return caster.pointer;
 }
 
-template <bool Const> class styleable_caster_template :
-		public std::conditional<Const, const_visitor, visitor>::type
+template <bool is_const>
+class styleable_caster_template : public std::conditional<is_const, const_visitor, visitor>::type
 {
 public:
-	typename std::conditional<Const, const styleable*, styleable*>::type pointer = nullptr;
+	typename std::conditional<is_const, const styleable*, styleable*>::type pointer = nullptr;
 
-	virtual void visit(typename std::conditional<Const, const path_element&, path_element&>::type e){
+	void visit(typename std::conditional<is_const, const path_element&, path_element&>::type e) override
+	{
 		this->pointer = &e;
 	}
-	virtual void visit(typename std::conditional<Const, const rect_element&, rect_element&>::type e){
+
+	void visit(typename std::conditional<is_const, const rect_element&, rect_element&>::type e) override
+	{
 		this->pointer = &e;
 	}
-	virtual void visit(typename std::conditional<Const, const circle_element&, circle_element&>::type e){
+
+	void visit(typename std::conditional<is_const, const circle_element&, circle_element&>::type e) override
+	{
 		this->pointer = &e;
 	}
-	virtual void visit(typename std::conditional<Const, const ellipse_element&, ellipse_element&>::type e){
+
+	void visit(typename std::conditional<is_const, const ellipse_element&, ellipse_element&>::type e) override
+	{
 		this->pointer = &e;
 	}
-	virtual void visit(typename std::conditional<Const, const line_element&, line_element&>::type e){
+
+	void visit(typename std::conditional<is_const, const line_element&, line_element&>::type e) override
+	{
 		this->pointer = &e;
 	}
-	virtual void visit(typename std::conditional<Const, const polyline_element&, polyline_element&>::type e){
+
+	void visit(typename std::conditional<is_const, const polyline_element&, polyline_element&>::type e) override
+	{
 		this->pointer = &e;
 	}
-	virtual void visit(typename std::conditional<Const, const polygon_element&, polygon_element&>::type e){
+
+	void visit(typename std::conditional<is_const, const polygon_element&, polygon_element&>::type e) override
+	{
 		this->pointer = &e;
 	}
-	virtual void visit(typename std::conditional<Const, const g_element&, g_element&>::type e){
+
+	void visit(typename std::conditional<is_const, const g_element&, g_element&>::type e) override
+	{
 		this->pointer = &e;
 	}
-	virtual void visit(typename std::conditional<Const, const svg_element&, svg_element&>::type e){
+
+	void visit(typename std::conditional<is_const, const svg_element&, svg_element&>::type e) override
+	{
 		this->pointer = &e;
 	}
-	virtual void visit(typename std::conditional<Const, const symbol_element&, symbol_element&>::type e){
+
+	void visit(typename std::conditional<is_const, const symbol_element&, symbol_element&>::type e) override
+	{
 		this->pointer = &e;
 	}
-	virtual void visit(typename std::conditional<Const, const use_element&, use_element&>::type e){
+
+	void visit(typename std::conditional<is_const, const use_element&, use_element&>::type e) override
+	{
 		this->pointer = &e;
 	}
-	virtual void visit(typename std::conditional<Const, const defs_element&, defs_element&>::type e){
+
+	void visit(typename std::conditional<is_const, const defs_element&, defs_element&>::type e) override
+	{
 		this->pointer = &e;
 	}
-	virtual void visit(typename std::conditional<Const, const gradient::stop_element&, gradient::stop_element&>::type e){
+
+	void visit(typename std::conditional<is_const, const gradient::stop_element&, gradient::stop_element&>::type e
+	) override
+	{
 		this->pointer = &e;
 	}
-	virtual void visit(typename std::conditional<Const, const linear_gradient_element&, linear_gradient_element&>::type e){
+
+	void visit(typename std::conditional<is_const, const linear_gradient_element&, linear_gradient_element&>::type e
+	) override
+	{
 		this->pointer = &e;
 	}
-	virtual void visit(typename std::conditional<Const, const radial_gradient_element&, radial_gradient_element&>::type e){
+
+	void visit(typename std::conditional<is_const, const radial_gradient_element&, radial_gradient_element&>::type e
+	) override
+	{
 		this->pointer = &e;
 	}
-	virtual void visit(typename std::conditional<Const, const filter_element&, filter_element&>::type e){
+
+	void visit(typename std::conditional<is_const, const filter_element&, filter_element&>::type e) override
+	{
 		this->pointer = &e;
 	}
-	virtual void visit(typename std::conditional<Const, const fe_gaussian_blur_element&, fe_gaussian_blur_element&>::type e){
+
+	void visit(typename std::conditional<is_const, const fe_gaussian_blur_element&, fe_gaussian_blur_element&>::type e
+	) override
+	{
 		this->pointer = &e;
 	}
-	virtual void visit(typename std::conditional<Const, const fe_color_matrix_element&, fe_color_matrix_element&>::type e){
+
+	void visit(typename std::conditional<is_const, const fe_color_matrix_element&, fe_color_matrix_element&>::type e
+	) override
+	{
 		this->pointer = &e;
 	}
-	virtual void visit(typename std::conditional<Const, const fe_blend_element&, fe_blend_element&>::type e){
+
+	void visit(typename std::conditional<is_const, const fe_blend_element&, fe_blend_element&>::type e) override
+	{
 		this->pointer = &e;
 	}
-	virtual void visit(typename std::conditional<Const, const fe_composite_element&, fe_composite_element&>::type e){
+
+	void visit(typename std::conditional<is_const, const fe_composite_element&, fe_composite_element&>::type e) override
+	{
 		this->pointer = &e;
 	}
-	virtual void visit(typename std::conditional<Const, const image_element&, image_element&>::type e){
+
+	void visit(typename std::conditional<is_const, const image_element&, image_element&>::type e) override
+	{
 		this->pointer = &e;
 	}
-	virtual void visit(typename std::conditional<Const, const mask_element&, mask_element&>::type e){
+
+	void visit(typename std::conditional<is_const, const mask_element&, mask_element&>::type e) override
+	{
 		this->pointer = &e;
 	}
-	virtual void visit(typename std::conditional<Const, const text_element&, text_element&>::type e){
+
+	void visit(typename std::conditional<is_const, const text_element&, text_element&>::type e) override
+	{
 		this->pointer = &e;
 	}
 };
 
-typedef styleable_caster_template<true> const_styleable_caster;
-typedef styleable_caster_template<false> styleable_caster;
+using const_styleable_caster = styleable_caster_template<true>;
+using styleable_caster = styleable_caster_template<false>;
 
-inline styleable* cast_to_styleable(element* e){
-	if(!e){
+inline styleable* cast_to_styleable(element* e)
+{
+	if (!e) {
 		return nullptr;
 	}
 	styleable_caster caster;
@@ -189,8 +239,9 @@ inline styleable* cast_to_styleable(element* e){
 	return caster.pointer;
 }
 
-inline const styleable* cast_to_styleable(const element* e){
-	if(!e){
+inline const styleable* cast_to_styleable(const element* e)
+{
+	if (!e) {
 		return nullptr;
 	}
 	const_styleable_caster caster;
@@ -198,4 +249,4 @@ inline const styleable* cast_to_styleable(const element* e){
 	return caster.pointer;
 }
 
-}
+} // namespace svgdom

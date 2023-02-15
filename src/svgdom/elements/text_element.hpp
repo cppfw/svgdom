@@ -1,7 +1,7 @@
 /*
 The MIT License (MIT)
 
-Copyright (c) 2015-2021 Ivan Gagis <igagis@gmail.com>
+Copyright (c) 2015-2023 Ivan Gagis <igagis@gmail.com>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -27,40 +27,40 @@ SOFTWARE.
 
 #pragma once
 
-#include "element.hpp"
 #include "container.hpp"
+#include "element.hpp"
 #include "styleable.hpp"
 #include "transformable.hpp"
 
-namespace svgdom{
+namespace svgdom {
 
-class text_positioning{
-public:
-	//TODO: attributes x, y, dx, dy, rotate are not implemented yet.
-};
-
-class text_element :
-		public element,
-		public container,
-		public styleable,
-		public transformable,
-		public text_positioning
+class text_positioning
 {
 public:
-	//TODO: attributes lengthAdjust, textLength are not implemented yet.
-	
+	// TODO: attributes x, y, dx, dy, rotate are not implemented yet.
+};
+
+// TODO: why lint complains here on macos?
+// NOLINTNEXTLINE(bugprone-exception-escape, "error: an exception may be thrown in function")
+class text_element : public element, public container, public styleable, public transformable, public text_positioning
+{
+public:
+	// TODO: attributes lengthAdjust, textLength are not implemented yet.
+
 	void accept(visitor& v) override;
 	void accept(const_visitor& v) const override;
 
-	const std::string& get_id()const override{
+	const std::string& get_id() const override
+	{
 		return this->id;
 	}
 
 	static const std::string tag;
 
-	const std::string& get_tag()const override{
+	const std::string& get_tag() const override
+	{
 		return tag;
 	}
 };
 
-}
+} // namespace svgdom

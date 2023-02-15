@@ -1,7 +1,7 @@
 /*
 The MIT License (MIT)
 
-Copyright (c) 2015-2021 Ivan Gagis <igagis@gmail.com>
+Copyright (c) 2015-2023 Ivan Gagis <igagis@gmail.com>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -28,85 +28,84 @@ SOFTWARE.
 #pragma once
 
 #include <map>
-#include <vector>
 #include <memory>
+#include <vector>
 
 #include <mikroxml/mikroxml.hpp>
 
 #include "elements/element.hpp"
-#include "elements/referencing.hpp"
-#include "elements/rectangle.hpp"
-#include "elements/view_boxed.hpp"
-#include "elements/transformable.hpp"
+#include "elements/filter.hpp"
 #include "elements/gradients.hpp"
+#include "elements/image_element.hpp"
+#include "elements/rectangle.hpp"
+#include "elements/referencing.hpp"
 #include "elements/shapes.hpp"
 #include "elements/structurals.hpp"
-#include "elements/filter.hpp"
-#include "elements/image_element.hpp"
-#include "elements/text_element.hpp"
 #include "elements/style.hpp"
+#include "elements/text_element.hpp"
+#include "elements/transformable.hpp"
+#include "elements/view_boxed.hpp"
 
-namespace svgdom{
+namespace svgdom {
 
-class parser : public mikroxml::parser{
-	enum class xml_namespace{
+class parser : public mikroxml::parser
+{
+	enum class xml_namespace {
 		unknown,
 		svg,
 		xlink
 	};
-	
-	std::vector<
-			std::map<std::string, xml_namespace>
-		> namespace_stack;
-	
-	std::vector<
-			std::map<xml_namespace, std::string>
-		> flipped_namespace_stack;
-	
+
+	std::vector<std::map<std::string, xml_namespace>> namespace_stack;
+
+	std::vector<std::map<xml_namespace, std::string>> flipped_namespace_stack;
+
 	std::vector<xml_namespace> default_namespace_stack;
-	
+
 	xml_namespace find_namespace(const std::string& ns);
 	const std::string* find_flipped_namespace(xml_namespace ns);
-	
-	struct namespace_name_pair{
+
+	// TODO: why lint complains here on macos?
+	// NOLINTNEXTLINE(bugprone-exception-escape, "error: an exception may be thrown in function")
+	struct namespace_name_pair {
 		xml_namespace ns;
 		std::string name;
 	};
-	
-	namespace_name_pair get_namespace(const std::string& xmlName);
-	
+
+	namespace_name_pair get_namespace(const std::string& xml_name);
+
 	const std::string* find_attribute(const std::string& name);
-	
+
 	const std::string* find_attribute_of_namespace(xml_namespace ns, const std::string& name);
 
 	void push_namespaces();
 	void pop_namespaces();
-	
+
 	std::string cur_element;
 	std::map<std::string, std::string> attributes;
-	
+
 	std::unique_ptr<svg_element> svg; // root svg element
 	std::vector<element*> element_stack;
-	
+
 	void add_element(std::unique_ptr<element> e);
-	
-	void on_element_start(utki::span<const char> name)override;
-	void on_element_end(utki::span<const char> name)override;
-	void on_attribute_parsed(utki::span<const char> name, utki::span<const char> value)override;
-	void on_attributes_end(bool is_empty_element)override;
-	void on_content_parsed(utki::span<const char> str)override;
+
+	void on_element_start(utki::span<const char> name) override;
+	void on_element_end(utki::span<const char> name) override;
+	void on_attribute_parsed(utki::span<const char> name, utki::span<const char> value) override;
+	void on_attributes_end(bool is_empty_element) override;
+	void on_content_parsed(utki::span<const char> str) override;
 
 	void fill_element(element& e);
 	void fill_referencing(referencing& e);
 	void fill_rectangle(
-			rectangle& r,
-			const rectangle& defaultValues = rectangle(
-					length(0, length_unit::percent),
-					length(0, length_unit::percent),
-					length(100, length_unit::percent),
-					length(100, length_unit::percent)
-				)
-		);
+		rectangle& r,
+		const rectangle& default_values = rectangle(
+			length(0, length_unit::percent),
+			length(0, length_unit::percent),
+			length(100, length_unit::percent),
+			length(100, length_unit::percent)
+		)
+	);
 	void fill_view_boxed(view_boxed& v);
 	void fill_aspect_ratioed(aspect_ratioed& e);
 	void fill_transformable(transformable& t);
@@ -118,7 +117,7 @@ class parser : public mikroxml::parser{
 	void fill_second_inputable(second_inputable& p);
 	void fill_text_positioning(text_positioning& p);
 	void fill_style(style_element& e);
-	
+
 	void parse_gradient_stop_element();
 	void parse_svg_element();
 	void parse_symbol_element();
@@ -143,10 +142,11 @@ class parser : public mikroxml::parser{
 	void parse_mask_element();
 	void parse_text_element();
 	void parse_style_element();
-	
+
 	void parse_element();
+
 public:
 	std::unique_ptr<svg_element> get_dom();
 };
 
-}
+} // namespace svgdom

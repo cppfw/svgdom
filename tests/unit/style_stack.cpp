@@ -7,6 +7,10 @@
 #include "../../src/svgdom/util/style_stack.hpp"
 #include "../../src/svgdom/dom.hpp"
 
+#ifdef assert
+#	undef assert
+#endif
+
 namespace{
 auto svg = R"qwertyuiop(
 <svg xmlns="http://www.w3.org/2000/svg"

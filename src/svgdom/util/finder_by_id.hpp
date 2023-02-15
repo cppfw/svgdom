@@ -1,7 +1,7 @@
 /*
 The MIT License (MIT)
 
-Copyright (c) 2015-2021 Ivan Gagis <igagis@gmail.com>
+Copyright (c) 2015-2023 Ivan Gagis <igagis@gmail.com>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -33,20 +33,21 @@ SOFTWARE.
 
 #include "style_stack.hpp"
 
-namespace svgdom{
+namespace svgdom {
 
-class finder_by_id{
+class finder_by_id
+{
 public:
-
 	finder_by_id(const svgdom::element& root);
 
-	const element* find(const std::string& id)const noexcept;
+	const element* find(const std::string& id) const noexcept;
 
 	/**
 	 * @brief Get element-by-id cache size.
 	 * @return number of cached elements.
 	 */
-	size_t size()const noexcept{
+	size_t size() const noexcept
+	{
 		return this->cache.size();
 	}
 
@@ -54,4 +55,4 @@ private:
 	std::unordered_map<std::string, const element*> cache;
 };
 
-}
+} // namespace svgdom

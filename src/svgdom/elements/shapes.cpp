@@ -1,7 +1,7 @@
 /*
 The MIT License (MIT)
 
-Copyright (c) 2015-2021 Ivan Gagis <igagis@gmail.com>
+Copyright (c) 2015-2023 Ivan Gagis <igagis@gmail.com>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -27,8 +27,8 @@ SOFTWARE.
 
 #include "shapes.hpp"
 
-#include <sstream>
 #include <cctype>
+#include <sstream>
 
 #include <utki/debug.hpp>
 
@@ -45,70 +45,85 @@ const std::string polygon_element::tag = "polygon";
 const std::string polyline_element::tag = "polyline";
 const std::string rect_element::tag = "rect";
 
-void path_element::accept(visitor& v){
+void path_element::accept(visitor& v)
+{
 	v.visit(*this);
 }
 
-void path_element::accept(const_visitor& v) const{
+void path_element::accept(const_visitor& v) const
+{
 	v.visit(*this);
 }
 
-void rect_element::accept(visitor& v){
+void rect_element::accept(visitor& v)
+{
 	v.visit(*this);
 }
 
-void rect_element::accept(const_visitor& v) const {
+void rect_element::accept(const_visitor& v) const
+{
 	v.visit(*this);
 }
 
-void circle_element::accept(visitor& v){
+void circle_element::accept(visitor& v)
+{
 	v.visit(*this);
 }
 
-void circle_element::accept(const_visitor& v) const {
+void circle_element::accept(const_visitor& v) const
+{
 	v.visit(*this);
 }
 
-void ellipse_element::accept(visitor& v){
+void ellipse_element::accept(visitor& v)
+{
 	v.visit(*this);
 }
 
-void ellipse_element::accept(const_visitor& v) const {
+void ellipse_element::accept(const_visitor& v) const
+{
 	v.visit(*this);
 }
 
-void line_element::accept(visitor& v){
+void line_element::accept(visitor& v)
+{
 	v.visit(*this);
 }
 
-void line_element::accept(const_visitor& v) const {
+void line_element::accept(const_visitor& v) const
+{
 	v.visit(*this);
 }
 
-void polygon_element::accept(visitor& v){
+void polygon_element::accept(visitor& v)
+{
 	v.visit(*this);
 }
 
-void polygon_element::accept(const_visitor& v) const {
+void polygon_element::accept(const_visitor& v) const
+{
 	v.visit(*this);
 }
 
-void polyline_element::accept(visitor& v){
+void polyline_element::accept(visitor& v)
+{
 	v.visit(*this);
 }
 
-void polyline_element::accept(const_visitor& v) const {
+void polyline_element::accept(const_visitor& v) const
+{
 	v.visit(*this);
 }
 
-std::string polyline_shape::points_to_string() const {
+std::string polyline_shape::points_to_string() const
+{
 	std::stringstream s;
-	
-	bool isFirst = true;
-	for(auto& p : this->points){
-		if(isFirst){
-			isFirst = false;
-		}else{
+
+	bool is_first = true;
+	for (auto& p : this->points) {
+		if (is_first) {
+			is_first = false;
+		} else {
 			s << ',';
 		}
 		s << p[0] << ',' << p[1];
@@ -116,39 +131,40 @@ std::string polyline_shape::points_to_string() const {
 	return s.str();
 }
 
-decltype(path_element::path) path_element::parse(std::string_view str){
+decltype(path_element::path) path_element::parse(std::string_view str)
+{
 	decltype(path_element::path) ret;
-	
-	try{
+
+	try {
 		utki::string_parser p(str);
-		
+
 		p.skip_whitespaces();
-		
+
 		step::type cur_step_type = step::type::unknown;
-		
-		while(!p.empty()){
+
+		while (!p.empty()) {
 			ASSERT(!utki::string_parser::is_space(p.peek_char())) // spaces should be skept
-			
+
 			{
 				auto t = step::char_to_type(p.peek_char());
-				if(t != step::type::unknown){
+				if (t != step::type::unknown) {
 					cur_step_type = t;
 					p.read_char();
-				}else if(cur_step_type == step::type::unknown){
+				} else if (cur_step_type == step::type::unknown) {
 					cur_step_type = step::type::move_abs;
-				}else if(cur_step_type == step::type::move_abs){
+				} else if (cur_step_type == step::type::move_abs) {
 					cur_step_type = step::type::line_abs;
-				}else if(cur_step_type == step::type::move_rel){
+				} else if (cur_step_type == step::type::move_rel) {
 					cur_step_type = step::type::line_rel;
 				}
 			}
-			
+
 			p.skip_whitespaces();
-			
+
 			step cur_step;
 			cur_step.type_ = cur_step_type;
-			
-			switch(cur_step.type_){
+
+			switch (cur_step.type_) {
 				case step::type::move_abs:
 				case step::type::move_rel:
 				case step::type::line_abs:
@@ -197,7 +213,7 @@ decltype(path_element::path) path_element::parse(std::string_view str){
 					p.skip_whitespaces_and_comma();
 					cur_step.y1 = p.read_number<real>();
 					p.skip_whitespaces_and_comma();
-					cur_step.x = p.read_number<real>();					
+					cur_step.x = p.read_number<real>();
 					p.skip_whitespaces_and_comma();
 					cur_step.y = p.read_number<real>();
 					break;
@@ -227,46 +243,50 @@ decltype(path_element::path) path_element::parse(std::string_view str){
 					ASSERT(false)
 					break;
 			}
-			
+
 			ret.push_back(cur_step);
-			
+
 			p.skip_whitespaces_and_comma();
 		}
-	}catch(std::invalid_argument&
+	} catch (std::invalid_argument&
 #ifdef DEBUG
-			e
+				 e
 #endif
-		)
+	)
 	{
-		LOG([&](auto& o){o << "WARNING: path_element::parse(): std::invalid_argument exception caught, ignored." << '\n' << "e.what() = " << e.what();})
+		LOG([&](auto& o) {
+			o << "WARNING: path_element::parse(): std::invalid_argument exception caught, ignored." << '\n'
+			  << "e.what() = " << e.what();
+		})
 		// ignore
 	}
-	
+
 	return ret;
 }
 
-std::string path_element::path_to_string() const {
+std::string path_element::path_to_string() const
+{
 	std::stringstream s;
-	
+
 	step::type cur_step_type = step::type::unknown;
 
 	bool first = true;
-	
-	for(auto& cur_step : this->path){
-		if(cur_step_type == cur_step.type_){
+
+	for (auto& cur_step : this->path) {
+		if (cur_step_type == cur_step.type_) {
 			s << " ";
-		}else{
+		} else {
 			if (first) {
 				first = false;
 			} else {
 				s << " ";
 			}
-			
+
 			s << step::type_to_char(cur_step.type_);
 			cur_step_type = cur_step.type_;
 		}
-		
-		switch(cur_step.type_){
+
+		switch (cur_step.type_) {
 			case step::type::move_abs:
 			case step::type::move_rel:
 			case step::type::line_abs:
@@ -349,9 +369,9 @@ std::string path_element::path_to_string() const {
 	return s.str();
 }
 
-
-char path_element::step::type_to_char(step::type t){
-	switch(t){
+char path_element::step::type_to_char(step::type t)
+{
+	switch (t) {
 		case step::type::move_abs:
 			return 'M';
 		case step::type::move_rel:
@@ -396,8 +416,9 @@ char path_element::step::type_to_char(step::type t){
 	}
 }
 
-path_element::step::type path_element::step::char_to_type(char c){
-	switch(c){
+path_element::step::type path_element::step::char_to_type(char c)
+{
+	switch (c) {
 		case 'M':
 			return step::type::move_abs;
 		case 'm':
@@ -442,13 +463,14 @@ path_element::step::type path_element::step::char_to_type(char c){
 	}
 }
 
-decltype(polyline_shape::points) polyline_shape::parse(std::string_view s){
+decltype(polyline_shape::points) polyline_shape::parse(std::string_view s)
+{
 	decltype(polyline_shape::points) ret;
-	
+
 	utki::string_parser p(s);
 
-	try{
-		while(!s.empty()){
+	try {
+		while (!s.empty()) {
 			decltype(ret)::value_type point;
 
 			point[0] = p.read_number<real>();
@@ -456,21 +478,23 @@ decltype(polyline_shape::points) polyline_shape::parse(std::string_view s){
 			p.skip_whitespaces_and_comma();
 
 			point[1] = p.read_number<real>();
-			
+
 			ret.push_back(point);
-			
+
 			p.skip_whitespaces_and_comma();
 		}
-	}catch(std::invalid_argument&
+	} catch (std::invalid_argument&
 #ifdef DEBUG
-			e
+				 e
 #endif
-		)
+	)
 	{
-		LOG([&](auto& o){o << "WARNING: polyline_shape::parse(): std::invalid_argument exception caught, ignored." << '\n' << "e.what() = " << e.what();})
+		LOG([&](auto& o) {
+			o << "WARNING: polyline_shape::parse(): std::invalid_argument exception caught, ignored." << '\n'
+			  << "e.what() = " << e.what();
+		})
 		// ignore
 	}
-	
+
 	return ret;
 }
-

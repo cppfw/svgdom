@@ -1,7 +1,7 @@
 /*
 The MIT License (MIT)
 
-Copyright (c) 2015-2021 Ivan Gagis <igagis@gmail.com>
+Copyright (c) 2015-2023 Ivan Gagis <igagis@gmail.com>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -33,34 +33,37 @@ SOFTWARE.
 
 using namespace svgdom;
 
-decltype(view_boxed::view_box) view_boxed::parse_view_box(std::string_view str){
+decltype(view_boxed::view_box) view_boxed::parse_view_box(std::string_view str)
+{
 	decltype(view_boxed::view_box) ret;
-	
-	try{
+
+	try {
 		utki::string_parser p(str);
 
-		for(unsigned i = 0; i != ret.size(); ++i){
+		for (auto& r : ret) {
 			p.skip_whitespaces_and_comma();
-			ret[i] = p.read_number<real>();
+			r = p.read_number<real>();
 		}
-	}catch(std::invalid_argument&){
-		return {{-1, -1, -1, -1}};
+	} catch (std::invalid_argument&) {
+		return {
+			{-1, -1, -1, -1}
+        };
 	}
-	
+
 	return ret;
 }
 
-std::string view_boxed::view_box_to_string()const{
+std::string view_boxed::view_box_to_string() const
+{
 	std::stringstream s;
-	bool isFirst = true;
-	for (auto i = this->view_box.begin(); i != this->view_box.end(); ++i) {
-		if (isFirst) {
-			isFirst = false;
-		}
-		else {
+	bool is_first = true;
+	for (const auto& e : this->view_box) {
+		if (is_first) {
+			is_first = false;
+		} else {
 			s << " ";
 		}
-		s << (*i);
+		s << e;
 	}
 	return s.str();
 }

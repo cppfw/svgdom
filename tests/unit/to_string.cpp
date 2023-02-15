@@ -42,7 +42,7 @@ tst::set to_string_tests("to_string", [](auto& suite){
 
 				LOG([&](auto&o){o << str << '\n';})
 				
-				tst::check(str.find("xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" version=\"1.1\"") != std::string::npos, SL);
+				tst::check(str.find(R"(xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1")") != std::string::npos, SL);
 				
 				tst::check(str.find("fill:#4213fe") != std::string::npos, SL);
 			}

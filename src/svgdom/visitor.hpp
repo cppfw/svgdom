@@ -1,7 +1,7 @@
 /*
 The MIT License (MIT)
 
-Copyright (c) 2015-2021 Ivan Gagis <igagis@gmail.com>
+Copyright (c) 2015-2023 Ivan Gagis <igagis@gmail.com>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -27,15 +27,15 @@ SOFTWARE.
 
 #pragma once
 
-#include "elements/structurals.hpp"
-#include "elements/shapes.hpp"
-#include "elements/gradients.hpp"
 #include "elements/filter.hpp"
+#include "elements/gradients.hpp"
 #include "elements/image_element.hpp"
-#include "elements/text_element.hpp"
+#include "elements/shapes.hpp"
+#include "elements/structurals.hpp"
 #include "elements/style.hpp"
+#include "elements/text_element.hpp"
 
-namespace svgdom{
+namespace svgdom {
 
 /**
  * @brief Visitor interface.
@@ -45,20 +45,22 @@ namespace svgdom{
  * corresponding 'visit' method from visitor. And user can override visitor's methods
  * to implement their own operation to perform on each SVG element.
  */
-class visitor{
+class visitor
+{
 	container* cur_parent_container = nullptr;
 	decltype(container::children)::iterator cur_iterator;
-	
+
 protected:
 	/**
 	 * @brief Get current container whose children are being visited.
 	 * @return Pointer to current traversed container.
 	 * @return nullptr if root SVG element is being visited.
 	 */
-	decltype(cur_parent_container) cur_parent()const{
+	decltype(cur_parent_container) cur_parent() const
+	{
 		return this->cur_parent_container;
 	}
-	
+
 	/**
 	 * @brief Get iterator of current visited child element.
 	 * Returns iterator into the parent container of the currently visited child element.
@@ -67,10 +69,11 @@ protected:
 	 * traversing is completed and only then perform elements removal if needed.
 	 * @return Iterator of currently visited child element.
 	 */
-	decltype(container::children)::iterator cur_iter()const{
+	decltype(container::children)::iterator cur_iter() const
+	{
 		return this->cur_iterator;
 	}
-	
+
 	/**
 	 * @brief Relay accept to children.
 	 * @param c - container to whose children the 'accept' should be relayed.
@@ -102,14 +105,14 @@ public:
 	virtual void visit(mask_element& e);
 	virtual void visit(text_element& e);
 	virtual void visit(style_element& e);
-	
+
 	/**
 	 * @brief Default visit method.
 	 * This method is called by all the visit methods by default.
 	 * @param e - SVG element to visit.
 	 */
-	virtual void default_visit(element& e){}
-	
+	virtual void default_visit(element& e) {}
+
 	/**
 	 * @brief Default visit method for container elements.
 	 * Default implementation of this method calls this->default_visit(e) and
@@ -118,23 +121,23 @@ public:
 	 * @param c - 'container' ancestor of the element to visit.
 	 */
 	virtual void default_visit(element& e, container& c);
-	
-	virtual ~visitor()noexcept{}
+
+	virtual ~visitor() noexcept = default;
 };
 
 /**
  * @brief Constant version of visitor.
  * Same as visitor, but it takes all elements as 'const' arguments, so it cannot modify elements.
  */
-class const_visitor{
+class const_visitor
+{
 protected:
-
 	/**
 	 * @brief Relay accept to children.
 	 * @param c - container to whose children the 'accept' should be relayed.
 	 */
 	void relay_accept(const container& c);
-	
+
 public:
 	virtual void visit(const path_element& e);
 	virtual void visit(const rect_element& e);
@@ -160,13 +163,13 @@ public:
 	virtual void visit(const mask_element& e);
 	virtual void visit(const text_element& e);
 	virtual void visit(const style_element& e);
-	
+
 	/**
 	 * @brief Default visit method.
 	 * This method is called by all the visit methods by default.
 	 * @param e - SVG element to visit.
 	 */
-	virtual void default_visit(const element& e){}
+	virtual void default_visit(const element& e) {}
 
 	/**
 	 * @brief Default visit method for container elements.
@@ -176,8 +179,8 @@ public:
 	 * @param c - 'container' ancestor of the element to visit.
 	 */
 	virtual void default_visit(const element& e, const container& c);
-	
-	virtual ~const_visitor()noexcept{}
+
+	virtual ~const_visitor() noexcept = default;
 };
 
-}
+} // namespace svgdom

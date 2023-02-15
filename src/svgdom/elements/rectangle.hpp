@@ -1,7 +1,7 @@
 /*
 The MIT License (MIT)
 
-Copyright (c) 2015-2021 Ivan Gagis <igagis@gmail.com>
+Copyright (c) 2015-2023 Ivan Gagis <igagis@gmail.com>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -29,38 +29,45 @@ SOFTWARE.
 
 #include "../length.hpp"
 
-namespace svgdom{
+namespace svgdom {
 
 /**
  * @brief A rectangular element.
  */
-struct rectangle{
+struct rectangle {
 	length x = length(0, length_unit::unknown);
 	length y = length(0, length_unit::unknown);
 	length width = length(100, length_unit::unknown);
 	length height = length(100, length_unit::unknown);
-	
-	rectangle(){}
-	
+
+	rectangle() = default;
+
 	constexpr rectangle(length x, length y, length width, length height) :
-			x(x), y(y), width(width), height(height)
+		x(x),
+		y(y),
+		width(width),
+		height(height)
 	{}
-	
-	bool is_x_specified()const noexcept{
+
+	bool is_x_specified() const noexcept
+	{
 		return this->x.unit != length_unit::unknown;
 	}
 
-	bool is_y_specified()const noexcept{
+	bool is_y_specified() const noexcept
+	{
 		return this->y.unit != length_unit::unknown;
 	}
-	
-	bool is_width_specified()const noexcept{
+
+	bool is_width_specified() const noexcept
+	{
 		return this->width.unit != length_unit::unknown;
 	}
-	
-	bool is_height_specified()const noexcept{
+
+	bool is_height_specified() const noexcept
+	{
 		return this->height.unit != length_unit::unknown;
 	}
 };
 
-}
+} // namespace svgdom

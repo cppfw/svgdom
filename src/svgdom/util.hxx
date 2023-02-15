@@ -1,7 +1,7 @@
 /*
 The MIT License (MIT)
 
-Copyright (c) 2015-2021 Ivan Gagis <igagis@gmail.com>
+Copyright (c) 2015-2023 Ivan Gagis <igagis@gmail.com>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -28,17 +28,17 @@ SOFTWARE.
 #pragma once
 
 #include <array>
-#include <string_view>
 #include <charconv>
+#include <string_view>
 
 #include <r4/vector.hpp>
-
 #include <utki/string.hpp>
 
-#include "config.hpp"
 #include "elements/coordinate_units.hpp"
 
-namespace svgdom{
+#include "config.hpp"
+
+namespace svgdom {
 
 std::string trim_tail(std::string_view s);
 
@@ -52,4 +52,4 @@ r4::vector2<real> parse_number_and_optional_number(std::string_view s, r4::vecto
 
 std::string number_and_optional_number_to_string(std::array<real, 2> non, real optional_number_default);
 
-}
+} // namespace svgdom

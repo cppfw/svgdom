@@ -1,7 +1,7 @@
 /*
 The MIT License (MIT)
 
-Copyright (c) 2015-2021 Ivan Gagis <igagis@gmail.com>
+Copyright (c) 2015-2023 Ivan Gagis <igagis@gmail.com>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -33,34 +33,36 @@ SOFTWARE.
 
 using namespace svgdom;
 
-namespace{
-aspect_ratioed::aspect_ratio_preservation string_to_preserve_aspect_ratio(std::string_view str){
-	if(str == "none"){
+namespace {
+aspect_ratioed::aspect_ratio_preservation string_to_preserve_aspect_ratio(std::string_view str)
+{
+	if (str == "none") {
 		return aspect_ratioed::aspect_ratio_preservation::none;
-	}else if(str == "xMinYMin"){
+	} else if (str == "xMinYMin") {
 		return aspect_ratioed::aspect_ratio_preservation::x_min_y_min;
-	}else if(str == "xMidYMin"){
+	} else if (str == "xMidYMin") {
 		return aspect_ratioed::aspect_ratio_preservation::x_mid_y_min;
-	}else if(str == "xMaxYMin"){
+	} else if (str == "xMaxYMin") {
 		return aspect_ratioed::aspect_ratio_preservation::x_max_y_min;
-	}else if(str == "xMinYMid"){
+	} else if (str == "xMinYMid") {
 		return aspect_ratioed::aspect_ratio_preservation::x_min_y_mid;
-	}else if(str == "xMidYMid"){
+	} else if (str == "xMidYMid") {
 		return aspect_ratioed::aspect_ratio_preservation::x_mid_y_mid;
-	}else if(str == "xMaxYMid"){
+	} else if (str == "xMaxYMid") {
 		return aspect_ratioed::aspect_ratio_preservation::x_max_y_mid;
-	}else if(str == "xMinYMax"){
+	} else if (str == "xMinYMax") {
 		return aspect_ratioed::aspect_ratio_preservation::x_min_y_max;
-	}else if(str == "xMidYMax"){
+	} else if (str == "xMidYMax") {
 		return aspect_ratioed::aspect_ratio_preservation::x_mid_y_max;
-	}else if(str == "xMaxYMax"){
+	} else if (str == "xMaxYMax") {
 		return aspect_ratioed::aspect_ratio_preservation::x_max_y_max;
 	}
 	return aspect_ratioed::aspect_ratio_preservation::none;
 }
-}
+} // namespace
 
-void aspect_ratioed::aspect_ratio_preservation_value::parse(std::string_view s){
+void aspect_ratioed::aspect_ratio_preservation_value::parse(std::string_view s)
+{
 	utki::string_parser p(s);
 
 	p.skip_whitespaces();
@@ -68,38 +70,39 @@ void aspect_ratioed::aspect_ratio_preservation_value::parse(std::string_view s){
 	auto w = p.read_word();
 
 	p.skip_whitespaces();
-	
-	if(w == "defer"){
+
+	if (w == "defer") {
 		this->defer = true;
 		w = p.read_word();
-		if(w.empty()){
+		if (w.empty()) {
 			return;
 		}
-	}else{
+	} else {
 		this->defer = false;
 	}
 
 	this->preserve = string_to_preserve_aspect_ratio(w);
 
 	w = p.read_word();
-	if(w.empty()){
+	if (w.empty()) {
 		return;
 	}
 
-	if(w == "meet"){
+	if (w == "meet") {
 		this->slice = false;
-	}else if(w == "slice"){
+	} else if (w == "slice") {
 		this->slice = true;
 	}
 }
 
-std::string aspect_ratioed::aspect_ratio_preservation_value::to_string()const{
+std::string aspect_ratioed::aspect_ratio_preservation_value::to_string() const
+{
 	std::stringstream s;
 	if (this->defer) {
 		s << "defer ";
 	}
 
-	switch(this->preserve){
+	switch (this->preserve) {
 		default:
 			break;
 		case aspect_ratioed::aspect_ratio_preservation::none:

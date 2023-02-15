@@ -1,7 +1,7 @@
 /*
 The MIT License (MIT)
 
-Copyright (c) 2015-2021 Ivan Gagis <igagis@gmail.com>
+Copyright (c) 2015-2023 Ivan Gagis <igagis@gmail.com>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -33,19 +33,20 @@ SOFTWARE.
 
 using namespace svgdom;
 
-std::string transformable::transformations_to_string()const{
+std::string transformable::transformations_to_string() const
+{
 	std::stringstream s;
 
-	bool isFirst = true;
+	bool is_first = true;
 
-	for(auto& t : this->transformations){
-		if(isFirst){
-			isFirst = false;
-		}else{
+	for (auto& t : this->transformations) {
+		if (is_first) {
+			is_first = false;
+		} else {
 			s << " ";
 		}
 
-		switch(t.type_){
+		switch (t.type_) {
 			default:
 				ASSERT(false)
 				break;
@@ -54,21 +55,21 @@ std::string transformable::transformations_to_string()const{
 				break;
 			case transformation::type::translate:
 				s << "translate(" << t.x;
-				if(t.y != 0){
+				if (t.y != 0) {
 					s << "," << t.y;
 				}
 				s << ")";
 				break;
 			case transformation::type::scale:
 				s << "scale(" << t.x;
-				if(t.x != t.y){
+				if (t.x != t.y) {
 					s << "," << t.y;
 				}
 				s << ")";
 				break;
 			case transformation::type::rotate:
 				s << "rotate(" << t.angle;
-				if(t.x != 0 || t.y != 0){
+				if (t.x != 0 || t.y != 0) {
 					s << "," << t.x << "," << t.y;
 				}
 				s << ")";
@@ -85,46 +86,47 @@ std::string transformable::transformations_to_string()const{
 	return s.str();
 }
 
-decltype(transformable::transformations) transformable::parse(std::string_view str){
+decltype(transformable::transformations) transformable::parse(std::string_view str)
+{
 	decltype(transformable::transformations) ret;
 
-	try{
+	try {
 		utki::string_parser p(str);
 		p.skip_whitespaces();
 
-		while(!p.empty()){
+		while (!p.empty()) {
 			auto transform = p.read_word_until('(');
 
-	//		TRACE(<< "transform = " << transform << std::endl)
+			//		TRACE(<< "transform = " << transform << std::endl)
 
 			transformation t;
 
-			if(transform == "matrix"){
+			if (transform == "matrix") {
 				t.type_ = transformation::type::matrix;
-			}else if(transform == "translate"){
+			} else if (transform == "translate") {
 				t.type_ = transformation::type::translate;
-			}else if(transform == "scale"){
+			} else if (transform == "scale") {
 				t.type_ = transformation::type::scale;
-			}else if(transform == "rotate"){
+			} else if (transform == "rotate") {
 				t.type_ = transformation::type::rotate;
-			}else if(transform == "skewX"){
+			} else if (transform == "skewX") {
 				t.type_ = transformation::type::skewx;
-			}else if(transform == "skewY"){
+			} else if (transform == "skewY") {
 				t.type_ = transformation::type::skewy;
-			}else{
+			} else {
 				return ret; // unknown transformation, stop parsing
 			}
 
 			p.skip_whitespaces();
 
-			if(p.read_char() != '('){
-	//			TRACE(<< "error: expected '('" << std::endl)
+			if (p.read_char() != '(') {
+				//			TRACE(<< "error: expected '('" << std::endl)
 				return ret; // expected (
 			}
 
 			p.skip_whitespaces();
 
-			switch(t.type_){
+			switch (t.type_) {
 				default:
 					ASSERT(false)
 					break;
@@ -142,34 +144,34 @@ decltype(transformable::transformations) transformable::parse(std::string_view s
 					t.f = p.read_number<real>();
 					break;
 				case transformation::type::translate:
-					t.x = p.read_number<real>();					
+					t.x = p.read_number<real>();
 					p.skip_whitespaces_and_comma();
-					try{
+					try {
 						t.y = p.read_number<real>();
-					}catch(std::invalid_argument&){
+					} catch (std::invalid_argument&) {
 						t.y = 0;
 					}
 					break;
 				case transformation::type::scale:
 					t.x = p.read_number<real>();
 					p.skip_whitespaces_and_comma();
-					try{
+					try {
 						t.y = p.read_number<real>();
-					}catch(std::invalid_argument&){
+					} catch (std::invalid_argument&) {
 						t.y = t.x;
 					}
 					break;
 				case transformation::type::rotate:
 					t.angle = p.read_number<real>();
 					p.skip_whitespaces_and_comma();
-					try{
+					try {
 						t.x = p.read_number<real>();
-					}catch(std::invalid_argument&){
+					} catch (std::invalid_argument&) {
 						t.x = 0;
 						t.y = 0;
 						break;
 					}
-					
+
 					p.skip_whitespaces_and_comma();
 					t.y = p.read_number<real>();
 					break;
@@ -181,7 +183,7 @@ decltype(transformable::transformations) transformable::parse(std::string_view s
 
 			p.skip_whitespaces();
 
-			if(p.read_char() != ')'){
+			if (p.read_char() != ')') {
 				return ret; // expected )
 			}
 
@@ -189,13 +191,16 @@ decltype(transformable::transformations) transformable::parse(std::string_view s
 
 			p.skip_whitespaces_and_comma();
 		}
-	}catch(std::invalid_argument&
+	} catch (std::invalid_argument&
 #ifdef DEBUG
-			e
+				 e
 #endif
-		)
+	)
 	{
-		LOG([&](auto& o){o << "WARNING: transformable::parse(): std::invalid_argument exception caught, ignored." << '\n' << "e.what() = " << e.what();})
+		LOG([&](auto& o) {
+			o << "WARNING: transformable::parse(): std::invalid_argument exception caught, ignored." << '\n'
+			  << "e.what() = " << e.what();
+		})
 		// ignore
 	}
 

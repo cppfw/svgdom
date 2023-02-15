@@ -1,7 +1,7 @@
 /*
 The MIT License (MIT)
 
-Copyright (c) 2015-2021 Ivan Gagis <igagis@gmail.com>
+Copyright (c) 2015-2023 Ivan Gagis <igagis@gmail.com>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -27,28 +27,28 @@ SOFTWARE.
 
 #pragma once
 
-#include <vector>
 #include <memory>
+#include <vector>
 
 #include "element.hpp"
 
-namespace svgdom{
+namespace svgdom {
 
 /**
  * @brief An element which can have child elements.
  */
-struct container{
+struct container {
 	std::vector<std::unique_ptr<element>> children;
-	
+
 	container() = default;
-	
+
 	/**
 	 * @brief Copy constructor.
 	 * This copy constructor does nothing because to make a deep copy of the children
 	 * one needs to clone every child by hand.
 	 * @param orig - object to copy.
 	 */
-	container(const container& orig){}
+	container(const container& orig) {}
 };
 
-}
+} // namespace svgdom

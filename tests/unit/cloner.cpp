@@ -6,7 +6,7 @@
 namespace{
 tst::set set("cloner", [](auto& suite){
 	suite.add("basic_test", [](){
-		auto domOriginal = std::make_unique<svgdom::svg_element>();
+		auto dom_original = std::make_unique<svgdom::svg_element>();
 	
 		auto path = std::make_unique<svgdom::path_element>();
 
@@ -32,19 +32,19 @@ tst::set set("cloner", [](auto& suite){
 		step.y = 0;
 		path->path.push_back(step);
 
-		domOriginal->children.push_back(std::move(path));
+		dom_original->children.push_back(std::move(path));
 
 		svgdom::cloner cloner;
 		
-		domOriginal->accept(cloner);
+		dom_original->accept(cloner);
 		
-		std::unique_ptr<svgdom::svg_element> domClone = cloner.get_clone_as<svgdom::svg_element>();
+		std::unique_ptr<svgdom::svg_element> dom_clone = cloner.get_clone_as<svgdom::svg_element>();
 
-		std::string domOriginalStr = domOriginal->to_string();
+		std::string dom_original_str = dom_original->to_string();
 		
-		std::string domCloneStr = domClone->to_string();
+		std::string dom_clone_str = dom_clone->to_string();
 		
-		tst::check_eq(domOriginalStr, domCloneStr, SL);
+		tst::check_eq(dom_original_str, dom_clone_str, SL);
 	});
 });
 }
