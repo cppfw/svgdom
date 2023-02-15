@@ -31,7 +31,14 @@ groups=()
 
 depends=("${pkgPrefix}utki" "${pkgPrefix}mikroxml" "${pkgPrefix}cssom" "${pkgPrefix}r4")
 
-makedepends=('myci' 'prorab' 'prorab-extra' 'doxygen' "${pkgPrefix}tst")
+makedepends=(
+	'myci'
+	'prorab'
+	'prorab-extra'
+	'doxygen'
+	"${pkgPrefix}tst"
+	"${pkgPrefix}clang-tools-extra"
+)
 checkdepends=('myci')
 optdepends=()
 provides=()
@@ -54,12 +61,12 @@ prepare() {
 
 build() {
 	cd "$rootDir"
-	make
+	make CXX=clang++
 }
 
 check() {
 	cd "$rootDir"
-	make test
+	make CXX=clang++ test
 }
 
 package() {
