@@ -41,6 +41,7 @@ SOFTWARE.
 #include "../malformed_svg_error.hpp"
 
 using namespace svgdom;
+using namespace std::string_literals;
 
 namespace{
 const char* none_word = "none";
@@ -1056,7 +1057,7 @@ style_value svgdom::parse_paint(std::string_view str){
 	
 	// check if rgb() or RGB() notation
 	{
-		const static std::string rgb_word = "rgb(";
+		const static std::string rgb_word = "rgb("s;
 
 		utki::string_parser p(str);
 
@@ -1081,7 +1082,7 @@ style_value svgdom::parse_paint(std::string_view str){
 	
 	// check if hsl() notation
 	{
-		const static std::string hsl_word = "hsl(";
+		const static std::string hsl_word = "hsl("s;
 
 		utki::string_parser p(str);
 
