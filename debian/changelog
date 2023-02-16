@@ -1,3 +1,9 @@
+libsvgdom (0.4.3) unstable; urgency=medium
+
+  * implement parsing of rgb() paint with percentages
+
+ -- Ivan Gagis <igagis@gmail.com>  Tue, 14 Feb 2023 12:42:51 +0200
+
 libsvgdom (0.4.2) unstable; urgency=medium
 
   * msvs: build v143 configs
