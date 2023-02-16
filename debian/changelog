@@ -1,3 +1,9 @@
+libsvgdom (0.4.4) unstable; urgency=medium
+
+  * fix lint issues
+
+ -- Ivan Gagis <igagis@gmail.com>  Thu, 16 Feb 2023 23:48:23 +0200
+
 libsvgdom (0.4.3) unstable; urgency=medium
 
   * implement parsing of rgb() paint with percentages
