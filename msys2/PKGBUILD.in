@@ -71,5 +71,5 @@ check() {
 
 package() {
 	cd "$rootDir"
-	make DESTDIR="$pkgdir" PREFIX="$dirPrefix" install
+	make CXX=clang++ DESTDIR="$pkgdir" PREFIX="$dirPrefix" install
 }
