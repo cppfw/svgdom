@@ -1086,10 +1086,16 @@ style_value svgdom::parse_paint(std::string_view str)
 			case 3:
 				{
 					uint32_t color = 0;
+					auto shift = 0;
 
-					for (auto i = 0; i != 3; ++i) {
-						color |= (((uint32_t(d[i]) << num_bits_in_nibble)) << (i * utki::num_bits_in_byte));
-						color |= ((uint32_t(d[i]) & nibble_mask) << (i * utki::num_bits_in_byte));
+					auto end = std::next(d.begin(), 3);
+					ASSERT(d.size() >= 3)
+					ASSERT(end <= d.end())
+
+					for (auto i = d.begin(); i != end; ++i) {
+						color |= (((uint32_t(*i) << num_bits_in_nibble)) << shift);
+						color |= ((uint32_t(*i) & nibble_mask) << shift);
+						shift += utki::num_bits_in_byte;
 					}
 
 					return {color};
@@ -1097,10 +1103,14 @@ style_value svgdom::parse_paint(std::string_view str)
 			case 6:
 				{
 					uint32_t color = 0;
+					auto shift = 0;
 
-					for (auto i = 0; i != 3; ++i) {
-						color |= ((uint32_t(d[i * 2]) << num_bits_in_nibble) << (i * utki::num_bits_in_byte));
-						color |= ((uint32_t(d[i * 2 + 1]) & nibble_mask) << (i * utki::num_bits_in_byte));
+					for (auto i = d.begin(); i != d.end(); ++i) {
+						color |= (((uint32_t(*i) << num_bits_in_nibble)) << shift);
+						++i;
+						ASSERT(i != d.end())
+						color |= ((uint32_t(*i) & nibble_mask) << shift);
+						shift += utki::num_bits_in_byte;
 					}
 
 					return {color};
