@@ -1076,18 +1076,32 @@ style_value svgdom::parse_paint(std::string_view str)
 
 			ASSERT(((*i) & 0xf0) == 0) // only one hex digit
 		}
+
+		// TODO: use constants from utki::
+		constexpr auto num_bits_in_nibble = 4;
+		// constexpr auto byte_mask = 0xff;
+		constexpr auto nibble_mask = 0xf;
+
 		switch (num_digits) {
 			case 3:
 				{
-					auto color = (uint32_t(d[0]) << 4) | (uint32_t(d[0])) | (uint32_t(d[1]) << 12)
-						| (uint32_t(d[1]) << 8) | (uint32_t(d[2]) << 20) | (uint32_t(d[2]) << 16);
+					uint32_t color = 0;
+
+					for (auto i = 0; i != 3; ++i) {
+						color |= (((uint32_t(d[i]) << num_bits_in_nibble)) << (i * utki::num_bits_in_byte));
+						color |= ((uint32_t(d[i]) & nibble_mask) << (i * utki::num_bits_in_byte));
+					}
 
 					return {color};
 				}
 			case 6:
 				{
-					auto color = (uint32_t(d[0]) << 4) | (uint32_t(d[1])) | (uint32_t(d[2]) << 12)
-						| (uint32_t(d[3]) << 8) | (uint32_t(d[4]) << 20) | (uint32_t(d[5]) << 16);
+					uint32_t color = 0;
+
+					for (auto i = 0; i != 3; ++i) {
+						color |= ((uint32_t(d[i * 2]) << num_bits_in_nibble) << (i * utki::num_bits_in_byte));
+						color |= ((uint32_t(d[i * 2 + 1]) & nibble_mask) << (i * utki::num_bits_in_byte));
+					}
 
 					return {color};
 				}
@@ -1107,24 +1121,22 @@ style_value svgdom::parse_paint(std::string_view str)
 				// rgb() color values are given as percentages
 				case '%':
 					{
-						float r, g, b;
-
 						p.skip_whitespaces();
-						r = p.read_number<float>();
+						auto r = p.read_number<float>();
 						p.skip_whitespaces();
 						if (p.read_char() != '%') {
 							ASSERT(false)
 							break;
 						}
 						p.skip_whitespaces_and_comma();
-						g = p.read_number<float>();
+						auto g = p.read_number<float>();
 						p.skip_whitespaces();
 						if (p.read_char() != '%') {
 							ASSERT(false)
 							break;
 						}
 						p.skip_whitespaces_and_comma();
-						b = p.read_number<float>();
+						auto b = p.read_number<float>();
 						p.skip_whitespaces();
 						if (p.read_char() != '%') {
 							ASSERT(false, [&](auto& o) {
@@ -1139,22 +1151,25 @@ style_value svgdom::parse_paint(std::string_view str)
 							break;
 						}
 
+						// TODO: use constants from utki::
+						constexpr auto byte_mask = 0xff;
+						constexpr auto hundred_percent = 100;
+
 						// std::cout << "r = " << r << ", g = " << g << ", b = " << b << std::endl;
-						auto color = uint32_t(r * 0xff / 100) | (uint32_t(g * 0xff / 100) << 8)
-							| (uint32_t(b * 0xff / 100) << 16);
+						auto color = uint32_t(r * byte_mask / hundred_percent)
+							| (uint32_t(g * byte_mask / hundred_percent) << utki::num_bits_in_byte)
+							| (uint32_t(b * byte_mask / hundred_percent) << (utki::num_bits_in_byte * 2));
 						return {color};
 					}
 				// rgb() color values are given as absolute values
 				case ',':
 					{
-						uint32_t r, g, b;
-
 						p.skip_whitespaces();
-						r = p.read_number<uint32_t>();
+						auto r = p.read_number<uint32_t>();
 						p.skip_whitespaces_and_comma();
-						g = p.read_number<uint32_t>();
+						auto g = p.read_number<uint32_t>();
 						p.skip_whitespaces_and_comma();
-						b = p.read_number<uint32_t>();
+						auto b = p.read_number<uint32_t>();
 						p.skip_whitespaces();
 
 						if (p.read_char() != ')') {
@@ -1162,7 +1177,7 @@ style_value svgdom::parse_paint(std::string_view str)
 							break;
 						}
 
-						auto color = r | (g << 8) | (b << 16);
+						auto color = r | (g << utki::num_bits_in_byte) | (b << (utki::num_bits_in_byte * 2));
 						return {color};
 					}
 				// malformed rgb() paint specification
@@ -1181,24 +1196,25 @@ style_value svgdom::parse_paint(std::string_view str)
 		utki::string_parser p(str);
 
 		if (hsl_word == p.read_chars(hsl_word.size())) {
-			uint32_t h, s, l;
-
 			p.skip_whitespaces();
-			h = p.read_number<decltype(h)>();
+			auto h = p.read_number<uint32_t>();
 			p.skip_whitespaces_and_comma();
-			s = p.read_number<decltype(s)>();
+			auto s = p.read_number<uint32_t>();
 			if (p.read_char() != '%') {
 				return {style_value_special::none};
 			}
 			p.skip_whitespaces_and_comma();
-			l = p.read_number<decltype(l)>();
+			auto l = p.read_number<uint32_t>();
 			if (p.read_char() != '%') {
 				return {style_value_special::none};
 			}
 			p.skip_whitespaces();
 
 			if (p.read_char() == ')') {
-				auto color = hsl_to_rgb(real(h), real(s) / real(100), real(l) / real(100));
+				// TODO: use constant from utki::
+				constexpr auto hundred_percent = 100;
+
+				auto color = hsl_to_rgb(real(h), real(s) / real(hundred_percent), real(l) / real(hundred_percent));
 				return {color};
 			}
 			return {style_value_special::none};
