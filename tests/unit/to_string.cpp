@@ -16,22 +16,22 @@ tst::set to_string_tests("to_string", [](auto& suite){
 
 				path.styles[svgdom::style_property::fill] = svgdom::make_style_value(0x42, 0x13, 0xfe);
 
-				step.type_ = svgdom::path_element::step::type::move_abs;
+				step.type_v = svgdom::path_element::step::type::move_abs;
 				step.x = 0;
 				step.y = 0;
 				path.path.push_back(step);
 
-				step.type_ = svgdom::path_element::step::type::line_abs;
+				step.type_v = svgdom::path_element::step::type::line_abs;
 				step.x = 0;
 				step.y = 300;
 				path.path.push_back(step);
 
-				step.type_ = svgdom::path_element::step::type::line_abs;
+				step.type_v = svgdom::path_element::step::type::line_abs;
 				step.x = 300;
 				step.y = 300;
 				path.path.push_back(step);
 
-				step.type_ = svgdom::path_element::step::type::line_abs;
+				step.type_v = svgdom::path_element::step::type::line_abs;
 				step.x = 300;
 				step.y = 0;
 				path.path.push_back(step);

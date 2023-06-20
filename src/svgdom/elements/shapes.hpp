@@ -75,7 +75,7 @@ struct path_element : public shape {
 			arc_rel
 		};
 
-		type type_;
+		type type_v;
 
 		real x, y;
 

@@ -68,22 +68,22 @@ tst::set set("custom_element", [](auto& suite){
 
 		svgdom::path_element::step step;
 
-		step.type_ = svgdom::path_element::step::type::move_abs;
+		step.type_v = svgdom::path_element::step::type::move_abs;
 		step.x = 0;
 		step.y = 0;
 		path.path.push_back(step);
 
-		step.type_ = svgdom::path_element::step::type::line_abs;
+		step.type_v = svgdom::path_element::step::type::line_abs;
 		step.x = 0;
 		step.y = 300;
 		path.path.push_back(step);
 
-		step.type_ = svgdom::path_element::step::type::line_abs;
+		step.type_v = svgdom::path_element::step::type::line_abs;
 		step.x = 300;
 		step.y = 300;
 		path.path.push_back(step);
 
-		step.type_ = svgdom::path_element::step::type::line_abs;
+		step.type_v = svgdom::path_element::step::type::line_abs;
 		step.x = 300;
 		step.y = 0;
 		path.path.push_back(step);

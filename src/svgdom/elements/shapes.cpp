@@ -162,9 +162,9 @@ decltype(path_element::path) path_element::parse(std::string_view str)
 			p.skip_whitespaces();
 
 			step cur_step;
-			cur_step.type_ = cur_step_type;
+			cur_step.type_v = cur_step_type;
 
-			switch (cur_step.type_) {
+			switch (cur_step.type_v) {
 				case step::type::move_abs:
 				case step::type::move_rel:
 				case step::type::line_abs:
@@ -273,7 +273,7 @@ std::string path_element::path_to_string() const
 	bool first = true;
 
 	for (auto& cur_step : this->path) {
-		if (cur_step_type == cur_step.type_) {
+		if (cur_step_type == cur_step.type_v) {
 			s << " ";
 		} else {
 			if (first) {
@@ -282,11 +282,11 @@ std::string path_element::path_to_string() const
 				s << " ";
 			}
 
-			s << step::type_to_char(cur_step.type_);
-			cur_step_type = cur_step.type_;
+			s << step::type_to_char(cur_step.type_v);
+			cur_step_type = cur_step.type_v;
 		}
 
-		switch (cur_step.type_) {
+		switch (cur_step.type_v) {
 			case step::type::move_abs:
 			case step::type::move_rel:
 			case step::type::line_abs:
