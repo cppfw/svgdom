@@ -537,7 +537,7 @@ const std::map<std::string_view, style_property> string_to_property_map = {
 } // namespace
 
 namespace {
-auto property_to_string_map = utki::flip_map(string_to_property_map);
+const auto property_to_string_map = utki::flip_map(string_to_property_map);
 } // namespace
 
 style_property styleable::string_to_property(std::string_view str)
@@ -762,7 +762,7 @@ const auto color_to_color_name_map = utki::flip_map(color_name_to_color_map);
 } // namespace
 
 namespace {
-std::map<std::string_view, display> string_to_display_map = {
+const std::map<std::string_view, display> string_to_display_map = {
 	{			"inline",     svgdom::display::inline_display},
 	{			 "block",			  svgdom::display::block},
 	{		 "list-item",          svgdom::display::list_item},
@@ -784,7 +784,7 @@ std::map<std::string_view, display> string_to_display_map = {
 } // namespace
 
 namespace {
-auto display_to_string_map = utki::flip_map(string_to_display_map);
+const auto display_to_string_map = utki::flip_map(string_to_display_map);
 } // namespace
 
 style_value svgdom::parse_display(std::string_view& str)
@@ -801,7 +801,11 @@ style_value svgdom::parse_display(std::string_view& str)
 
 std::string_view svgdom::display_to_string(const style_value& v)
 {
-	const auto& default_value = display_to_string_map[svgdom::display::inline_display];
+	const auto& default_value = []() {
+		auto i = display_to_string_map.find(svgdom::display::inline_display);
+		ASSERT(i != display_to_string_map.end())
+		return i->second;
+	}();
 
 	if (!std::holds_alternative<svgdom::display>(v)) {
 		return default_value;
@@ -815,7 +819,7 @@ std::string_view svgdom::display_to_string(const style_value& v)
 }
 
 namespace {
-std::map<std::string_view, visibility> string_to_visibility_map = {
+const std::map<std::string_view, visibility> string_to_visibility_map = {
 	{ "visible",  visibility::visible},
 	{  "hidden",   visibility::hidden},
 	{"collapse", visibility::collapse}
@@ -823,7 +827,7 @@ std::map<std::string_view, visibility> string_to_visibility_map = {
 } // namespace
 
 namespace {
-auto visibility_to_string_map = utki::flip_map(string_to_visibility_map);
+const auto visibility_to_string_map = utki::flip_map(string_to_visibility_map);
 } // namespace
 
 style_value svgdom::parse_visibility(std::string_view str)
@@ -840,7 +844,11 @@ style_value svgdom::parse_visibility(std::string_view str)
 
 std::string_view svgdom::visibility_to_string(const style_value& v)
 {
-	const auto& default_value = visibility_to_string_map[svgdom::visibility::visible];
+	const auto& default_value = []() {
+		auto i = visibility_to_string_map.find(svgdom::visibility::visible);
+		ASSERT(i != visibility_to_string_map.end())
+		return i->second;
+	}();
 
 	if (!std::holds_alternative<svgdom::visibility>(v)) {
 		return default_value;
@@ -855,18 +863,15 @@ std::string_view svgdom::visibility_to_string(const style_value& v)
 
 style_value svgdom::parse_color_interpolation(std::string_view str)
 {
-	color_interpolation v;
 	if (str == "auto") {
-		v = color_interpolation::automatic;
+		return color_interpolation::automatic;
 	} else if (str == "linearRGB") {
-		v = color_interpolation::linear_rgb;
+		return color_interpolation::linear_rgb;
 	} else if (str == "sRGB") {
-		v = color_interpolation::s_rgb;
-	} else {
-		return {style_value_special::unknown};
+		return color_interpolation::s_rgb;
 	}
 
-	return {v};
+	return {style_value_special::unknown};
 }
 
 namespace {
