@@ -1058,32 +1058,38 @@ style_value svgdom::parse_paint(std::string_view str)
 
 	// check if #-notation
 	if (str[0] == '#') {
-		utki::string_parser p(str.substr(1, 6));
+		constexpr auto num_digits_three = 3;
+		constexpr auto num_digits_six = 6;
 
-		std::array<uint8_t, 6> d;
+		utki::string_parser p(str.substr(1, num_digits_six));
+
+		// TODO: use constants from utki::
+		constexpr auto num_bits_in_nibble = 4;
+		constexpr auto lower_nibble_mask = 0xf;
+#ifdef DEBUG
+		constexpr auto upper_nibble_mask = 0xf0;
+#endif
+
+		// NOLINTNEXTLINE(cppcoreguidelines-pro-type-member-init)
+		std::array<uint8_t, num_digits_six> d;
 		unsigned num_digits = 0;
 		for (auto i = d.begin(); i != d.end() && !p.empty(); ++i, ++num_digits) {
 			char c = p.read_char();
 			if ('0' <= c && c <= '9') {
 				(*i) = c - '0';
 			} else if ('a' <= c && c <= 'f') {
-				(*i) = 10 + c - 'a';
+				(*i) = utki::to_int(utki::integer_base::dec) + (c - 'a');
 			} else if ('A' <= c && c <= 'F') {
-				(*i) = 10 + c - 'A';
+				(*i) = utki::to_int(utki::integer_base::dec) + (c - 'A');
 			} else {
 				break;
 			}
 
-			ASSERT(((*i) & 0xf0) == 0) // only one hex digit
+			ASSERT(((*i) & upper_nibble_mask) == 0) // only one hex digit
 		}
 
-		// TODO: use constants from utki::
-		constexpr auto num_bits_in_nibble = 4;
-		// constexpr auto byte_mask = 0xff;
-		constexpr auto nibble_mask = 0xf;
-
 		switch (num_digits) {
-			case 3:
+			case num_digits_three:
 				{
 					uint32_t color = 0;
 					auto shift = 0;
@@ -1094,13 +1100,13 @@ style_value svgdom::parse_paint(std::string_view str)
 
 					for (auto i = d.begin(); i != end; ++i) {
 						color |= (((uint32_t(*i) << num_bits_in_nibble)) << shift);
-						color |= ((uint32_t(*i) & nibble_mask) << shift);
+						color |= ((uint32_t(*i) & lower_nibble_mask) << shift);
 						shift += utki::num_bits_in_byte;
 					}
 
 					return {color};
 				}
-			case 6:
+			case num_digits_six:
 				{
 					uint32_t color = 0;
 					auto shift = 0;
@@ -1109,7 +1115,7 @@ style_value svgdom::parse_paint(std::string_view str)
 						color |= (((uint32_t(*i) << num_bits_in_nibble)) << shift);
 						++i;
 						ASSERT(i != d.end())
-						color |= ((uint32_t(*i) & nibble_mask) << shift);
+						color |= ((uint32_t(*i) & lower_nibble_mask) << shift);
 						shift += utki::num_bits_in_byte;
 					}
 
