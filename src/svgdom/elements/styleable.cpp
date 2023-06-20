@@ -988,7 +988,9 @@ uint32_t hsl_to_rgb(real h, real s, real l)
 
 	real m = l - c / real(2);
 
-	real r = 1, g = 1, b = 1;
+	real r = 1;
+	real g = 1;
+	real b = 1;
 	if (h < real(60)) {
 		r = c;
 		g = x;
@@ -1018,9 +1020,9 @@ uint32_t hsl_to_rgb(real h, real s, real l)
 	r += m;
 	g += m;
 	b += m;
-	r *= 0xff;
-	g *= 0xff;
-	b *= 0xff;
+	r *= utki::byte_mask;
+	g *= utki::byte_mask;
+	b *= utki::byte_mask;
 
 	uint32_t ret = 0;
 
@@ -1065,13 +1067,6 @@ style_value svgdom::parse_paint(std::string_view str)
 
 		utki::string_parser p(str.substr(1, num_digits_six));
 
-		// TODO: use constants from utki::
-		constexpr auto num_bits_in_nibble = 4;
-		constexpr auto lower_nibble_mask = 0xf;
-#ifdef DEBUG
-		constexpr auto upper_nibble_mask = 0xf0;
-#endif
-
 		// NOLINTNEXTLINE(cppcoreguidelines-pro-type-member-init)
 		std::array<uint8_t, num_digits_six> d;
 		unsigned num_digits = 0;
@@ -1087,7 +1082,7 @@ style_value svgdom::parse_paint(std::string_view str)
 				break;
 			}
 
-			ASSERT(((*i) & upper_nibble_mask) == 0) // only one hex digit
+			ASSERT(((*i) & utki::upper_nibble_mask) == 0) // only one hex digit
 		}
 
 		switch (num_digits) {
@@ -1101,8 +1096,8 @@ style_value svgdom::parse_paint(std::string_view str)
 					ASSERT(end <= d.end())
 
 					for (auto i = d.begin(); i != end; ++i) {
-						color |= (((uint32_t(*i) << num_bits_in_nibble)) << shift);
-						color |= ((uint32_t(*i) & lower_nibble_mask) << shift);
+						color |= (((uint32_t(*i) << utki::num_bits_in_nibble)) << shift);
+						color |= ((uint32_t(*i) & utki::lower_nibble_mask) << shift);
 						shift += utki::num_bits_in_byte;
 					}
 
@@ -1114,10 +1109,10 @@ style_value svgdom::parse_paint(std::string_view str)
 					auto shift = 0;
 
 					for (auto i = d.begin(); i != d.end(); ++i) {
-						color |= (((uint32_t(*i) << num_bits_in_nibble)) << shift);
+						color |= (((uint32_t(*i) << utki::num_bits_in_nibble)) << shift);
 						++i;
 						ASSERT(i != d.end())
-						color |= ((uint32_t(*i) & lower_nibble_mask) << shift);
+						color |= ((uint32_t(*i) & utki::lower_nibble_mask) << shift);
 						shift += utki::num_bits_in_byte;
 					}
 
@@ -1169,14 +1164,10 @@ style_value svgdom::parse_paint(std::string_view str)
 							break;
 						}
 
-						// TODO: use constants from utki::
-						constexpr auto byte_mask = 0xff;
-						constexpr auto hundred_percent = 100;
-
 						// std::cout << "r = " << r << ", g = " << g << ", b = " << b << std::endl;
-						auto color = uint32_t(r * byte_mask / hundred_percent)
-							| (uint32_t(g * byte_mask / hundred_percent) << utki::num_bits_in_byte)
-							| (uint32_t(b * byte_mask / hundred_percent) << (utki::num_bits_in_byte * 2));
+						auto color = uint32_t(r * utki::byte_mask / utki::hundred_percent)
+							| (uint32_t(g * utki::byte_mask / utki::hundred_percent) << utki::num_bits_in_byte)
+							| (uint32_t(b * utki::byte_mask / utki::hundred_percent) << (utki::num_bits_in_byte * 2));
 						return {color};
 					}
 				// rgb() color values are given as absolute values
@@ -1229,10 +1220,11 @@ style_value svgdom::parse_paint(std::string_view str)
 			p.skip_whitespaces();
 
 			if (p.read_char() == ')') {
-				// TODO: use constant from utki::
-				constexpr auto hundred_percent = 100;
-
-				auto color = hsl_to_rgb(real(h), real(s) / real(hundred_percent), real(l) / real(hundred_percent));
+				auto color = hsl_to_rgb( //
+					real(h),
+					real(s) / real(utki::hundred_percent),
+					real(l) / real(utki::hundred_percent)
+				);
 				return {color};
 			}
 			return {style_value_special::none};
@@ -1280,10 +1272,6 @@ std::string svgdom::paint_to_string(const style_value& v)
 		} else {
 			// #-notation
 
-			// TODO: use constants from utki::
-			constexpr auto lower_nibble_mask = 0xf;
-			constexpr auto num_bits_in_nibble = utki::num_bits_in_byte / 2;
-
 			std::stringstream s;
 			s << std::hex;
 			s << "#";
@@ -1291,8 +1279,8 @@ std::string svgdom::paint_to_string(const style_value& v)
 			uint32_t val = std::get<uint32_t>(v);
 
 			for (auto i = 0; i != 3; ++i) {
-				s << ((val >> num_bits_in_nibble) & lower_nibble_mask);
-				s << (val & lower_nibble_mask);
+				s << ((val >> utki::num_bits_in_nibble) & utki::lower_nibble_mask);
+				s << (val & utki::lower_nibble_mask);
 				val >>= utki::num_bits_in_byte;
 			}
 
