@@ -898,9 +898,9 @@ std::string svgdom::color_interpolation_filters_to_string(const style_value& v)
 }
 
 namespace {
-enable_background_property parse_enable_background_new_rect(std::string_view str)
+decltype(enable_background_property::rect) parse_enable_background_new_rect(std::string_view str)
 {
-	enable_background_property ret;
+	using ret_type = decltype(enable_background_property::rect);
 
 	try {
 		utki::string_parser p(str);
@@ -909,39 +909,36 @@ enable_background_property parse_enable_background_new_rect(std::string_view str
 		p.skip_whitespaces();
 
 		if (p.empty()) {
-			ret.rect.d.x() = -1; // indicate that rectangle is not specified
-			return ret;
+			// indicate that rectangle is not specified
+			return {
+				{-1, -1},
+				{-1, -1}
+            };
 		}
 
-		ret.rect.p.x() = p.read_number<real>();
-		ret.rect.p.y() = p.read_number<real>();
-		ret.rect.d.x() = p.read_number<real>();
-		ret.rect.d.y() = p.read_number<real>();
+		return ret_type({p.read_number<real>(), p.read_number<real>()}, {p.read_number<real>(), p.read_number<real>()});
 	} catch (std::invalid_argument&) {
 		throw malformed_svg_error("malformed enable-background NEW string");
 	}
-
-	return ret;
 }
 } // namespace
 
 style_value svgdom::parse_enable_background(std::string_view str)
 {
-	enable_background_property ebp;
+	constexpr auto default_value = svgdom::enable_background::accumulate;
 
 	std::string new_str = "new";
-	if (str.substr(0, new_str.length()) == "new") {
+	if (str.substr(0, new_str.length()) == new_str) {
 		try {
-			ebp = parse_enable_background_new_rect(str);
-			ebp.value = svgdom::enable_background::new_background;
+			return enable_background_property{
+				svgdom::enable_background::new_background,
+				parse_enable_background_new_rect(str)};
 		} catch (malformed_svg_error&) {
-			ebp.value = svgdom::enable_background::accumulate; // default value
+			return enable_background_property{default_value};
 		}
-	} else {
-		ebp.value = svgdom::enable_background::accumulate; // default value
 	}
 
-	return {ebp};
+	return enable_background_property{default_value};
 }
 
 std::string svgdom::enable_background_to_string(const style_value& v)
@@ -1023,8 +1020,8 @@ uint32_t hsl_to_rgb(real h, real s, real l)
 	uint32_t ret = 0;
 
 	ret |= uint32_t(r);
-	ret |= (uint32_t(g) << 8);
-	ret |= (uint32_t(b) << 16);
+	ret |= (uint32_t(g) << utki::num_bits_in_byte);
+	ret |= (uint32_t(b) << (utki::num_bits_in_byte * 2));
 
 	return ret;
 }
