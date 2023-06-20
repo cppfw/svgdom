@@ -102,8 +102,8 @@ class parser : public mikroxml::parser
 		const rectangle& default_values = rectangle(
 			length(0, length_unit::percent),
 			length(0, length_unit::percent),
-			length(100, length_unit::percent),
-			length(100, length_unit::percent)
+			length(utki::hundred_percent, length_unit::percent),
+			length(utki::hundred_percent, length_unit::percent)
 		)
 	);
 	void fill_view_boxed(view_boxed& v);

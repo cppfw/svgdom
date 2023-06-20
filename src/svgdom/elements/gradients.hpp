@@ -102,11 +102,11 @@ struct linear_gradient_element : public gradient {
 
 struct radial_gradient_element : public gradient {
 	// TODO: change default unit to percent?
-	length cx = length(utki::hundred_percent / 2, length_unit::unknown);
-	length cy = length(utki::hundred_percent / 2, length_unit::unknown);
-	length r = length(utki::hundred_percent / 2, length_unit::unknown);
-	length fx = length(utki::hundred_percent / 2, length_unit::unknown);
-	length fy = length(utki::hundred_percent / 2, length_unit::unknown);
+	length cx = length(real(utki::hundred_percent) / 2, length_unit::unknown);
+	length cy = length(real(utki::hundred_percent) / 2, length_unit::unknown);
+	length r = length(real(utki::hundred_percent) / 2, length_unit::unknown);
+	length fx = length(real(utki::hundred_percent) / 2, length_unit::unknown);
+	length fy = length(real(utki::hundred_percent) / 2, length_unit::unknown);
 
 	void accept(visitor& v) override;
 	void accept(const_visitor& v) const override;

@@ -122,6 +122,14 @@ public:
 	 */
 	virtual void default_visit(element& e, container& c);
 
+	visitor() = default;
+
+	visitor(const visitor&) = default;
+	visitor& operator=(const visitor&) = default;
+
+	visitor(visitor&&) = default;
+	visitor& operator=(visitor&&) = default;
+
 	virtual ~visitor() noexcept = default;
 };
 
@@ -179,6 +187,14 @@ public:
 	 * @param c - 'container' ancestor of the element to visit.
 	 */
 	virtual void default_visit(const element& e, const container& c);
+
+	const_visitor() = default;
+
+	const_visitor(const const_visitor&) = default;
+	const_visitor& operator=(const const_visitor&) = default;
+
+	const_visitor(const_visitor&&) = default;
+	const_visitor& operator=(const_visitor&&) = default;
 
 	virtual ~const_visitor() noexcept = default;
 };

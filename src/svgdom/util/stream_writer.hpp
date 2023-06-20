@@ -62,8 +62,8 @@ protected:
 		const rectangle& default_values = rectangle(
 			length(0, length_unit::percent),
 			length(0, length_unit::percent),
-			length(100, length_unit::percent),
-			length(100, length_unit::percent)
+			length(utki::hundred_percent, length_unit::percent),
+			length(utki::hundred_percent, length_unit::percent)
 		)
 	);
 	void add_shape_attributes(const shape& e);

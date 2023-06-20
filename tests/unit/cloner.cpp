@@ -4,13 +4,13 @@
 #include "../../src/svgdom/util/cloner.hpp"
 
 namespace{
-tst::set set("cloner", [](auto& suite){
+const tst::set set("cloner", [](auto& suite){
 	suite.add("basic_test", [](){
 		auto dom_original = std::make_unique<svgdom::svg_element>();
 	
 		auto path = std::make_unique<svgdom::path_element>();
 
-		svgdom::path_element::step step;
+		svgdom::path_element::step step{};
 
 		step.type_ = svgdom::path_element::step::type::move_abs;
 		step.x = 0;

@@ -39,7 +39,8 @@ std::unique_ptr<svg_element> svgdom::load(const papki::file& f)
 	{
 		papki::file::guard file_guard(f);
 
-		std::array<uint8_t, 4096> buf; // 4k
+		// NOLINTNEXTLINE(cppcoreguidelines-pro-type-member-init)
+		std::array<uint8_t, size_t(utki::kilobyte) * 4> buf;
 
 		while (true) {
 			auto res = f.read(utki::make_span(buf));
@@ -85,6 +86,7 @@ std::unique_ptr<svg_element> svgdom::load(const std::string& s)
 
 std::unique_ptr<svg_element> svgdom::load(utki::span<const uint8_t> buf)
 {
+	// NOLINTNEXTLINE(cppcoreguidelines-pro-type-reinterpret-cast)
 	return load(utki::make_span(reinterpret_cast<const char*>(buf.data()), buf.size()));
 }
 

@@ -36,6 +36,7 @@ using namespace svgdom;
 
 length length::parse(std::string_view str)
 {
+	// NOLINTNEXTLINE(cppcoreguidelines-pro-type-member-init)
 	length ret;
 
 	utki::string_parser p(str);
@@ -73,6 +74,11 @@ length length::parse(std::string_view str)
 
 real length::to_px(real dpi) const noexcept
 {
+	constexpr auto cm_per_inch = 2.54; // TODO: add to utki?
+	constexpr auto mm_per_inch = cm_per_inch * 10; // TODO: add to utki?
+	constexpr auto pt_per_inch = 72;
+	constexpr auto pc_per_inch = 6;
+
 	switch (this->unit) {
 		default:
 			return 0;
@@ -82,13 +88,13 @@ real length::to_px(real dpi) const noexcept
 		case svgdom::length_unit::in:
 			return std::ceil(this->value * dpi);
 		case svgdom::length_unit::cm:
-			return std::ceil(this->value * (dpi / real(2.54)));
+			return std::ceil(this->value * (dpi / real(cm_per_inch)));
 		case svgdom::length_unit::mm:
-			return std::ceil(this->value * (dpi / real(25.4)));
-		case svgdom::length_unit::pt: // 1 pt = 1/72 of an inch
-			return std::ceil(this->value * (dpi / real(72)));
-		case svgdom::length_unit::pc: // 1 pc = 1/6 of an inch
-			return std::ceil(this->value * (dpi / real(6)));
+			return std::ceil(this->value * (dpi / real(mm_per_inch)));
+		case svgdom::length_unit::pt:
+			return std::ceil(this->value * (dpi / real(pt_per_inch)));
+		case svgdom::length_unit::pc:
+			return std::ceil(this->value * (dpi / real(pc_per_inch)));
 		case svgdom::length_unit::em:
 		case svgdom::length_unit::ex:
 			// em and ex depend on the font size. Text is not supported by svgdom, so return 0 size.

@@ -72,6 +72,13 @@ public:
 
 	public:
 		push(style_stack& ss, const svgdom::styleable& s);
+
+		push(const push&) = delete;
+		push& operator=(const push&) = delete;
+
+		push(push&&) = delete;
+		push& operator=(push&&) = delete;
+
 		~push() noexcept;
 	};
 };
