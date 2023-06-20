@@ -118,6 +118,7 @@ struct fe_gaussian_blur_element : public filter_primitive, public inputable {
 	}
 };
 
+// NOLINTNEXTLINE(cppcoreguidelines-pro-type-member-init)
 struct fe_color_matrix_element : public filter_primitive, public inputable {
 	enum class type {
 		matrix,
@@ -128,7 +129,9 @@ struct fe_color_matrix_element : public filter_primitive, public inputable {
 
 	type type_ = type::matrix;
 
-	std::array<real, 20> values;
+	constexpr static auto max_num_values = 20;
+
+	std::array<real, max_num_values> values;
 
 	void accept(visitor& v) override;
 	void accept(const_visitor& v) const override;
@@ -161,6 +164,7 @@ struct fe_blend_element : public filter_primitive, public inputable, public seco
 	}
 };
 
+// NOLINTNEXTLINE(cppcoreguidelines-pro-type-member-init)
 struct fe_composite_element : public filter_primitive, public inputable, public second_inputable {
 	enum class operator_type {
 		over,

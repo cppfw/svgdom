@@ -692,7 +692,7 @@ void parser::parse_fe_color_matrix_element()
 				// 20 values expected
 				{
 					utki::string_parser p(*a);
-					for (unsigned i = 0; i != 20; ++i) {
+					for (unsigned i = 0; i != fe_color_matrix_element::max_num_values; ++i) {
 						ret->values[i] = p.read_number<real>();
 						p.skip_whitespaces_and_comma();
 					}

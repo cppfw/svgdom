@@ -46,9 +46,16 @@ struct container {
 	 * @brief Copy constructor.
 	 * This copy constructor does nothing because to make a deep copy of the children
 	 * one needs to clone every child by hand.
-	 * @param orig - object to copy.
 	 */
-	container(const container& orig) {}
+	// TODO: implement deep copying using cloner?
+	container(const container&) {}
+
+	container& operator=(const container&) = delete;
+
+	container(container&&) = default;
+	container& operator=(container&&) = default;
+
+	virtual ~container() = default;
 };
 
 } // namespace svgdom

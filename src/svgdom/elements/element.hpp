@@ -62,7 +62,15 @@ struct element {
 	 */
 	virtual const std::string& get_tag() const = 0;
 
-	virtual ~element() noexcept = default;
+	element() = default;
+
+	element(const element&) = default;
+	element& operator=(const element&) = default;
+
+	element(element&&) = default;
+	element& operator=(element&&) = default;
+
+	virtual ~element() = default;
 };
 
 } // namespace svgdom
