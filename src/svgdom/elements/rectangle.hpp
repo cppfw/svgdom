@@ -37,8 +37,11 @@ namespace svgdom {
 struct rectangle {
 	length x = length(0, length_unit::unknown);
 	length y = length(0, length_unit::unknown);
-	length width = length(100, length_unit::unknown);
-	length height = length(100, length_unit::unknown);
+
+	constexpr static auto default_dimension = 100;
+
+	length width = length(default_dimension, length_unit::unknown);
+	length height = length(default_dimension, length_unit::unknown);
 
 	rectangle() = default;
 

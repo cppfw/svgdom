@@ -287,7 +287,15 @@ struct styleable : public cssom::styleable {
 		return utki::make_span(this->classes);
 	}
 
-	~styleable() noexcept override = default;
+	styleable() = default;
+
+	styleable(const styleable&) = default;
+	styleable& operator=(const styleable&) = default;
+
+	styleable(styleable&&) = default;
+	styleable& operator=(styleable&&) = default;
+
+	~styleable() override = default;
 
 	const style_value* get_style_property(style_property p) const;
 

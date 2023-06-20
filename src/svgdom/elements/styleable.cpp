@@ -1246,15 +1246,22 @@ std::string svgdom::paint_to_string(const style_value& v)
 		} else {
 			// #-notation
 
+			// TODO: use constants from utki::
+			constexpr auto lower_nibble_mask = 0xf;
+			constexpr auto num_bits_in_nibble = utki::num_bits_in_byte / 2;
+
 			std::stringstream s;
 			s << std::hex;
 			s << "#";
-			s << ((*std::get_if<uint32_t>(&v) >> 4) & 0xf);
-			s << ((*std::get_if<uint32_t>(&v)) & 0xf);
-			s << ((*std::get_if<uint32_t>(&v) >> 12) & 0xf);
-			s << ((*std::get_if<uint32_t>(&v) >> 8) & 0xf);
-			s << ((*std::get_if<uint32_t>(&v) >> 20) & 0xf);
-			s << ((*std::get_if<uint32_t>(&v) >> 16) & 0xf);
+
+			uint32_t val = std::get<uint32_t>(v);
+
+			for (auto i = 0; i != 3; ++i) {
+				s << ((val >> num_bits_in_nibble) & lower_nibble_mask);
+				s << (val & lower_nibble_mask);
+				val >>= utki::num_bits_in_byte;
+			}
+
 			return s.str();
 		}
 	}
