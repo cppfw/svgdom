@@ -46,9 +46,9 @@ using namespace std::string_literals;
 using namespace std::string_view_literals;
 
 namespace {
-const char* none_word = "none";
-const char* inherit_word = "inherit";
-const char* current_color_word = "currentColor";
+constexpr const char* none_word = "none";
+constexpr const char* inherit_word = "inherit";
+constexpr const char* current_color_word = "currentColor";
 } // namespace
 
 namespace {
@@ -302,52 +302,46 @@ style_value styleable::parse_style_property_value(style_property type, std::stri
 			return length::parse(str);
 		case style_property::stroke_linecap:
 			{
-				stroke_line_cap slc;
 				if (str == "butt") {
-					slc = stroke_line_cap::butt;
+					return stroke_line_cap::butt;
 				} else if (str == "round") {
-					slc = stroke_line_cap::round;
+					return stroke_line_cap::round;
 				} else if (str == "square") {
-					slc = stroke_line_cap::square;
-				} else {
-					LOG([&](auto& o) {
-						o << "unknown strokeLineCap value:" << str << std::endl;
-					})
-					return {};
+					return stroke_line_cap::square;
 				}
-				return {slc};
+
+				LOG([&](auto& o) {
+					o << "unknown strokeLineCap value:" << str << std::endl;
+				})
+				return {};
 			}
 		case style_property::stroke_linejoin:
 			{
-				stroke_line_join slj;
 				if (str == "miter") {
-					slj = stroke_line_join::miter;
+					return stroke_line_join::miter;
 				} else if (str == "round") {
-					slj = stroke_line_join::round;
+					return stroke_line_join::round;
 				} else if (str == "bevel") {
-					slj = stroke_line_join::bevel;
-				} else {
-					LOG([&](auto& o) {
-						o << "unknown strokeLineJoin value:" << str << std::endl;
-					})
-					return {};
+					return stroke_line_join::bevel;
 				}
-				return {slj};
+
+				LOG([&](auto& o) {
+					o << "unknown strokeLineJoin value:" << str << std::endl;
+				})
+				return {};
 			}
 		case style_property::fill_rule:
 			{
-				fill_rule fr;
 				if (str == "nonzero") {
-					fr = fill_rule::nonzero;
+					return fill_rule::nonzero;
 				} else if (str == "evenodd") {
-					fr = fill_rule::evenodd;
-				} else {
-					LOG([&](auto& o) {
-						o << "unknown fill-rule value:" << str << std::endl;
-					})
-					return {};
+					return fill_rule::evenodd;
 				}
-				return {fr};
+
+				LOG([&](auto& o) {
+					o << "unknown fill-rule value:" << str << std::endl;
+				})
+				return {};
 			}
 		case style_property::mask:
 		case style_property::filter:
@@ -584,20 +578,20 @@ r4::vector3<real> svgdom::get_rgb(const style_value& v)
 		return 0;
 	}
 
-	auto c = *std::get_if<uint32_t>(&v);
+	auto c = std::get<uint32_t>(v);
 
 	r4::vector3<real> ret;
 
-	ret.r() = real(c & 0xff) / real(0xff);
-	ret.g() = real((c >> 8) & 0xff) / real(0xff);
-	ret.b() = real((c >> 16) & 0xff) / real(0xff);
+	ret.r() = real(c & utki::byte_mask) / real(utki::byte_mask);
+	ret.g() = real((c >> utki::num_bits_in_byte) & utki::byte_mask) / real(utki::byte_mask);
+	ret.b() = real((c >> (utki::num_bits_in_byte * 2)) & utki::byte_mask) / real(utki::byte_mask);
 
 	return ret;
 }
 
 style_value svgdom::make_style_value(uint8_t r, uint8_t g, uint8_t b)
 {
-	return {uint32_t(r) | (uint32_t(g) << 8) | (uint32_t(b) << 16)};
+	return {uint32_t(r) | (uint32_t(g) << utki::num_bits_in_byte) | (uint32_t(b) << (utki::num_bits_in_byte * 2))};
 }
 
 style_value svgdom::make_style_value(const r4::vector3<real>& rgb)
