@@ -185,10 +185,10 @@ void parser::parse_element()
 	this->element_stack.push_back(nullptr);
 }
 
-parser::xml_namespace parser::find_namespace(std::string_view ns)
+parser::xml_namespace parser::find_namespace(const std::string& ns)
 {
 	for (auto i = this->namespace_stack.rbegin(), e = this->namespace_stack.rend(); i != e; ++i) {
-		auto iter = i->find(std::string(ns)); // TODO: use string_view somehow
+		auto iter = i->find(std::string(ns));
 		if (iter == i->end()) {
 			continue;
 		}

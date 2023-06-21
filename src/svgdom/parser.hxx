@@ -62,7 +62,7 @@ class parser : public mikroxml::parser
 
 	std::vector<xml_namespace> default_namespace_stack;
 
-	xml_namespace find_namespace(std::string_view ns);
+	xml_namespace find_namespace(const std::string& ns);
 	std::optional<std::string_view> find_flipped_namespace(xml_namespace ns);
 
 	// TODO: why lint complains here on macos?
