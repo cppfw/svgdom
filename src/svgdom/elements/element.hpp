@@ -63,6 +63,8 @@ struct element {
 	 */
 	virtual std::string_view get_tag() const = 0;
 
+	// TODO: why lint complains here on macos?
+	// NOLINTNEXTLINE(bugprone-exception-escape, "error: an exception may be thrown in function")
 	element() = default;
 
 	element(const element&) = default;

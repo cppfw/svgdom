@@ -264,7 +264,7 @@ std::string path_element::path_to_string() const
 
 	bool first = true;
 
-	for (auto& cur_step : this->path) {
+	for (const auto& cur_step : this->path) {
 		if (cur_step_type == cur_step.type_v) {
 			s << " ";
 		} else {
@@ -345,9 +345,9 @@ std::string path_element::path_to_string() const
 				s << " ";
 				s << cur_step.x_axis_rotation();
 				s << " ";
-				s << (cur_step.flags.large_arc ? "1" : "0");
+				s << (cur_step.flags.large_arc ? "1"sv : "0"sv);
 				s << ",";
-				s << (cur_step.flags.sweep ? "1" : "0");
+				s << (cur_step.flags.sweep ? "1"sv : "0"sv);
 				s << " ";
 				s << cur_step.x;
 				s << ",";
