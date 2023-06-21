@@ -36,6 +36,8 @@ SOFTWARE.
 
 namespace svgdom {
 
+using namespace std::string_view_literals;
+
 /**
  * @brief Common base for gradient elements.
  */
@@ -61,14 +63,14 @@ struct gradient : public element, public container, public referencing, public t
 		void accept(visitor& v) override;
 		void accept(const_visitor& v) const override;
 
-		const std::string& get_id() const override
+		std::string_view get_id() const override
 		{
 			return this->id;
 		}
 
-		static const std::string tag;
+		constexpr static std::string_view tag = "stop"sv;
 
-		const std::string& get_tag() const override
+		std::string_view get_tag() const override
 		{
 			return tag;
 		}
@@ -76,7 +78,7 @@ struct gradient : public element, public container, public referencing, public t
 
 	std::string spread_method_to_string() const;
 
-	const std::string& get_id() const override
+	std::string_view get_id() const override
 	{
 		return this->id;
 	}
@@ -92,9 +94,9 @@ struct linear_gradient_element : public gradient {
 	void accept(visitor& v) override;
 	void accept(const_visitor& v) const override;
 
-	static const std::string tag;
+	constexpr static std::string_view tag = "linearGradient"sv;
 
-	const std::string& get_tag() const override
+	std::string_view get_tag() const override
 	{
 		return tag;
 	}
@@ -111,9 +113,9 @@ struct radial_gradient_element : public gradient {
 	void accept(visitor& v) override;
 	void accept(const_visitor& v) const override;
 
-	static const std::string tag;
+	constexpr static std::string_view tag = "radialGradient"sv;
 
-	const std::string& get_tag() const override
+	std::string_view get_tag() const override
 	{
 		return tag;
 	}

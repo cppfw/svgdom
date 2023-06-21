@@ -27,6 +27,8 @@ SOFTWARE.
 
 #include "finder_by_tag.hpp"
 
+#include <string_view>
+
 #include <utki/debug.hpp>
 
 #include "../visitor.hpp"
@@ -40,19 +42,19 @@ private:
 	void add_to_cache(const svgdom::element& e)
 	{
 		if (!e.get_tag().empty()) {
-			auto it = cache.find(e.get_tag());
+			auto it = this->cache.find(e.get_tag());
 
-			if (it != cache.end()) {
+			if (it != this->cache.end()) {
 				it->second.push_back(&e);
 			} else {
 				std::vector<const element*> elements = {&e};
-				cache.insert(std::make_pair(e.get_tag(), std::move(elements)));
+				this->cache.insert(std::make_pair(e.get_tag(), std::move(elements)));
 			}
 		}
 	}
 
 public:
-	std::unordered_map<std::string, std::vector<const element*>> cache;
+	std::unordered_map<std::string_view, std::vector<const element*>> cache;
 
 	void default_visit(const element& e) override
 	{
@@ -71,7 +73,7 @@ finder_by_tag::finder_by_tag(const svgdom::element& root) :
 	}())
 {}
 
-utki::span<const svgdom::element* const> finder_by_tag::find(const std::string& tag_name) const noexcept
+utki::span<const svgdom::element* const> finder_by_tag::find(std::string_view tag_name) const noexcept
 {
 	if (tag_name.length() == 0) {
 		return nullptr;

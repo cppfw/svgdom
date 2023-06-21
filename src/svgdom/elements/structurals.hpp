@@ -30,6 +30,7 @@ SOFTWARE.
 #include "aspect_ratioed.hpp"
 #include "container.hpp"
 #include "coordinate_units.hpp"
+#include "element.hpp"
 #include "rectangle.hpp"
 #include "referencing.hpp"
 #include "styleable.hpp"
@@ -38,20 +39,22 @@ SOFTWARE.
 
 namespace svgdom {
 
+using namespace std::string_view_literals;
+
 // TODO: why lint complains here on macos?
 // NOLINTNEXTLINE(bugprone-exception-escape, "error: an exception may be thrown in function")
 struct g_element : public element, public container, public transformable, public styleable {
 	void accept(visitor& v) override;
 	void accept(const_visitor& v) const override;
 
-	const std::string& get_id() const override
+	std::string_view get_id() const override
 	{
 		return this->id;
 	}
 
-	static const std::string tag;
+	constexpr static std::string_view tag = "g"sv;
 
-	const std::string& get_tag() const override
+	std::string_view get_tag() const override
 	{
 		return tag;
 	}
@@ -63,14 +66,14 @@ struct defs_element : public element, public container, public transformable, pu
 	void accept(visitor& v) override;
 	void accept(const_visitor& v) const override;
 
-	const std::string& get_id() const override
+	std::string_view get_id() const override
 	{
 		return this->id;
 	}
 
-	static const std::string tag;
+	constexpr static std::string_view tag = "defs"sv;
 
-	const std::string& get_tag() const override
+	std::string_view get_tag() const override
 	{
 		return tag;
 	}
@@ -80,14 +83,14 @@ struct use_element : public element, public transformable, public referencing, p
 	void accept(visitor& v) override;
 	void accept(const_visitor& v) const override;
 
-	const std::string& get_id() const override
+	std::string_view get_id() const override
 	{
 		return this->id;
 	}
 
-	static const std::string tag;
+	constexpr static std::string_view tag = "use"sv;
 
-	const std::string& get_tag() const override
+	std::string_view get_tag() const override
 	{
 		return tag;
 	}
@@ -103,14 +106,14 @@ struct svg_element :
 	void accept(visitor& v) override;
 	void accept(const_visitor& v) const override;
 
-	const std::string& get_id() const override
+	std::string_view get_id() const override
 	{
 		return this->id;
 	}
 
-	static const std::string tag;
+	constexpr static std::string_view tag = "svg"sv;
 
-	const std::string& get_tag() const override
+	std::string_view get_tag() const override
 	{
 		return tag;
 	}
@@ -139,14 +142,14 @@ struct symbol_element : public element, public container, public view_boxed, pub
 	void accept(visitor& v) override;
 	void accept(const_visitor& v) const override;
 
-	const std::string& get_id() const override
+	std::string_view get_id() const override
 	{
 		return this->id;
 	}
 
-	static const std::string tag;
+	constexpr static std::string_view tag = "symbol"sv;
 
-	const std::string& get_tag() const override
+	std::string_view get_tag() const override
 	{
 		return tag;
 	}
@@ -160,14 +163,14 @@ struct mask_element : public element, public container, public rectangle, public
 	void accept(visitor& v) override;
 	void accept(const_visitor& v) const override;
 
-	const std::string& get_id() const override
+	std::string_view get_id() const override
 	{
 		return this->id;
 	}
 
-	static const std::string tag;
+	constexpr static std::string_view tag = "mask"sv;
 
-	const std::string& get_tag() const override
+	std::string_view get_tag() const override
 	{
 		return tag;
 	}

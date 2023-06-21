@@ -43,7 +43,7 @@ tst::set set("misc", [](tst::suite& suite){
                     <rect style="fill: hsl(84,39%,99%);" width="100%" height="100%"/>
                     <rect style="fill: hsl(120,42%,71%);" x="93" y="98.5" width="814" height="803"/>
                 <!-- /svg -->
-            )qwertyuiop"s;
+            )qwertyuiop"sv;
             try{
                 auto dom = svgdom::load(str);
                 tst::check(false, SL);

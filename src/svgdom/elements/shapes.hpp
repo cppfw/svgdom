@@ -36,13 +36,15 @@ SOFTWARE.
 
 namespace svgdom {
 
+using namespace std::string_view_literals;
+
 /**
  * @brief element representing a geometric shape.
  */
 // TODO: why lint complains here on macos?
 // NOLINTNEXTLINE(bugprone-exception-escape, "error: an exception may be thrown in function")
 struct shape : public element, public transformable, public styleable {
-	const std::string& get_id() const override
+	std::string_view get_id() const override
 	{
 		return this->id;
 	}
@@ -117,9 +119,9 @@ struct path_element : public shape {
 	void accept(visitor& v) override;
 	void accept(const_visitor& v) const override;
 
-	static const std::string tag;
+	constexpr static std::string_view tag = "path"sv;
 
-	const std::string& get_tag() const override
+	std::string_view get_tag() const override
 	{
 		return tag;
 	}
@@ -132,9 +134,9 @@ struct rect_element : public shape, public rectangle {
 	void accept(visitor& v) override;
 	void accept(const_visitor& v) const override;
 
-	static const std::string tag;
+	constexpr static std::string_view tag = "rect"sv;
 
-	const std::string& get_tag() const override
+	std::string_view get_tag() const override
 	{
 		return tag;
 	}
@@ -157,9 +159,9 @@ struct circle_element : public shape {
 	void accept(visitor& v) override;
 	void accept(const_visitor& v) const override;
 
-	static const std::string tag;
+	constexpr static std::string_view tag = "circle"sv;
 
-	const std::string& get_tag() const override
+	std::string_view get_tag() const override
 	{
 		return tag;
 	}
@@ -174,9 +176,9 @@ struct ellipse_element : public shape {
 	void accept(visitor& v) override;
 	void accept(const_visitor& v) const override;
 
-	static const std::string tag;
+	constexpr static std::string_view tag = "ellipse"sv;
 
-	const std::string& get_tag() const override
+	std::string_view get_tag() const override
 	{
 		return tag;
 	}
@@ -191,9 +193,9 @@ struct line_element : public shape {
 	void accept(visitor& v) override;
 	void accept(const_visitor& v) const override;
 
-	static const std::string tag;
+	constexpr static std::string_view tag = "line"sv;
 
-	const std::string& get_tag() const override
+	std::string_view get_tag() const override
 	{
 		return tag;
 	}
@@ -215,9 +217,9 @@ struct polyline_element : public polyline_shape {
 	void accept(visitor& v) override;
 	void accept(const_visitor& v) const override;
 
-	static const std::string tag;
+	constexpr static std::string_view tag = "polyline"sv;
 
-	const std::string& get_tag() const override
+	std::string_view get_tag() const override
 	{
 		return tag;
 	}
@@ -229,9 +231,9 @@ struct polygon_element : public polyline_shape {
 	void accept(visitor& v) override;
 	void accept(const_visitor& v) const override;
 
-	static const std::string tag;
+	constexpr static std::string_view tag = "polygon"sv;
 
-	const std::string& get_tag() const override
+	std::string_view get_tag() const override
 	{
 		return tag;
 	}

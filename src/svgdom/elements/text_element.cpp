@@ -31,8 +31,6 @@ SOFTWARE.
 
 using namespace svgdom;
 
-const std::string text_element::tag = "text";
-
 void text_element::accept(visitor& v)
 {
 	v.visit(*this);

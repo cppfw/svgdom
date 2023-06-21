@@ -31,8 +31,6 @@ SOFTWARE.
 
 using namespace svgdom;
 
-const std::string image_element::tag = "image";
-
 void image_element::accept(visitor& v)
 {
 	v.visit(*this);

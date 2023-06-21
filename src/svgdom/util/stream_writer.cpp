@@ -35,7 +35,7 @@ SOFTWARE.
 
 using namespace svgdom;
 
-void stream_writer::set_name(const std::string& name)
+void stream_writer::set_name(std::string_view name)
 {
 	this->name = name;
 }

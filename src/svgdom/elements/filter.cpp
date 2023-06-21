@@ -31,12 +31,6 @@ SOFTWARE.
 
 using namespace svgdom;
 
-const std::string filter_element::tag = "filter";
-const std::string fe_gaussian_blur_element::tag = "feGaussianBlur";
-const std::string fe_color_matrix_element::tag = "feColorMatrix";
-const std::string fe_blend_element::tag = "feBlend";
-const std::string fe_composite_element::tag = "feComposite";
-
 void filter_element::accept(visitor& visitor)
 {
 	visitor.visit(*this);

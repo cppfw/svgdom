@@ -4,20 +4,20 @@
 #include "../../src/svgdom/visitor.hpp"
 #include "../../src/svgdom/util/stream_writer.hpp"
 
+using namespace std::string_view_literals;
+
 // TODO: why lint complains here on macos?
 // NOLINTNEXTLINE(bugprone-exception-escape, "error: an exception may be thrown in function")
 struct custom_element : public svgdom::element{
 	void accept(svgdom::const_visitor& visitor) const override;
 	void accept(svgdom::visitor& visitor) override;
 
-	static const std::string tag;
+	constexpr static std::string_view tag = "custom_element"sv;
 
-	const std::string& get_tag()const override{
+	std::string_view get_tag()const override{
 		return tag;
 	}
 };
-
-const std::string custom_element::tag = "custom_element";
 
 class custom_visitor : virtual public svgdom::const_visitor{
 public:

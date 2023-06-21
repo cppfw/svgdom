@@ -37,14 +37,6 @@ SOFTWARE.
 
 using namespace svgdom;
 
-const std::string circle_element::tag = "circle";
-const std::string ellipse_element::tag = "ellipse";
-const std::string line_element::tag = "line";
-const std::string path_element::tag = "path";
-const std::string polygon_element::tag = "polygon";
-const std::string polyline_element::tag = "polyline";
-const std::string rect_element::tag = "rect";
-
 void path_element::accept(visitor& v)
 {
 	v.visit(*this);

@@ -42,7 +42,7 @@ class finder_by_tag
 public:
 	finder_by_tag(const svgdom::element& root);
 
-	utki::span<const element* const> find(const std::string& tag_name) const noexcept;
+	utki::span<const element* const> find(std::string_view tag_name) const noexcept;
 
 	/**
 	 * @brief Get elements-by-tag-name cache size.
@@ -54,7 +54,7 @@ public:
 	}
 
 private:
-	std::unordered_map<std::string, std::vector<const element*>> cache;
+	std::unordered_map<std::string_view, std::vector<const element*>> cache;
 };
 
 } // namespace svgdom

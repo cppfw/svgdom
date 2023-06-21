@@ -28,6 +28,7 @@ SOFTWARE.
 #pragma once
 
 #include <ostream>
+#include <string_view>
 
 namespace svgdom {
 
@@ -60,7 +61,7 @@ struct element {
 	 * @brief Get tag name of the element.
 	 * @return Tag name of the element.
 	 */
-	virtual const std::string& get_tag() const = 0;
+	virtual std::string_view get_tag() const = 0;
 
 	element() = default;
 

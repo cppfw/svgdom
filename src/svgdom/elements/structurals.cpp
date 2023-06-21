@@ -32,13 +32,6 @@ SOFTWARE.
 
 using namespace svgdom;
 
-const std::string defs_element::tag = "defs";
-const std::string svg_element::tag = "svg";
-const std::string mask_element::tag = "mask";
-const std::string g_element::tag = "g";
-const std::string symbol_element::tag = "symbol";
-const std::string use_element::tag = "use";
-
 r4::vector2<real> svg_element::get_dimensions(real dpi) const noexcept
 {
 	real w = this->width.to_px(dpi);

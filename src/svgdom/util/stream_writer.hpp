@@ -46,7 +46,7 @@ protected:
 	unsigned indent = 0;
 	std::string indent_str();
 
-	void set_name(const std::string& name);
+	void set_name(std::string_view name);
 	void add_attribute(std::string_view name, const std::string& value);
 	void add_attribute(std::string_view name, const length& value);
 	void add_attribute(std::string_view name, real value);

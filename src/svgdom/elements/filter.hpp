@@ -39,6 +39,9 @@ SOFTWARE.
 #include "styleable.hpp"
 
 namespace svgdom {
+
+using namespace std::string_view_literals;
+
 struct filter_element : public element, public styleable, public rectangle, public referencing, public container {
 	coordinate_units filter_units = coordinate_units::object_bounding_box;
 	coordinate_units primitive_units = coordinate_units::user_space_on_use;
@@ -48,14 +51,14 @@ struct filter_element : public element, public styleable, public rectangle, publ
 	void accept(visitor& v) override;
 	void accept(const_visitor& v) const override;
 
-	const std::string& get_id() const override
+	std::string_view get_id() const override
 	{
 		return this->id;
 	}
 
-	static const std::string tag;
+	constexpr static std::string_view tag = "filter"sv;
 
-	const std::string& get_tag() const override
+	std::string_view get_tag() const override
 	{
 		return tag;
 	}
@@ -64,7 +67,7 @@ struct filter_element : public element, public styleable, public rectangle, publ
 struct filter_primitive : public element, public rectangle, public styleable {
 	std::string result;
 
-	const std::string& get_id() const override
+	std::string_view get_id() const override
 	{
 		return this->id;
 	}
@@ -110,9 +113,9 @@ struct fe_gaussian_blur_element : public filter_primitive, public inputable {
 	void accept(visitor& v) override;
 	void accept(const_visitor& v) const override;
 
-	static const std::string tag;
+	constexpr static std::string_view tag = "feGaussianBlur"sv;
 
-	const std::string& get_tag() const override
+	std::string_view get_tag() const override
 	{
 		return tag;
 	}
@@ -136,9 +139,9 @@ struct fe_color_matrix_element : public filter_primitive, public inputable {
 	void accept(visitor& v) override;
 	void accept(const_visitor& v) const override;
 
-	static const std::string tag;
+	constexpr static std::string_view tag = "feColorMatrix"sv;
 
-	const std::string& get_tag() const override
+	std::string_view get_tag() const override
 	{
 		return tag;
 	}
@@ -156,9 +159,9 @@ struct fe_blend_element : public filter_primitive, public inputable, public seco
 	void accept(visitor& v) override;
 	void accept(const_visitor& v) const override;
 
-	static const std::string tag;
+	constexpr static std::string_view tag = "feBlend"sv;
 
-	const std::string& get_tag() const override
+	std::string_view get_tag() const override
 	{
 		return tag;
 	}
@@ -180,9 +183,9 @@ struct fe_composite_element : public filter_primitive, public inputable, public 
 	void accept(visitor& v) override;
 	void accept(const_visitor& v) const override;
 
-	static const std::string tag;
+	constexpr static std::string_view tag = "feComposite"sv;
 
-	const std::string& get_tag() const override
+	std::string_view get_tag() const override
 	{
 		return tag;
 	}

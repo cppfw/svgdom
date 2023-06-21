@@ -36,6 +36,8 @@ SOFTWARE.
 
 namespace svgdom {
 
+using namespace std::string_view_literals;
+
 // TODO: why lint complains here on macos?
 // NOLINTNEXTLINE(bugprone-exception-escape, "error: an exception may be thrown in function")
 struct style_element : public element {
@@ -45,9 +47,9 @@ struct style_element : public element {
 		style_value value;
 	};
 
-	static const std::string tag;
+	constexpr static std::string_view tag = "style"sv;
 
-	const std::string& get_tag() const override
+	std::string_view get_tag() const override
 	{
 		return tag;
 	}

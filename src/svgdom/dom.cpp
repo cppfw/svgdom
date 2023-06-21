@@ -79,7 +79,7 @@ std::unique_ptr<svg_element> svgdom::load(std::istream& s)
 	return parser.get_dom();
 }
 
-std::unique_ptr<svg_element> svgdom::load(const std::string& s)
+std::unique_ptr<svg_element> svgdom::load(std::string_view s)
 {
 	return load(utki::make_span(s));
 }

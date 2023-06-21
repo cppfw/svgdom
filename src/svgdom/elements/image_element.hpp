@@ -35,6 +35,9 @@ SOFTWARE.
 #include "transformable.hpp"
 
 namespace svgdom {
+
+using namespace std::string_view_literals;
+
 struct image_element :
 	public element,
 	public styleable,
@@ -45,14 +48,14 @@ struct image_element :
 	void accept(visitor& v) override;
 	void accept(const_visitor& v) const override;
 
-	const std::string& get_id() const override
+	std::string_view get_id() const override
 	{
 		return this->id;
 	}
 
-	static const std::string tag;
+	constexpr static std::string_view tag = "image"sv;
 
-	const std::string& get_tag() const override
+	std::string_view get_tag() const override
 	{
 		return tag;
 	}

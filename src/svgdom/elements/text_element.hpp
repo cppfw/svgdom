@@ -34,6 +34,8 @@ SOFTWARE.
 
 namespace svgdom {
 
+using namespace std::string_view_literals;
+
 class text_positioning
 {
 public:
@@ -50,16 +52,16 @@ public:
 	void accept(visitor& v) override;
 	void accept(const_visitor& v) const override;
 
-	const std::string& get_id() const override
+	std::string_view get_id() const override
 	{
 		return this->id;
 	}
 
-	static const std::string tag;
+	constexpr static std::string_view tag = "text"sv;
 
-	const std::string& get_tag() const override
+	std::string_view get_tag() const override
 	{
-		return tag;
+		return std::string_view(tag);
 	}
 };
 
