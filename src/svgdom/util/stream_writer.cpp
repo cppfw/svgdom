@@ -564,10 +564,10 @@ void stream_writer::visit(const filter_element& e)
 	this->add_rectangle_attributes(
 		e,
 		rectangle(
-			length(-10, length_unit::percent),
-			length(-10, length_unit::percent),
-			length(120, length_unit::percent),
-			length(120, length_unit::percent)
+			length(filter_element::default_filter_region_x, length_unit::percent),
+			length(filter_element::default_filter_region_y, length_unit::percent),
+			length(filter_element::default_filter_region_width, length_unit::percent),
+			length(filter_element::default_filter_region_height, length_unit::percent)
 		)
 	);
 	this->add_referencing_attributes(e);

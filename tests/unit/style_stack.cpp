@@ -12,7 +12,7 @@
 #endif
 
 namespace{
-auto svg = R"qwertyuiop(
+const auto svg = R"qwertyuiop(
 <svg xmlns="http://www.w3.org/2000/svg"
     xmlns:xlink="http://www.w3.org/1999/xlink">
 
@@ -90,7 +90,7 @@ public:
 }
 
 namespace{
-tst::set set("style_stack", [](auto& suite){
+const tst::set set("style_stack", [](auto& suite){
 	suite.add("basic_test", [](){
 		auto dom = svgdom::load(papki::span_file(utki::make_span(svg)));
 		utki::assert(dom, SL);

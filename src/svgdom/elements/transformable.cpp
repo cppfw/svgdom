@@ -99,6 +99,7 @@ decltype(transformable::transformations) transformable::parse(std::string_view s
 
 			//		TRACE(<< "transform = " << transform << std::endl)
 
+			// NOLINTNEXTLINE(cppcoreguidelines-pro-type-member-init)
 			transformation t;
 
 			if (transform == "matrix") {

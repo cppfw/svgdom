@@ -18,7 +18,7 @@ struct fixture{
 	}
 };
 namespace{
-tst::set set("finders", [](auto& suite){
+const tst::set set("finders", [](auto& suite){
 	suite.add("finder_by_id",[](){
 		fixture f;
 

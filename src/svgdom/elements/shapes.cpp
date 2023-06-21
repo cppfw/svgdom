@@ -153,7 +153,7 @@ decltype(path_element::path) path_element::parse(std::string_view str)
 
 			p.skip_whitespaces();
 
-			step cur_step;
+			step cur_step{};
 			cur_step.type_v = cur_step_type;
 
 			switch (cur_step.type_v) {

@@ -43,6 +43,11 @@ namespace svgdom {
 using namespace std::string_view_literals;
 
 struct filter_element : public element, public styleable, public rectangle, public referencing, public container {
+	constexpr static auto default_filter_region_x = -10;
+	constexpr static auto default_filter_region_y = -10;
+	constexpr static auto default_filter_region_width = 120;
+	constexpr static auto default_filter_region_height = 120;
+
 	coordinate_units filter_units = coordinate_units::object_bounding_box;
 	coordinate_units primitive_units = coordinate_units::user_space_on_use;
 

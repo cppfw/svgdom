@@ -41,7 +41,7 @@ public:
 };
 
 namespace{
-tst::set set("edit_dom_visitor", [](auto& suite){
+const tst::set set("edit_dom_visitor", [](auto& suite){
 	suite.add("basic_test", [](){
 		auto dom = std::make_unique<svgdom::svg_element>();
 

@@ -602,10 +602,10 @@ void parser::parse_filter_element()
 	this->fill_rectangle(
 		*ret,
 		rectangle(
-			length(-10, length_unit::percent),
-			length(-10, length_unit::percent),
-			length(120, length_unit::percent),
-			length(120, length_unit::percent)
+			length(filter_element::default_filter_region_x, length_unit::percent),
+			length(filter_element::default_filter_region_y, length_unit::percent),
+			length(filter_element::default_filter_region_width, length_unit::percent),
+			length(filter_element::default_filter_region_height, length_unit::percent)
 		)
 	);
 	this->fill_referencing(*ret);

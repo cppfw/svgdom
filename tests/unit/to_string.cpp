@@ -4,7 +4,7 @@
 #include "../../src/svgdom/elements/structurals.hpp"
 #include "../../src/svgdom/elements/shapes.hpp"
 
-tst::set to_string_tests("to_string", [](auto& suite){
+const tst::set to_string_tests("to_string", [](auto& suite){
 	suite.add(
 			"path_element_is_converted_to_string",
 			[](){
@@ -12,7 +12,7 @@ tst::set to_string_tests("to_string", [](auto& suite){
 
 				svgdom::path_element path;
 
-				svgdom::path_element::step step;
+				svgdom::path_element::step step{};
 
 				path.styles[svgdom::style_property::fill] = svgdom::make_style_value(0x42, 0x13, 0xfe);
 
