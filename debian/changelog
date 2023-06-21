@@ -1,3 +1,9 @@
+libsvgdom (0.4.8) unstable; urgency=medium
+
+  * fix lint issues
+
+ -- Ivan Gagis <igagis@gmail.com>  Wed, 21 Jun 2023 23:26:41 +0300
+
 libsvgdom (0.4.7) unstable; urgency=medium
 
   * conan: migrate to conan v2
