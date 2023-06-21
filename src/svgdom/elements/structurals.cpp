@@ -34,6 +34,9 @@ using namespace svgdom;
 
 r4::vector2<real> svg_element::get_dimensions(real dpi) const noexcept
 {
+	constexpr auto default_svg_width = 300;
+	constexpr auto default_svg_height = 150;
+
 	real w = this->width.to_px(dpi);
 	real h = this->height.to_px(dpi);
 
@@ -41,7 +44,7 @@ r4::vector2<real> svg_element::get_dimensions(real dpi) const noexcept
 		if (this->view_box[2] > 0) {
 			w = this->view_box[2];
 		} else {
-			w = 300;
+			w = default_svg_width;
 		}
 	}
 
@@ -49,7 +52,7 @@ r4::vector2<real> svg_element::get_dimensions(real dpi) const noexcept
 		if (this->view_box[3] > 0) {
 			h = this->view_box[3];
 		} else {
-			h = 150;
+			h = default_svg_height;
 		}
 	}
 

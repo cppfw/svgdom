@@ -61,7 +61,7 @@ public:
 
 	std::string_view get_tag() const override
 	{
-		return std::string_view(tag);
+		return tag;
 	}
 };
 

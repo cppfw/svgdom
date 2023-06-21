@@ -47,7 +47,7 @@ const std::string xlink_namespace = "http://www.w3.org/1999/xlink";
 } // namespace
 
 namespace {
-gradient::spread_method gradient_string_to_spread_method(const std::string& str)
+gradient::spread_method gradient_string_to_spread_method(std::string_view str)
 {
 	if (str == "pad") {
 		return gradient::spread_method::pad;
@@ -185,10 +185,10 @@ void parser::parse_element()
 	this->element_stack.push_back(nullptr);
 }
 
-parser::xml_namespace parser::find_namespace(const std::string& ns)
+parser::xml_namespace parser::find_namespace(std::string_view ns)
 {
 	for (auto i = this->namespace_stack.rbegin(), e = this->namespace_stack.rend(); i != e; ++i) {
-		auto iter = i->find(ns);
+		auto iter = i->find(std::string(ns)); // TODO: use string_view somehow
 		if (iter == i->end()) {
 			continue;
 		}
@@ -198,7 +198,7 @@ parser::xml_namespace parser::find_namespace(const std::string& ns)
 	return xml_namespace::unknown;
 }
 
-const std::string* parser::find_flipped_namespace(xml_namespace ns)
+std::optional<std::string_view> parser::find_flipped_namespace(xml_namespace ns)
 {
 	for (auto i = this->flipped_namespace_stack.rbegin(), e = this->flipped_namespace_stack.rend(); i != e; ++i) {
 		auto iter = i->find(ns);
@@ -206,9 +206,9 @@ const std::string* parser::find_flipped_namespace(xml_namespace ns)
 			continue;
 		}
 		ASSERT(ns == iter->first)
-		return &iter->second;
+		return {iter->second};
 	}
-	return nullptr;
+	return {};
 }
 
 parser::namespace_name_pair parser::get_namespace(const std::string& xml_name)
@@ -248,7 +248,8 @@ const std::string* parser::find_attribute_of_namespace(xml_namespace ns, const s
 	}
 
 	if (auto prefix = this->find_flipped_namespace(ns)) {
-		if (auto a = this->find_attribute(*prefix + ":" + name)) {
+		auto attr = std::string(prefix.value()) + ":" + name;
+		if (auto a = this->find_attribute(attr)) {
 			return a;
 		}
 	}
