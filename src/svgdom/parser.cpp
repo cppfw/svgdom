@@ -558,7 +558,7 @@ void parser::parse_gradient_stop_element()
 		utki::string_parser p(*a);
 		ret->offset = p.read_number<real>();
 		if (!p.empty() && p.read_char() == '%') {
-			ret->offset /= 100;
+			ret->offset /= utki::hundred_percent;
 		}
 	}
 
@@ -693,8 +693,8 @@ void parser::parse_fe_color_matrix_element()
 				// 20 values expected
 				{
 					utki::string_parser p(*a);
-					for (unsigned i = 0; i != fe_color_matrix_element::max_num_values; ++i) {
-						ret->values[i] = p.read_number<real>();
+					for (auto& v : ret->values) {
+						v = p.read_number<real>();
 						p.skip_whitespaces_and_comma();
 					}
 				}
@@ -1011,7 +1011,7 @@ class parse_content_visitor : public visitor
 
 public:
 	parse_content_visitor(utki::span<const char> content) :
-		content(content)
+		content(std::move(content))
 	{}
 
 	void default_visit(element&, container&) override
@@ -1023,10 +1023,10 @@ public:
 	{
 		e.css.append(cssom::read(
 			papki::span_file(this->content),
-			[](const std::string& name) -> uint32_t {
+			[](std::string_view name) -> uint32_t {
 				return uint32_t(styleable::string_to_property(name));
 			},
-			[](uint32_t id, std::string v) -> std::unique_ptr<cssom::property_value_base> {
+			[](uint32_t id, std::string_view v) -> std::unique_ptr<cssom::property_value_base> {
 				auto sp = style_property(id);
 				if (sp == style_property::unknown) {
 					return nullptr;

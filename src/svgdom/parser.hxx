@@ -29,6 +29,7 @@ SOFTWARE.
 
 #include <map>
 #include <memory>
+#include <optional>
 #include <vector>
 
 #include <mikroxml/mikroxml.hpp>
@@ -68,7 +69,7 @@ class parser : public mikroxml::parser
 	// TODO: why lint complains here on macos?
 	// NOLINTNEXTLINE(bugprone-exception-escape, "error: an exception may be thrown in function")
 	struct namespace_name_pair {
-		xml_namespace ns;
+		xml_namespace ns = xml_namespace::unknown;
 		std::string name;
 	};
 

@@ -58,7 +58,7 @@ struct gradient : public element, public container, public referencing, public t
 	// TODO: why lint complains here on macos?
 	// NOLINTNEXTLINE(bugprone-exception-escape, "error: an exception may be thrown in function")
 	struct stop_element : public element, public styleable {
-		real offset;
+		real offset = 0;
 
 		void accept(visitor& v) override;
 		void accept(const_visitor& v) const override;

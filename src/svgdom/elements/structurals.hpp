@@ -156,9 +156,9 @@ struct symbol_element : public element, public container, public view_boxed, pub
 };
 
 struct mask_element : public element, public container, public rectangle, public styleable {
-	coordinate_units mask_units;
+	coordinate_units mask_units = coordinate_units::unknown;
 
-	coordinate_units mask_content_units;
+	coordinate_units mask_content_units = coordinate_units::unknown;
 
 	void accept(visitor& v) override;
 	void accept(const_visitor& v) const override;
