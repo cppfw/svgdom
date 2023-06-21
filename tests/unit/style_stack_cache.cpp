@@ -9,7 +9,7 @@
 #include "../../src/svgdom/util/style_stack_cache.hpp"
 
 namespace{
-tst::set set("style_stack_cache", [](auto& suite){
+const tst::set set("style_stack_cache", [](auto& suite){
 	suite.add(
 			"basic_test",
 			[](){

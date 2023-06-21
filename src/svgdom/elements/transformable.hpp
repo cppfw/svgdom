@@ -48,7 +48,7 @@ struct transformable {
 			skewy
 		};
 
-		type type_;
+		type type_v;
 
 		union {
 			real a;

@@ -130,6 +130,7 @@ const style_value* style_stack::get_css_style_property(style_property p) const
 			continue;
 		}
 		specificity = r.specificity;
+		// NOLINTNEXTLINE(cppcoreguidelines-pro-type-static-cast-downcast)
 		ret = &static_cast<const style_element::css_style_value*>(r.value)->value;
 	}
 	return ret;

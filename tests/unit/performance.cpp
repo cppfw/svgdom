@@ -7,7 +7,7 @@
 #include "../../src/svgdom/dom.hpp"
 
 namespace{
-tst::set set("performance", [](auto& suite){
+const tst::set set("performance", [](auto& suite){
 	suite.add("basic_test", [](){
 		auto load_start = utki::get_ticks_ms();
 	

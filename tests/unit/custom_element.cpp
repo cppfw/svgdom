@@ -60,13 +60,13 @@ public:
 };
 
 namespace{
-tst::set set("custom_element", [](auto& suite){
+const tst::set set("custom_element", [](auto& suite){
 	suite.add("basic_test", [](){
 		auto dom = std::make_unique<svgdom::svg_element>();
 
 		svgdom::path_element path;
 
-		svgdom::path_element::step step;
+		svgdom::path_element::step step{};
 
 		step.type_v = svgdom::path_element::step::type::move_abs;
 		step.x = 0;

@@ -46,7 +46,7 @@ std::string transformable::transformations_to_string() const
 			s << " ";
 		}
 
-		switch (t.type_) {
+		switch (t.type_v) {
 			default:
 				ASSERT(false)
 				break;
@@ -102,17 +102,17 @@ decltype(transformable::transformations) transformable::parse(std::string_view s
 			transformation t;
 
 			if (transform == "matrix") {
-				t.type_ = transformation::type::matrix;
+				t.type_v = transformation::type::matrix;
 			} else if (transform == "translate") {
-				t.type_ = transformation::type::translate;
+				t.type_v = transformation::type::translate;
 			} else if (transform == "scale") {
-				t.type_ = transformation::type::scale;
+				t.type_v = transformation::type::scale;
 			} else if (transform == "rotate") {
-				t.type_ = transformation::type::rotate;
+				t.type_v = transformation::type::rotate;
 			} else if (transform == "skewX") {
-				t.type_ = transformation::type::skewx;
+				t.type_v = transformation::type::skewx;
 			} else if (transform == "skewY") {
-				t.type_ = transformation::type::skewy;
+				t.type_v = transformation::type::skewy;
 			} else {
 				return ret; // unknown transformation, stop parsing
 			}
@@ -126,7 +126,7 @@ decltype(transformable::transformations) transformable::parse(std::string_view s
 
 			p.skip_whitespaces();
 
-			switch (t.type_) {
+			switch (t.type_v) {
 				default:
 					ASSERT(false)
 					break;

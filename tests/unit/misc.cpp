@@ -14,7 +14,7 @@ using namespace std::string_literals;
 using namespace std::string_view_literals;
 
 namespace{
-tst::set set("misc", [](tst::suite& suite){
+const tst::set set("misc", [](tst::suite& suite){
     suite.add(
         "read_from_istream",
         [](){
