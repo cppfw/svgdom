@@ -50,20 +50,41 @@ struct transformable {
 
 		type type_v;
 
-		union {
-			real a;
-			real angle;
-		};
+		real a;
 
-		union {
-			real b;
-			real x;
-		};
+		real& angle() noexcept
+		{
+			return this->a;
+		}
 
-		union {
-			real c;
-			real y;
-		};
+		const real& angle() const noexcept
+		{
+			return this->a;
+		}
+
+		real b;
+
+		real& x() noexcept
+		{
+			return this->b;
+		}
+
+		const real& x() const noexcept
+		{
+			return this->b;
+		}
+
+		real c;
+
+		real& y() noexcept
+		{
+			return this->c;
+		}
+
+		const real& y() const noexcept
+		{
+			return this->c;
+		}
 
 		real d, e, f;
 	};
