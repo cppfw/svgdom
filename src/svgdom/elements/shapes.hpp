@@ -81,29 +81,48 @@ struct path_element : public shape {
 
 		real x, y;
 
-		union {
-			real x1;
-			real rx;
-		};
+		real x1;
 
-		union {
-			real y1;
-			real ry;
-		};
+		real& rx() noexcept
+		{
+			return this->x1;
+		}
 
-		union {
-			real x2;
-			real x_axis_rotation;
-		};
+		const real& rx() const noexcept
+		{
+			return this->x1;
+		}
 
-		union {
-			real y2;
+		real y1;
 
-			struct {
-				bool large_arc;
-				bool sweep;
-			} flags;
-		};
+		real& ry() noexcept
+		{
+			return this->y1;
+		}
+
+		const real& ry() const noexcept
+		{
+			return this->y1;
+		}
+
+		real x2;
+
+		real& x_axis_rotation() noexcept
+		{
+			return this->x2;
+		}
+
+		const real& x_axis_rotation() const noexcept
+		{
+			return this->x2;
+		}
+
+		real y2;
+
+		struct {
+			bool large_arc;
+			bool sweep;
+		} flags;
 
 		static type char_to_type(char c);
 

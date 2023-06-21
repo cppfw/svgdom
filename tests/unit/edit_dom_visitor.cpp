@@ -47,7 +47,7 @@ const tst::set set("edit_dom_visitor", [](auto& suite){
 
 		svgdom::path_element path;
 
-		svgdom::path_element::step step;
+		svgdom::path_element::step step{};
 
 		step.type_v = svgdom::path_element::step::type::move_abs;
 		step.x = 0;

@@ -1026,7 +1026,7 @@ public:
 			[](const std::string& name) -> uint32_t {
 				return uint32_t(styleable::string_to_property(name));
 			},
-			[](uint32_t id, std::string&& v) -> std::unique_ptr<cssom::property_value_base> {
+			[](uint32_t id, std::string v) -> std::unique_ptr<cssom::property_value_base> {
 				auto sp = style_property(id);
 				if (sp == style_property::unknown) {
 					return nullptr;

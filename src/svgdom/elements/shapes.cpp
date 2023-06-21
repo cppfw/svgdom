@@ -217,11 +217,11 @@ decltype(path_element::path) path_element::parse(std::string_view str)
 					break;
 				case step::type::arc_abs:
 				case step::type::arc_rel:
-					cur_step.rx = p.read_number<real>();
+					cur_step.rx() = p.read_number<real>();
 					p.skip_whitespaces_and_comma();
-					cur_step.ry = p.read_number<real>();
+					cur_step.ry() = p.read_number<real>();
 					p.skip_whitespaces_and_comma();
-					cur_step.x_axis_rotation = p.read_number<real>();
+					cur_step.x_axis_rotation() = p.read_number<real>();
 					p.skip_whitespaces_and_comma();
 					cur_step.flags.large_arc = (p.read_char() != '0');
 					p.skip_whitespaces_and_comma();
@@ -339,11 +339,11 @@ std::string path_element::path_to_string() const
 				break;
 			case step::type::arc_abs:
 			case step::type::arc_rel:
-				s << cur_step.rx;
+				s << cur_step.rx();
 				s << ",";
-				s << cur_step.ry;
+				s << cur_step.ry();
 				s << " ";
-				s << cur_step.x_axis_rotation;
+				s << cur_step.x_axis_rotation();
 				s << " ";
 				s << (cur_step.flags.large_arc ? "1" : "0");
 				s << ",";

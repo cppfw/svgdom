@@ -20,7 +20,8 @@ const std::string data_dir = "samples_data/";
 }
 
 namespace{
-tst::set set("samples", [](tst::suite& suite){
+// NOLINTNEXTLINE(cppcoreguidelines-interfaces-global-init)
+const tst::set set("samples", [](tst::suite& suite){
     // make sure the locale does not affect parsing (decimal delimiter can be "." or "," in different locales)
 	// so, set DE locale which has "," to make sure it does not affect the parsing
 	if(!std::setlocale(LC_ALL, "de_DE.UTF-8")){

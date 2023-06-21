@@ -424,13 +424,13 @@ void stream_writer::visit(const radial_gradient_element& e)
 {
 	this->set_name(e.get_tag());
 	this->add_gradient_attributes(e);
-	if (e.cx.unit != length_unit::percent || e.cx.value != utki::hundred_percent / 2) {
+	if (e.cx.unit != length_unit::percent || e.cx.value != real(utki::hundred_percent) / 2) {
 		this->add_attribute("cx", e.cx);
 	}
-	if (e.cy.unit != length_unit::percent || e.cy.value != utki::hundred_percent / 2) {
+	if (e.cy.unit != length_unit::percent || e.cy.value != real(utki::hundred_percent) / 2) {
 		this->add_attribute("cy", e.cy);
 	}
-	if (e.r.unit != length_unit::percent || e.r.value != utki::hundred_percent / 2) {
+	if (e.r.unit != length_unit::percent || e.r.value != real(utki::hundred_percent) / 2) {
 		this->add_attribute("r", e.r);
 	}
 	if (e.fx.unit != length_unit::unknown) {
@@ -515,6 +515,7 @@ void stream_writer::visit(const style_element& e)
 		[](uint32_t id, const cssom::property_value_base& value) -> std::string {
 			return styleable::style_value_to_string(
 				style_property(id),
+				// NOLINTNEXTLINE(cppcoreguidelines-pro-type-static-cast-downcast)
 				static_cast<const style_element::css_style_value&>(value).value
 			);
 		},
@@ -635,11 +636,14 @@ void stream_writer::visit(const fe_color_matrix_element& e)
 				// write 20 values
 				{
 					std::stringstream ss;
-					for (unsigned i = 0; i != e.values.size(); ++i) {
-						if (i != 0) {
+					bool first_value = true;
+					for (const auto& v : e.values) {
+						if (!first_value) {
 							ss << " ";
+						} else {
+							first_value = false;
 						}
-						ss << e.values[i];
+						ss << v;
 					}
 					values_value = ss.str();
 				}
