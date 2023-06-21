@@ -56,14 +56,6 @@ jobs:
         run: make config=asan
       - name: test
         run: make config=asan test
-      - name: publish test report
-        uses: mikepenz/action-junit-report@v2.2.2
-        with:
-          report_paths: 'tests/*/out/asan/junit.xml'
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          check_name: "test report: ${{ github.job }} - ${{ matrix.image_owner }}${{ matrix.os }}:${{ matrix.codename }}"
-          fail_on_failure: true
-        if: ${{ matrix.labels == '' }}
 ##### linux #####
   linux:
     strategy:
@@ -119,14 +111,6 @@ jobs:
           locale-gen
       - name: build
         run: dpkg-buildpackage --unsigned-source --unsigned-changes
-      - name: publish test report
-        uses: mikepenz/action-junit-report@v2.2.2
-        with:
-          report_paths: 'tests/*/out/rel/junit.xml'
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          check_name: "test report: ${{ github.job }} - ${{ matrix.image_owner }}${{ matrix.os }}:${{ matrix.codename }}"
-          fail_on_failure: true
-        if: ${{ matrix.labels == '' }}
       - name: deploy deb packages
         run: |
           echo "${{ secrets.MYCI_REPO_SSH_KEY }}" > repo_key_rsa && chmod 600 repo_key_rsa
@@ -168,13 +152,6 @@ jobs:
       run: make
     - name: test
       run: make test
-    - name: publish test report
-      uses: mikepenz/action-junit-report@v2.2.2
-      with:
-        report_paths: 'tests/*/out/rel/junit.xml'
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        check_name: "test report: ${{ github.job }}"
-        fail_on_failure: true
     - name: deploy
       run: myci-deploy-homebrew.sh --tap cppfw/tap
       if: startsWith(github.ref, 'refs/tags/')
@@ -297,13 +274,6 @@ jobs:
       run: |
         cd msys2
         PKGEXT='.pkg.tar.xz' makepkg-mingw --syncdeps --noconfirm --skipinteg
-    - name: publish test report
-      uses: mikepenz/action-junit-report@v2.2.2
-      with:
-        report_paths: 'tests/*/out/rel/junit.xml'
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        check_name: "test report: ${{ github.job }} - ${{ matrix.repo }}"
-        fail_on_failure: true
     - name: deploy
       run: |
         echo "${{ secrets.MYCI_REPO_SSH_KEY }}" > repo_key_rsa && chmod 600 repo_key_rsa
