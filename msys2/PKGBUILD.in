@@ -29,7 +29,12 @@ url="http://github.com/cppfw/${packageName}"
 license=('MIT')
 groups=()
 
-depends=("${pkgPrefix}utki" "${pkgPrefix}mikroxml" "${pkgPrefix}cssom" "${pkgPrefix}r4")
+depends=(
+	"${pkgPrefix}utki"
+	"${pkgPrefix}mikroxml"
+	"${pkgPrefix}cssom"
+	"${pkgPrefix}r4"
+)
 
 makedepends=(
 	'myci'
@@ -61,19 +66,15 @@ prepare() {
 
 build() {
 	cd "$rootDir"
-	make
+	CXX=clang++ make
 }
 
 check() {
 	cd "$rootDir"
-	# no idea why tests fail on 32 bit system. it started after some msys2 update.
-	# maybe it will be fixed after some time in msys2
-	if [ "$MSYSTEM" == "MINGW64" ]; then
-		make test
-	fi
+	CXX=clang++ make test
 }
 
 package() {
 	cd "$rootDir"
-	make DESTDIR="$pkgdir" PREFIX="$dirPrefix" install
+	CXX=clang++ make DESTDIR="$pkgdir" PREFIX="$dirPrefix" install
 }
