@@ -1,3 +1,9 @@
+libsvgdom (0.4.9) unstable; urgency=medium
+
+  * debian: add dbgsrc package
+
+ -- Ivan Gagis <igagis@gmail.com>  Tue, 27 Jun 2023 14:26:07 +0300
+
 libsvgdom (0.4.8) unstable; urgency=medium
 
   * fix lint issues
