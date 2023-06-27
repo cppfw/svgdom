@@ -26,16 +26,16 @@ Depends: ${shlibs:Depends}, ${misc:Depends}
 Description: cross-platform C++ library for reading SVG files.
  SVG document object model library.
 
-Package: libsvgdom$(soname)-dbg
+Package: libsvgdom$(soname)-dbgsrc
 Section: debug
 Architecture: any
-Depends: libsvgdom$(soname) (= ${binary:Version}), ${misc:Depends}
-Description: debugging symbols for libsvgdom$(soname) package.
+Depends: libsvgdom$(soname)-dbgsym (= ${binary:Version}), ${misc:Depends}
+Description: debugging sources for libsvgdom$(soname) package.
 
 Package: libsvgdom-dev
 Section: libdevel
 Architecture: any
-Depends: libsvgdom$(soname) (= ${binary:Version}), libsvgdom$(soname)-dbg (= ${binary:Version}), ${misc:Depends},
+Depends: libsvgdom$(soname) (= ${binary:Version}), ${misc:Depends},
 		libutki-dev, libpapki-dev, libcssom-dev, libr4-dev
 Suggests: libsvgdom-doc
 Description: cross-platform C++ library for reading SVG files.
