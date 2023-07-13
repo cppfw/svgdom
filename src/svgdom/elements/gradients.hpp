@@ -27,6 +27,8 @@ SOFTWARE.
 
 #pragma once
 
+#include <ratio>
+
 #include "container.hpp"
 #include "coordinate_units.hpp"
 #include "element.hpp"
@@ -88,7 +90,7 @@ struct linear_gradient_element : public gradient {
 	// TODO: change default unit to percent?
 	length x1 = length(0, length_unit::unknown);
 	length y1 = length(0, length_unit::unknown);
-	length x2 = length(utki::hundred_percent, length_unit::unknown);
+	length x2 = length(std::centi::den, length_unit::unknown);
 	length y2 = length(0, length_unit::unknown);
 
 	void accept(visitor& v) override;
@@ -104,11 +106,11 @@ struct linear_gradient_element : public gradient {
 
 struct radial_gradient_element : public gradient {
 	// TODO: change default unit to percent?
-	length cx = length(real(utki::hundred_percent) / 2, length_unit::unknown);
-	length cy = length(real(utki::hundred_percent) / 2, length_unit::unknown);
-	length r = length(real(utki::hundred_percent) / 2, length_unit::unknown);
-	length fx = length(real(utki::hundred_percent) / 2, length_unit::unknown);
-	length fy = length(real(utki::hundred_percent) / 2, length_unit::unknown);
+	length cx = length(real(std::centi::den) / 2, length_unit::unknown);
+	length cy = length(real(std::centi::den) / 2, length_unit::unknown);
+	length r = length(real(std::centi::den) / 2, length_unit::unknown);
+	length fx = length(real(std::centi::den) / 2, length_unit::unknown);
+	length fy = length(real(std::centi::den) / 2, length_unit::unknown);
 
 	void accept(visitor& v) override;
 	void accept(const_visitor& v) const override;

@@ -47,7 +47,7 @@ decltype(view_boxed::view_box) view_boxed::parse_view_box(std::string_view str)
 	} catch (std::invalid_argument&) {
 		return {
 			{-1, -1, -1, -1}
-        };
+		};
 	}
 
 	return ret;

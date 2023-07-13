@@ -27,6 +27,7 @@ SOFTWARE.
 
 #include "parser.hxx"
 
+#include <ratio>
 #include <string_view>
 
 #include <papki/span_file.hpp>
@@ -558,7 +559,7 @@ void parser::parse_gradient_stop_element()
 		utki::string_parser p(*a);
 		ret->offset = p.read_number<real>();
 		if (!p.empty() && p.read_char() == '%') {
-			ret->offset /= utki::hundred_percent;
+			ret->offset /= std::centi::den;
 		}
 	}
 

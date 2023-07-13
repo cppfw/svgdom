@@ -166,7 +166,8 @@ struct rect_element : public shape, public rectangle {
 			length(0, length_unit::number),
 			length(0, length_unit::number),
 			length(0, length_unit::unknown),
-			length(0, length_unit::unknown)};
+			length(0, length_unit::unknown)
+		};
 	}
 };
 

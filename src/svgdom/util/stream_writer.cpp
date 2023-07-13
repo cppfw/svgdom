@@ -424,13 +424,13 @@ void stream_writer::visit(const radial_gradient_element& e)
 {
 	this->set_name(e.get_tag());
 	this->add_gradient_attributes(e);
-	if (e.cx.unit != length_unit::percent || e.cx.value != real(utki::hundred_percent) / 2) {
+	if (e.cx.unit != length_unit::percent || e.cx.value != real(std::centi::den) / 2) {
 		this->add_attribute("cx", e.cx);
 	}
-	if (e.cy.unit != length_unit::percent || e.cy.value != real(utki::hundred_percent) / 2) {
+	if (e.cy.unit != length_unit::percent || e.cy.value != real(std::centi::den) / 2) {
 		this->add_attribute("cy", e.cy);
 	}
-	if (e.r.unit != length_unit::percent || e.r.value != real(utki::hundred_percent) / 2) {
+	if (e.r.unit != length_unit::percent || e.r.value != real(std::centi::den) / 2) {
 		this->add_attribute("r", e.r);
 	}
 	if (e.fx.unit != length_unit::unknown) {
@@ -452,7 +452,7 @@ void stream_writer::visit(const linear_gradient_element& e)
 	if (e.y1.unit != length_unit::percent || e.y1.value != 0) {
 		this->add_attribute("y1", e.y1);
 	}
-	if (e.x2.unit != length_unit::percent || e.x2.value != utki::hundred_percent) {
+	if (e.x2.unit != length_unit::percent || e.x2.value != std::centi::den) {
 		this->add_attribute("x2", e.x2);
 	}
 	if (e.y2.unit != length_unit::percent || e.y2.value != 0) {

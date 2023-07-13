@@ -31,6 +31,7 @@ SOFTWARE.
 #include <cctype>
 #include <cmath>
 #include <iomanip>
+#include <ratio>
 #include <set>
 
 #include <utki/debug.hpp>
@@ -457,7 +458,8 @@ const std::set<style_property> non_inherited_style_properties = {
 	style_property::stop_color,
 	style_property::stop_opacity,
 	style_property::text_decoration,
-	style_property::unicode_bidi};
+	style_property::unicode_bidi
+};
 } // namespace
 
 bool styleable::is_inherited(style_property p)
@@ -583,15 +585,15 @@ r4::vector3<real> svgdom::get_rgb(const style_value& v)
 	r4::vector3<real> ret;
 
 	ret.r() = real(c & utki::byte_mask) / real(utki::byte_mask);
-	ret.g() = real((c >> utki::num_bits_in_byte) & utki::byte_mask) / real(utki::byte_mask);
-	ret.b() = real((c >> (utki::num_bits_in_byte * 2)) & utki::byte_mask) / real(utki::byte_mask);
+	ret.g() = real((c >> utki::byte_bits) & utki::byte_mask) / real(utki::byte_mask);
+	ret.b() = real((c >> (utki::byte_bits * 2)) & utki::byte_mask) / real(utki::byte_mask);
 
 	return ret;
 }
 
 style_value svgdom::make_style_value(uint8_t r, uint8_t g, uint8_t b)
 {
-	return {uint32_t(r) | (uint32_t(g) << utki::num_bits_in_byte) | (uint32_t(b) << (utki::num_bits_in_byte * 2))};
+	return {uint32_t(r) | (uint32_t(g) << utki::byte_bits) | (uint32_t(b) << (utki::byte_bits * 2))};
 }
 
 style_value svgdom::make_style_value(const r4::vector3<real>& rgb)
@@ -913,7 +915,7 @@ decltype(enable_background_property::rect) parse_enable_background_new_rect(std:
 			return {
 				{-1, -1},
 				{-1, -1}
-            };
+			};
 		}
 
 		return ret_type({p.read_number<real>(), p.read_number<real>()}, {p.read_number<real>(), p.read_number<real>()});
@@ -932,7 +934,8 @@ style_value svgdom::parse_enable_background(std::string_view str)
 		try {
 			return enable_background_property{
 				svgdom::enable_background::new_background,
-				parse_enable_background_new_rect(str)};
+				parse_enable_background_new_rect(str)
+			};
 		} catch (malformed_svg_error&) {
 			return enable_background_property{default_value};
 		}
@@ -1022,8 +1025,8 @@ uint32_t hsl_to_rgb(real h, real s, real l)
 	uint32_t ret = 0;
 
 	ret |= uint32_t(r);
-	ret |= (uint32_t(g) << utki::num_bits_in_byte);
-	ret |= (uint32_t(b) << (utki::num_bits_in_byte * 2));
+	ret |= (uint32_t(g) << utki::byte_bits);
+	ret |= (uint32_t(b) << (utki::byte_bits * 2));
 
 	return ret;
 }
@@ -1091,9 +1094,9 @@ style_value svgdom::parse_paint(std::string_view str)
 					ASSERT(end <= d.end())
 
 					for (auto i = d.begin(); i != end; ++i) {
-						color |= (((uint32_t(*i) << utki::num_bits_in_nibble)) << shift);
+						color |= (((uint32_t(*i) << utki::nibble_bits)) << shift);
 						color |= ((uint32_t(*i) & utki::lower_nibble_mask) << shift);
-						shift += utki::num_bits_in_byte;
+						shift += utki::byte_bits;
 					}
 
 					return {color};
@@ -1104,11 +1107,11 @@ style_value svgdom::parse_paint(std::string_view str)
 					auto shift = 0;
 
 					for (auto i = d.begin(); i != d.end(); ++i) {
-						color |= (((uint32_t(*i) << utki::num_bits_in_nibble)) << shift);
+						color |= (((uint32_t(*i) << utki::nibble_bits)) << shift);
 						++i;
 						ASSERT(i != d.end())
 						color |= ((uint32_t(*i) & utki::lower_nibble_mask) << shift);
-						shift += utki::num_bits_in_byte;
+						shift += utki::byte_bits;
 					}
 
 					return {color};
@@ -1160,9 +1163,9 @@ style_value svgdom::parse_paint(std::string_view str)
 						}
 
 						// std::cout << "r = " << r << ", g = " << g << ", b = " << b << std::endl;
-						auto color = uint32_t(r * utki::byte_mask / utki::hundred_percent)
-							| (uint32_t(g * utki::byte_mask / utki::hundred_percent) << utki::num_bits_in_byte)
-							| (uint32_t(b * utki::byte_mask / utki::hundred_percent) << (utki::num_bits_in_byte * 2));
+						auto color = uint32_t(r * utki::byte_mask / std::centi::den)
+							| (uint32_t(g * utki::byte_mask / std::centi::den) << utki::byte_bits)
+							| (uint32_t(b * utki::byte_mask / std::centi::den) << (utki::byte_bits * 2));
 						return {color};
 					}
 				// rgb() color values are given as absolute values
@@ -1181,7 +1184,7 @@ style_value svgdom::parse_paint(std::string_view str)
 							break;
 						}
 
-						auto color = r | (g << utki::num_bits_in_byte) | (b << (utki::num_bits_in_byte * 2));
+						auto color = r | (g << utki::byte_bits) | (b << (utki::byte_bits * 2));
 						return {color};
 					}
 				// malformed rgb() paint specification
@@ -1217,8 +1220,8 @@ style_value svgdom::parse_paint(std::string_view str)
 			if (p.read_char() == ')') {
 				auto color = hsl_to_rgb( //
 					real(h),
-					real(s) / real(utki::hundred_percent),
-					real(l) / real(utki::hundred_percent)
+					real(s) / real(std::centi::den),
+					real(l) / real(std::centi::den)
 				);
 				return {color};
 			}
@@ -1274,9 +1277,9 @@ std::string svgdom::paint_to_string(const style_value& v)
 			uint32_t val = std::get<uint32_t>(v);
 
 			for (auto i = 0; i != 3; ++i) {
-				s << ((val >> utki::num_bits_in_nibble) & utki::lower_nibble_mask);
+				s << ((val >> utki::nibble_bits) & utki::lower_nibble_mask);
 				s << (val & utki::lower_nibble_mask);
-				val >>= utki::num_bits_in_byte;
+				val >>= utki::byte_bits;
 			}
 
 			return s.str();
