@@ -1,3 +1,9 @@
+libsvgdom (0.4.10) unstable; urgency=medium
+
+  * use std::ratio
+
+ -- Ivan Gagis <igagis@gmail.com>  Thu, 13 Jul 2023 15:46:51 +0300
+
 libsvgdom (0.4.9) unstable; urgency=medium
 
   * debian: add dbgsrc package
