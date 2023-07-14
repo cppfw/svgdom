@@ -86,8 +86,7 @@ std::unique_ptr<svg_element> svgdom::load(std::string_view s)
 
 std::unique_ptr<svg_element> svgdom::load(utki::span<const uint8_t> buf)
 {
-	// NOLINTNEXTLINE(cppcoreguidelines-pro-type-reinterpret-cast)
-	return load(utki::make_span(reinterpret_cast<const char*>(buf.data()), buf.size()));
+	return load(to_char(buf));
 }
 
 std::unique_ptr<svg_element> svgdom::load(utki::span<const char> buf)
