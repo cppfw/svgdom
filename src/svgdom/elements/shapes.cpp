@@ -240,6 +240,7 @@ decltype(path_element::path) path_element::parse(std::string_view str)
 
 			p.skip_whitespaces_and_comma();
 		}
+		// NOLINTNEXTLINE(bugprone-empty-catch)
 	} catch (std::invalid_argument&
 #ifdef DEBUG
 				 e
@@ -475,6 +476,7 @@ decltype(polyline_shape::points) polyline_shape::parse(std::string_view s)
 
 			p.skip_whitespaces_and_comma();
 		}
+		// NOLINTNEXTLINE(bugprone-empty-catch)
 	} catch (std::invalid_argument&
 #ifdef DEBUG
 				 e

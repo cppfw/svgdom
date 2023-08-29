@@ -45,10 +45,15 @@ const tst::set set("misc", [](tst::suite& suite){
                     <rect style="fill: hsl(120,42%,71%);" x="93" y="98.5" width="814" height="803"/>
                 <!-- /svg -->
             )qwertyuiop"sv;
+
+            bool thrown = false;
             try{
                 auto dom = svgdom::load(str);
                 tst::check(false, SL);
-            }catch(std::invalid_argument& e){}
+            }catch(std::invalid_argument& e){
+                thrown = true;
+            }
+            tst::check(thrown, SL);
         }
     );
 

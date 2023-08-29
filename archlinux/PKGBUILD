@@ -1,0 +1,62 @@
+# Maintainer: Ivan Gagis <igagis@gmail.com>
+
+pkgname=svgdom
+pkgver=$PACKAGE_VERSION
+pkgrel=1
+arch=('x86_64' 'armv7h' 'aarch64')
+epoch=
+pkgdesc="SVG DOM library in C++"
+url="http://github.com/cppfw/${pkgname}"
+license=('MIT')
+groups=()
+
+depends=(
+	"utki"
+	"mikroxml"
+	"cssom"
+	"r4"
+)
+
+makedepends=(
+	'myci'
+	'prorab'
+	'prorab-extra'
+	'doxygen'
+	"tst"
+	"clang" # for clang-tidy and clang-format
+)
+checkdepends=('myci')
+optdepends=()
+provides=()
+conflicts=()
+replaces=()
+backup=()
+options=()
+install=
+changelog=
+source=() # do not download any sources
+noextract=()
+md5sums=()
+validpgpkeys=()
+
+rootDir=$(pwd)/.. # project root directory
+
+prepare() {
+	cd "$rootDir"
+}
+
+build() {
+	cd "$rootDir"
+	# TODO: turn on lint when arch adopts more modern clang-tidy
+	make lint=off
+}
+
+check() {
+	cd "$rootDir"
+	make test
+}
+
+package() {
+	cd "$rootDir"
+	make DESTDIR="$pkgdir" PREFIX=/usr install
+}
