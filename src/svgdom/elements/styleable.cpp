@@ -1163,9 +1163,9 @@ style_value svgdom::parse_paint(std::string_view str)
 						}
 
 						// std::cout << "r = " << r << ", g = " << g << ", b = " << b << std::endl;
-						auto color = uint32_t(r * utki::byte_mask / std::centi::den)
-							| (uint32_t(g * utki::byte_mask / std::centi::den) << utki::byte_bits)
-							| (uint32_t(b * utki::byte_mask / std::centi::den) << (utki::byte_bits * 2));
+						auto color = uint32_t(r * utki::byte_mask / std::centi::den) |
+							(uint32_t(g * utki::byte_mask / std::centi::den) << utki::byte_bits) |
+							(uint32_t(b * utki::byte_mask / std::centi::den) << (utki::byte_bits * 2));
 						return {color};
 					}
 				// rgb() color values are given as absolute values

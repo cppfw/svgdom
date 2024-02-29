@@ -89,8 +89,6 @@ void stream_writer::write(const container* children, const std::string& content)
 
 std::string stream_writer::indent_str()
 {
-	std::string ind;
-
 	std::stringstream ss;
 	for (unsigned i = 0; i != this->indent; ++i) {
 		ss << "\t";
@@ -149,8 +147,8 @@ void stream_writer::add_view_boxed_attributes(const view_boxed& e)
 
 void stream_writer::add_aspect_ratioed_attributes(const aspect_ratioed& e)
 {
-	if (e.preserve_aspect_ratio.preserve != aspect_ratioed::aspect_ratio_preservation::none
-		|| e.preserve_aspect_ratio.defer || e.preserve_aspect_ratio.slice)
+	if (e.preserve_aspect_ratio.preserve != aspect_ratioed::aspect_ratio_preservation::none ||
+		e.preserve_aspect_ratio.defer || e.preserve_aspect_ratio.slice)
 	{
 		this->add_attribute("preserveAspectRatio", e.preserve_aspect_ratio.to_string());
 	}
@@ -481,8 +479,8 @@ void stream_writer::visit(const mask_element& e)
 		this->add_attribute("maskUnits", coordinate_units_to_string(e.mask_units));
 	}
 
-	if (e.mask_content_units != coordinate_units::user_space_on_use
-		&& e.mask_content_units != coordinate_units::unknown)
+	if (e.mask_content_units != coordinate_units::user_space_on_use &&
+		e.mask_content_units != coordinate_units::unknown)
 	{
 		this->add_attribute("maskContentUnits", coordinate_units_to_string(e.mask_content_units));
 	}

@@ -201,26 +201,26 @@ using style_value = std::variant<
 
 inline bool is_valid(const style_value& v)
 {
-	return !std::holds_alternative<style_value_special>(v)
-		|| *std::get_if<style_value_special>(&v) != style_value_special::unknown;
+	return !std::holds_alternative<style_value_special>(v) ||
+		*std::get_if<style_value_special>(&v) != style_value_special::unknown;
 }
 
 inline bool is_none(const style_value& v)
 {
-	return std::holds_alternative<style_value_special>(v)
-		&& *std::get_if<style_value_special>(&v) == style_value_special::none;
+	return std::holds_alternative<style_value_special>(v) &&
+		*std::get_if<style_value_special>(&v) == style_value_special::none;
 }
 
 inline bool is_inherit(const style_value& v)
 {
-	return std::holds_alternative<style_value_special>(v)
-		&& *std::get_if<style_value_special>(&v) == style_value_special::inherit;
+	return std::holds_alternative<style_value_special>(v) &&
+		*std::get_if<style_value_special>(&v) == style_value_special::inherit;
 }
 
 inline bool is_current_color(const style_value& v)
 {
-	return std::holds_alternative<style_value_special>(v)
-		&& *std::get_if<style_value_special>(&v) == style_value_special::current_color;
+	return std::holds_alternative<style_value_special>(v) &&
+		*std::get_if<style_value_special>(&v) == style_value_special::current_color;
 }
 
 /**
