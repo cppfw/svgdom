@@ -28,7 +28,7 @@ Description: cross-platform C++ library for reading SVG files.
 
 Package: libsvgdom$(soname)-dbgsrc
 Section: debug
-Architecture: any
+Architecture: all
 Depends: libsvgdom$(soname)-dbgsym (= ${binary:Version}), ${misc:Depends}
 Description: debugging sources for libsvgdom$(soname) package.
 
