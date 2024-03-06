@@ -12,6 +12,7 @@
 struct fixture{
 	std::unique_ptr<svgdom::svg_element> dom;
 	fixture(){
+		// NOLINTNEXTLINE(bugprone-unused-return-value, "false positive")
 		this->dom = svgdom::load(papki::fs_file("samples_data/finders.svg"));
 		tst::check(this->dom != nullptr, SL);
 		tst::check(this->dom->children.size() != 0, SL);

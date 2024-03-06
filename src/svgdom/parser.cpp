@@ -401,6 +401,7 @@ void parser::add_element(std::unique_ptr<element> e)
 		}
 
 		[[maybe_unused]] auto ptr = e.release();
+		// NOLINTNEXTLINE(bugprone-unused-return-value, "false positive")
 		this->svg = std::unique_ptr<svg_element>(c.pointer);
 	} else {
 		container_caster c;
