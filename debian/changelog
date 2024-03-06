@@ -1,3 +1,9 @@
+libsvgdom (0.4.13) unstable; urgency=medium
+
+  * build for debian bookworm
+
+ -- Ivan Gagis <igagis@gmail.com>  Wed, 06 Mar 2024 16:30:52 +0200
+
 libsvgdom (0.4.12) unstable; urgency=medium
 
   * aptian
