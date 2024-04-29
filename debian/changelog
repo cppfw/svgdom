@@ -1,3 +1,9 @@
+libsvgdom (0.4.14) unstable; urgency=medium
+
+  * update homebrew packaging
+
+ -- Ivan Gagis <igagis@gmail.com>  Mon, 29 Apr 2024 23:41:15 +0300
+
 libsvgdom (0.4.13) unstable; urgency=medium
 
   * build for debian bookworm
