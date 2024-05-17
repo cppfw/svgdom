@@ -1,3 +1,9 @@
+libsvgdom (0.4.15) unstable; urgency=medium
+
+  * update
+
+ -- Ivan Gagis <igagis@gmail.com>  Fri, 17 May 2024 22:19:20 +0300
+
 libsvgdom (0.4.14) unstable; urgency=medium
 
   * update homebrew packaging
