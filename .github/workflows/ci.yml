@@ -127,7 +127,7 @@ jobs:
       matrix:
         include:
           - {image: "archlinux:latest", arch: amd64}
-          - {image: "lopsided/archlinux-arm32v7:latest", arch: arm32, labels: [arm,docker]}
+          # - {image: "lopsided/archlinux-arm32v7:latest", arch: arm32, labels: [arm,docker]}
           - {image: "lopsided/archlinux-arm64v8:latest", arch: arm64, labels: [arm64,docker]}
     runs-on: ${{ (matrix.labels == '' && 'ubuntu-latest') || matrix.labels }}
     container: ${{ matrix.image }}
@@ -413,57 +413,57 @@ jobs:
           conan upload --check --remote cppfw $PACKAGE_NAME/$PACKAGE_VERSION@$MYCI_CONAN_USER/main
         if: startsWith(github.ref, 'refs/tags/')
 ##### conan - macosx #####
-  conan-macosx:
-    strategy:
-      fail-fast: false
-      matrix:
-        os:
-          # - macos-10.15
-          - macos-11
-          # - macos-12
-    name: conan - ${{ matrix.os }}
-    runs-on: ${{ matrix.os }}
-    steps:
-      - name: workaround python2 and python3 issue when upgrading python
-        run : |
-          rm -rf /usr/local/bin/2to3*
-          rm -rf /usr/local/bin/idle3*
-          rm -rf /usr/local/bin/pydoc3*
-          rm -rf /usr/local/bin/python3
-          rm -rf /usr/local/bin/python3-config
-          rm -rf /usr/local/bin/python3*
-          rm -rf /usr/local/bin/python3*-config
-      - name: git clone
-        uses: myci-actions/checkout@master
-      - name: install clang-tidy and clang-format
-        run: |
-          brew install llvm
-          ln -s "$(brew --prefix llvm)/bin/clang-format" "/usr/local/bin/clang-format"
-          ln -s "$(brew --prefix llvm)/bin/clang-tidy" "/usr/local/bin/clang-tidy"
-          ln -s "$(brew --prefix llvm)/bin/clang-apply-replacements" "/usr/local/bin/clang-apply-replacements"
-      - name: add cppfw tap
-        run: |
-          brew tap cppfw/tap
-          brew update
-      - name: install ci tools
-        run: brew install myci prorab prorab-extra conan make
-      - name: create default conan profile
-        run: |
-          conan profile detect --name default
-          sed -i -E "s/compiler.cppstd=.*$/compiler.cppstd=17/g" ~/.conan2/profiles/default
-      - name: set PATH
-        uses: myci-actions/export-env-var@master
-        with: {name: PATH, value: "/usr/local/opt/make/libexec/gnubin:$PATH"}
-      - name: set PACKAGE_VERSION
-        uses: myci-actions/export-env-var@master
-        with: {name: PACKAGE_VERSION, value: $(myci-deb-version.sh debian/changelog)}
-        if: startsWith(github.ref, 'refs/tags/')
-      - name: build
-        run: |
-          conan remote add cppfw $MYCI_CONAN_REMOTE
-          conan create conan --user $MYCI_CONAN_USER --channel main --version $PACKAGE_VERSION
-      - name: deploy conan package
-        run: |
-          conan remote login --password $MYCI_CONAN_PASSWORD cppfw $MYCI_CONAN_USER
-          conan upload --check --remote cppfw $PACKAGE_NAME/$PACKAGE_VERSION@$MYCI_CONAN_USER/main
-        if: startsWith(github.ref, 'refs/tags/')
+  # conan-macosx:
+  #   strategy:
+  #     fail-fast: false
+  #     matrix:
+  #       os:
+  #         # - macos-10.15
+  #         - macos-11
+  #         # - macos-12
+  #   name: conan - ${{ matrix.os }}
+  #   runs-on: ${{ matrix.os }}
+  #   steps:
+  #     - name: workaround python2 and python3 issue when upgrading python
+  #       run : |
+  #         rm -rf /usr/local/bin/2to3*
+  #         rm -rf /usr/local/bin/idle3*
+  #         rm -rf /usr/local/bin/pydoc3*
+  #         rm -rf /usr/local/bin/python3
+  #         rm -rf /usr/local/bin/python3-config
+  #         rm -rf /usr/local/bin/python3*
+  #         rm -rf /usr/local/bin/python3*-config
+  #     - name: git clone
+  #       uses: myci-actions/checkout@master
+  #     - name: install clang-tidy and clang-format
+  #       run: |
+  #         brew install llvm
+  #         ln -s "$(brew --prefix llvm)/bin/clang-format" "/usr/local/bin/clang-format"
+  #         ln -s "$(brew --prefix llvm)/bin/clang-tidy" "/usr/local/bin/clang-tidy"
+  #         ln -s "$(brew --prefix llvm)/bin/clang-apply-replacements" "/usr/local/bin/clang-apply-replacements"
+  #     - name: add cppfw tap
+  #       run: |
+  #         brew tap cppfw/tap
+  #         brew update
+  #     - name: install ci tools
+  #       run: brew install myci prorab prorab-extra conan make
+  #     - name: create default conan profile
+  #       run: |
+  #         conan profile detect --name default
+  #         sed -i -E "s/compiler.cppstd=.*$/compiler.cppstd=17/g" ~/.conan2/profiles/default
+  #     - name: set PATH
+  #       uses: myci-actions/export-env-var@master
+  #       with: {name: PATH, value: "/usr/local/opt/make/libexec/gnubin:$PATH"}
+  #     - name: set PACKAGE_VERSION
+  #       uses: myci-actions/export-env-var@master
+  #       with: {name: PACKAGE_VERSION, value: $(myci-deb-version.sh debian/changelog)}
+  #       if: startsWith(github.ref, 'refs/tags/')
+  #     - name: build
+  #       run: |
+  #         conan remote add cppfw $MYCI_CONAN_REMOTE
+  #         conan create conan --user $MYCI_CONAN_USER --channel main --version $PACKAGE_VERSION
+  #     - name: deploy conan package
+  #       run: |
+  #         conan remote login --password $MYCI_CONAN_PASSWORD cppfw $MYCI_CONAN_USER
+  #         conan upload --check --remote cppfw $PACKAGE_NAME/$PACKAGE_VERSION@$MYCI_CONAN_USER/main
+  #       if: startsWith(github.ref, 'refs/tags/')
