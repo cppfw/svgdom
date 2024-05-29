@@ -74,8 +74,8 @@ length length::parse(std::string_view str)
 
 real length::to_px(real dpi) const noexcept
 {
-	constexpr auto cm_per_inch = 2.54; // TODO: add to utki?
-	constexpr auto mm_per_inch = cm_per_inch * 10; // TODO: add to utki?
+	constexpr auto cm_per_inch = 2.54; // TODO: use constant from utki
+	constexpr auto mm_per_inch = cm_per_inch * 10; // TODO: use constant from utki
 	constexpr auto pt_per_inch = 72;
 	constexpr auto pc_per_inch = 6;
 
