@@ -74,8 +74,6 @@ length length::parse(std::string_view str)
 
 real length::to_px(real dpi) const noexcept
 {
-	constexpr auto cm_per_inch = 2.54; // TODO: use constant from utki
-	constexpr auto mm_per_inch = cm_per_inch * 10; // TODO: use constant from utki
 	constexpr auto pt_per_inch = 72;
 	constexpr auto pc_per_inch = 6;
 
@@ -88,9 +86,9 @@ real length::to_px(real dpi) const noexcept
 		case svgdom::length_unit::in:
 			return std::ceil(this->value * dpi);
 		case svgdom::length_unit::cm:
-			return std::ceil(this->value * (dpi / real(cm_per_inch)));
+			return std::ceil(this->value * (dpi / real(utki::cm_per_inch)));
 		case svgdom::length_unit::mm:
-			return std::ceil(this->value * (dpi / real(mm_per_inch)));
+			return std::ceil(this->value * (dpi / real(utki::mm_per_inch)));
 		case svgdom::length_unit::pt:
 			return std::ceil(this->value * (dpi / real(pt_per_inch)));
 		case svgdom::length_unit::pc:
