@@ -2,17 +2,17 @@
 	<defs>
 		<style>
 			<![CDATA[
-			.cls-1, .cls-3 {
-				fill: none; 
+			.cls-4 {
+				fill-rule: evenodd; 
 			}
 			.cls-2, .cls-4 {
 				fill: #47506a; 
 			}
+			.cls-1, .cls-3 {
+				fill: none; 
+			}
 			.cls-3 {
 				stroke: #3866f0; stroke-width: 4px; 
-			}
-			.cls-4 {
-				fill-rule: evenodd; 
 			}
 			]]>
 		</style>

@@ -122,6 +122,7 @@ decltype(transformable::transformations) transformable::parse(std::string_view s
 
 			if (p.read_char() != '(') {
 				//			TRACE(<< "error: expected '('" << std::endl)
+				// TODO: throw invalid argument
 				return ret; // expected (
 			}
 
