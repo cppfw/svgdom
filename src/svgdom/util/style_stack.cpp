@@ -135,7 +135,9 @@ const style_value* style_stack::get_css_style_property(size_t stack_depth, style
 	crawler c(utki::make_span(this->stack).subspan(0, stack_depth));
 	uint32_t specificity = 0;
 	const style_value* ret = nullptr;
-	for (auto& ss : this->css) {
+
+	// later added CSSes override earlier ones, so go through them in reverse order
+	for (auto& ss : utki::reverse_range(this->css)) {
 		auto r = ss.get().get_property_value(c, uint32_t(p));
 		if (!r.value) {
 			continue;
