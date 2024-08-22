@@ -1,6 +1,6 @@
 #include <utki/config.hpp>
 
-#if CFG_COMPILER != CFG_COMPILER_MSVC || CFG_COMPILER_MSVC_TOOLS_V >= 142
+#if CFG_COMPILER != CFG_COMPILER_MSVC
 
 #include <tst/set.hpp>
 #include <tst/check.hpp>
