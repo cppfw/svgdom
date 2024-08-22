@@ -311,7 +311,7 @@ struct styleable : public cssom::styleable {
 
 	static style_value parse_style_property_value(style_property type, std::string_view str);
 
-	static bool is_inherited(style_property p);
+	static bool is_inheritable(style_property p);
 
 	static std::string_view property_to_string(style_property p);
 	static style_property string_to_property(std::string_view str);

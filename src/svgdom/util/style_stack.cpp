@@ -28,6 +28,7 @@ SOFTWARE.
 #include "style_stack.hpp"
 
 #include <utki/debug.hpp>
+#include <utki/util.hpp>
 
 #include "casters.hpp"
 
@@ -75,14 +76,17 @@ const svgdom::style_value* style_stack::get_style_property(svgdom::style_propert
 {
 	bool explicit_inherit = false;
 
-	for (auto i = this->stack.rbegin(); i != this->stack.rend(); ++i) {
-		auto v = i->get().get_style_property(p);
+	for (const auto& styleable_ref : utki::reverse_range(this->stack)) {
+		const auto& s = styleable_ref.get();
+		auto v = s.get_style_property(p);
 		if (!v) {
 			v = this->get_css_style_property(p);
 			if (!v) {
-				v = i->get().get_presentation_attribute(p);
+				// Presentation attributes have lower priority than other styling (style attribute/CSS).
+				// See https://www.w3.org/TR/SVG11/styling.html#UsingPresentationAttributes
+				v = s.get_presentation_attribute(p);
 				if (!v) {
-					if (!explicit_inherit && !svgdom::styleable::is_inherited(p)) {
+					if (!explicit_inherit && !svgdom::styleable::is_inheritable(p)) {
 						return nullptr;
 					}
 					continue;
@@ -119,7 +123,7 @@ void style_stack::add_css(const cssom::sheet& css_doc)
 const style_value* style_stack::get_css_style_property(style_property p) const
 {
 	crawler c(this->stack);
-	unsigned specificity = 0;
+	uint32_t specificity = 0;
 	const style_value* ret = nullptr;
 	for (auto& ss : this->css) {
 		auto r = ss.get().get_property_value(c, uint32_t(p));

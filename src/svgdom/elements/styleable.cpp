@@ -440,7 +440,7 @@ decltype(styleable::styles) styleable::parse(const std::string& str)
 }
 
 namespace {
-const std::set<style_property> non_inherited_style_properties = {
+const std::set<style_property> non_inheritable_style_properties = {
 	style_property::alignment_baseline,
 	style_property::baseline_shift,
 	style_property::clip,
@@ -462,9 +462,9 @@ const std::set<style_property> non_inherited_style_properties = {
 };
 } // namespace
 
-bool styleable::is_inherited(style_property p)
+bool styleable::is_inheritable(style_property p)
 {
-	return non_inherited_style_properties.find(p) == non_inherited_style_properties.end();
+	return non_inheritable_style_properties.find(p) == non_inheritable_style_properties.end();
 }
 
 namespace {
