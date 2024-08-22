@@ -74,13 +74,23 @@ void style_stack::crawler::reset()
 
 const svgdom::style_value* style_stack::get_style_property(svgdom::style_property p) const
 {
+	// INFO: some guide to styling priority, not a spec.
+	//       https://vecta.io/blog/definitive-guide-to-css-styling-order
+
 	bool explicit_inherit = false;
 
+	size_t stack_depth = this->stack.size();
+
 	for (const auto& styleable_ref : utki::reverse_range(this->stack)) {
+		utki::scope_exit satck_depth_decrement([&]() {
+			ASSERT(stack_depth > 0)
+			--stack_depth;
+		});
+
 		const auto& s = styleable_ref.get();
 		auto v = s.get_style_property(p);
 		if (!v) {
-			v = this->get_css_style_property(p);
+			v = this->get_css_style_property(stack_depth, p);
 			if (!v) {
 				// Presentation attributes have lower priority than other styling (style attribute/CSS).
 				// See https://www.w3.org/TR/SVG11/styling.html#UsingPresentationAttributes
@@ -120,9 +130,9 @@ void style_stack::add_css(const cssom::sheet& css_doc)
 	this->css.emplace_back(css_doc);
 }
 
-const style_value* style_stack::get_css_style_property(style_property p) const
+const style_value* style_stack::get_css_style_property(size_t stack_depth, style_property p) const
 {
-	crawler c(this->stack);
+	crawler c(utki::make_span(this->stack).subspan(0, stack_depth));
 	uint32_t specificity = 0;
 	const style_value* ret = nullptr;
 	for (auto& ss : this->css) {

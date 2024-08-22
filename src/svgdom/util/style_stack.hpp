@@ -45,9 +45,9 @@ private:
 
 	class crawler : public cssom::xml_dom_crawler
 	{
-		const decltype(style_stack::stack)& stack;
+		utki::span<const decltype(style_stack::stack)::value_type> stack;
 
-		std::remove_reference<decltype(stack)>::type::const_reverse_iterator iter;
+		decltype(stack)::reverse_iterator iter;
 
 	public:
 		crawler(decltype(stack) stack);
@@ -59,7 +59,7 @@ private:
 		void reset() override;
 	};
 
-	const svgdom::style_value* get_css_style_property(svgdom::style_property p) const;
+	const svgdom::style_value* get_css_style_property(size_t stack_depth, svgdom::style_property p) const;
 
 public:
 	const svgdom::style_value* get_style_property(svgdom::style_property p) const;
