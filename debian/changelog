@@ -1,3 +1,9 @@
+libsvgdom (0.4.19) unstable; urgency=medium
+
+  * fix CSS property inheritance
+
+ -- Ivan Gagis <igagis@gmail.com>  Thu, 22 Aug 2024 15:50:29 +0300
+
 libsvgdom (0.4.18) unstable; urgency=medium
 
   * deb: fix dbgsrc package
