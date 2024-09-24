@@ -13,6 +13,60 @@ env:
   MYCI_CONAN_USER: cppfw
   MYCI_CONAN_PASSWORD: ${{ secrets.MYCI_CONAN_PASSWORD }}
 jobs:
+##### coverage #####
+  coverage:
+    runs-on: ubuntu-latest
+    container: debian:bookworm
+    name: coverage - measure
+    env:
+      linux_distro: debian
+      linux_release: bookworm
+    steps:
+      - name: add cppfw deb repo
+        uses: myci-actions/add-deb-repo@master
+        with:
+          repo: deb https://gagis.hopto.org/repo/cppfw/${{ env.linux_distro }} ${{ env.linux_release }} main
+          repo-name: cppfw
+          keys-asc: https://gagis.hopto.org/repo/cppfw/pubkey.gpg
+          install: myci locales git pipx
+      - name: add llvm repo (for clang-format)
+        uses: myci-actions/add-deb-repo@master
+        with:
+          repo: deb http://apt.llvm.org/${{ env.linux_release }} llvm-toolchain-${{ env.linux_release }} main
+          repo-name: llvm
+          keys-asc: https://apt.llvm.org/llvm-snapshot.gpg.key
+      - name: git clone
+        uses: myci-actions/checkout@master
+      - name: prepare debian package
+        run: myci-deb-prepare.sh
+      - name: install deps
+        run: myci-deb-install-build-deps.sh
+      - name: add DE locale
+        # needed for testing that locale with "," as decimal delimiter does not break the parsing with string_parser
+        run: |
+          echo "de_DE.UTF-8 UTF-8" >> /etc/locale.gen
+          locale-gen
+      - name: build
+        run: make config=gcov
+      - name: test
+        run: make config=gcov test
+      - name: generate coverage report
+        run: pipx run gcovr --gcov-ignore-parse-errors --exclude-throw-branches --filter src/ --cobertura > cobertura.xml
+      - name: upload coverage report to artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: cobertura.xml
+          path: cobertura.xml
+      - name: upload coverage data to codecov.io
+        uses: codecov/codecov-action@v4
+        if: always() # even if previous steps fail, this one needs to be run
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: cobertura.xml
+          # flags: unittests # optional
+          name: codecov-umbrella # optional
+          fail_ci_if_error: true # optional (default = false)
+          verbose: true # optional (default = false)
 ##### sanitizer #####
   sanitizer:
     strategy:
