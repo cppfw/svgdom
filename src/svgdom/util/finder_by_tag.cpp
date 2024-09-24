@@ -76,12 +76,12 @@ finder_by_tag::finder_by_tag(const svgdom::element& root) :
 utki::span<const svgdom::element* const> finder_by_tag::find(std::string_view tag_name) const noexcept
 {
 	if (tag_name.length() == 0) {
-		return nullptr;
+		return {};
 	}
 
 	auto i = this->cache.find(tag_name);
 	if (i == this->cache.end()) {
-		return nullptr;
+		return {};
 	}
 
 	return utki::make_span(i->second);
