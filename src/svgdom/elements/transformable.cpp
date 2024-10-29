@@ -202,7 +202,7 @@ decltype(transformable::transformations) transformable::parse(std::string_view s
 	{
 		LOG([&](auto& o) {
 			o << "WARNING: transformable::parse(): std::invalid_argument exception caught, ignored." << '\n'
-			  << "e.what() = " << e.what();
+			  << "e.what() = " << e.what() << std::endl;
 		})
 		// ignore
 	}
