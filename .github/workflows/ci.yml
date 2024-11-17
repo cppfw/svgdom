@@ -451,7 +451,7 @@ jobs:
           keys-asc: https://gagis.hopto.org/repo/cppfw/pubkey.gpg
           install: devscripts equivs myci prorab prorab-extra pipx cmake git
       - name: add ~/.local/bin to PATH
-        uses: myci-actions/export-env-var@master
+        uses: myci-actions/export-env-var@main
         with: {name: PATH, value: "$PATH:$HOME/.local/bin"}
       - name: install conan
         run: pipx install conan
