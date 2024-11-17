@@ -81,7 +81,7 @@ const svgdom::style_value* style_stack::get_style_property(svgdom::style_propert
 
 	size_t stack_depth = this->stack.size();
 
-	for (const auto& styleable_ref : utki::reverse_range(this->stack)) {
+	for (const auto& styleable_ref : utki::views::reverse(this->stack)) {
 		utki::scope_exit satck_depth_decrement([&]() {
 			ASSERT(stack_depth > 0)
 			--stack_depth;
@@ -137,7 +137,7 @@ const style_value* style_stack::get_css_style_property(size_t stack_depth, style
 	const style_value* ret = nullptr;
 
 	// later added CSSes override earlier ones, so go through them in reverse order
-	for (auto& ss : utki::reverse_range(this->css)) {
+	for (auto& ss : utki::views::reverse(this->css)) {
 		auto r = ss.get().get_property_value(c, uint32_t(p));
 		if (!r.value) {
 			continue;
