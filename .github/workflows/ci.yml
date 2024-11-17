@@ -427,13 +427,14 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - {os: ubuntu, codename: jammy, image_owner: , arch: x86_64}
-          # - {os: debian, codename: bullseye, image_owner: , arch: x86_64}
-          # - {os: debian, codename: bullseye, image_owner: i386/, arch: x86, labels: [i386,docker]}
-          # - {os: debian, codename: bullseye, image_owner: arm32v7/, arch: armhf, labels: [arm32,docker]}
+          # - {os: ubuntu, codename: jammy, image_owner: }
+          - {os: debian, codename: bookworm, image_owner: }
+          # - {os: debian, codename: bookworm, image_owner: i386/, labels: [i386,docker]}
+          - {os: debian, codename: bookworm, image_owner: , labels: [arm32,docker]}
+          - {os: debian, codename: bookworm, image_owner: , labels: [arm64,docker]}
     runs-on: ${{ (matrix.labels == '' && 'ubuntu-latest') || matrix.labels }}
     container: ${{ matrix.image_owner }}${{ matrix.os }}:${{ matrix.codename }}
-    name: conan - linux - ${{ matrix.arch }}
+    name: conan - linux | ${{ matrix.labels[0] }}
     steps:
       - name: add llvm repo (for clang-format)
         uses: myci-actions/add-deb-repo@main
@@ -448,9 +449,12 @@ jobs:
           repo: deb https://gagis.hopto.org/repo/cppfw/${{ matrix.os }} ${{ matrix.codename }} main
           repo-name: cppfw
           keys-asc: https://gagis.hopto.org/repo/cppfw/pubkey.gpg
-          install: devscripts equivs myci prorab prorab-extra python3-pip cmake git
+          install: devscripts equivs myci prorab prorab-extra pipx cmake git
+      - name: add ~/.local/bin to PATH
+        uses: myci-actions/export-env-var@master
+        with: {name: PATH, value: "$PATH:$HOME/.local/bin"}
       - name: install conan
-        run: pip3 --quiet install conan
+        run: pipx install conan
       - name: create default conan profile
         run: |
           conan profile detect --name default
