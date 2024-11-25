@@ -1,3 +1,9 @@
+libsvgdom (0.4.24) unstable; urgency=medium
+
+  * vcpkgize
+
+ -- Ivan Gagis <igagis@gmail.com>  Mon, 25 Nov 2024 23:39:15 +0200
+
 libsvgdom (0.4.23) unstable; urgency=medium
 
   * conan: rebuild
