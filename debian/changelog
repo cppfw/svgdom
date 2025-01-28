@@ -1,3 +1,9 @@
+libsvgdom (0.4.26) unstable; urgency=medium
+
+  * emscripten
+
+ -- Ivan Gagis <igagis@gmail.com>  Tue, 28 Jan 2025 21:00:29 +0200
+
 libsvgdom (0.4.25) unstable; urgency=medium
 
   * conan: macos
