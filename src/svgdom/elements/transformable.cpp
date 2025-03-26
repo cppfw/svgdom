@@ -194,9 +194,10 @@ decltype(transformable::transformations) transformable::parse(std::string_view s
 			p.skip_whitespaces_and_comma();
 		}
 		// NOLINTNEXTLINE(bugprone-empty-catch)
-	} catch (std::invalid_argument&
+	} catch (
+		std::invalid_argument&
 #ifdef DEBUG
-				 e
+			e
 #endif
 	)
 	{

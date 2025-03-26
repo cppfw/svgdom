@@ -50,7 +50,7 @@ const tst::set set("samples", [](tst::suite& suite){
             
             papki::vector_file out_file;
             {
-                papki::file::guard file_guard(out_file, papki::file::mode::create);
+                papki::file::guard file_guard(out_file, papki::mode::create);
                 out_file.write(utki::make_span(str));
             }
             
@@ -70,7 +70,7 @@ const tst::set set("samples", [](tst::suite& suite){
                 papki::fs_file failed_file(in_file_name + ".out");
 
                 {
-                    papki::file::guard file_guard(failed_file, papki::file::mode::create);
+                    papki::file::guard file_guard(failed_file, papki::mode::create);
                     failed_file.write(out_data);
                 }
 
