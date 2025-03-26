@@ -1,3 +1,9 @@
+libsvgdom (0.4.27) unstable; urgency=medium
+
+  * update
+
+ -- Ivan Gagis <igagis@gmail.com>  Wed, 26 Mar 2025 13:44:00 +0200
+
 libsvgdom (0.4.26) unstable; urgency=medium
 
   * emscripten
