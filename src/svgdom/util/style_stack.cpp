@@ -29,6 +29,7 @@ SOFTWARE.
 
 #include <utki/debug.hpp>
 #include <utki/util.hpp>
+#include <utki/views.hpp>
 
 #include "casters.hpp"
 
