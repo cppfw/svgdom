@@ -301,13 +301,16 @@ void parser::fill_rectangle(rectangle& r, const rectangle& default_values)
 
 void parser::fill_referencing(referencing& e)
 {
-	auto a = this->find_attribute_of_namespace(xml_namespace::xlink, "href");
+	auto a = this->find_attribute_of_namespace(
+		xml_namespace::xlink, //
+		"href"
+	);
 	if (!a) {
+		// In some SVG documents the svg namespace is used instead of xlink, though this is against SVG spec we allow to do so.
 		a = this->find_attribute_of_namespace(
-			xml_namespace::svg,
+			xml_namespace::svg, //
 			"href"
-		); // in some SVG documents the svg namespace is used instead of xlink, though this is against SVG spec we allow
-		   // to do so.
+		);
 	}
 	if (a) {
 		e.iri = *a;
