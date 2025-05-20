@@ -7,6 +7,8 @@ project(${name})
 # Otherwise VCPKG does not set the CMAKE_PREFIX_PATH to find packages.
 find_package(myci CONFIG REQUIRED)
 
+find_package(ZLIB REQUIRED)
+
 set(srcs)
 myci_add_source_files(srcs
     DIRECTORY
@@ -28,5 +30,5 @@ myci_declare_library(${name}
         mikroxml
         cssom
     EXTERNAL_DEPENDENCIES
-        ZLIB
+        ZLIB::ZLIB
 )
