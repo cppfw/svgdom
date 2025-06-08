@@ -1,11 +1,5 @@
 svgdom provides CMake targets:
 
-find_package(utki CONFIG REQUIRED)
-find_package(ZLIB REQUIRED)
-find_package(papki CONFIG REQUIRED)
-find_package(cssom CONFIG REQUIRED)
-find_package(mikroxml CONFIG REQUIRED)
-find_package(r4 CONFIG REQUIRED)
 find_package(svgdom CONFIG REQUIRED)
 
 target_link_libraries(main PRIVATE svgdom::svgdom)
