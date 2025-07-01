@@ -1,3 +1,9 @@
+libsvgdom (0.4.32) unstable; urgency=medium
+
+  * add debian dbg package
+
+ -- Ivan Gagis <igagis@gmail.com>  Wed, 02 Jul 2025 01:27:18 +0300
+
 libsvgdom (0.4.31) unstable; urgency=medium
 
   * cmake: config transient deps
