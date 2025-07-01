@@ -1,0 +1,69 @@
+Source: libsvgdom
+Section: libs
+Priority: extra
+Maintainer: Ivan Gagis <igagis@gmail.com>
+Build-Depends:
+	debhelper (>= 9),
+	prorab,
+	prorab-extra,
+	myci,
+	clang-tidy,
+	clang-format,
+	libc6-dev,
+	libutki-dev (>= 1.1.150),
+	libpapki-dev,
+	libmikroxml-dev,
+	libcssom-dev (>= 0.1.19),
+	libr4-dev,
+	libtst-dev
+Build-Depends-Indep: doxygen
+Standards-Version: 3.9.2
+
+Package: libsvgdom$(soname)
+Section: libs
+Architecture: any
+Depends:
+	${shlibs:Depends},
+	${misc:Depends}
+Description: cross-platform C++ library for reading SVG files.
+	SVG document object model library.
+
+Package: libsvgdom-dbg$(soname)
+Section: libs
+Architecture: any
+Depends:
+	${shlibs:Depends},
+	${misc:Depends}
+Description: cross-platform C++ library for reading SVG files.
+	Debug Version of libsvgdom.
+
+Package: libsvgdom$(soname)-dbgsrc
+Section: debug
+Architecture: all
+Depends:
+	libsvgdom$(soname)-dbgsym (= ${binary:Version}),
+	libsvgdom-dbg$(soname)-dbgsym (= ${binary:Version}),
+	${misc:Depends}
+Description: debugging sources for libsvgdom$(soname) package.
+
+Package: libsvgdom-dev
+Section: libdevel
+Architecture: any
+Depends:
+	libsvgdom$(soname) (= ${binary:Version}),
+	libsvgdom-dbg$(soname) (= ${binary:Version}),
+	${misc:Depends},
+	libutki-dev,
+	libpapki-dev,
+	libcssom-dev,
+	libr4-dev
+Suggests: libsvgdom-doc
+Description: cross-platform C++ library for reading SVG files.
+	SVG document object model library.
+
+Package: libsvgdom-doc
+Section: doc
+Architecture: all
+Depends: ${misc:Depends}
+Description: documentation for libsvgdom - SVG DOM library.
+	For more details see description to libsvgdom-dev package.
