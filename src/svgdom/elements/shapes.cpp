@@ -240,19 +240,12 @@ decltype(path_element::path) path_element::parse(std::string_view str)
 
 			p.skip_whitespaces_and_comma();
 		}
-		// NOLINTNEXTLINE(bugprone-empty-catch)
-	} catch (
-		std::invalid_argument&
-#ifdef DEBUG
-			e
-#endif
-	)
-	{
-		LOG([&](auto& o) {
+	} catch (std::invalid_argument& e) {
+		utki::log_debug([&](auto& o) {
 			o << "WARNING: path_element::parse(): std::invalid_argument exception caught, ignored." << '\n'
-			  << "e.what() = " << e.what() << std::endl;
-		})
-		// ignore
+			  << "  e.what() = " << e.what() << std::endl;
+		});
+		// ignore the exception
 	}
 
 	return ret;
@@ -477,19 +470,12 @@ decltype(polyline_shape::points) polyline_shape::parse(std::string_view s)
 
 			p.skip_whitespaces_and_comma();
 		}
-		// NOLINTNEXTLINE(bugprone-empty-catch)
-	} catch (
-		std::invalid_argument&
-#ifdef DEBUG
-			e
-#endif
-	)
-	{
-		LOG([&](auto& o) {
+	} catch (std::invalid_argument& e) {
+		utki::log_debug([&](auto& o) {
 			o << "WARNING: polyline_shape::parse(): std::invalid_argument exception caught, ignored." << '\n'
-			  << "e.what() = " << e.what() << std::endl;
-		})
-		// ignore
+			  << "  e.what() = " << e.what() << std::endl;
+		});
+		// ignore the exception
 	}
 
 	return ret;

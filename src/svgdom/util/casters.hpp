@@ -170,15 +170,23 @@ public:
 		this->pointer = &e;
 	}
 
-	void visit(
-		typename std::conditional_t<is_const, const linear_gradient_element&, linear_gradient_element&> e
+	void visit( //
+		typename std::conditional_t<
+			is_const,
+			const linear_gradient_element&, //
+			linear_gradient_element& //
+			> e //
 	) override
 	{
 		this->pointer = &e;
 	}
 
-	void visit(
-		typename std::conditional_t<is_const, const radial_gradient_element&, radial_gradient_element&> e
+	void visit( //
+		typename std::conditional_t<
+			is_const,
+			const radial_gradient_element&, //
+			radial_gradient_element& //
+			> e //
 	) override
 	{
 		this->pointer = &e;
@@ -189,15 +197,23 @@ public:
 		this->pointer = &e;
 	}
 
-	void visit(
-		typename std::conditional_t<is_const, const fe_gaussian_blur_element&, fe_gaussian_blur_element&> e
+	void visit( //
+		typename std::conditional_t<
+			is_const,
+			const fe_gaussian_blur_element&, //
+			fe_gaussian_blur_element& //
+			> e //
 	) override
 	{
 		this->pointer = &e;
 	}
 
-	void visit(
-		typename std::conditional_t<is_const, const fe_color_matrix_element&, fe_color_matrix_element&> e
+	void visit( //
+		typename std::conditional_t<
+			is_const,
+			const fe_color_matrix_element&, //
+			fe_color_matrix_element& //
+			> e //
 	) override
 	{
 		this->pointer = &e;

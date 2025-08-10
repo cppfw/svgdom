@@ -1026,23 +1026,21 @@ public:
 
 	void visit(style_element& e) override
 	{
-		e.css.append(
-			cssom::read(
-				papki::span_file(this->content),
-				[](std::string_view name) -> uint32_t {
-					return uint32_t(styleable::string_to_property(name));
-				},
-				[](uint32_t id, std::string_view v) -> std::unique_ptr<cssom::property_value_base> {
-					auto sp = style_property(id);
-					if (sp == style_property::unknown) {
-						return nullptr;
-					}
-					auto ret = std::make_unique<style_element::css_style_value>();
-					ret->value = styleable::parse_style_property_value(sp, v);
-					return ret;
+		e.css.append(cssom::read(
+			papki::span_file(this->content),
+			[](std::string_view name) -> uint32_t {
+				return uint32_t(styleable::string_to_property(name));
+			},
+			[](uint32_t id, std::string_view v) -> std::unique_ptr<cssom::property_value_base> {
+				auto sp = style_property(id);
+				if (sp == style_property::unknown) {
+					return nullptr;
 				}
-			)
-		);
+				auto ret = std::make_unique<style_element::css_style_value>();
+				ret->value = styleable::parse_style_property_value(sp, v);
+				return ret;
+			}
+		));
 	}
 };
 } // namespace
