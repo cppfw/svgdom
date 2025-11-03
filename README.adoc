@@ -10,4 +10,4 @@ SVG document object model library in C++.
 
 = Installation
 
-Please, see link:wiki/Main.adoc[WiKi] for installation instructions.
+Please, see link:wiki/main.adoc[WiKi] for installation instructions.
