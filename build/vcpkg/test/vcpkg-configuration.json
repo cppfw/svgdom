@@ -13,7 +13,7 @@
         "packages": [
           "myci",
           "utki",
-          "papki",
+          "fsif",
           "mikroxml",
           "cssom",
           "r4"

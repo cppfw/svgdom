@@ -27,7 +27,7 @@ SOFTWARE.
 
 #pragma once
 
-#include <papki/file.hpp>
+#include <fsif/file.hpp>
 #include <utki/config.hpp>
 
 #include "elements/structurals.hpp"
@@ -40,7 +40,7 @@ namespace svgdom {
  * @param f - file interface to load SVG from.
  * @return unique pointer to the root of SVG document tree.
  */
-std::unique_ptr<svg_element> load(const papki::file& f);
+std::unique_ptr<svg_element> load(const fsif::file& f);
 
 /**
  * @brief Load SVG document.

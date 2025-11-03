@@ -23,7 +23,7 @@ myci_declare_library(${name}
         ../../src/${name}
     DEPENDENCIES
         utki
-        papki
+        fsif
         r4
         mikroxml
         cssom

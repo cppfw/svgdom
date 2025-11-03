@@ -11,7 +11,7 @@ class Libsvgdom < Formula
   depends_on "libtst" => :build
   depends_on "libmikroxml"
   depends_on "libcssom"
-  depends_on "libpapki"
+  depends_on "libfsif"
   depends_on "libutki"
   depends_on "libr4"
 

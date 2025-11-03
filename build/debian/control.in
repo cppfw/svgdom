@@ -11,7 +11,7 @@ Build-Depends:
 	clang-format,
 	libc6-dev,
 	libutki-dev (>= 1.1.150),
-	libpapki-dev,
+	libfsif-dev,
 	libmikroxml-dev,
 	libcssom-dev (>= 0.1.19),
 	libr4-dev,
@@ -54,7 +54,7 @@ Depends:
 	libsvgdom-dbg$(soname) (= ${binary:Version}),
 	${misc:Depends},
 	libutki-dev,
-	libpapki-dev,
+	libfsif-dev,
 	libcssom-dev,
 	libr4-dev
 Suggests: libsvgdom-doc

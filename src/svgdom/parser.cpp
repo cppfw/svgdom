@@ -30,7 +30,7 @@ SOFTWARE.
 #include <ratio>
 #include <string_view>
 
-#include <papki/span_file.hpp>
+#include <fsif/span_file.hpp>
 #include <utki/debug.hpp>
 #include <utki/string.hpp>
 #include <utki/util.hpp>
@@ -1027,7 +1027,7 @@ public:
 	void visit(style_element& e) override
 	{
 		e.css.append(cssom::read(
-			papki::span_file(this->content),
+			fsif::span_file(this->content),
 			[](std::string_view name) -> uint32_t {
 				return uint32_t(styleable::string_to_property(name));
 			},

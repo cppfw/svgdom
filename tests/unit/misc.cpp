@@ -3,7 +3,7 @@
 
 #include <fstream>
 
-#include <papki/fs_file.hpp>
+#include <fsif/native_file.hpp>
 
 #include <svgdom/dom.hpp>
 #include <svgdom/util/style_stack.hpp>
@@ -27,9 +27,9 @@ const tst::set set("misc", [](tst::suite& suite){
     );
 
     suite.add(
-        "read_from_fs_file",
+        "read_from_native_file",
         [](){
-            auto dom = svgdom::load(papki::fs_file("samples_data/tiger.svg"));
+            auto dom = svgdom::load(fsif::native_file("samples_data/tiger.svg"));
             tst::check(dom, SL);
         }
     );

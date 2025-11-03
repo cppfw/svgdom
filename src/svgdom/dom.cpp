@@ -32,12 +32,12 @@ SOFTWARE.
 
 using namespace svgdom;
 
-std::unique_ptr<svg_element> svgdom::load(const papki::file& f)
+std::unique_ptr<svg_element> svgdom::load(const fsif::file& f)
 {
 	svgdom::parser parser;
 
 	{
-		papki::file::guard file_guard(f);
+		fsif::file::guard file_guard(f);
 
 		// NOLINTNEXTLINE(cppcoreguidelines-pro-type-member-init)
 		std::array<uint8_t, size_t(utki::kilobyte) * 4> buf;

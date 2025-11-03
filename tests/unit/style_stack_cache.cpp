@@ -2,7 +2,7 @@
 #include <tst/check.hpp>
 
 #include <utki/time.hpp>
-#include <papki/fs_file.hpp>
+#include <fsif/native_file.hpp>
 
 #include "../../src/svgdom/dom.hpp"
 #include "../../src/svgdom/visitor.hpp"
@@ -15,7 +15,7 @@ const tst::set set("style_stack_cache", [](auto& suite){
 			[](){
 				auto load_start = utki::get_ticks_ms();
 	
-				auto dom = svgdom::load(papki::fs_file("samples_data/back.svg"));
+				auto dom = svgdom::load(fsif::native_file("samples_data/back.svg"));
 
 				tst::check(dom != nullptr, SL);
 				tst::check(dom->children.size() != 0, SL);

@@ -14,7 +14,7 @@ this_soname := $(shell cat $(d)soname.txt)
 this_srcs := $(call prorab-src-dir, $(this_src_dir))
 
 this_ldlibs += -l cssom$(this_dbg)
-this_ldlibs += -l papki$(this_dbg)
+this_ldlibs += -l fsif$(this_dbg)
 this_ldlibs += -l mikroxml$(this_dbg)
 this_ldlibs += -l utki$(this_dbg)
 this_ldlibs += -l m

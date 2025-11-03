@@ -2,7 +2,7 @@
 #include <tst/check.hpp>
 
 #include <utki/time.hpp>
-#include <papki/fs_file.hpp>
+#include <fsif/native_file.hpp>
 
 #include "../../src/svgdom/dom.hpp"
 
@@ -11,7 +11,7 @@ const tst::set set("performance", [](auto& suite){
 	suite.add("basic_test", [](){
 		auto load_start = utki::get_ticks_ms();
 	
-		auto buf = papki::fs_file("samples_data/back.svg").load();
+		auto buf = fsif::native_file("samples_data/back.svg").load();
 		
 		utki::log([&](auto&o){o << "SVG loaded in " << float(utki::get_ticks_ms() - load_start) / 1000.0f << " sec." << std::endl;});
 		

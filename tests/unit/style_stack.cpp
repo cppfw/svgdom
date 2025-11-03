@@ -1,7 +1,7 @@
 #include <tst/set.hpp>
 #include <tst/check.hpp>
 
-#include <papki/span_file.hpp>
+#include <fsif/span_file.hpp>
 
 #include "../../src/svgdom/visitor.hpp"
 #include "../../src/svgdom/util/style_stack.hpp"
@@ -142,7 +142,7 @@ public:
 namespace{
 const tst::set set("style_stack", [](auto& suite){
 	suite.add("basic_test", [](){
-		auto dom = svgdom::load(papki::span_file(utki::make_span(svg)));
+		auto dom = svgdom::load(fsif::span_file(utki::make_span(svg)));
 		utki::assert(dom, SL);
 		utki::assert(dom->children.size() != 0, SL);
 		

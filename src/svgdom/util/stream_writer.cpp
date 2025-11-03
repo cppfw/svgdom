@@ -27,7 +27,7 @@ SOFTWARE.
 
 #include "stream_writer.hpp"
 
-#include <papki/vector_file.hpp>
+#include <fsif/vector_file.hpp>
 #include <utki/string.hpp>
 #include <utki/util.hpp>
 
@@ -504,7 +504,7 @@ void stream_writer::visit(const style_element& e)
 	auto ind = this->indent_str();
 	--this->indent;
 
-	papki::vector_file fi;
+	fsif::vector_file fi;
 	e.css.write(
 		fi,
 		[](uint32_t id) -> std::string {

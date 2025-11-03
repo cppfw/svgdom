@@ -1,7 +1,7 @@
 #include <tst/set.hpp>
 #include <tst/check.hpp>
 
-#include <papki/fs_file.hpp>
+#include <fsif/native_file.hpp>
 
 #include "../../src/svgdom/dom.hpp"
 #include "../../src/svgdom/util/finder_by_id.hpp"
@@ -13,7 +13,7 @@ struct fixture{
 	std::unique_ptr<svgdom::svg_element> dom;
 	fixture(){
 		// NOLINTNEXTLINE(bugprone-unused-return-value, "false positive")
-		this->dom = svgdom::load(papki::fs_file("samples_data/finders.svg"));
+		this->dom = svgdom::load(fsif::native_file("samples_data/finders.svg"));
 		tst::check(this->dom != nullptr, SL);
 		tst::check(this->dom->children.size() != 0, SL);
 	}
