@@ -902,8 +902,6 @@ std::string svgdom::color_interpolation_filters_to_string(const style_value& v)
 namespace {
 decltype(enable_background_property::rect) parse_enable_background_new_rect(std::string_view str)
 {
-	using ret_type = decltype(enable_background_property::rect);
-
 	try {
 		utki::string_parser p(str);
 		p.skip_inclusive_until(' '); // skip 'new'
@@ -918,7 +916,10 @@ decltype(enable_background_property::rect) parse_enable_background_new_rect(std:
 			};
 		}
 
-		return ret_type({p.read_number<real>(), p.read_number<real>()}, {p.read_number<real>(), p.read_number<real>()});
+		return {
+			{p.read_number<real>(), p.read_number<real>()},
+			{p.read_number<real>(), p.read_number<real>()}
+		};
 	} catch (std::invalid_argument&) {
 		throw malformed_svg_error("malformed enable-background NEW string");
 	}
