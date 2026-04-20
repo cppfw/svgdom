@@ -1040,7 +1040,8 @@ style_value svgdom::parse_paint(std::string_view str)
 		return {style_value_special::none};
 	}
 
-	ASSERT(!utki::string_parser::is_space(str[0])) // leading spaces should be skept already
+	// leading spaces should be skept already
+	utki::assert(!utki::string_parser::is_space(str[0]), SL);
 
 	{
 		auto ret = parse_url(str);
@@ -1073,14 +1074,15 @@ style_value svgdom::parse_paint(std::string_view str)
 			if ('0' <= c && c <= '9') {
 				(*i) = c - '0';
 			} else if ('a' <= c && c <= 'f') {
-				(*i) = utki::to_int(utki::integer_base::dec) + (c - 'a');
+				(*i) = decltype(d)::value_type(utki::to_int(utki::integer_base::dec) + (c - 'a'));
 			} else if ('A' <= c && c <= 'F') {
-				(*i) = utki::to_int(utki::integer_base::dec) + (c - 'A');
+				(*i) = decltype(d)::value_type(utki::to_int(utki::integer_base::dec) + (c - 'A'));
 			} else {
 				break;
 			}
 
-			ASSERT(((*i) & utki::upper_nibble_mask) == 0) // only one hex digit
+			// only one hex digit
+			utki::assert(((*i) & utki::upper_nibble_mask) == 0, SL);
 		}
 
 		switch (num_digits) {
@@ -1090,8 +1092,8 @@ style_value svgdom::parse_paint(std::string_view str)
 					auto shift = 0;
 
 					auto end = std::next(d.begin(), 3);
-					ASSERT(d.size() >= 3)
-					ASSERT(end <= d.end())
+					utki::assert(d.size() >= 3, SL);
+					utki::assert(end <= d.end(), SL);
 
 					for (auto i = d.begin(); i != end; ++i) {
 						color |= (((uint32_t(*i) << utki::nibble_bits)) << shift);
@@ -1109,7 +1111,7 @@ style_value svgdom::parse_paint(std::string_view str)
 					for (auto i = d.begin(); i != d.end(); ++i) {
 						color |= (((uint32_t(*i) << utki::nibble_bits)) << shift);
 						++i;
-						ASSERT(i != d.end())
+						utki::assert(i != d.end(), SL);
 						color |= ((uint32_t(*i) & utki::lower_nibble_mask) << shift);
 						shift += utki::byte_bits;
 					}
@@ -1136,23 +1138,27 @@ style_value svgdom::parse_paint(std::string_view str)
 						auto r = p.read_number<float>();
 						p.skip_whitespaces();
 						if (p.read_char() != '%') {
-							ASSERT(false)
+							utki::assert(false, SL);
 							break;
 						}
 						p.skip_whitespaces_and_comma();
 						auto g = p.read_number<float>();
 						p.skip_whitespaces();
 						if (p.read_char() != '%') {
-							ASSERT(false)
+							utki::assert(false, SL);
 							break;
 						}
 						p.skip_whitespaces_and_comma();
 						auto b = p.read_number<float>();
 						p.skip_whitespaces();
 						if (p.read_char() != '%') {
-							ASSERT(false, [&](auto& o) {
-								o << "str = " << str;
-							})
+							utki::assert(
+								false,
+								[&](auto& o) {
+									o << "str = " << str;
+								},
+								SL
+							);
 							break;
 						}
 						p.skip_whitespaces();
@@ -1189,7 +1195,7 @@ style_value svgdom::parse_paint(std::string_view str)
 					}
 				// malformed rgb() paint specification
 				default:
-					ASSERT(false)
+					utki::assert(false, SL);
 					break;
 			}
 			return {style_value_special::none};
@@ -1236,7 +1242,7 @@ style_value svgdom::parse_paint(std::string_view str)
 
 		auto i = color_name_to_color_map.find(name);
 		if (i != color_name_to_color_map.end()) {
-			ASSERT(i->first == name)
+			utki::assert(i->first == name, SL);
 			return {i->second};
 		}
 	}
