@@ -29,6 +29,8 @@ SOFTWARE.
 
 using namespace svgdom;
 
+void visitor::default_visit(element&) {}
+
 void visitor::visit(path_element& e)
 {
 	this->default_visit(e);
@@ -167,6 +169,8 @@ void visitor::relay_accept(container& c)
 	this->cur_iterator = old_iter;
 	this->cur_parent_container = old_parent;
 }
+
+void const_visitor::default_visit(const element&) {}
 
 void const_visitor::visit(const path_element& e)
 {

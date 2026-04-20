@@ -111,7 +111,7 @@ public:
 	 * This method is called by all the visit methods by default.
 	 * @param e - SVG element to visit.
 	 */
-	virtual void default_visit(element& e) {}
+	virtual void default_visit(element& e);
 
 	/**
 	 * @brief Default visit method for container elements.
@@ -177,7 +177,7 @@ public:
 	 * This method is called by all the visit methods by default.
 	 * @param e - SVG element to visit.
 	 */
-	virtual void default_visit(const element& e) {}
+	virtual void default_visit(const element& e);
 
 	/**
 	 * @brief Default visit method for container elements.
