@@ -1268,8 +1268,9 @@ std::string svgdom::paint_to_string(const style_value& v)
 		ss << "url(" << *std::get_if<std::string>(&v) << ")";
 		return ss.str();
 	} else if (std::holds_alternative<uint32_t>(v)) {
-		auto i = color_to_color_name_map.find(*std::get_if<uint32_t>(&v));
-		if (i != color_to_color_name_map.end()) {
+		if (auto i = color_to_color_name_map.find(*std::get_if<uint32_t>(&v)); //
+			i != color_to_color_name_map.end())
+		{
 			// color name
 
 			return std::string(i->second);
