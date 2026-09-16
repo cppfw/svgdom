@@ -43,7 +43,12 @@ using namespace std::string_view_literals;
 
 // TODO: why lint complains here on macos?
 // NOLINTNEXTLINE(bugprone-exception-escape, "error: an exception may be thrown in function")
-struct g_element : public element, public container, public transformable, public styleable {
+struct g_element :
+	public element, //
+	public container,
+	public transformable,
+	public styleable //
+{
 	void accept(visitor& v) override;
 	void accept(const_visitor& v) const override;
 
@@ -62,7 +67,12 @@ struct g_element : public element, public container, public transformable, publi
 
 // TODO: why lint complains here on macos?
 // NOLINTNEXTLINE(bugprone-exception-escape, "error: an exception may be thrown in function")
-struct defs_element : public element, public container, public transformable, public styleable {
+struct defs_element :
+	public element, //
+	public container,
+	public transformable,
+	public styleable //
+{
 	void accept(visitor& v) override;
 	void accept(const_visitor& v) const override;
 
@@ -79,7 +89,13 @@ struct defs_element : public element, public container, public transformable, pu
 	}
 };
 
-struct use_element : public element, public transformable, public referencing, public rectangle, public styleable {
+struct use_element :
+	public element, //
+	public transformable,
+	public referencing,
+	public rectangle,
+	public styleable //
+{
 	void accept(visitor& v) override;
 	void accept(const_visitor& v) const override;
 
@@ -97,12 +113,13 @@ struct use_element : public element, public transformable, public referencing, p
 };
 
 struct svg_element :
-	public element,
+	public element, //
 	public container,
 	public rectangle,
 	public view_boxed,
 	public aspect_ratioed,
-	public styleable {
+	public styleable //
+{
 	void accept(visitor& v) override;
 	void accept(const_visitor& v) const override;
 
@@ -138,7 +155,13 @@ struct svg_element :
 
 // TODO: why lint complains here on macos?
 // NOLINTNEXTLINE(bugprone-exception-escape, "error: an exception may be thrown in function")
-struct symbol_element : public element, public container, public view_boxed, public aspect_ratioed, public styleable {
+struct symbol_element :
+	public element, //
+	public container,
+	public view_boxed,
+	public aspect_ratioed,
+	public styleable //
+{
 	void accept(visitor& v) override;
 	void accept(const_visitor& v) const override;
 
@@ -155,7 +178,12 @@ struct symbol_element : public element, public container, public view_boxed, pub
 	}
 };
 
-struct mask_element : public element, public container, public rectangle, public styleable {
+struct mask_element :
+	public element, //
+	public container,
+	public rectangle,
+	public styleable //
+{
 	coordinate_units mask_units = coordinate_units::unknown;
 
 	coordinate_units mask_content_units = coordinate_units::unknown;
