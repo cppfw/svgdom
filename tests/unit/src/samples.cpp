@@ -13,7 +13,7 @@
 #include <regex>
 #include <clocale>
 
-#include "../../src/svgdom/dom.hpp"
+#include "../../../src/svgdom/dom.hpp"
 
 namespace{
 const std::string data_dir = "samples_data/";

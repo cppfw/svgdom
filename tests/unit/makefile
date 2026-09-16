@@ -7,7 +7,7 @@ this_no_install := true
 
 this_name := tests
 
-this_srcs := $(call prorab-src-dir, .)
+this_srcs := $(call prorab-src-dir, src)
 
 this_ldlibs += -l tst$(this_dbg)
 this_ldlibs += -l utki$(this_dbg)

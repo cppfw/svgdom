@@ -1,8 +1,8 @@
 #include <tst/set.hpp>
 #include <tst/check.hpp>
 
-#include "../../src/svgdom/elements/structurals.hpp"
-#include "../../src/svgdom/elements/shapes.hpp"
+#include "../../../src/svgdom/elements/structurals.hpp"
+#include "../../../src/svgdom/elements/shapes.hpp"
 
 const tst::set to_string_tests("to_string", [](auto& suite){
 	suite.add(

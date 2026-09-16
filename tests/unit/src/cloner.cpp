@@ -1,7 +1,7 @@
 #include <tst/set.hpp>
 #include <tst/check.hpp>
 
-#include "../../src/svgdom/util/cloner.hpp"
+#include "../../../src/svgdom/util/cloner.hpp"
 
 namespace{
 const tst::set set("cloner", [](auto& suite){

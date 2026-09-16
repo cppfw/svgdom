@@ -1,8 +1,8 @@
 #include <tst/set.hpp>
 #include <tst/check.hpp>
 
-#include "../../src/svgdom/visitor.hpp"
-#include "../../src/svgdom/util/stream_writer.hpp"
+#include "../../../src/svgdom/visitor.hpp"
+#include "../../../src/svgdom/util/stream_writer.hpp"
 
 using namespace std::string_view_literals;
 

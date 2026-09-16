@@ -28,3 +28,8 @@ myci_declare_library(${name}
         mikroxml
         cssom
 )
+
+# ==============
+# = unit tests =
+
+include(unit_tests.cmake)

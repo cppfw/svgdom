@@ -4,9 +4,9 @@
 #include <utki/time.hpp>
 #include <fsif/native_file.hpp>
 
-#include "../../src/svgdom/dom.hpp"
-#include "../../src/svgdom/visitor.hpp"
-#include "../../src/svgdom/util/style_stack_cache.hpp"
+#include "../../../src/svgdom/dom.hpp"
+#include "../../../src/svgdom/visitor.hpp"
+#include "../../../src/svgdom/util/style_stack_cache.hpp"
 
 namespace{
 const tst::set set("style_stack_cache", [](auto& suite){

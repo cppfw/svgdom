@@ -3,9 +3,9 @@
 
 #include <fsif/span_file.hpp>
 
-#include "../../src/svgdom/visitor.hpp"
-#include "../../src/svgdom/util/style_stack.hpp"
-#include "../../src/svgdom/dom.hpp"
+#include "../../../src/svgdom/visitor.hpp"
+#include "../../../src/svgdom/util/style_stack.hpp"
+#include "../../../src/svgdom/dom.hpp"
 
 #ifdef assert
 #	undef assert

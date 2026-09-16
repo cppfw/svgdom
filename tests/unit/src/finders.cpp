@@ -3,11 +3,11 @@
 
 #include <fsif/native_file.hpp>
 
-#include "../../src/svgdom/dom.hpp"
-#include "../../src/svgdom/util/finder_by_id.hpp"
-#include "../../src/svgdom/util/finder_by_class.hpp"
-#include "../../src/svgdom/util/finder_by_tag.hpp"
-#include "../../src/svgdom/util/casters.hpp"
+#include "../../../src/svgdom/dom.hpp"
+#include "../../../src/svgdom/util/finder_by_id.hpp"
+#include "../../../src/svgdom/util/finder_by_class.hpp"
+#include "../../../src/svgdom/util/finder_by_tag.hpp"
+#include "../../../src/svgdom/util/casters.hpp"
 
 struct fixture{
 	std::unique_ptr<svgdom::svg_element> dom;

@@ -4,7 +4,7 @@
 #include <utki/time.hpp>
 #include <fsif/native_file.hpp>
 
-#include "../../src/svgdom/dom.hpp"
+#include "../../../src/svgdom/dom.hpp"
 
 namespace{
 const tst::set set("performance", [](auto& suite){

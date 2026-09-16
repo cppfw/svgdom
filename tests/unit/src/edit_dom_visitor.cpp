@@ -1,7 +1,7 @@
 #include <tst/set.hpp>
 #include <tst/check.hpp>
 
-#include "../../src/svgdom/visitor.hpp"
+#include "../../../src/svgdom/visitor.hpp"
 
 // visitor to remove all 'line' elements
 class editing_visitor : public svgdom::visitor{
