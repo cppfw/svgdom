@@ -18,7 +18,8 @@
           "cssom",
           "r4",
           "tst",
-          "clargs"
+          "clargs",
+          "nitki"
         ]
       }
     ],
