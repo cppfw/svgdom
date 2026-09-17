@@ -127,6 +127,7 @@ std::string styleable::style_value_to_string(style_property p, const style_value
 				  << std::endl;
 			})
 			break;
+		case style_property::color_interpolation:
 		case style_property::color_interpolation_filters:
 			s << color_interpolation_filters_to_string(v);
 			break;
@@ -142,10 +143,12 @@ std::string styleable::style_value_to_string(style_property p, const style_value
 			break;
 		case style_property::solid_color:
 		case style_property::stop_color:
+		case style_property::color:
 		case style_property::fill:
 		case style_property::stroke:
 			s << paint_to_string(v);
 			break;
+		case style_property::font_size:
 		case style_property::stroke_dashoffset:
 		case style_property::stroke_width:
 			if (std::holds_alternative<length>(v)) {
@@ -188,6 +191,7 @@ std::string styleable::style_value_to_string(style_property p, const style_value
 				}
 			}
 			break;
+		case style_property::clip_rule:
 		case style_property::fill_rule:
 			if (std::holds_alternative<svgdom::fill_rule>(v)) {
 				switch (*std::get_if<svgdom::fill_rule>(&v)) {
@@ -205,8 +209,17 @@ std::string styleable::style_value_to_string(style_property p, const style_value
 			break;
 		case style_property::mask:
 		case style_property::filter:
+		case style_property::marker:
+		case style_property::marker_end:
+		case style_property::marker_mid:
+		case style_property::marker_start:
 			if (std::holds_alternative<std::string>(v)) {
 				s << "url(" << *std::get_if<std::string>(&v) << ")";
+			}
+			break;
+		case style_property::font_family:
+			if (std::holds_alternative<std::string>(v)) {
+				s << *std::get_if<std::string>(&v);
 			}
 			break;
 		case style_property::display:
@@ -274,6 +287,7 @@ style_value styleable::parse_style_property_value(style_property type, std::stri
 				o << "unimplemented style property encountered: " << styleable::property_to_string(type) << std::endl;
 			})
 			return {style_value_special::unknown};
+		case style_property::color_interpolation:
 		case style_property::color_interpolation_filters:
 			return parse_color_interpolation(str);
 		case style_property::stroke_miterlimit:
@@ -299,9 +313,11 @@ style_value styleable::parse_style_property_value(style_property type, std::stri
 			break;
 		case style_property::solid_color:
 		case style_property::stop_color:
+		case style_property::color:
 		case style_property::fill:
 		case style_property::stroke:
 			return parse_paint(str);
+		case style_property::font_size:
 		case style_property::stroke_dashoffset:
 		case style_property::stroke_width:
 			return length::parse(str);
@@ -335,6 +351,7 @@ style_value styleable::parse_style_property_value(style_property type, std::stri
 				})
 				return {};
 			}
+		case style_property::clip_rule:
 		case style_property::fill_rule:
 			{
 				if (str == "nonzero") {
@@ -351,6 +368,16 @@ style_value styleable::parse_style_property_value(style_property type, std::stri
 		case style_property::mask:
 		case style_property::filter:
 			return parse_url(str);
+		case style_property::marker:
+		case style_property::marker_end:
+		case style_property::marker_mid:
+		case style_property::marker_start:
+			if (str == none_word) {
+				return {style_value_special::none};
+			}
+			return parse_url(str);
+		case style_property::font_family:
+			return {std::string(str)};
 		case style_property::display:
 			return parse_display(str);
 		case style_property::enable_background:
