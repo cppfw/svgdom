@@ -1,5 +1,6 @@
 {
   "dependencies": [
-      "svgdom"
+      "svgdom",
+      "tst"
   ]
 }

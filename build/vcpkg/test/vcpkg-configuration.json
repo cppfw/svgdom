@@ -16,7 +16,9 @@
           "fsif",
           "mikroxml",
           "cssom",
-          "r4"
+          "r4",
+          "tst",
+          "clargs"
         ]
       }
     ],
