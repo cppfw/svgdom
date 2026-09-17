@@ -50,7 +50,7 @@ const tst::set set("misc", [](tst::suite& suite){
             try{
                 auto dom = svgdom::load(str);
                 tst::check(false, SL);
-            }catch(std::invalid_argument& e){
+            }catch(std::invalid_argument&){
                 thrown = true;
             }
             tst::check(thrown, SL);
