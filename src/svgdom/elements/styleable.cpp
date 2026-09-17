@@ -1077,8 +1077,12 @@ std::string svgdom::enable_background_to_string(const style_value& v)
 
 namespace {
 // generic helper to parse a keyword into an enumeration type, falling back to 'def' if the keyword is unknown
-template <typename E>
-style_value parse_keyword(const std::map<std::string_view, E>& m, std::string_view str, E def)
+template <typename enum_type>
+style_value parse_keyword(
+	const std::map<std::string_view, enum_type>& m, //
+	std::string_view str,
+	enum_type def
+)
 {
 	auto i = m.find(str);
 	if (i == m.end()) {
@@ -1088,13 +1092,17 @@ style_value parse_keyword(const std::map<std::string_view, E>& m, std::string_vi
 }
 
 // generic helper to serialize an enumeration type back to a keyword, falling back to 'def' if the value is not that type
-template <typename E>
-std::string_view keyword_to_string(const std::map<E, std::string_view>& m, const style_value& v, std::string_view def)
+template <typename enum_type>
+std::string_view keyword_to_string(
+	const std::map<enum_type, std::string_view>& m, //
+	const style_value& v,
+	std::string_view def
+)
 {
-	if (!std::holds_alternative<E>(v)) {
+	if (!std::holds_alternative<enum_type>(v)) {
 		return def;
 	}
-	auto i = m.find(*std::get_if<E>(&v));
+	auto i = m.find(*std::get_if<enum_type>(&v));
 	if (i == m.end()) {
 		return def;
 	}
