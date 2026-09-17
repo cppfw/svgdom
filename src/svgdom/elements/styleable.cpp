@@ -213,11 +213,13 @@ std::string styleable::style_value_to_string(style_property p, const style_value
 		case style_property::marker_end:
 		case style_property::marker_mid:
 		case style_property::marker_start:
+		case style_property::clip_path:
 			if (std::holds_alternative<std::string>(v)) {
 				s << "url(" << *std::get_if<std::string>(&v) << ")";
 			}
 			break;
 		case style_property::font_family:
+		case style_property::font_weight:
 			if (std::holds_alternative<std::string>(v)) {
 				s << *std::get_if<std::string>(&v);
 			}
@@ -230,6 +232,33 @@ std::string styleable::style_value_to_string(style_property p, const style_value
 			break;
 		case style_property::visibility:
 			s << visibility_to_string(v);
+			break;
+		case style_property::color_rendering:
+			s << color_rendering_to_string(v);
+			break;
+		case style_property::font_stretch:
+			s << font_stretch_to_string(v);
+			break;
+		case style_property::font_style:
+			s << font_style_to_string(v);
+			break;
+		case style_property::font_variant:
+			s << font_variant_to_string(v);
+			break;
+		case style_property::image_rendering:
+			s << image_rendering_to_string(v);
+			break;
+		case style_property::overflow:
+			s << overflow_to_string(v);
+			break;
+		case style_property::shape_rendering:
+			s << shape_rendering_to_string(v);
+			break;
+		case style_property::text_anchor:
+			s << text_anchor_to_string(v);
+			break;
+		case style_property::text_rendering:
+			s << text_rendering_to_string(v);
 			break;
 		case style_property::stroke_dasharray:
 			s << stroke_dasharray_to_string(v);
@@ -372,11 +401,13 @@ style_value styleable::parse_style_property_value(style_property type, std::stri
 		case style_property::marker_end:
 		case style_property::marker_mid:
 		case style_property::marker_start:
+		case style_property::clip_path:
 			if (str == none_word) {
 				return {style_value_special::none};
 			}
 			return parse_url(str);
 		case style_property::font_family:
+		case style_property::font_weight:
 			return {std::string(str)};
 		case style_property::display:
 			return parse_display(str);
@@ -384,6 +415,24 @@ style_value styleable::parse_style_property_value(style_property type, std::stri
 			return parse_enable_background(str);
 		case style_property::visibility:
 			return parse_visibility(str);
+		case style_property::color_rendering:
+			return parse_color_rendering(str);
+		case style_property::font_stretch:
+			return parse_font_stretch(str);
+		case style_property::font_style:
+			return parse_font_style(str);
+		case style_property::font_variant:
+			return parse_font_variant(str);
+		case style_property::image_rendering:
+			return parse_image_rendering(str);
+		case style_property::overflow:
+			return parse_overflow(str);
+		case style_property::shape_rendering:
+			return parse_shape_rendering(str);
+		case style_property::text_anchor:
+			return parse_text_anchor(str);
+		case style_property::text_rendering:
+			return parse_text_rendering(str);
 		case style_property::stroke_dasharray:
 			return parse_stroke_dasharray(str);
 	}
@@ -1010,6 +1059,214 @@ std::string svgdom::enable_background_to_string(const style_value& v)
 				return ss.str();
 			}
 	}
+}
+
+namespace {
+// generic helper to parse a keyword into an enumeration type, falling back to 'def' if the keyword is unknown
+template <typename E>
+style_value parse_keyword(const std::map<std::string_view, E>& m, std::string_view str, E def)
+{
+	auto i = m.find(str);
+	if (i == m.end()) {
+		return {def};
+	}
+	return {i->second};
+}
+
+// generic helper to serialize an enumeration type back to a keyword, falling back to 'def' if the value is not that type
+template <typename E>
+std::string_view keyword_to_string(const std::map<E, std::string_view>& m, const style_value& v, std::string_view def)
+{
+	if (!std::holds_alternative<E>(v)) {
+		return def;
+	}
+	auto i = m.find(*std::get_if<E>(&v));
+	if (i == m.end()) {
+		return def;
+	}
+	return i->second;
+}
+} // namespace
+
+namespace {
+const std::map<std::string_view, color_rendering> string_to_color_rendering_map = {
+	{		   "auto",        svgdom::color_rendering::automatic},
+	{  "optimizeSpeed",   svgdom::color_rendering::optimize_speed},
+	{"optimizeQuality", svgdom::color_rendering::optimize_quality}
+};
+const auto color_rendering_to_string_map = utki::flip_map(string_to_color_rendering_map);
+} // namespace
+
+namespace {
+const std::map<std::string_view, font_stretch> string_to_font_stretch_map = {
+	{		 "normal",          svgdom::font_stretch::normal},
+	{		  "wider",           svgdom::font_stretch::wider},
+	{	   "narrower",        svgdom::font_stretch::narrower},
+	{"ultra-condensed", svgdom::font_stretch::ultra_condensed},
+	{"extra-condensed", svgdom::font_stretch::extra_condensed},
+	{	  "condensed",       svgdom::font_stretch::condensed},
+	{ "semi-condensed",  svgdom::font_stretch::semi_condensed},
+	{  "semi-expanded",   svgdom::font_stretch::semi_expanded},
+	{	   "expanded",        svgdom::font_stretch::expanded},
+	{ "extra-expanded",  svgdom::font_stretch::extra_expanded},
+	{ "ultra-expanded",  svgdom::font_stretch::ultra_expanded}
+};
+const auto font_stretch_to_string_map = utki::flip_map(string_to_font_stretch_map);
+} // namespace
+
+namespace {
+const std::map<std::string_view, font_style> string_to_font_style_map = {
+	{ "normal",  svgdom::font_style::normal},
+	{ "italic",  svgdom::font_style::italic},
+	{"oblique", svgdom::font_style::oblique}
+};
+const auto font_style_to_string_map = utki::flip_map(string_to_font_style_map);
+} // namespace
+
+namespace {
+const std::map<std::string_view, font_variant> string_to_font_variant_map = {
+	{    "normal",     svgdom::font_variant::normal},
+	{"small-caps", svgdom::font_variant::small_caps}
+};
+const auto font_variant_to_string_map = utki::flip_map(string_to_font_variant_map);
+} // namespace
+
+namespace {
+const std::map<std::string_view, image_rendering> string_to_image_rendering_map = {
+	{		   "auto",        svgdom::image_rendering::automatic},
+	{  "optimizeSpeed",   svgdom::image_rendering::optimize_speed},
+	{"optimizeQuality", svgdom::image_rendering::optimize_quality}
+};
+const auto image_rendering_to_string_map = utki::flip_map(string_to_image_rendering_map);
+} // namespace
+
+namespace {
+const std::map<std::string_view, overflow> string_to_overflow_map = {
+	{"visible",   svgdom::overflow::visible},
+	{ "hidden",    svgdom::overflow::hidden},
+	{ "scroll",    svgdom::overflow::scroll},
+	{   "auto", svgdom::overflow::automatic}
+};
+const auto overflow_to_string_map = utki::flip_map(string_to_overflow_map);
+} // namespace
+
+namespace {
+const std::map<std::string_view, shape_rendering> string_to_shape_rendering_map = {
+	{			  "auto",           svgdom::shape_rendering::automatic},
+	{	 "optimizeSpeed",      svgdom::shape_rendering::optimize_speed},
+	{		"crispEdges",         svgdom::shape_rendering::crisp_edges},
+	{"geometricPrecision", svgdom::shape_rendering::geometric_precision}
+};
+const auto shape_rendering_to_string_map = utki::flip_map(string_to_shape_rendering_map);
+} // namespace
+
+namespace {
+const std::map<std::string_view, text_anchor> string_to_text_anchor_map = {
+	{ "start",  svgdom::text_anchor::start},
+	{"middle", svgdom::text_anchor::middle},
+	{   "end",    svgdom::text_anchor::end}
+};
+const auto text_anchor_to_string_map = utki::flip_map(string_to_text_anchor_map);
+} // namespace
+
+namespace {
+const std::map<std::string_view, text_rendering> string_to_text_rendering_map = {
+	{			  "auto",           svgdom::text_rendering::automatic},
+	{	 "optimizeSpeed",      svgdom::text_rendering::optimize_speed},
+	{"optimizeLegibility", svgdom::text_rendering::optimize_legibility},
+	{"geometricPrecision", svgdom::text_rendering::geometric_precision}
+};
+const auto text_rendering_to_string_map = utki::flip_map(string_to_text_rendering_map);
+} // namespace
+
+style_value svgdom::parse_color_rendering(std::string_view str)
+{
+	return parse_keyword(string_to_color_rendering_map, str, svgdom::color_rendering::automatic);
+}
+
+std::string_view svgdom::color_rendering_to_string(const style_value& v)
+{
+	return keyword_to_string(color_rendering_to_string_map, v, "auto");
+}
+
+style_value svgdom::parse_font_stretch(std::string_view str)
+{
+	return parse_keyword(string_to_font_stretch_map, str, svgdom::font_stretch::normal);
+}
+
+std::string_view svgdom::font_stretch_to_string(const style_value& v)
+{
+	return keyword_to_string(font_stretch_to_string_map, v, "normal");
+}
+
+style_value svgdom::parse_font_style(std::string_view str)
+{
+	return parse_keyword(string_to_font_style_map, str, svgdom::font_style::normal);
+}
+
+std::string_view svgdom::font_style_to_string(const style_value& v)
+{
+	return keyword_to_string(font_style_to_string_map, v, "normal");
+}
+
+style_value svgdom::parse_font_variant(std::string_view str)
+{
+	return parse_keyword(string_to_font_variant_map, str, svgdom::font_variant::normal);
+}
+
+std::string_view svgdom::font_variant_to_string(const style_value& v)
+{
+	return keyword_to_string(font_variant_to_string_map, v, "normal");
+}
+
+style_value svgdom::parse_image_rendering(std::string_view str)
+{
+	return parse_keyword(string_to_image_rendering_map, str, svgdom::image_rendering::automatic);
+}
+
+std::string_view svgdom::image_rendering_to_string(const style_value& v)
+{
+	return keyword_to_string(image_rendering_to_string_map, v, "auto");
+}
+
+style_value svgdom::parse_overflow(std::string_view str)
+{
+	return parse_keyword(string_to_overflow_map, str, svgdom::overflow::hidden);
+}
+
+std::string_view svgdom::overflow_to_string(const style_value& v)
+{
+	return keyword_to_string(overflow_to_string_map, v, "hidden");
+}
+
+style_value svgdom::parse_shape_rendering(std::string_view str)
+{
+	return parse_keyword(string_to_shape_rendering_map, str, svgdom::shape_rendering::automatic);
+}
+
+std::string_view svgdom::shape_rendering_to_string(const style_value& v)
+{
+	return keyword_to_string(shape_rendering_to_string_map, v, "auto");
+}
+
+style_value svgdom::parse_text_anchor(std::string_view str)
+{
+	return parse_keyword(string_to_text_anchor_map, str, svgdom::text_anchor::start);
+}
+
+std::string_view svgdom::text_anchor_to_string(const style_value& v)
+{
+	return keyword_to_string(text_anchor_to_string_map, v, "start");
+}
+
+style_value svgdom::parse_text_rendering(std::string_view str)
+{
+	return parse_keyword(string_to_text_rendering_map, str, svgdom::text_rendering::automatic);
+}
+
+std::string_view svgdom::text_rendering_to_string(const style_value& v)
+{
+	return keyword_to_string(text_rendering_to_string_map, v, "auto");
 }
 
 namespace {

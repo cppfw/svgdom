@@ -180,6 +180,74 @@ struct enable_background_property {
 	}
 };
 
+enum class color_rendering {
+	automatic, // "auto"
+	optimize_speed, // "optimizeSpeed"
+	optimize_quality // "optimizeQuality"
+};
+
+enum class font_stretch {
+	normal, // "normal"
+	wider, // "wider"
+	narrower, // "narrower"
+	ultra_condensed, // "ultra-condensed"
+	extra_condensed, // "extra-condensed"
+	condensed, // "condensed"
+	semi_condensed, // "semi-condensed"
+	semi_expanded, // "semi-expanded"
+	expanded, // "expanded"
+	extra_expanded, // "extra-expanded"
+	ultra_expanded // "ultra-expanded"
+};
+
+enum class font_style {
+	normal, // "normal"
+	italic, // "italic"
+	oblique // "oblique"
+};
+
+enum class font_variant {
+	normal, // "normal"
+	small_caps // "small-caps"
+};
+
+// NB: per the SVG 1.1 and SVG 2 specs the only values are 'auto' | 'optimizeSpeed' | 'optimizeQuality';
+// 'crisp-edges' and 'pixelated' are CSS image-rendering values, not part of the SVG spec
+enum class image_rendering {
+	automatic, // "auto"
+	optimize_speed, // "optimizeSpeed"
+	optimize_quality // "optimizeQuality"
+};
+
+// NB: per the SVG 1.1 and SVG 2 specs the values are 'visible' | 'hidden' | 'scroll' | 'auto' (there is no 'crop' value)
+enum class overflow {
+	visible, // "visible"
+	hidden, // "hidden"
+	scroll, // "scroll"
+	automatic // "auto"
+};
+
+// NB: per the SVG spec the values are 'auto' | 'optimizeSpeed' | 'crispEdges' | 'geometricPrecision' (camelCase, 'auto' not 'default')
+enum class shape_rendering {
+	automatic, // "auto"
+	optimize_speed, // "optimizeSpeed"
+	crisp_edges, // "crispEdges"
+	geometric_precision // "geometricPrecision"
+};
+
+enum class text_anchor {
+	start, // "start"
+	middle, // "middle"
+	end // "end"
+};
+
+enum class text_rendering {
+	automatic, // "auto"
+	optimize_speed, // "optimizeSpeed"
+	optimize_legibility, // "optimizeLegibility"
+	geometric_precision // "geometricPrecision"
+};
+
 enum class style_value_special {
 	unknown,
 	none,
@@ -199,6 +267,15 @@ using style_value = std::variant<
 	svgdom::display,
 	svgdom::enable_background_property,
 	svgdom::visibility,
+	svgdom::color_rendering,
+	svgdom::font_stretch,
+	svgdom::font_style,
+	svgdom::font_variant,
+	svgdom::image_rendering,
+	svgdom::overflow,
+	svgdom::shape_rendering,
+	svgdom::text_anchor,
+	svgdom::text_rendering,
 	std::string,
 	std::vector<length>>;
 
@@ -245,6 +322,33 @@ std::string_view display_to_string(const style_value& v);
 
 style_value parse_visibility(std::string_view str);
 std::string_view visibility_to_string(const style_value& v);
+
+style_value parse_color_rendering(std::string_view str);
+std::string_view color_rendering_to_string(const style_value& v);
+
+style_value parse_font_stretch(std::string_view str);
+std::string_view font_stretch_to_string(const style_value& v);
+
+style_value parse_font_style(std::string_view str);
+std::string_view font_style_to_string(const style_value& v);
+
+style_value parse_font_variant(std::string_view str);
+std::string_view font_variant_to_string(const style_value& v);
+
+style_value parse_image_rendering(std::string_view str);
+std::string_view image_rendering_to_string(const style_value& v);
+
+style_value parse_overflow(std::string_view str);
+std::string_view overflow_to_string(const style_value& v);
+
+style_value parse_shape_rendering(std::string_view str);
+std::string_view shape_rendering_to_string(const style_value& v);
+
+style_value parse_text_anchor(std::string_view str);
+std::string_view text_anchor_to_string(const style_value& v);
+
+style_value parse_text_rendering(std::string_view str);
+std::string_view text_rendering_to_string(const style_value& v);
 
 style_value parse_enable_background(std::string_view str);
 std::string enable_background_to_string(const style_value& v);
