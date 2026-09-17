@@ -1,6 +1,7 @@
 #include <tst/set.hpp>
 #include <tst/check.hpp>
 
+#include <array>
 #include <string>
 #include <string_view>
 
@@ -15,7 +16,7 @@ namespace {
 // parse a keyword and make sure it round-trips to the exact same keyword, both through the
 // property-specific to_string function and through styleable::style_value_to_string (the
 // full serialization switch)
-template<typename EnumT>
+template<typename enum_type>
 void check_keyword_roundtrip(
 	style_property p,
 	std::string_view keyword, //
@@ -27,7 +28,7 @@ void check_keyword_roundtrip(
 
 	// the parsed value must actually hold the expected enumeration type (and not some fallback)
 	tst::check(
-		std::holds_alternative<EnumT>(v),
+		std::holds_alternative<enum_type>(v),
 		[&](auto& o) {
 			o << "parsed value for '" << styleable::property_to_string(p) << "' does not hold the expected enumeration type" << std::endl;
 			o << "keyword = " << keyword << std::endl;
@@ -162,7 +163,7 @@ const tst::set set("style_properties", [](tst::suite& suite){
 			// the 'inherit' keyword is handled generically (before per-property parsing) and must
 			// round-trip for every one of the newly implemented style properties. All of the
 			// keyword properties above are inheritable per the SVG spec ('Inherited: yes').
-			const style_property props[] = {
+			const std::array<style_property, 10> props = {
 				style_property::color_rendering,
 				style_property::font_stretch,
 				style_property::font_style,
@@ -236,7 +237,7 @@ const tst::set set("style_properties", [](tst::suite& suite){
 			auto str = dom->to_string();
 
 			// all the properties must be serialized with their values (and not be left empty as they used to be)
-			const std::string expected[] = {
+			const std::array<std::string, 10> expected = {
 				"color-rendering:auto",
 				"font-stretch:condensed",
 				"font-style:italic",
