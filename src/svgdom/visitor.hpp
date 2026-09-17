@@ -31,6 +31,7 @@ SOFTWARE.
 #include "elements/gradients.hpp"
 #include "elements/image_element.hpp"
 #include "elements/shapes.hpp"
+#include "elements/solid_color.hpp"
 #include "elements/structurals.hpp"
 #include "elements/style.hpp"
 #include "elements/text_element.hpp"
@@ -96,6 +97,7 @@ public:
 	virtual void visit(gradient::stop_element& e);
 	virtual void visit(linear_gradient_element& e);
 	virtual void visit(radial_gradient_element& e);
+	virtual void visit(solid_color_element& e);
 	virtual void visit(filter_element& e);
 	virtual void visit(fe_gaussian_blur_element& e);
 	virtual void visit(fe_color_matrix_element& e);
@@ -162,6 +164,7 @@ public:
 	virtual void visit(const gradient::stop_element& e);
 	virtual void visit(const linear_gradient_element& e);
 	virtual void visit(const radial_gradient_element& e);
+	virtual void visit(const solid_color_element& e);
 	virtual void visit(const filter_element& e);
 	virtual void visit(const fe_gaussian_blur_element& e);
 	virtual void visit(const fe_color_matrix_element& e);

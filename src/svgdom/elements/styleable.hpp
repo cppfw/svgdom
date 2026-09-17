@@ -106,6 +106,9 @@ enum class style_property : uint32_t {
 	kerning,
 	text_anchor, // 60
 	writing_mode,
+	// the 'solidColor' element properties (SVG 2)
+	solid_color,
+	solid_opacity,
 
 	enum_size
 };

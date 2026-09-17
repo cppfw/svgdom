@@ -90,6 +90,11 @@ public:
 		this->visit_container(e, e, e);
 	}
 
+	void visit(const svgdom::solid_color_element& e) override
+	{
+		this->visit_element(e, e);
+	}
+
 	void visit(const svgdom::defs_element& e) override
 	{
 		this->visit_container(e, e, e);

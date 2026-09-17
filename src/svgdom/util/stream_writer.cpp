@@ -440,6 +440,14 @@ void stream_writer::visit(const radial_gradient_element& e)
 	this->write(&e);
 }
 
+void stream_writer::visit(const solid_color_element& e)
+{
+	this->set_name(e.get_tag());
+	this->add_element_attributes(e);
+	this->add_styleable_attributes(e);
+	this->write();
+}
+
 void stream_writer::visit(const linear_gradient_element& e)
 {
 	this->set_name(e.get_tag());

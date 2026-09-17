@@ -131,6 +131,7 @@ std::string styleable::style_value_to_string(style_property p, const style_value
 			s << color_interpolation_filters_to_string(v);
 			break;
 		case style_property::stroke_miterlimit:
+		case style_property::solid_opacity:
 		case style_property::stop_opacity:
 		case style_property::opacity:
 		case style_property::stroke_opacity:
@@ -139,6 +140,7 @@ std::string styleable::style_value_to_string(style_property p, const style_value
 				s << *std::get_if<real>(&v);
 			}
 			break;
+		case style_property::solid_color:
 		case style_property::stop_color:
 		case style_property::fill:
 		case style_property::stroke:
@@ -282,6 +284,7 @@ style_value styleable::parse_style_property_value(style_property type, std::stri
 				return {miter_limit};
 			}
 			break;
+		case style_property::solid_opacity:
 		case style_property::stop_opacity:
 		case style_property::opacity:
 		case style_property::stroke_opacity:
@@ -294,6 +297,7 @@ style_value styleable::parse_style_property_value(style_property type, std::stri
 				return {opacity};
 			}
 			break;
+		case style_property::solid_color:
 		case style_property::stop_color:
 		case style_property::fill:
 		case style_property::stroke:
@@ -455,6 +459,8 @@ const std::set<style_property> non_inheritable_style_properties = {
 	style_property::mask,
 	style_property::opacity,
 	style_property::overflow,
+	style_property::solid_color,
+	style_property::solid_opacity,
 	style_property::stop_color,
 	style_property::stop_opacity,
 	style_property::text_decoration,
@@ -513,6 +519,8 @@ const std::map<std::string_view, style_property> string_to_property_map = {
 	{					"overflow",					 style_property::overflow},
 	{			  "pointer-events",               style_property::pointer_events},
 	{			 "shape-rendering",              style_property::shape_rendering},
+	{				 "solid-color",                  style_property::solid_color},
+	{			   "solid-opacity",                style_property::solid_opacity},
 	{				  "stop-color",				   style_property::stop_color},
 	{				"stop-opacity",                 style_property::stop_opacity},
 	{					  "stroke",					   style_property::stroke},

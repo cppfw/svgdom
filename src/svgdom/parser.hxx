@@ -41,6 +41,7 @@ SOFTWARE.
 #include "elements/rectangle.hpp"
 #include "elements/referencing.hpp"
 #include "elements/shapes.hpp"
+#include "elements/solid_color.hpp"
 #include "elements/structurals.hpp"
 #include "elements/style.hpp"
 #include "elements/text_element.hpp"
@@ -134,6 +135,7 @@ class parser : public mikroxml::parser
 	void parse_ellipse_element();
 	void parse_linear_gradient_element();
 	void parse_radial_gradient_element();
+	void parse_solid_color_element();
 	void parse_filter_element();
 	void parse_fe_gaussian_blur_element();
 	void parse_fe_color_matrix_element();

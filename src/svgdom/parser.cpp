@@ -142,6 +142,8 @@ void parser::parse_element()
 				this->parse_linear_gradient_element();
 			} else if (nsn.name == radial_gradient_element::tag) {
 				this->parse_radial_gradient_element();
+			} else if (nsn.name == solid_color_element::tag) {
+				this->parse_solid_color_element();
 			} else if (nsn.name == gradient::stop_element::tag) {
 				this->parse_gradient_stop_element();
 			} else if (nsn.name == rect_element::tag) {
@@ -890,6 +892,22 @@ void parser::parse_radial_gradient_element()
 	if (auto a = this->find_attribute_of_namespace(xml_namespace::svg, "fy")) {
 		ret->fy = length::parse(*a);
 	}
+
+	this->add_element(std::move(ret));
+}
+
+void parser::parse_solid_color_element()
+{
+	utki::assert(this->get_namespace(this->cur_element).ns == xml_namespace::svg, SL);
+	utki::assert(this->get_namespace(this->cur_element).name == solid_color_element::tag, SL);
+
+	auto ret = std::make_unique<solid_color_element>();
+
+	this->fill_element(*ret);
+	this->fill_styleable(*ret);
+
+	// the 'solid-color' and 'solid-opacity' attributes are parsed by fill_styleable()
+	// as presentation attributes
 
 	this->add_element(std::move(ret));
 }

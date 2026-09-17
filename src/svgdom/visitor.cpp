@@ -121,6 +121,11 @@ void visitor::visit(radial_gradient_element& e)
 	this->default_visit(e, e);
 }
 
+void visitor::visit(solid_color_element& e)
+{
+	this->default_visit(e);
+}
+
 void visitor::visit(filter_element& e)
 {
 	this->default_visit(e, e);
@@ -260,6 +265,11 @@ void const_visitor::visit(const linear_gradient_element& e)
 void const_visitor::visit(const radial_gradient_element& e)
 {
 	this->default_visit(e, e);
+}
+
+void const_visitor::visit(const solid_color_element& e)
+{
+	this->default_visit(e);
 }
 
 void const_visitor::visit(const filter_element& e)

@@ -85,6 +85,7 @@ public:
 	void visit(const defs_element& e) override;
 	void visit(const linear_gradient_element& e) override;
 	void visit(const radial_gradient_element& e) override;
+	void visit(const solid_color_element& e) override;
 	void visit(const gradient::stop_element& e) override;
 	void visit(const use_element& e) override;
 	void visit(const path_element& e) override;

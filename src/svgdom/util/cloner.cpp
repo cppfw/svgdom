@@ -29,7 +29,10 @@ SOFTWARE.
 
 using namespace svgdom;
 
-void cloner::clone_children(const container& e, container& clone)
+void cloner::clone_children(
+	const container& e, //
+	container& clone
+)
 {
 	auto old_parent = this->cur_parent;
 	this->cur_parent = &clone;
@@ -69,6 +72,12 @@ void cloner::visit(const linear_gradient_element& e)
 {
 	auto clone = std::make_unique<linear_gradient_element>(e);
 	this->clone_children(e, *clone);
+	this->cur_parent->children.push_back(std::move(clone));
+}
+
+void cloner::visit(const solid_color_element& e)
+{
+	auto clone = std::make_unique<solid_color_element>(e);
 	this->cur_parent->children.push_back(std::move(clone));
 }
 

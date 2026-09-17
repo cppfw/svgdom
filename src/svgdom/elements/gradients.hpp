@@ -45,7 +45,13 @@ using namespace std::string_view_literals;
  */
 // TODO: why lint complains here on macos?
 // NOLINTNEXTLINE(bugprone-exception-escape, "error: an exception may be thrown in function")
-struct gradient : public element, public container, public referencing, public transformable, public styleable {
+struct gradient :
+	public element, //
+	public container,
+	public referencing,
+	public transformable,
+	public styleable //
+{
 	enum class spread_method {
 		default_method,
 		pad,
@@ -59,7 +65,10 @@ struct gradient : public element, public container, public referencing, public t
 
 	// TODO: why lint complains here on macos?
 	// NOLINTNEXTLINE(bugprone-exception-escape, "error: an exception may be thrown in function")
-	struct stop_element : public element, public styleable {
+	struct stop_element :
+		public element, //
+		public styleable //
+	{
 		real offset = 0;
 
 		void accept(visitor& v) override;

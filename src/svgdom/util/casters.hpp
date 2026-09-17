@@ -239,6 +239,11 @@ public:
 		this->pointer = &e;
 	}
 
+	void visit(typename std::conditional_t<is_const, const solid_color_element&, solid_color_element&> e) override
+	{
+		this->pointer = &e;
+	}
+
 	void visit(typename std::conditional_t<is_const, const text_element&, text_element&> e) override
 	{
 		this->pointer = &e;
