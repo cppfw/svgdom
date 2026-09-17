@@ -272,5 +272,49 @@ const tst::set set("style_properties", [](tst::suite& suite){
 		}
 	);
 
+	suite.add(
+		"compositing_blending_properties",
+		[]{
+			// isolation: auto | isolate
+			check_keyword_roundtrip<isolation>(style_property::isolation, "auto", &parse_isolation, &isolation_to_string);
+			check_keyword_roundtrip<isolation>(style_property::isolation, "isolate", &parse_isolation, &isolation_to_string);
+
+			// mix-blend-mode: all <blend-mode> values plus plus-lighter
+			check_keyword_roundtrip<mix_blend_mode>(style_property::mix_blend_mode, "normal", &parse_mix_blend_mode, &mix_blend_mode_to_string);
+			check_keyword_roundtrip<mix_blend_mode>(style_property::mix_blend_mode, "multiply", &parse_mix_blend_mode, &mix_blend_mode_to_string);
+			check_keyword_roundtrip<mix_blend_mode>(style_property::mix_blend_mode, "screen", &parse_mix_blend_mode, &mix_blend_mode_to_string);
+			check_keyword_roundtrip<mix_blend_mode>(style_property::mix_blend_mode, "overlay", &parse_mix_blend_mode, &mix_blend_mode_to_string);
+			check_keyword_roundtrip<mix_blend_mode>(style_property::mix_blend_mode, "darken", &parse_mix_blend_mode, &mix_blend_mode_to_string);
+			check_keyword_roundtrip<mix_blend_mode>(style_property::mix_blend_mode, "lighten", &parse_mix_blend_mode, &mix_blend_mode_to_string);
+			check_keyword_roundtrip<mix_blend_mode>(style_property::mix_blend_mode, "color-dodge", &parse_mix_blend_mode, &mix_blend_mode_to_string);
+			check_keyword_roundtrip<mix_blend_mode>(style_property::mix_blend_mode, "color-burn", &parse_mix_blend_mode, &mix_blend_mode_to_string);
+			check_keyword_roundtrip<mix_blend_mode>(style_property::mix_blend_mode, "hard-light", &parse_mix_blend_mode, &mix_blend_mode_to_string);
+			check_keyword_roundtrip<mix_blend_mode>(style_property::mix_blend_mode, "soft-light", &parse_mix_blend_mode, &mix_blend_mode_to_string);
+			check_keyword_roundtrip<mix_blend_mode>(style_property::mix_blend_mode, "difference", &parse_mix_blend_mode, &mix_blend_mode_to_string);
+			check_keyword_roundtrip<mix_blend_mode>(style_property::mix_blend_mode, "exclusion", &parse_mix_blend_mode, &mix_blend_mode_to_string);
+			check_keyword_roundtrip<mix_blend_mode>(style_property::mix_blend_mode, "hue", &parse_mix_blend_mode, &mix_blend_mode_to_string);
+			check_keyword_roundtrip<mix_blend_mode>(style_property::mix_blend_mode, "saturation", &parse_mix_blend_mode, &mix_blend_mode_to_string);
+			check_keyword_roundtrip<mix_blend_mode>(style_property::mix_blend_mode, "color", &parse_mix_blend_mode, &mix_blend_mode_to_string);
+			check_keyword_roundtrip<mix_blend_mode>(style_property::mix_blend_mode, "luminosity", &parse_mix_blend_mode, &mix_blend_mode_to_string);
+			check_keyword_roundtrip<mix_blend_mode>(style_property::mix_blend_mode, "plus-lighter", &parse_mix_blend_mode, &mix_blend_mode_to_string);
+
+			// both are non-inheritable per the CSS compositing spec ('Inherited: no')
+			tst::check(!styleable::is_inheritable(style_property::isolation), SL);
+			tst::check(!styleable::is_inheritable(style_property::mix_blend_mode), SL);
+
+			// the 'inherit' keyword is still handled generically for these properties
+			{
+				auto v = styleable::parse_style_property_value(style_property::mix_blend_mode, "inherit");
+				tst::check(is_inherit(v), SL);
+				tst::check_eq(styleable::style_value_to_string(style_property::mix_blend_mode, v), std::string("inherit"), SL);
+			}
+			{
+				auto v = styleable::parse_style_property_value(style_property::isolation, "inherit");
+				tst::check(is_inherit(v), SL);
+				tst::check_eq(styleable::style_value_to_string(style_property::isolation, v), std::string("inherit"), SL);
+			}
+		}
+	);
+
 });
 }

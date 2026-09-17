@@ -109,6 +109,9 @@ enum class style_property : uint32_t {
 	// the 'solidColor' element properties (SVG 2)
 	solid_color,
 	solid_opacity,
+	// CSS compositing and blending properties (applied to SVG elements)
+	isolation,
+	mix_blend_mode,
 
 	enum_size
 };
@@ -248,6 +251,32 @@ enum class text_rendering {
 	geometric_precision // "geometricPrecision"
 };
 
+// CSS compositing and blending properties (applied to SVG elements)
+enum class isolation {
+	automatic, // "auto"
+	isolate // "isolate"
+};
+
+enum class mix_blend_mode {
+	normal, // "normal"
+	multiply, // "multiply"
+	screen, // "screen"
+	overlay, // "overlay"
+	darken, // "darken"
+	lighten, // "lighten"
+	color_dodge, // "color-dodge"
+	color_burn, // "color-burn"
+	hard_light, // "hard-light"
+	soft_light, // "soft-light"
+	difference, // "difference"
+	exclusion, // "exclusion"
+	hue, // "hue"
+	saturation, // "saturation"
+	color, // "color"
+	luminosity, // "luminosity"
+	plus_lighter // "plus-lighter"
+};
+
 enum class style_value_special {
 	unknown,
 	none,
@@ -276,6 +305,8 @@ using style_value = std::variant<
 	svgdom::shape_rendering,
 	svgdom::text_anchor,
 	svgdom::text_rendering,
+	svgdom::isolation,
+	svgdom::mix_blend_mode,
 	std::string,
 	std::vector<length>>;
 
@@ -349,6 +380,12 @@ std::string_view text_anchor_to_string(const style_value& v);
 
 style_value parse_text_rendering(std::string_view str);
 std::string_view text_rendering_to_string(const style_value& v);
+
+style_value parse_isolation(std::string_view str);
+std::string_view isolation_to_string(const style_value& v);
+
+style_value parse_mix_blend_mode(std::string_view str);
+std::string_view mix_blend_mode_to_string(const style_value& v);
 
 style_value parse_enable_background(std::string_view str);
 std::string enable_background_to_string(const style_value& v);

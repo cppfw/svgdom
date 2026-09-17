@@ -260,6 +260,12 @@ std::string styleable::style_value_to_string(style_property p, const style_value
 		case style_property::text_rendering:
 			s << text_rendering_to_string(v);
 			break;
+		case style_property::isolation:
+			s << isolation_to_string(v);
+			break;
+		case style_property::mix_blend_mode:
+			s << mix_blend_mode_to_string(v);
+			break;
 		case style_property::stroke_dasharray:
 			s << stroke_dasharray_to_string(v);
 			break;
@@ -433,6 +439,10 @@ style_value styleable::parse_style_property_value(style_property type, std::stri
 			return parse_text_anchor(str);
 		case style_property::text_rendering:
 			return parse_text_rendering(str);
+		case style_property::isolation:
+			return parse_isolation(str);
+		case style_property::mix_blend_mode:
+			return parse_mix_blend_mode(str);
 		case style_property::stroke_dasharray:
 			return parse_stroke_dasharray(str);
 	}
@@ -540,7 +550,9 @@ const std::set<style_property> non_inheritable_style_properties = {
 	style_property::stop_color,
 	style_property::stop_opacity,
 	style_property::text_decoration,
-	style_property::unicode_bidi
+	style_property::unicode_bidi,
+	style_property::isolation,
+	style_property::mix_blend_mode
 };
 } // namespace
 
@@ -613,7 +625,9 @@ const std::map<std::string_view, style_property> string_to_property_map = {
 	{				"unicode-bidi",                 style_property::unicode_bidi},
 	{				  "visibility",				   style_property::visibility},
 	{				"word-spacing",                 style_property::word_spacing},
-	{				"writing-mode",                 style_property::writing_mode}
+	{				"writing-mode",                 style_property::writing_mode},
+	{				   "isolation",					style_property::isolation},
+	{			  "mix-blend-mode",               style_property::mix_blend_mode}
 };
 } // namespace
 
@@ -1267,6 +1281,57 @@ style_value svgdom::parse_text_rendering(std::string_view str)
 std::string_view svgdom::text_rendering_to_string(const style_value& v)
 {
 	return keyword_to_string(text_rendering_to_string_map, v, "auto");
+}
+
+namespace {
+const std::map<std::string_view, isolation> string_to_isolation_map = {
+	{   "auto", svgdom::isolation::automatic},
+	{"isolate",   svgdom::isolation::isolate}
+};
+const auto isolation_to_string_map = utki::flip_map(string_to_isolation_map);
+} // namespace
+
+namespace {
+const std::map<std::string_view, mix_blend_mode> string_to_mix_blend_mode_map = {
+	{	  "normal",       svgdom::mix_blend_mode::normal},
+	{    "multiply",     svgdom::mix_blend_mode::multiply},
+	{	  "screen",       svgdom::mix_blend_mode::screen},
+	{	 "overlay",      svgdom::mix_blend_mode::overlay},
+	{	  "darken",       svgdom::mix_blend_mode::darken},
+	{	 "lighten",      svgdom::mix_blend_mode::lighten},
+	{ "color-dodge",  svgdom::mix_blend_mode::color_dodge},
+	{  "color-burn",   svgdom::mix_blend_mode::color_burn},
+	{  "hard-light",   svgdom::mix_blend_mode::hard_light},
+	{  "soft-light",   svgdom::mix_blend_mode::soft_light},
+	{  "difference",   svgdom::mix_blend_mode::difference},
+	{   "exclusion",    svgdom::mix_blend_mode::exclusion},
+	{		 "hue",          svgdom::mix_blend_mode::hue},
+	{  "saturation",   svgdom::mix_blend_mode::saturation},
+	{	   "color",        svgdom::mix_blend_mode::color},
+	{  "luminosity",   svgdom::mix_blend_mode::luminosity},
+	{"plus-lighter", svgdom::mix_blend_mode::plus_lighter}
+};
+const auto mix_blend_mode_to_string_map = utki::flip_map(string_to_mix_blend_mode_map);
+} // namespace
+
+style_value svgdom::parse_isolation(std::string_view str)
+{
+	return parse_keyword(string_to_isolation_map, str, svgdom::isolation::automatic);
+}
+
+std::string_view svgdom::isolation_to_string(const style_value& v)
+{
+	return keyword_to_string(isolation_to_string_map, v, "auto");
+}
+
+style_value svgdom::parse_mix_blend_mode(std::string_view str)
+{
+	return parse_keyword(string_to_mix_blend_mode_map, str, svgdom::mix_blend_mode::normal);
+}
+
+std::string_view svgdom::mix_blend_mode_to_string(const style_value& v)
+{
+	return keyword_to_string(mix_blend_mode_to_string_map, v, "normal");
 }
 
 namespace {
