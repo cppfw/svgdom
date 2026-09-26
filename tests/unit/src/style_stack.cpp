@@ -1,17 +1,17 @@
-#include <tst/set.hpp>
-#include <tst/check.hpp>
+#include "../../../src/svgdom/util/style_stack.hpp"
 
 #include <fsif/span_file.hpp>
+#include <tst/check.hpp>
+#include <tst/set.hpp>
 
-#include "../../../src/svgdom/visitor.hpp"
-#include "../../../src/svgdom/util/style_stack.hpp"
 #include "../../../src/svgdom/dom.hpp"
+#include "../../../src/svgdom/visitor.hpp"
 
 #ifdef assert
 #	undef assert
 #endif
 
-namespace{
+namespace {
 const auto svg = R"qwertyuiop(
 <svg xmlns="http://www.w3.org/2000/svg"
     xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -49,55 +49,83 @@ const auto svg = R"qwertyuiop(
 	</g>
 </svg>
 )qwertyuiop";
-}
+} // namespace
 
-namespace{
-class traverse_visitor : public svgdom::const_visitor{
+namespace {
+class traverse_visitor : public svgdom::const_visitor
+{
 public:
 	svgdom::style_stack ss;
 
-	void visit(const svgdom::style_element& e)override{
+	void visit(const svgdom::style_element& e) override
+	{
 		this->ss.add_css(e.css);
 	}
 
-	void visit(const svgdom::svg_element& e)override{
-		svgdom::style_stack::push ss_push(this->ss, e);
-		this->relay_accept(e);
-	}
-	void visit(const svgdom::defs_element& e)override{
-		svgdom::style_stack::push ss_push(this->ss, e);
-		this->relay_accept(e);
-	}
-	void visit(const svgdom::g_element& e)override{
+	void visit(const svgdom::svg_element& e) override
+	{
 		svgdom::style_stack::push ss_push(this->ss, e);
 		this->relay_accept(e);
 	}
 
-	void visit(const svgdom::circle_element& e)override{
+	void visit(const svgdom::defs_element& e) override
+	{
+		svgdom::style_stack::push ss_push(this->ss, e);
+		this->relay_accept(e);
+	}
+
+	void visit(const svgdom::g_element& e) override
+	{
+		svgdom::style_stack::push ss_push(this->ss, e);
+		this->relay_accept(e);
+	}
+
+	void visit(const svgdom::circle_element& e) override
+	{
 		svgdom::style_stack::push ss_push(this->ss, e);
 
 		auto sp = this->ss.get_style_property(svgdom::style_property::stroke);
-		tst::check(sp, [&](auto&o){o << "no stroke style property defined for circle with id=" << e.id;}, SL);
+		tst::check(
+			sp,
+			[&](auto& o) {
+				o << "no stroke style property defined for circle with id=" << e.id;
+			},
+			SL
+		);
 
 		auto blue = svgdom::parse_paint("blue");
 		auto green = svgdom::parse_paint("green");
 
 		std::map<std::string, uint32_t> id_to_expected_stroke_map{
-			{"green1", 0x6600},
-			{"red1", 0x67},
-			{"blue1", *std::get_if<uint32_t>(&blue)},
-			{"red2", 0x67},
+			{"green1",						 0x6600},
+			{  "red1",						   0x67},
+			{ "blue1",  *std::get_if<uint32_t>(&blue)},
+			{  "red2",						   0x67},
 			{"green2", *std::get_if<uint32_t>(&green)},
 			{"green3", *std::get_if<uint32_t>(&green)}
 		};
-		
-		auto i = id_to_expected_stroke_map.find(e.id);
-		tst::check(i != id_to_expected_stroke_map.end(), [&](auto&o){o << "circle with id=" << e.id <<" not found in expected values map";}, SL);
 
-		tst::check(*std::get_if<uint32_t>(sp) == i->second, [&](auto&o){o << "expected stroke=0x" << std::hex << i->second <<", got stroke=0x" << *std::get_if<uint32_t>(sp) << " for circle with id=" << e.id;}, SL);
+		auto i = id_to_expected_stroke_map.find(e.id);
+		tst::check(
+			i != id_to_expected_stroke_map.end(),
+			[&](auto& o) {
+				o << "circle with id=" << e.id << " not found in expected values map";
+			},
+			SL
+		);
+
+		tst::check(
+			*std::get_if<uint32_t>(sp) == i->second,
+			[&](auto& o) {
+				o << "expected stroke=0x" << std::hex << i->second << ", got stroke=0x" << *std::get_if<uint32_t>(sp)
+				  << " for circle with id=" << e.id;
+			},
+			SL
+		);
 	}
 
-	void visit(const svgdom::rect_element& e)override{
+	void visit(const svgdom::rect_element& e) override
+	{
 		svgdom::style_stack::push ss_push(this->ss, e);
 
 		auto blue = svgdom::parse_paint("blue");
@@ -107,48 +135,86 @@ public:
 		// check stroke
 		{
 			auto sp = this->ss.get_style_property(svgdom::style_property::stroke);
-			tst::check(sp, [&](auto&o){o << "no stroke style property defined for rect with id=" << e.id;}, SL);
+			tst::check(
+				sp,
+				[&](auto& o) {
+					o << "no stroke style property defined for rect with id=" << e.id;
+				},
+				SL
+			);
 
 			std::map<std::string, uint32_t> id_to_expected_stroke_map{
-				{"rect_blue_stroke_yellow_fill", *std::get_if<uint32_t>(&blue)},
+				{  "rect_blue_stroke_yellow_fill", *std::get_if<uint32_t>(&blue)},
 				{"g_cyan_stroke_yellow_fill_rect", *std::get_if<uint32_t>(&cyan)}
 			};
-			
-			auto i = id_to_expected_stroke_map.find(e.id);
-			tst::check(i != id_to_expected_stroke_map.end(), [&](auto&o){o << "rect with id=" << e.id <<" not found in expected stroke values map";}, SL);
 
-			tst::check(*std::get_if<uint32_t>(sp) == i->second, [&](auto&o){o << "expected stroke=0x" << std::hex << i->second <<", got stroke=0x" << *std::get_if<uint32_t>(sp) << " for rect with id=" << e.id;}, SL);
+			auto i = id_to_expected_stroke_map.find(e.id);
+			tst::check(
+				i != id_to_expected_stroke_map.end(),
+				[&](auto& o) {
+					o << "rect with id=" << e.id << " not found in expected stroke values map";
+				},
+				SL
+			);
+
+			tst::check(
+				*std::get_if<uint32_t>(sp) == i->second,
+				[&](auto& o) {
+					o << "expected stroke=0x" << std::hex << i->second << ", got stroke=0x"
+					  << *std::get_if<uint32_t>(sp) << " for rect with id=" << e.id;
+				},
+				SL
+			);
 		}
 
 		// check fill
 		{
 			auto fp = this->ss.get_style_property(svgdom::style_property::fill);
-			tst::check(fp, [&](auto&o){o << "no fill style property defined for rect with id=" << e.id;}, SL);
+			tst::check(
+				fp,
+				[&](auto& o) {
+					o << "no fill style property defined for rect with id=" << e.id;
+				},
+				SL
+			);
 
 			std::map<std::string, uint32_t> id_to_expected_fill_map{
-				{"rect_blue_stroke_yellow_fill", *std::get_if<uint32_t>(&yellow)},
+				{  "rect_blue_stroke_yellow_fill", *std::get_if<uint32_t>(&yellow)},
 				{"g_cyan_stroke_yellow_fill_rect", *std::get_if<uint32_t>(&yellow)}
 			};
-			
-			auto i = id_to_expected_fill_map.find(e.id);
-			tst::check(i != id_to_expected_fill_map.end(), [&](auto&o){o << "rect with id=" << e.id <<" not found in expected fill values map";}, SL);
 
-			tst::check(*std::get_if<uint32_t>(fp) == i->second, [&](auto&o){o << "expected fill=0x" << std::hex << i->second <<", got fill=0x" << *std::get_if<uint32_t>(fp) << " for rect with id=" << e.id;}, SL);
+			auto i = id_to_expected_fill_map.find(e.id);
+			tst::check(
+				i != id_to_expected_fill_map.end(),
+				[&](auto& o) {
+					o << "rect with id=" << e.id << " not found in expected fill values map";
+				},
+				SL
+			);
+
+			tst::check(
+				*std::get_if<uint32_t>(fp) == i->second,
+				[&](auto& o) {
+					o << "expected fill=0x" << std::hex << i->second << ", got fill=0x" << *std::get_if<uint32_t>(fp)
+					  << " for rect with id=" << e.id;
+				},
+				SL
+			);
 		}
 	}
 };
-}
+} // namespace
 
-namespace{
-const tst::set set("style_stack", [](auto& suite){
-	suite.add("basic_test", [](){
+namespace {
+const tst::set set("style_stack", [](auto& suite) {
+	suite.add("basic_test", []() {
 		auto dom = svgdom::load(fsif::span_file(utki::make_span(svg)));
 		utki::assert(dom, SL);
 		utki::assert(dom->children.size() != 0, SL);
-		
+
 		traverse_visitor v;
 
 		dom->accept(v);
 	});
 });
-}
+} // namespace

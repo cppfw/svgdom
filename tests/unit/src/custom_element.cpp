@@ -1,57 +1,61 @@
-#include <tst/set.hpp>
 #include <tst/check.hpp>
+#include <tst/set.hpp>
 
-#include "../../../src/svgdom/visitor.hpp"
 #include "../../../src/svgdom/util/stream_writer.hpp"
+#include "../../../src/svgdom/visitor.hpp"
 
 using namespace std::string_view_literals;
 
 // TODO: why lint complains here on macos?
 // NOLINTNEXTLINE(bugprone-exception-escape, "error: an exception may be thrown in function")
-struct custom_element : public svgdom::element{
+struct custom_element : public svgdom::element {
 	void accept(svgdom::const_visitor& visitor) const override;
 	void accept(svgdom::visitor& visitor) override;
 
 	constexpr static std::string_view tag = "custom_element"sv;
 
-	std::string_view get_tag()const override{
+	std::string_view get_tag() const override
+	{
 		return tag;
 	}
 };
 
-class custom_visitor : virtual public svgdom::const_visitor{
+class custom_visitor : virtual public svgdom::const_visitor
+{
 public:
 	using svgdom::const_visitor::visit;
-	
-	virtual void visit(const custom_element& e){
+
+	virtual void visit(const custom_element& e)
+	{
 		this->default_visit(e);
 	}
 };
 
-void custom_element::accept(svgdom::const_visitor& visitor) const{
-	if(auto v = dynamic_cast<custom_visitor*>(&visitor)){
+void custom_element::accept(svgdom::const_visitor& visitor) const
+{
+	if (auto v = dynamic_cast<custom_visitor*>(&visitor)) {
 		v->visit(*this);
-	}else{
+	} else {
 		visitor.default_visit(*this);
 	}
 }
 
-void custom_element::accept(svgdom::visitor& visitor){
+void custom_element::accept(svgdom::visitor& visitor)
+{
 	visitor.default_visit(*this);
 }
 
-class custom_stream_writer :
-		public svgdom::stream_writer,
-		public custom_visitor
+class custom_stream_writer : public svgdom::stream_writer, public custom_visitor
 {
 public:
 	custom_stream_writer(std::ostream& s) :
-			svgdom::stream_writer(s)
+		svgdom::stream_writer(s)
 	{}
-	
+
 	using svgdom::stream_writer::visit;
 
-	void visit(const custom_element& e)override{
+	void visit(const custom_element& e) override
+	{
 		this->set_name("custom");
 		this->add_attribute("customAttrib1", "value1");
 		this->add_attribute("customAttrib2", "value2");
@@ -59,9 +63,9 @@ public:
 	}
 };
 
-namespace{
-const tst::set set("custom_element", [](auto& suite){
-	suite.add("basic_test", [](){
+namespace {
+const tst::set set("custom_element", [](auto& suite) {
+	suite.add("basic_test", []() {
 		auto dom = std::make_unique<svgdom::svg_element>();
 
 		svgdom::path_element path;
@@ -91,18 +95,24 @@ const tst::set set("custom_element", [](auto& suite){
 		dom->children.push_back(std::make_unique<svgdom::path_element>(path));
 
 		dom->children.push_back(std::make_unique<custom_element>());
-		
+
 		std::stringstream ss;
 		custom_stream_writer writer(ss);
-		
+
 		dom->accept(writer);
-		
+
 		auto str = ss.str();
-		
-		utki::log([&](auto&o){o << str << std::endl;});
-		
-		tst::check(str.find(R"(xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1")") != std::string::npos, SL);
+
+		utki::log([&](auto& o) {
+			o << str << std::endl;
+		});
+
+		tst::check(
+			str.find(R"(xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1")"
+			) != std::string::npos,
+			SL
+		);
 		tst::check(str.find(R"(<custom customAttrib1="value1" customAttrib2="value2"/>)") != std::string::npos, SL);
 	});
 });
-}
+} // namespace
