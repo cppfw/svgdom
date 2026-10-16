@@ -1,4 +1,8 @@
 # TODO: remove when moved to C++20
+# svgdom must support C++17, so the following are suppressed:
+# - modernize-loop-convert: its fix-it suggests std::ranges::reverse_view (C++20)
+# - modernize-use-designated-initializers: designated initializers are C++20
 Checks: |
+  -modernize-loop-convert
   -modernize-use-designated-initializers
 InheritParentConfig: true
