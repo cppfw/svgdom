@@ -70,7 +70,13 @@ const tst::set set("samples", [](tst::suite& suite) {
 				failed_file.write(out_data);
 			}
 
-			tst::check(false, SL) << "parsed file is not as expected: " << in_file_name;
+			tst::check(
+				false,
+				[&](auto& o) {
+					o << "parsed file is not as expected: " << in_file_name;
+				},
+				SL
+			);
 		}
 	});
 });
