@@ -1,3 +1,9 @@
+libsvgdom (0.4.36) unstable; urgency=medium
+
+  * update
+
+ -- Ivan Gagis <igagis@gmail.com>  Thu, 05 Nov 2026 15:51:54 +0200
+
 libsvgdom (0.4.35) unstable; urgency=medium
 
   * fix compiler warnings
