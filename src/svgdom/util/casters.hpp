@@ -33,7 +33,12 @@ SOFTWARE.
 
 namespace svgdom {
 
-// TODO: doxygen all
+/**
+ * @brief A visitor which casts an element to a given element type.
+ * After visiting, the pointer member holds the element if it matches the
+ * requested type, or nullptr otherwise.
+ * @tparam element_type - the element type to cast to.
+ */
 template <class element_type>
 class element_caster : public std::conditional_t<std::is_const_v<element_type>, const_visitor, visitor>
 {
@@ -45,13 +50,28 @@ class element_caster : public std::conditional_t<std::is_const_v<element_type>, 
 	);
 
 public:
+	/**
+	 * @brief Pointer to the visited element.
+	 * Set to the element's address if it matches the requested type, otherwise
+	 * remains nullptr.
+	 */
 	element_type* pointer = nullptr;
 
+	/**
+	 * @brief Visit the element.
+	 * @param e - the visited element.
+	 */
 	void visit(element_type& e) override
 	{
 		this->pointer = &e;
 	}
 
+	/**
+	 * @brief Visit an element which does not match the requested type.
+	 * Does nothing.
+	 * @param e - the visited element.
+	 * @param c - the visited container.
+	 */
 	void default_visit(
 		typename std::conditional_t<std::is_const_v<element_type>, const element&, element&> e,
 		typename std::conditional_t<std::is_const_v<element_type>, const container&, container&> c
@@ -61,12 +81,30 @@ public:
 	}
 };
 
+/**
+ * @brief A visitor which casts an element to a container.
+ * After visiting, the pointer member holds the container if the element is a
+ * container, or nullptr otherwise.
+ * This class is not intended to be used directly;
+ * use const_container_caster, container_caster, or cast_to_container() instead.
+ * @tparam is_const - whether to produce a const container pointer.
+ */
 template <bool is_const>
 class container_caster_template : public std::conditional_t<is_const, const_visitor, visitor>
 {
 public:
+	/**
+	 * @brief Pointer to the visited container.
+	 * Set to the container's address if the element is a container, otherwise
+	 * remains nullptr.
+	 */
 	typename std::conditional_t<is_const, const container*, container*> pointer = nullptr;
 
+	/**
+	 * @brief Visit the element and its container.
+	 * @param e - the visited element.
+	 * @param c - the visited container.
+	 */
 	void default_visit(
 		typename std::conditional_t<is_const, const element&, element&> e,
 		typename std::conditional_t<is_const, const container&, container&> c
@@ -76,9 +114,22 @@ public:
 	}
 };
 
+/**
+ * @brief Const container caster.
+ */
 using const_container_caster = container_caster_template<true>;
+
+/**
+ * @brief Non-const container caster.
+ */
 using container_caster = container_caster_template<false>;
 
+/**
+ * @brief Cast an element to a container.
+ * @param e - element to cast.
+ * @return pointer to the element as a container, or nullptr if it is not a
+ * container.
+ */
 inline container* cast_to_container(element* e)
 {
 	if (!e) {
@@ -89,6 +140,12 @@ inline container* cast_to_container(element* e)
 	return caster.pointer;
 }
 
+/**
+ * @brief Cast a const element to a const container.
+ * @param e - element to cast.
+ * @return pointer to the element as a const container, or nullptr if it is
+ * not a container.
+ */
 inline const container* cast_to_container(const element* e)
 {
 	if (!e) {
@@ -99,10 +156,23 @@ inline const container* cast_to_container(const element* e)
 	return caster.pointer;
 }
 
+/**
+ * @brief A visitor which casts an element to a styleable.
+ * After visiting, the pointer member holds the element if it is a styleable,
+ * or nullptr otherwise.
+ * This class is not intended to be used directly;
+ * use const_styleable_caster, styleable_caster, or cast_to_styleable() instead.
+ * @tparam is_const - whether to produce a const styleable pointer.
+ */
 template <bool is_const>
 class styleable_caster_template : public std::conditional_t<is_const, const_visitor, visitor>
 {
 public:
+	/**
+	 * @brief Pointer to the visited styleable.
+	 * Set to the element's address if it is a styleable, otherwise remains
+	 * nullptr.
+	 */
 	typename std::conditional_t<is_const, const styleable*, styleable*> pointer = nullptr;
 
 	void visit(typename std::conditional_t<is_const, const path_element&, path_element&> e) override
@@ -250,9 +320,22 @@ public:
 	}
 };
 
+/**
+ * @brief Const styleable caster.
+ */
 using const_styleable_caster = styleable_caster_template<true>;
+
+/**
+ * @brief Non-const styleable caster.
+ */
 using styleable_caster = styleable_caster_template<false>;
 
+/**
+ * @brief Cast an element to a styleable.
+ * @param e - element to cast.
+ * @return pointer to the element as a styleable, or nullptr if it is not a
+ * styleable.
+ */
 inline styleable* cast_to_styleable(element* e)
 {
 	if (!e) {
@@ -263,6 +346,12 @@ inline styleable* cast_to_styleable(element* e)
 	return caster.pointer;
 }
 
+/**
+ * @brief Cast a const element to a const styleable.
+ * @param e - element to cast.
+ * @return pointer to the element as a const styleable, or nullptr if it is
+ * not a styleable.
+ */
 inline const styleable* cast_to_styleable(const element* e)
 {
 	if (!e) {
