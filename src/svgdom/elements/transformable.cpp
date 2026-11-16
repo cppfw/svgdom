@@ -48,7 +48,7 @@ std::string transformable::transformations_to_string() const
 
 		switch (t.type_v) {
 			default:
-				ASSERT(false)
+				utki::assert(false, SL);
 				break;
 			case transformation::type::matrix:
 				s << "matrix(" << t.a << "," << t.b << "," << t.c << "," << t.d << "," << t.e << "," << t.f << ")";
@@ -130,7 +130,7 @@ decltype(transformable::transformations) transformable::parse(std::string_view s
 
 			switch (t.type_v) {
 				default:
-					ASSERT(false)
+					utki::assert(false, SL);
 					break;
 				case transformation::type::matrix:
 					t.a = p.read_number<real>();

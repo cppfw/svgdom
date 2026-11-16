@@ -56,9 +56,13 @@ namespace {
 std::string stroke_dasharray_to_string(const style_value& v)
 {
 	// special values must be already handled by styleable::style_value_to_string() at this point
-	ASSERT(!std::holds_alternative<style_value_special>(v), [&](auto& o) {
-		o << "v = " << unsigned(*std::get_if<style_value_special>(&v));
-	})
+	utki::assert(
+		!std::holds_alternative<style_value_special>(v),
+		[&](auto& o) {
+			o << "v = " << unsigned(*std::get_if<style_value_special>(&v));
+		},
+		SL
+	);
 
 	if (!std::holds_alternative<std::vector<length>>(v)) {
 		return {};
@@ -159,7 +163,7 @@ std::string styleable::style_value_to_string(style_property p, const style_value
 			if (std::holds_alternative<svgdom::stroke_line_cap>(v)) {
 				switch (*std::get_if<svgdom::stroke_line_cap>(&v)) {
 					default:
-						ASSERT(false)
+						utki::assert(false, SL);
 						break;
 					case stroke_line_cap::butt:
 						s << "butt";
@@ -177,7 +181,7 @@ std::string styleable::style_value_to_string(style_property p, const style_value
 			if (std::holds_alternative<svgdom::stroke_line_join>(v)) {
 				switch (*std::get_if<svgdom::stroke_line_join>(&v)) {
 					default:
-						ASSERT(false)
+						utki::assert(false, SL);
 						break;
 					case stroke_line_join::miter:
 						s << "miter";
@@ -196,7 +200,7 @@ std::string styleable::style_value_to_string(style_property p, const style_value
 			if (std::holds_alternative<svgdom::fill_rule>(v)) {
 				switch (*std::get_if<svgdom::fill_rule>(&v)) {
 					default:
-						ASSERT(false)
+						utki::assert(false, SL);
 						break;
 					case fill_rule::evenodd:
 						s << "evenodd";
@@ -286,7 +290,7 @@ std::string styleable::styles_to_string() const
 			s << "; ";
 		}
 
-		ASSERT(st.first != style_property::unknown)
+		utki::assert(st.first != style_property::unknown, SL);
 
 		s << property_to_string(st.first) << ":";
 
@@ -898,7 +902,7 @@ std::string_view svgdom::display_to_string(const style_value& v)
 {
 	const auto& default_value = []() {
 		auto i = display_to_string_map.find(svgdom::display::inline_display);
-		ASSERT(i != display_to_string_map.end())
+		utki::assert(i != display_to_string_map.end(), SL);
 		return i->second;
 	}();
 
@@ -941,7 +945,7 @@ std::string_view svgdom::visibility_to_string(const style_value& v)
 {
 	const auto& default_value = []() {
 		auto i = visibility_to_string_map.find(svgdom::visibility::visible);
-		ASSERT(i != visibility_to_string_map.end())
+		utki::assert(i != visibility_to_string_map.end(), SL);
 		return i->second;
 	}();
 
@@ -980,9 +984,13 @@ std::string to_string(color_interpolation ci)
 		case color_interpolation::s_rgb:
 			return "sRGB";
 		default:
-			ASSERT(false, [&](auto& o) {
-				o << "ci = " << unsigned(ci);
-			})
+			utki::assert(
+				false,
+				[&](auto& o) {
+					o << "ci = " << unsigned(ci);
+				},
+				SL
+			);
 			return "";
 	}
 }

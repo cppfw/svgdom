@@ -44,7 +44,7 @@ std::unique_ptr<svg_element> svgdom::load(const fsif::file& f)
 
 		while (true) {
 			auto res = f.read(utki::make_span(buf));
-			ASSERT(res <= buf.size())
+			utki::assert(res <= buf.size(), SL);
 			if (res == 0) {
 				break;
 			}

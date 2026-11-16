@@ -96,7 +96,7 @@ void parser::push_namespaces()
 				continue;
 			}
 
-			ASSERT(attr.length() >= xmlns.length())
+			utki::assert(attr.length() >= xmlns.length(), SL);
 			auto ns_name = attr.substr(xmlns.length(), attr.length() - xmlns.length());
 
 			if (e.second == svg_namespace) {
@@ -112,11 +112,11 @@ void parser::push_namespaces()
 
 void parser::pop_namespaces()
 {
-	ASSERT(this->namespace_stack.size() != 0)
+	utki::assert(this->namespace_stack.size() != 0, SL);
 	this->namespace_stack.pop_back();
-	ASSERT(this->default_namespace_stack.size() != 0)
+	utki::assert(this->default_namespace_stack.size() != 0, SL);
 	this->default_namespace_stack.pop_back();
-	ASSERT(this->flipped_namespace_stack.size() != 0)
+	utki::assert(this->flipped_namespace_stack.size() != 0, SL);
 	this->flipped_namespace_stack.pop_back();
 }
 
@@ -195,7 +195,7 @@ parser::xml_namespace parser::find_namespace(const std::string& ns)
 		if (iter == i->end()) {
 			continue;
 		}
-		ASSERT(ns == iter->first)
+		utki::assert(ns == iter->first, SL);
 		return iter->second;
 	}
 	return xml_namespace::unknown;
@@ -208,7 +208,7 @@ std::optional<std::string_view> parser::find_flipped_namespace(xml_namespace ns)
 		if (iter == i->end()) {
 			continue;
 		}
-		ASSERT(ns == iter->first)
+		utki::assert(ns == iter->first, SL);
 		return {iter->second};
 	}
 	return {};
@@ -225,7 +225,7 @@ parser::namespace_name_pair parser::get_namespace(const std::string& xml_name)
 		return ret;
 	}
 
-	ASSERT(xml_name.length() >= colon_index + 1)
+	utki::assert(xml_name.length() >= colon_index + 1, SL);
 
 	ret.ns = this->find_namespace(xml_name.substr(0, colon_index));
 	ret.name = xml_name.substr(colon_index + 1, xml_name.length() - 1 - colon_index);
@@ -328,7 +328,7 @@ void parser::fill_shape(shape& s)
 
 void parser::fill_styleable(styleable& s)
 {
-	ASSERT(s.styles.size() == 0)
+	utki::assert(s.styles.size() == 0, SL);
 
 	for (auto& a : this->attributes) {
 		auto nsn = this->get_namespace(a.first);
@@ -358,7 +358,7 @@ void parser::fill_styleable(styleable& s)
 
 void parser::fill_transformable(transformable& t)
 {
-	ASSERT(t.transformations.size() == 0)
+	utki::assert(t.transformations.size() == 0, SL);
 	if (auto a = this->find_attribute_of_namespace(xml_namespace::svg, "transform")) {
 		t.transformations = transformable::parse(*a);
 	}
@@ -390,7 +390,7 @@ void parser::fill_aspect_ratioed(aspect_ratioed& e)
 
 void parser::add_element(std::unique_ptr<element> e)
 {
-	ASSERT(e)
+	utki::assert(e, SL);
 
 	auto elem = e.get();
 
@@ -425,8 +425,18 @@ void parser::add_element(std::unique_ptr<element> e)
 
 void parser::parse_circle_element()
 {
-	ASSERT(this->get_namespace(this->cur_element).ns == xml_namespace::svg)
-	ASSERT(this->get_namespace(this->cur_element).name == circle_element::tag)
+	utki::assert(
+		[this]() -> bool {
+			return this->get_namespace(this->cur_element).ns == xml_namespace::svg;
+		},
+		SL
+	);
+	utki::assert(
+		[this]() -> bool {
+			return this->get_namespace(this->cur_element).name == circle_element::tag;
+		},
+		SL
+	);
 
 	auto ret = std::make_unique<circle_element>();
 
@@ -447,8 +457,18 @@ void parser::parse_circle_element()
 
 void parser::parse_defs_element()
 {
-	ASSERT(this->get_namespace(this->cur_element).ns == xml_namespace::svg)
-	ASSERT(this->get_namespace(this->cur_element).name == defs_element::tag)
+	utki::assert(
+		[this]() -> bool {
+			return this->get_namespace(this->cur_element).ns == xml_namespace::svg;
+		},
+		SL
+	);
+	utki::assert(
+		[this]() -> bool {
+			return this->get_namespace(this->cur_element).name == defs_element::tag;
+		},
+		SL
+	);
 
 	auto ret = std::make_unique<defs_element>();
 
@@ -461,8 +481,18 @@ void parser::parse_defs_element()
 
 void parser::parse_mask_element()
 {
-	ASSERT(this->get_namespace(this->cur_element).ns == xml_namespace::svg)
-	ASSERT(this->get_namespace(this->cur_element).name == mask_element::tag)
+	utki::assert(
+		[this]() -> bool {
+			return this->get_namespace(this->cur_element).ns == xml_namespace::svg;
+		},
+		SL
+	);
+	utki::assert(
+		[this]() -> bool {
+			return this->get_namespace(this->cur_element).name == mask_element::tag;
+		},
+		SL
+	);
 
 	auto ret = std::make_unique<mask_element>();
 
@@ -483,8 +513,18 @@ void parser::parse_mask_element()
 
 void parser::parse_text_element()
 {
-	ASSERT(this->get_namespace(this->cur_element).ns == xml_namespace::svg)
-	ASSERT(this->get_namespace(this->cur_element).name == text_element::tag)
+	utki::assert(
+		[this]() -> bool {
+			return this->get_namespace(this->cur_element).ns == xml_namespace::svg;
+		},
+		SL
+	);
+	utki::assert(
+		[this]() -> bool {
+			return this->get_namespace(this->cur_element).name == text_element::tag;
+		},
+		SL
+	);
 
 	auto ret = std::make_unique<text_element>();
 
@@ -500,8 +540,18 @@ void parser::parse_text_element()
 
 void parser::parse_style_element()
 {
-	ASSERT(this->get_namespace(this->cur_element).ns == xml_namespace::svg)
-	ASSERT(this->get_namespace(this->cur_element).name == style_element::tag)
+	utki::assert(
+		[this]() -> bool {
+			return this->get_namespace(this->cur_element).ns == xml_namespace::svg;
+		},
+		SL
+	);
+	utki::assert(
+		[this]() -> bool {
+			return this->get_namespace(this->cur_element).name == style_element::tag;
+		},
+		SL
+	);
 
 	auto ret = std::make_unique<style_element>();
 
@@ -515,8 +565,18 @@ void parser::parse_style_element()
 
 void parser::parse_ellipse_element()
 {
-	ASSERT(this->get_namespace(this->cur_element).ns == xml_namespace::svg)
-	ASSERT(this->get_namespace(this->cur_element).name == ellipse_element::tag)
+	utki::assert(
+		[this]() -> bool {
+			return this->get_namespace(this->cur_element).ns == xml_namespace::svg;
+		},
+		SL
+	);
+	utki::assert(
+		[this]() -> bool {
+			return this->get_namespace(this->cur_element).name == ellipse_element::tag;
+		},
+		SL
+	);
 
 	auto ret = std::make_unique<ellipse_element>();
 
@@ -540,8 +600,18 @@ void parser::parse_ellipse_element()
 
 void parser::parse_g_element()
 {
-	ASSERT(this->get_namespace(this->cur_element).ns == xml_namespace::svg)
-	ASSERT(this->get_namespace(this->cur_element).name == g_element::tag)
+	utki::assert(
+		[this]() -> bool {
+			return this->get_namespace(this->cur_element).ns == xml_namespace::svg;
+		},
+		SL
+	);
+	utki::assert(
+		[this]() -> bool {
+			return this->get_namespace(this->cur_element).name == g_element::tag;
+		},
+		SL
+	);
 
 	auto ret = std::make_unique<g_element>();
 
@@ -554,8 +624,18 @@ void parser::parse_g_element()
 
 void parser::parse_gradient_stop_element()
 {
-	ASSERT(this->get_namespace(this->cur_element).ns == xml_namespace::svg)
-	ASSERT(this->get_namespace(this->cur_element).name == gradient::stop_element::tag)
+	utki::assert(
+		[this]() -> bool {
+			return this->get_namespace(this->cur_element).ns == xml_namespace::svg;
+		},
+		SL
+	);
+	utki::assert(
+		[this]() -> bool {
+			return this->get_namespace(this->cur_element).name == gradient::stop_element::tag;
+		},
+		SL
+	);
 
 	auto ret = std::make_unique<gradient::stop_element>();
 
@@ -574,8 +654,18 @@ void parser::parse_gradient_stop_element()
 
 void parser::parse_line_element()
 {
-	ASSERT(this->get_namespace(this->cur_element).ns == xml_namespace::svg)
-	ASSERT(this->get_namespace(this->cur_element).name == line_element::tag)
+	utki::assert(
+		[this]() -> bool {
+			return this->get_namespace(this->cur_element).ns == xml_namespace::svg;
+		},
+		SL
+	);
+	utki::assert(
+		[this]() -> bool {
+			return this->get_namespace(this->cur_element).name == line_element::tag;
+		},
+		SL
+	);
 
 	auto ret = std::make_unique<line_element>();
 
@@ -599,8 +689,18 @@ void parser::parse_line_element()
 
 void parser::parse_filter_element()
 {
-	ASSERT(this->get_namespace(this->cur_element).ns == xml_namespace::svg)
-	ASSERT(this->get_namespace(this->cur_element).name == filter_element::tag)
+	utki::assert(
+		[this]() -> bool {
+			return this->get_namespace(this->cur_element).ns == xml_namespace::svg;
+		},
+		SL
+	);
+	utki::assert(
+		[this]() -> bool {
+			return this->get_namespace(this->cur_element).name == filter_element::tag;
+		},
+		SL
+	);
 
 	auto ret = std::make_unique<filter_element>();
 
@@ -654,8 +754,18 @@ void parser::fill_second_inputable(second_inputable& p)
 
 void parser::parse_fe_gaussian_blur_element()
 {
-	ASSERT(this->get_namespace(this->cur_element).ns == xml_namespace::svg)
-	ASSERT(this->get_namespace(this->cur_element).name == fe_gaussian_blur_element::tag)
+	utki::assert(
+		[this]() -> bool {
+			return this->get_namespace(this->cur_element).ns == xml_namespace::svg;
+		},
+		SL
+	);
+	utki::assert(
+		[this]() -> bool {
+			return this->get_namespace(this->cur_element).name == fe_gaussian_blur_element::tag;
+		},
+		SL
+	);
 
 	auto ret = std::make_unique<fe_gaussian_blur_element>();
 
@@ -671,8 +781,18 @@ void parser::parse_fe_gaussian_blur_element()
 
 void parser::parse_fe_color_matrix_element()
 {
-	ASSERT(this->get_namespace(this->cur_element).ns == xml_namespace::svg)
-	ASSERT(this->get_namespace(this->cur_element).name == fe_color_matrix_element::tag)
+	utki::assert(
+		[this]() -> bool {
+			return this->get_namespace(this->cur_element).ns == xml_namespace::svg;
+		},
+		SL
+	);
+	utki::assert(
+		[this]() -> bool {
+			return this->get_namespace(this->cur_element).name == fe_color_matrix_element::tag;
+		},
+		SL
+	);
 
 	auto ret = std::make_unique<fe_color_matrix_element>();
 
@@ -694,7 +814,7 @@ void parser::parse_fe_color_matrix_element()
 	if (auto a = this->find_attribute_of_namespace(xml_namespace::svg, "values")) {
 		switch (ret->type_) {
 			default:
-				ASSERT(false) // should never get here, MATRIX should always be the default value
+				utki::assert(false, SL); // should never get here, MATRIX should always be the default value
 				break;
 			case fe_color_matrix_element::type::matrix:
 				// 20 values expected
@@ -723,8 +843,18 @@ void parser::parse_fe_color_matrix_element()
 
 void parser::parse_fe_blend_element()
 {
-	ASSERT(this->get_namespace(this->cur_element).ns == xml_namespace::svg)
-	ASSERT(this->get_namespace(this->cur_element).name == fe_blend_element::tag)
+	utki::assert(
+		[this]() -> bool {
+			return this->get_namespace(this->cur_element).ns == xml_namespace::svg;
+		},
+		SL
+	);
+	utki::assert(
+		[this]() -> bool {
+			return this->get_namespace(this->cur_element).name == fe_blend_element::tag;
+		},
+		SL
+	);
 
 	auto ret = std::make_unique<fe_blend_element>();
 
@@ -751,8 +881,18 @@ void parser::parse_fe_blend_element()
 
 void parser::parse_fe_composite_element()
 {
-	ASSERT(this->get_namespace(this->cur_element).ns == xml_namespace::svg)
-	ASSERT(this->get_namespace(this->cur_element).name == fe_composite_element::tag)
+	utki::assert(
+		[this]() -> bool {
+			return this->get_namespace(this->cur_element).ns == xml_namespace::svg;
+		},
+		SL
+	);
+	utki::assert(
+		[this]() -> bool {
+			return this->get_namespace(this->cur_element).name == fe_composite_element::tag;
+		},
+		SL
+	);
 
 	auto ret = std::make_unique<fe_composite_element>();
 
@@ -797,8 +937,18 @@ void parser::parse_fe_composite_element()
 
 void parser::parse_linear_gradient_element()
 {
-	ASSERT(this->get_namespace(this->cur_element).ns == xml_namespace::svg)
-	ASSERT(this->get_namespace(this->cur_element).name == linear_gradient_element::tag)
+	utki::assert(
+		[this]() -> bool {
+			return this->get_namespace(this->cur_element).ns == xml_namespace::svg;
+		},
+		SL
+	);
+	utki::assert(
+		[this]() -> bool {
+			return this->get_namespace(this->cur_element).name == linear_gradient_element::tag;
+		},
+		SL
+	);
 
 	auto ret = std::make_unique<linear_gradient_element>();
 
@@ -822,8 +972,18 @@ void parser::parse_linear_gradient_element()
 
 void parser::parse_path_element()
 {
-	ASSERT(this->get_namespace(this->cur_element).ns == xml_namespace::svg)
-	ASSERT(this->get_namespace(this->cur_element).name == path_element::tag)
+	utki::assert(
+		[this]() -> bool {
+			return this->get_namespace(this->cur_element).ns == xml_namespace::svg;
+		},
+		SL
+	);
+	utki::assert(
+		[this]() -> bool {
+			return this->get_namespace(this->cur_element).name == path_element::tag;
+		},
+		SL
+	);
 
 	auto ret = std::make_unique<path_element>();
 
@@ -838,8 +998,18 @@ void parser::parse_path_element()
 
 void parser::parse_polygon_element()
 {
-	ASSERT(this->get_namespace(this->cur_element).ns == xml_namespace::svg)
-	ASSERT(this->get_namespace(this->cur_element).name == polygon_element::tag)
+	utki::assert(
+		[this]() -> bool {
+			return this->get_namespace(this->cur_element).ns == xml_namespace::svg;
+		},
+		SL
+	);
+	utki::assert(
+		[this]() -> bool {
+			return this->get_namespace(this->cur_element).name == polygon_element::tag;
+		},
+		SL
+	);
 
 	auto ret = std::make_unique<polygon_element>();
 
@@ -854,8 +1024,18 @@ void parser::parse_polygon_element()
 
 void parser::parse_polyline_element()
 {
-	ASSERT(this->get_namespace(this->cur_element).ns == xml_namespace::svg)
-	ASSERT(this->get_namespace(this->cur_element).name == polyline_element::tag)
+	utki::assert(
+		[this]() -> bool {
+			return this->get_namespace(this->cur_element).ns == xml_namespace::svg;
+		},
+		SL
+	);
+	utki::assert(
+		[this]() -> bool {
+			return this->get_namespace(this->cur_element).name == polyline_element::tag;
+		},
+		SL
+	);
 
 	auto ret = std::make_unique<polyline_element>();
 
@@ -870,8 +1050,18 @@ void parser::parse_polyline_element()
 
 void parser::parse_radial_gradient_element()
 {
-	ASSERT(this->get_namespace(this->cur_element).ns == xml_namespace::svg)
-	ASSERT(this->get_namespace(this->cur_element).name == radial_gradient_element::tag)
+	utki::assert(
+		[this]() -> bool {
+			return this->get_namespace(this->cur_element).ns == xml_namespace::svg;
+		},
+		SL
+	);
+	utki::assert(
+		[this]() -> bool {
+			return this->get_namespace(this->cur_element).name == radial_gradient_element::tag;
+		},
+		SL
+	);
 
 	auto ret = std::make_unique<radial_gradient_element>();
 
@@ -914,8 +1104,18 @@ void parser::parse_solid_color_element()
 
 void parser::parse_rect_element()
 {
-	ASSERT(this->get_namespace(this->cur_element).ns == xml_namespace::svg)
-	ASSERT(this->get_namespace(this->cur_element).name == rect_element::tag)
+	utki::assert(
+		[this]() -> bool {
+			return this->get_namespace(this->cur_element).ns == xml_namespace::svg;
+		},
+		SL
+	);
+	utki::assert(
+		[this]() -> bool {
+			return this->get_namespace(this->cur_element).name == rect_element::tag;
+		},
+		SL
+	);
 
 	auto ret = std::make_unique<rect_element>();
 
@@ -934,8 +1134,18 @@ void parser::parse_rect_element()
 
 void parser::parse_svg_element()
 {
-	ASSERT(this->get_namespace(this->cur_element).ns == xml_namespace::svg)
-	ASSERT(this->get_namespace(this->cur_element).name == svg_element::tag)
+	utki::assert(
+		[this]() -> bool {
+			return this->get_namespace(this->cur_element).ns == xml_namespace::svg;
+		},
+		SL
+	);
+	utki::assert(
+		[this]() -> bool {
+			return this->get_namespace(this->cur_element).name == svg_element::tag;
+		},
+		SL
+	);
 
 	auto ret = std::make_unique<svg_element>();
 
@@ -950,8 +1160,18 @@ void parser::parse_svg_element()
 
 void parser::parse_image_element()
 {
-	ASSERT(this->get_namespace(this->cur_element).ns == xml_namespace::svg)
-	ASSERT(this->get_namespace(this->cur_element).name == image_element::tag)
+	utki::assert(
+		[this]() -> bool {
+			return this->get_namespace(this->cur_element).ns == xml_namespace::svg;
+		},
+		SL
+	);
+	utki::assert(
+		[this]() -> bool {
+			return this->get_namespace(this->cur_element).name == image_element::tag;
+		},
+		SL
+	);
 
 	auto ret = std::make_unique<image_element>();
 
@@ -967,8 +1187,18 @@ void parser::parse_image_element()
 
 void parser::parse_symbol_element()
 {
-	ASSERT(this->get_namespace(this->cur_element).ns == xml_namespace::svg)
-	ASSERT(this->get_namespace(this->cur_element).name == symbol_element::tag)
+	utki::assert(
+		[this]() -> bool {
+			return this->get_namespace(this->cur_element).ns == xml_namespace::svg;
+		},
+		SL
+	);
+	utki::assert(
+		[this]() -> bool {
+			return this->get_namespace(this->cur_element).name == symbol_element::tag;
+		},
+		SL
+	);
 
 	//		TRACE(<< "parse_symbol_element():" << std::endl)
 
@@ -984,8 +1214,18 @@ void parser::parse_symbol_element()
 
 void parser::parse_use_element()
 {
-	ASSERT(this->get_namespace(this->cur_element).ns == xml_namespace::svg)
-	ASSERT(this->get_namespace(this->cur_element).name == use_element::tag)
+	utki::assert(
+		[this]() -> bool {
+			return this->get_namespace(this->cur_element).ns == xml_namespace::svg;
+		},
+		SL
+	);
+	utki::assert(
+		[this]() -> bool {
+			return this->get_namespace(this->cur_element).name == use_element::tag;
+		},
+		SL
+	);
 
 	auto ret = std::make_unique<use_element>();
 
@@ -1011,7 +1251,7 @@ void parser::on_element_end(utki::span<const char> name)
 
 void parser::on_attribute_parsed(utki::span<const char> name, utki::span<const char> value)
 {
-	ASSERT(this->cur_element.length() != 0)
+	utki::assert(this->cur_element.length() != 0, SL);
 	this->attributes[utki::make_string(name)] = utki::make_string(value);
 }
 

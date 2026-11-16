@@ -41,7 +41,7 @@ style_stack::crawler::crawler(decltype(stack) stack) :
 
 const cssom::styleable& style_stack::crawler::get()
 {
-	ASSERT(!this->stack.empty())
+	utki::assert(!this->stack.empty(), SL);
 
 	return this->iter->get();
 }
@@ -84,7 +84,7 @@ const svgdom::style_value* style_stack::get_style_property(svgdom::style_propert
 
 	for (const auto& styleable_ref : utki::views::reverse(this->stack)) {
 		utki::scope_exit satck_depth_decrement([&]() {
-			ASSERT(stack_depth > 0)
+			utki::assert(stack_depth > 0, SL);
 			--stack_depth;
 		});
 
@@ -104,7 +104,7 @@ const svgdom::style_value* style_stack::get_style_property(svgdom::style_propert
 				}
 			}
 		}
-		ASSERT(v)
+		utki::assert(v, SL);
 		if (is_inherit(*v)) {
 			explicit_inherit = true;
 			continue;

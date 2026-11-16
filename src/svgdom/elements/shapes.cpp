@@ -135,7 +135,12 @@ decltype(path_element::path) path_element::parse(std::string_view str)
 		step::type cur_step_type = step::type::unknown;
 
 		while (!p.empty()) {
-			ASSERT(!utki::string_parser::is_space(p.peek_char())) // spaces should be skept
+			utki::assert(
+				[&]() -> bool {
+					return !utki::string_parser::is_space(p.peek_char());
+				},
+				SL
+			); // spaces should be skept
 
 			{
 				auto t = step::char_to_type(p.peek_char());
@@ -232,7 +237,7 @@ decltype(path_element::path) path_element::parse(std::string_view str)
 					cur_step.y = p.read_number<real>();
 					break;
 				default:
-					ASSERT(false)
+					utki::assert(false, SL);
 					break;
 			}
 
@@ -349,7 +354,7 @@ std::string path_element::path_to_string() const
 				s << cur_step.y;
 				break;
 			default:
-				ASSERT(false)
+				utki::assert(false, SL);
 				break;
 		}
 	}
@@ -398,7 +403,7 @@ char path_element::step::type_to_char(step::type t)
 		case step::type::arc_rel:
 			return 'a';
 		default:
-			ASSERT(false)
+			utki::assert(false, SL);
 			return ' ';
 	}
 }
