@@ -228,6 +228,7 @@ std::string styleable::style_value_to_string(style_property p, const style_value
 				s << "url(" << *std::get_if<std::string>(&v) << ")";
 			}
 			break;
+		case style_property::font:
 		case style_property::font_family:
 		case style_property::font_weight:
 		case style_property::text_decoration:
@@ -464,6 +465,7 @@ style_value styleable::parse_style_property_value(style_property type, std::stri
 				return {style_value_special::none};
 			}
 			return parse_url(str);
+		case style_property::font:
 		case style_property::font_family:
 		case style_property::font_weight:
 		case style_property::text_decoration:
