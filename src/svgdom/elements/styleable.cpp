@@ -156,8 +156,11 @@ std::string styleable::style_value_to_string(style_property p, const style_value
 			s << paint_to_string(v);
 			break;
 		case style_property::font_size:
+		case style_property::font_size_adjust:
 		case style_property::stroke_dashoffset:
 		case style_property::stroke_width:
+		case style_property::word_spacing:
+		case style_property::baseline_shift:
 			if (std::holds_alternative<length>(v)) {
 				s << *std::get_if<length>(&v);
 			}
@@ -229,6 +232,14 @@ std::string styleable::style_value_to_string(style_property p, const style_value
 		case style_property::font_weight:
 		case style_property::text_decoration:
 			if (std::holds_alternative<std::string>(v)) {
+				s << *std::get_if<std::string>(&v);
+			}
+			break;
+		case style_property::letter_spacing:
+		case style_property::kerning:
+			if (std::holds_alternative<length>(v)) {
+				s << *std::get_if<length>(&v);
+			} else if (std::holds_alternative<std::string>(v)) {
 				s << *std::get_if<std::string>(&v);
 			}
 			break;
@@ -379,8 +390,17 @@ style_value styleable::parse_style_property_value(style_property type, std::stri
 		case style_property::lighting_color:
 			return parse_paint(str);
 		case style_property::font_size:
+		case style_property::font_size_adjust:
 		case style_property::stroke_dashoffset:
 		case style_property::stroke_width:
+		case style_property::word_spacing:
+		case style_property::baseline_shift:
+			return length::parse(str);
+		case style_property::letter_spacing:
+		case style_property::kerning:
+			if (str == "auto") {
+				return {std::string("auto")};
+			}
 			return length::parse(str);
 		case style_property::stroke_linecap:
 			{
