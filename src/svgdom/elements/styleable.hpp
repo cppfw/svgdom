@@ -285,8 +285,7 @@ enum class pointer_events {
 	painted, // "painted"
 	fill, // "fill"
 	stroke, // "stroke"
-	all, // "all"
-	none // "none"
+	all // "all"
 };
 
 enum class alignment_baseline {

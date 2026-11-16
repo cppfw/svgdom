@@ -497,7 +497,11 @@ style_value styleable::parse_style_property_value(style_property type, std::stri
 		case style_property::font:
 		case style_property::font_family:
 		case style_property::font_weight:
+			return {std::string(str)};
 		case style_property::text_decoration:
+			if (str == "none") {
+				return {style_value_special::none};
+			}
 			return {std::string(str)};
 		case style_property::display:
 			return parse_display(str);
@@ -1471,8 +1475,7 @@ const std::map<std::string_view, pointer_events> string_to_pointer_events_map = 
 	{	   "painted",         svgdom::pointer_events::painted},
 	{		  "fill",            svgdom::pointer_events::fill},
 	{		"stroke",          svgdom::pointer_events::stroke},
-	{		   "all",			 svgdom::pointer_events::all},
-	{		  "none",            svgdom::pointer_events::none}
+	{		   "all",			 svgdom::pointer_events::all}
 };
 const auto pointer_events_to_string_map = utki::flip_map(string_to_pointer_events_map);
 } // namespace
@@ -1519,6 +1522,9 @@ std::string_view svgdom::writing_mode_to_string(const style_value& v)
 
 style_value svgdom::parse_pointer_events(std::string_view str)
 {
+	if (str == "none") {
+		return {style_value_special::none};
+	}
 	return parse_keyword(string_to_pointer_events_map, str, svgdom::pointer_events::visible_painted);
 }
 
