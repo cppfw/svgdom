@@ -227,6 +227,7 @@ std::string styleable::style_value_to_string(style_property p, const style_value
 			break;
 		case style_property::font_family:
 		case style_property::font_weight:
+		case style_property::text_decoration:
 			if (std::holds_alternative<std::string>(v)) {
 				s << *std::get_if<std::string>(&v);
 			}
@@ -272,6 +273,21 @@ std::string styleable::style_value_to_string(style_property p, const style_value
 			break;
 		case style_property::mix_blend_mode:
 			s << mix_blend_mode_to_string(v);
+			break;
+		case style_property::direction:
+			s << direction_to_string(v);
+			break;
+		case style_property::unicode_bidi:
+			s << unicode_bidi_to_string(v);
+			break;
+		case style_property::color_profile:
+			s << color_profile_to_string(v);
+			break;
+		case style_property::writing_mode:
+			s << writing_mode_to_string(v);
+			break;
+		case style_property::pointer_events:
+			s << pointer_events_to_string(v);
 			break;
 		case style_property::stroke_dasharray:
 			s << stroke_dasharray_to_string(v);
@@ -424,6 +440,7 @@ style_value styleable::parse_style_property_value(style_property type, std::stri
 			return parse_url(str);
 		case style_property::font_family:
 		case style_property::font_weight:
+		case style_property::text_decoration:
 			return {std::string(str)};
 		case style_property::display:
 			return parse_display(str);
@@ -453,6 +470,16 @@ style_value styleable::parse_style_property_value(style_property type, std::stri
 			return parse_isolation(str);
 		case style_property::mix_blend_mode:
 			return parse_mix_blend_mode(str);
+		case style_property::direction:
+			return parse_direction(str);
+		case style_property::unicode_bidi:
+			return parse_unicode_bidi(str);
+		case style_property::color_profile:
+			return parse_color_profile(str);
+		case style_property::writing_mode:
+			return parse_writing_mode(str);
+		case style_property::pointer_events:
+			return parse_pointer_events(str);
 		case style_property::stroke_dasharray:
 			return parse_stroke_dasharray(str);
 	}
@@ -1335,6 +1362,109 @@ const std::map<std::string_view, mix_blend_mode> string_to_mix_blend_mode_map = 
 };
 const auto mix_blend_mode_to_string_map = utki::flip_map(string_to_mix_blend_mode_map);
 } // namespace
+
+namespace {
+const std::map<std::string_view, direction> string_to_direction_map = {
+	{"ltr", svgdom::direction::ltr},
+	{"rtl", svgdom::direction::rtl}
+};
+const auto direction_to_string_map = utki::flip_map(string_to_direction_map);
+} // namespace
+
+namespace {
+const std::map<std::string_view, unicode_bidi> string_to_unicode_bidi_map = {
+	{	   "normal",        svgdom::unicode_bidi::normal},
+	{		"embed",         svgdom::unicode_bidi::embed},
+	{"bidi-override", svgdom::unicode_bidi::bidi_override}
+};
+const auto unicode_bidi_to_string_map = utki::flip_map(string_to_unicode_bidi_map);
+} // namespace
+
+namespace {
+const std::map<std::string_view, color_profile> string_to_color_profile_map = {
+	{	 "auto",  svgdom::color_profile::automatic},
+	{	 "sRGB",       svgdom::color_profile::srgb},
+	{"linearRGB", svgdom::color_profile::linear_rgb}
+};
+const auto color_profile_to_string_map = utki::flip_map(string_to_color_profile_map);
+} // namespace
+
+namespace {
+const std::map<std::string_view, writing_mode> string_to_writing_mode_map = {
+	{"horizontal-tb", svgdom::writing_mode::horizontal_tb},
+	{  "vertical-rl",   svgdom::writing_mode::vertical_rl},
+	{		"tb-rl",         svgdom::writing_mode::tb_rl},
+	{		"tb-lr",         svgdom::writing_mode::tb_lr},
+	{		"lr-tb",         svgdom::writing_mode::lr_tb},
+	{		"rl-tb",         svgdom::writing_mode::rl_tb}
+};
+const auto writing_mode_to_string_map = utki::flip_map(string_to_writing_mode_map);
+} // namespace
+
+namespace {
+const std::map<std::string_view, pointer_events> string_to_pointer_events_map = {
+	{"visiblePainted", svgdom::pointer_events::visible_painted},
+	{   "visibleFill",    svgdom::pointer_events::visible_fill},
+	{ "visibleStroke",  svgdom::pointer_events::visible_stroke},
+	{	   "visible",         svgdom::pointer_events::visible},
+	{	   "painted",         svgdom::pointer_events::painted},
+	{		  "fill",            svgdom::pointer_events::fill},
+	{		"stroke",          svgdom::pointer_events::stroke},
+	{		   "all",			 svgdom::pointer_events::all},
+	{		  "none",            svgdom::pointer_events::none}
+};
+const auto pointer_events_to_string_map = utki::flip_map(string_to_pointer_events_map);
+} // namespace
+
+style_value svgdom::parse_direction(std::string_view str)
+{
+	return parse_keyword(string_to_direction_map, str, svgdom::direction::ltr);
+}
+
+std::string_view svgdom::direction_to_string(const style_value& v)
+{
+	return keyword_to_string(direction_to_string_map, v, "ltr");
+}
+
+style_value svgdom::parse_unicode_bidi(std::string_view str)
+{
+	return parse_keyword(string_to_unicode_bidi_map, str, svgdom::unicode_bidi::normal);
+}
+
+std::string_view svgdom::unicode_bidi_to_string(const style_value& v)
+{
+	return keyword_to_string(unicode_bidi_to_string_map, v, "normal");
+}
+
+style_value svgdom::parse_color_profile(std::string_view str)
+{
+	return parse_keyword(string_to_color_profile_map, str, svgdom::color_profile::automatic);
+}
+
+std::string_view svgdom::color_profile_to_string(const style_value& v)
+{
+	return keyword_to_string(color_profile_to_string_map, v, "auto");
+}
+
+style_value svgdom::parse_writing_mode(std::string_view str)
+{
+	return parse_keyword(string_to_writing_mode_map, str, svgdom::writing_mode::horizontal_tb);
+}
+
+std::string_view svgdom::writing_mode_to_string(const style_value& v)
+{
+	return keyword_to_string(writing_mode_to_string_map, v, "horizontal-tb");
+}
+
+style_value svgdom::parse_pointer_events(std::string_view str)
+{
+	return parse_keyword(string_to_pointer_events_map, str, svgdom::pointer_events::visible_painted);
+}
+
+std::string_view svgdom::pointer_events_to_string(const style_value& v)
+{
+	return keyword_to_string(pointer_events_to_string_map, v, "visiblePainted");
+}
 
 style_value svgdom::parse_isolation(std::string_view str)
 {

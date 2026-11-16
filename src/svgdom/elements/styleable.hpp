@@ -251,6 +251,44 @@ enum class text_rendering {
 	geometric_precision // "geometricPrecision"
 };
 
+enum class direction {
+	ltr, // "ltr"
+	rtl // "rtl"
+};
+
+enum class unicode_bidi {
+	normal, // "normal"
+	embed, // "embed"
+	bidi_override // "bidi-override"
+};
+
+enum class color_profile {
+	automatic, // "auto"
+	srgb, // "sRGB"
+	linear_rgb // "linearRGB"
+};
+
+enum class writing_mode {
+	horizontal_tb, // "horizontal-tb"
+	vertical_rl, // "vertical-rl"
+	tb_rl, // "tb-rl"
+	tb_lr, // "tb-lr"
+	lr_tb, // "lr-tb"
+	rl_tb // "rl-tb"
+};
+
+enum class pointer_events {
+	visible_painted, // "visiblePainted"
+	visible_fill, // "visibleFill"
+	visible_stroke, // "visibleStroke"
+	visible, // "visible"
+	painted, // "painted"
+	fill, // "fill"
+	stroke, // "stroke"
+	all, // "all"
+	none // "none"
+};
+
 // CSS compositing and blending properties (applied to SVG elements)
 enum class isolation {
 	automatic, // "auto"
@@ -305,6 +343,11 @@ using style_value = std::variant<
 	svgdom::shape_rendering,
 	svgdom::text_anchor,
 	svgdom::text_rendering,
+	svgdom::direction,
+	svgdom::unicode_bidi,
+	svgdom::color_profile,
+	svgdom::writing_mode,
+	svgdom::pointer_events,
 	svgdom::isolation,
 	svgdom::mix_blend_mode,
 	std::string,
@@ -380,6 +423,21 @@ std::string_view text_anchor_to_string(const style_value& v);
 
 style_value parse_text_rendering(std::string_view str);
 std::string_view text_rendering_to_string(const style_value& v);
+
+style_value parse_direction(std::string_view str);
+std::string_view direction_to_string(const style_value& v);
+
+style_value parse_unicode_bidi(std::string_view str);
+std::string_view unicode_bidi_to_string(const style_value& v);
+
+style_value parse_color_profile(std::string_view str);
+std::string_view color_profile_to_string(const style_value& v);
+
+style_value parse_writing_mode(std::string_view str);
+std::string_view writing_mode_to_string(const style_value& v);
+
+style_value parse_pointer_events(std::string_view str);
+std::string_view pointer_events_to_string(const style_value& v);
 
 style_value parse_isolation(std::string_view str);
 std::string_view isolation_to_string(const style_value& v);
