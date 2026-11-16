@@ -235,8 +235,17 @@ std::string styleable::style_value_to_string(style_property p, const style_value
 		case style_property::font_family:
 		case style_property::font_weight:
 		case style_property::text_decoration:
+		case style_property::cursor:
 			if (std::holds_alternative<std::string>(v)) {
 				s << *std::get_if<std::string>(&v);
+			}
+			break;
+		case style_property::clip:
+			if (std::holds_alternative<std::string>(v)) {
+				s << "url(" << *std::get_if<std::string>(&v) << ")";
+			} else if (std::holds_alternative<r4::rectangle<length>>(v)) {
+				auto& r = *std::get_if<r4::rectangle<length>>(&v);
+				s << "rect(" << r.p.x() << ", " << r.p.y() << ", " << r.d.x() << ", " << r.d.y() << ")";
 			}
 			break;
 		case style_property::letter_spacing:
@@ -494,6 +503,34 @@ style_value styleable::parse_style_property_value(style_property type, std::stri
 				return {style_value_special::none};
 			}
 			return parse_url(str);
+		case style_property::clip:
+			if (str == none_word) {
+				return {style_value_special::none};
+			}
+			if (str.find("rect(") == 0) {
+				// parse rect(x, y, w, h)
+				utki::string_parser p(str.substr(5)); // skip "rect("
+				p.skip_whitespaces();
+				auto x = length::parse(p.read_word_until(','));
+				p.skip_whitespaces_and_comma();
+				p.skip_whitespaces();
+				auto y = length::parse(p.read_word_until(','));
+				p.skip_whitespaces_and_comma();
+				p.skip_whitespaces();
+				auto w = length::parse(p.read_word_until(','));
+				p.skip_whitespaces_and_comma();
+				p.skip_whitespaces();
+				auto h = length::parse(p.read_word_until(')'));
+				return {
+					r4::rectangle<length>{x, y, w, h}
+				};
+			}
+			return parse_url(str);
+		case style_property::cursor:
+			if (str == "auto") {
+				return {style_value_special::auto_value};
+			}
+			return {std::string(str)};
 		case style_property::font:
 		case style_property::font_family:
 		case style_property::font_weight:

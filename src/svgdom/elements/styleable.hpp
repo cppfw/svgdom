@@ -355,6 +355,7 @@ using style_value = std::variant<
 	uint32_t,
 	real,
 	length,
+	r4::rectangle<length>,
 	svgdom::stroke_line_cap,
 	svgdom::stroke_line_join,
 	svgdom::fill_rule,
