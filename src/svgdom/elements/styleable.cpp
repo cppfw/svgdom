@@ -141,6 +141,7 @@ std::string styleable::style_value_to_string(style_property p, const style_value
 		case style_property::opacity:
 		case style_property::stroke_opacity:
 		case style_property::fill_opacity:
+		case style_property::flood_opacity:
 			if (std::holds_alternative<real>(v)) {
 				s << *std::get_if<real>(&v);
 			}
@@ -150,6 +151,8 @@ std::string styleable::style_value_to_string(style_property p, const style_value
 		case style_property::color:
 		case style_property::fill:
 		case style_property::stroke:
+		case style_property::flood_color:
+		case style_property::lighting_color:
 			s << paint_to_string(v);
 			break;
 		case style_property::font_size:
@@ -342,6 +345,7 @@ style_value styleable::parse_style_property_value(style_property type, std::stri
 		case style_property::opacity:
 		case style_property::stroke_opacity:
 		case style_property::fill_opacity:
+		case style_property::flood_opacity:
 			{
 				real opacity = utki::string_parser(str).read_number<real>();
 				using std::min;
@@ -355,6 +359,8 @@ style_value styleable::parse_style_property_value(style_property type, std::stri
 		case style_property::color:
 		case style_property::fill:
 		case style_property::stroke:
+		case style_property::flood_color:
+		case style_property::lighting_color:
 			return parse_paint(str);
 		case style_property::font_size:
 		case style_property::stroke_dashoffset:
