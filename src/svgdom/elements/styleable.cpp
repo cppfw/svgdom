@@ -50,6 +50,7 @@ namespace {
 constexpr const char* none_word = "none";
 constexpr const char* inherit_word = "inherit";
 constexpr const char* current_color_word = "currentColor";
+constexpr const char* auto_word = "auto";
 } // namespace
 
 namespace {
@@ -121,6 +122,8 @@ std::string styleable::style_value_to_string(style_property p, const style_value
 		return none_word;
 	} else if (is_current_color(v)) {
 		return current_color_word;
+	} else if (is_auto(v)) {
+		return auto_word;
 	}
 
 	std::stringstream s;
@@ -240,8 +243,12 @@ std::string styleable::style_value_to_string(style_property p, const style_value
 		case style_property::kerning:
 			if (std::holds_alternative<length>(v)) {
 				s << *std::get_if<length>(&v);
-			} else if (std::holds_alternative<std::string>(v)) {
-				s << *std::get_if<std::string>(&v);
+			}
+			break;
+		case style_property::glyph_orientation_horizontal:
+		case style_property::glyph_orientation_vertical:
+			if (std::holds_alternative<real>(v)) {
+				s << *std::get_if<real>(&v);
 			}
 			break;
 		case style_property::display:
@@ -406,9 +413,31 @@ style_value styleable::parse_style_property_value(style_property type, std::stri
 		case style_property::letter_spacing:
 		case style_property::kerning:
 			if (str == "auto") {
-				return {std::string("auto")};
+				return {style_value_special::auto_value};
 			}
 			return length::parse(str);
+		case style_property::glyph_orientation_horizontal:
+		case style_property::glyph_orientation_vertical:
+			if (str == "auto") {
+				return {style_value_special::auto_value};
+			}
+			{
+				// parse angle and convert to radians
+				real angle = utki::string_parser(str).read_number<real>();
+				if (str.find("rad") != std::string_view::npos) {
+					// already radians
+				} else if (str.find("grad") != std::string_view::npos) {
+					// gradians → radians
+					angle *= real(utki::pi) / real(200);
+				} else if (str.find("turn") != std::string_view::npos) {
+					// turns → radians
+					angle *= real(utki::two_pi);
+				} else {
+					// bare number or "deg" = degrees → radians
+					angle *= real(utki::pi) / real(180);
+				}
+				return {angle};
+			}
 		case style_property::stroke_linecap:
 			{
 				if (str == "butt") {

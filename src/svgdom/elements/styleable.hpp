@@ -347,7 +347,8 @@ enum class style_value_special {
 	unknown,
 	none,
 	current_color,
-	inherit
+	inherit,
+	auto_value // "auto"
 };
 
 using style_value = std::variant<
@@ -405,6 +406,12 @@ inline bool is_current_color(const style_value& v)
 {
 	return std::holds_alternative<style_value_special>(v) &&
 		*std::get_if<style_value_special>(&v) == style_value_special::current_color;
+}
+
+inline bool is_auto(const style_value& v)
+{
+	return std::holds_alternative<style_value_special>(v) &&
+		*std::get_if<style_value_special>(&v) == style_value_special::auto_value;
 }
 
 /**
