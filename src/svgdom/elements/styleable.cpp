@@ -300,6 +300,12 @@ std::string styleable::style_value_to_string(style_property p, const style_value
 		case style_property::pointer_events:
 			s << pointer_events_to_string(v);
 			break;
+		case style_property::alignment_baseline:
+			s << alignment_baseline_to_string(v);
+			break;
+		case style_property::dominant_baseline:
+			s << dominant_baseline_to_string(v);
+			break;
 		case style_property::stroke_dasharray:
 			s << stroke_dasharray_to_string(v);
 			break;
@@ -500,6 +506,10 @@ style_value styleable::parse_style_property_value(style_property type, std::stri
 			return parse_writing_mode(str);
 		case style_property::pointer_events:
 			return parse_pointer_events(str);
+		case style_property::alignment_baseline:
+			return parse_alignment_baseline(str);
+		case style_property::dominant_baseline:
+			return parse_dominant_baseline(str);
 		case style_property::stroke_dasharray:
 			return parse_stroke_dasharray(str);
 	}
@@ -1484,6 +1494,60 @@ style_value svgdom::parse_pointer_events(std::string_view str)
 std::string_view svgdom::pointer_events_to_string(const style_value& v)
 {
 	return keyword_to_string(pointer_events_to_string_map, v, "visiblePainted");
+}
+
+namespace {
+const std::map<std::string_view, alignment_baseline> string_to_alignment_baseline_map = {
+	{			"auto",        svgdom::alignment_baseline::automatic},
+	{		"baseline",         svgdom::alignment_baseline::baseline},
+	{	 "before-edge",      svgdom::alignment_baseline::before_edge},
+	{"text-before-edge", svgdom::alignment_baseline::text_before_edge},
+	{		  "middle",           svgdom::alignment_baseline::middle},
+	{		 "central",          svgdom::alignment_baseline::central},
+	{	  "after-edge",       svgdom::alignment_baseline::after_edge},
+	{ "text-after-edge",  svgdom::alignment_baseline::text_after_edge},
+	{    "mathematical",     svgdom::alignment_baseline::mathematical},
+	{		 "hanging",          svgdom::alignment_baseline::hanging},
+	{	  "alphabetic",       svgdom::alignment_baseline::alphabetic},
+	{	 "ideographic",      svgdom::alignment_baseline::ideographic},
+	{			"ruby",			 svgdom::alignment_baseline::ruby}
+};
+const auto alignment_baseline_to_string_map = utki::flip_map(string_to_alignment_baseline_map);
+} // namespace
+
+namespace {
+const std::map<std::string_view, dominant_baseline> string_to_dominant_baseline_map = {
+	{			"auto",        svgdom::dominant_baseline::automatic},
+	{	  "use-script",       svgdom::dominant_baseline::use_script},
+	{	  "alphabetic",       svgdom::dominant_baseline::alphabetic},
+	{		 "central",          svgdom::dominant_baseline::central},
+	{		  "middle",           svgdom::dominant_baseline::middle},
+	{		 "hanging",          svgdom::dominant_baseline::hanging},
+	{ "text-after-edge",  svgdom::dominant_baseline::text_after_edge},
+	{"text-before-edge", svgdom::dominant_baseline::text_before_edge},
+	{	 "ideographic",      svgdom::dominant_baseline::ideographic}
+};
+const auto dominant_baseline_to_string_map = utki::flip_map(string_to_dominant_baseline_map);
+} // namespace
+
+style_value svgdom::parse_alignment_baseline(std::string_view str)
+{
+	return parse_keyword(string_to_alignment_baseline_map, str, svgdom::alignment_baseline::automatic);
+}
+
+std::string_view svgdom::alignment_baseline_to_string(const style_value& v)
+{
+	return keyword_to_string(alignment_baseline_to_string_map, v, "auto");
+}
+
+style_value svgdom::parse_dominant_baseline(std::string_view str)
+{
+	return parse_keyword(string_to_dominant_baseline_map, str, svgdom::dominant_baseline::automatic);
+}
+
+std::string_view svgdom::dominant_baseline_to_string(const style_value& v)
+{
+	return keyword_to_string(dominant_baseline_to_string_map, v, "auto");
 }
 
 style_value svgdom::parse_isolation(std::string_view str)

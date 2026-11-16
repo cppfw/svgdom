@@ -289,6 +289,34 @@ enum class pointer_events {
 	none // "none"
 };
 
+enum class alignment_baseline {
+	automatic, // "auto"
+	baseline, // "baseline"
+	before_edge, // "before-edge"
+	text_before_edge, // "text-before-edge"
+	middle, // "middle"
+	central, // "central"
+	after_edge, // "after-edge"
+	text_after_edge, // "text-after-edge"
+	mathematical, // "mathematical"
+	hanging, // "hanging"
+	alphabetic, // "alphabetic"
+	ideographic, // "ideographic"
+	ruby // "ruby"
+};
+
+enum class dominant_baseline {
+	automatic, // "auto"
+	use_script, // "use-script"
+	alphabetic, // "alphabetic"
+	central, // "central"
+	middle, // "middle"
+	hanging, // "hanging"
+	text_after_edge, // "text-after-edge"
+	text_before_edge, // "text-before-edge"
+	ideographic // "ideographic"
+};
+
 // CSS compositing and blending properties (applied to SVG elements)
 enum class isolation {
 	automatic, // "auto"
@@ -348,6 +376,8 @@ using style_value = std::variant<
 	svgdom::color_profile,
 	svgdom::writing_mode,
 	svgdom::pointer_events,
+	svgdom::alignment_baseline,
+	svgdom::dominant_baseline,
 	svgdom::isolation,
 	svgdom::mix_blend_mode,
 	std::string,
@@ -438,6 +468,12 @@ std::string_view writing_mode_to_string(const style_value& v);
 
 style_value parse_pointer_events(std::string_view str);
 std::string_view pointer_events_to_string(const style_value& v);
+
+style_value parse_alignment_baseline(std::string_view str);
+std::string_view alignment_baseline_to_string(const style_value& v);
+
+style_value parse_dominant_baseline(std::string_view str);
+std::string_view dominant_baseline_to_string(const style_value& v);
 
 style_value parse_isolation(std::string_view str);
 std::string_view isolation_to_string(const style_value& v);
