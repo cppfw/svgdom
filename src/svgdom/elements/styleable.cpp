@@ -51,6 +51,8 @@ constexpr const char* none_word = "none";
 constexpr const char* inherit_word = "inherit";
 constexpr const char* current_color_word = "currentColor";
 constexpr const char* auto_word = "auto";
+constexpr auto pi_gradians = 200; // number of gradians in pi radians
+constexpr auto rect_prefix_len = 5; // length of "rect("
 } // namespace
 
 namespace {
@@ -437,13 +439,13 @@ style_value styleable::parse_style_property_value(style_property type, std::stri
 					// already radians
 				} else if (str.find("grad") != std::string_view::npos) {
 					// gradians → radians
-					angle *= real(utki::pi) / real(200);
+					angle *= real(utki::pi) / real(pi_gradians);
 				} else if (str.find("turn") != std::string_view::npos) {
 					// turns → radians
 					angle *= real(utki::two_pi);
 				} else {
 					// bare number or "deg" = degrees → radians
-					angle *= real(utki::pi) / real(180);
+					angle = utki::deg_to_rad(angle);
 				}
 				return {angle};
 			}
@@ -509,7 +511,7 @@ style_value styleable::parse_style_property_value(style_property type, std::stri
 			}
 			if (str.find("rect(") == 0) {
 				// parse rect(x, y, w, h)
-				utki::string_parser p(str.substr(5)); // skip "rect("
+				utki::string_parser p(str.substr(rect_prefix_len)); // skip "rect("
 				p.skip_whitespaces();
 				auto x = length::parse(p.read_word_until(','));
 				p.skip_whitespaces_and_comma();
